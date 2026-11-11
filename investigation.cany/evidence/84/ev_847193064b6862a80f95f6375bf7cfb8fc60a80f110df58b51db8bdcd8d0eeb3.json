@@ -1,0 +1,2495 @@
+{
+  "id": "ev_847193064b6862a80f95f6375bf7cfb8fc60a80f110df58b51db8bdcd8d0eeb3",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Color|Opacity|Normal|Gloss|Specular|Subsurface|AO|Custom|Two[- ]sided|Alpha|Mesh|Cutout|Vertices|Anchor|Material)[A-Za-z0-9 _:]{0,30}$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1419b35c4",
+        "references": [
+          {
+            "from": "0x1419b3448",
+            "function": null
+          },
+          {
+            "from": "0x141e234d0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "alpha"
+      },
+      {
+        "address": "0x1419b35d0",
+        "references": [
+          {
+            "from": "0x1419b3450",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "alpha"
+      },
+      {
+        "address": "0x141a29940",
+        "references": [
+          {
+            "from": "0x14089e9c9",
+            "function": "sub_14089e5a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "custom "
+      },
+      {
+        "address": "0x141a2d1d0",
+        "references": [
+          {
+            "from": "0x1408b1d29",
+            "function": "sub_1408b1cc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "colorConfiguration"
+      },
+      {
+        "address": "0x141a2d1e8",
+        "references": [
+          {
+            "from": "0x1408b1d40",
+            "function": "sub_1408b1cc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "colorManagementSystem"
+      },
+      {
+        "address": "0x141a2d200",
+        "references": [
+          {
+            "from": "0x1408b1d57",
+            "function": "sub_1408b1cc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "colorSpace"
+      },
+      {
+        "address": "0x141a2d228",
+        "references": [
+          {
+            "from": "0x1408b1dad",
+            "function": "sub_1408b1cc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "customData"
+      },
+      {
+        "address": "0x141a2d238",
+        "references": [
+          {
+            "from": "0x1408b1dc1",
+            "function": "sub_1408b1cc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "customLayerData"
+      },
+      {
+        "address": "0x141a2d618",
+        "references": [
+          {
+            "from": "0x1408b7bc8",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408baf7c",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normal3h"
+      },
+      {
+        "address": "0x141a2d628",
+        "references": [
+          {
+            "from": "0x1408b7be9",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb007",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normal3f"
+      },
+      {
+        "address": "0x141a2d638",
+        "references": [
+          {
+            "from": "0x1408b7c0a",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb098",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normal3d"
+      },
+      {
+        "address": "0x141a2d648",
+        "references": [
+          {
+            "from": "0x1408b7c2b",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb130",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color3h"
+      },
+      {
+        "address": "0x141a2d650",
+        "references": [
+          {
+            "from": "0x1408b7c4c",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb1b4",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color3f"
+      },
+      {
+        "address": "0x141a2d658",
+        "references": [
+          {
+            "from": "0x1408b7c6d",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb23e",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color3d"
+      },
+      {
+        "address": "0x141a2d660",
+        "references": [
+          {
+            "from": "0x1408b7c8e",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb2d2",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color4h"
+      },
+      {
+        "address": "0x141a2d668",
+        "references": [
+          {
+            "from": "0x1408b7caf",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb350",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color4f"
+      },
+      {
+        "address": "0x141a2d670",
+        "references": [
+          {
+            "from": "0x1408b7cd0",
+            "function": "sub_1408b7760"
+          },
+          {
+            "from": "0x1408bb3dc",
+            "function": "sub_1408b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color4d"
+      },
+      {
+        "address": "0x141a2d798",
+        "references": [
+          {
+            "from": "0x1408b9203",
+            "function": "sub_1408b8890"
+          },
+          {
+            "from": "0x14097902f",
+            "function": "sub_140977f70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "NormalFloat"
+      },
+      {
+        "address": "0x141a2d7b8",
+        "references": [
+          {
+            "from": "0x1408b942d",
+            "function": "sub_1408b8890"
+          },
+          {
+            "from": "0x1409790bf",
+            "function": "sub_140977f70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorFloat"
+      },
+      {
+        "address": "0x141a3d598",
+        "references": [
+          {
+            "from": "0x14091fa9a",
+            "function": "sub_14091f940"
+          },
+          {
+            "from": "0x14091fc69",
+            "function": "sub_14091fb10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Anchor layer is invalid"
+      },
+      {
+        "address": "0x141a4f610",
+        "references": [
+          {
+            "from": "0x140986552",
+            "function": "sub_140986410"
+          }
+        ],
+        "section": ".rdata",
+        "text": "customDa"
+      },
+      {
+        "address": "0x141a60080",
+        "references": [
+          {
+            "from": "0x1409a04a3",
+            "function": "sub_1409a0430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color4"
+      },
+      {
+        "address": "0x141aa9e08",
+        "references": [
+          {
+            "from": "0x140bbc379",
+            "function": "sub_140bbbaa0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normals"
+      },
+      {
+        "address": "0x141aac640",
+        "references": [
+          {
+            "from": "0x140bc212d",
+            "function": "sub_140bc1cb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "materialGlowTintsLight"
+      },
+      {
+        "address": "0x141aac658",
+        "references": [
+          {
+            "from": "0x140bc2144",
+            "function": "sub_140bc1cb0"
+          },
+          {
+            "from": "0x140bca57b",
+            "function": "sub_140bca530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MeshLight"
+      },
+      {
+        "address": "0x141aac790",
+        "references": [
+          {
+            "from": "0x140bc22f9",
+            "function": "sub_140bc1cb0"
+          },
+          {
+            "from": "0x140bca58f",
+            "function": "sub_140bca530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MeshLightAPI"
+      },
+      {
+        "address": "0x141ab8800",
+        "references": [
+          {
+            "from": "0x140bd4241",
+            "function": "sub_140bd4100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding"
+      },
+      {
+        "address": "0x141ab8818",
+        "references": [
+          {
+            "from": "0x140bd4255",
+            "function": "sub_140bd4100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding:collection"
+      },
+      {
+        "address": "0x141ab8838",
+        "references": [
+          {
+            "from": "0x140bd4269",
+            "function": "sub_140bd4100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "materialVariant"
+      },
+      {
+        "address": "0x141ab8920",
+        "references": [
+          {
+            "from": "0x140bd441e",
+            "function": "sub_140bd4100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialBindingAPI"
+      },
+      {
+        "address": "0x141abb338",
+        "references": [
+          {
+            "from": "0x140bdfb77",
+            "function": "sub_140bdfb50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding:full"
+      },
+      {
+        "address": "0x141abb350",
+        "references": [
+          {
+            "from": "0x140bdfb87",
+            "function": "sub_140bdfb50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding:preview"
+      },
+      {
+        "address": "0x141abb370",
+        "references": [
+          {
+            "from": "0x140bdfb9b",
+            "function": "sub_140bdfb50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding:collection:full"
+      },
+      {
+        "address": "0x141abb398",
+        "references": [
+          {
+            "from": "0x140bdfbaf",
+            "function": "sub_140bdfb50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material:binding:collection:preview"
+      },
+      {
+        "address": "0x141abf150",
+        "references": [
+          {
+            "from": "0x140bea509",
+            "function": "sub_140bea440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normalOffsets"
+      },
+      {
+        "address": "0x141aceb48",
+        "references": [
+          {
+            "from": "0x1421a6830",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "color background pattern"
+      },
+      {
+        "address": "0x141aceb78",
+        "references": [
+          {
+            "from": "0x1421a6848",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "color pen pattern"
+      },
+      {
+        "address": "0x141aceba0",
+        "references": [
+          {
+            "from": "0x1421a6860",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "color fill pattern"
+      },
+      {
+        "address": "0x141ad0620",
+        "references": [],
+        "section": ".rdata",
+        "text": "Alpha mode cannot be transcoded"
+      },
+      {
+        "address": "0x141ad1210",
+        "references": [
+          {
+            "from": "0x141e6f440",
+            "function": null
+          },
+          {
+            "from": "0x1421a7e00",
+            "function": null
+          },
+          {
+            "from": "0x1421a8a78",
+            "function": null
+          },
+          {
+            "from": "0x1421ab5e0",
+            "function": null
+          },
+          {
+            "from": "0x1421ac880",
+            "function": null
+          },
+          {
+            "from": "0x1421ad590",
+            "function": null
+          },
+          {
+            "from": "0x1421ad970",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorSpace"
+      },
+      {
+        "address": "0x141ad1220",
+        "references": [
+          {
+            "from": "0x1421a7e08",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color space information"
+      },
+      {
+        "address": "0x141ad1490",
+        "references": [
+          {
+            "from": "0x141e6f710",
+            "function": null
+          },
+          {
+            "from": "0x1421a7f80",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomRendered"
+      },
+      {
+        "address": "0x141ad14a0",
+        "references": [
+          {
+            "from": "0x1421a7f88",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom image processing"
+      },
+      {
+        "address": "0x141ad20c8",
+        "references": [
+          {
+            "from": "0x1421a86d8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom Functions"
+      },
+      {
+        "address": "0x141ad2218",
+        "references": [
+          {
+            "from": "0x1421a8850",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomFunctions1D"
+      },
+      {
+        "address": "0x141ad2338",
+        "references": [
+          {
+            "from": "0x1421a8928",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomFunctions2"
+      },
+      {
+        "address": "0x141ad23c0",
+        "references": [
+          {
+            "from": "0x1421a89d0",
+            "function": null
+          },
+          {
+            "from": "0x1421ab8b0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorBalance"
+      },
+      {
+        "address": "0x141ad23e0",
+        "references": [
+          {
+            "from": "0x1421a8a00",
+            "function": null
+          },
+          {
+            "from": "0x1421aa070",
+            "function": null
+          },
+          {
+            "from": "0x1421aaf18",
+            "function": null
+          },
+          {
+            "from": "0x1421ac9a0",
+            "function": null
+          },
+          {
+            "from": "0x1421ad248",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorTemperature"
+      },
+      {
+        "address": "0x141ad24b0",
+        "references": [
+          {
+            "from": "0x1421a8ad8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorData"
+      },
+      {
+        "address": "0x141ad24e8",
+        "references": [
+          {
+            "from": "0x1421a8b08",
+            "function": null
+          },
+          {
+            "from": "0x1421ace08",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorInfo"
+      },
+      {
+        "address": "0x141ad2510",
+        "references": [
+          {
+            "from": "0x1421a8b50",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomPictureStyleFileName"
+      },
+      {
+        "address": "0x141ad3528",
+        "references": [
+          {
+            "from": "0x1421a9ac8",
+            "function": null
+          },
+          {
+            "from": "0x1421a9e90",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorFilter"
+      },
+      {
+        "address": "0x141ad3660",
+        "references": [
+          {
+            "from": "0x1421a9e60",
+            "function": null
+          },
+          {
+            "from": "0x1421aa1c0",
+            "function": null
+          },
+          {
+            "from": "0x1421aae58",
+            "function": null
+          },
+          {
+            "from": "0x1421ab038",
+            "function": null
+          },
+          {
+            "from": "0x1421ab128",
+            "function": null
+          },
+          {
+            "from": "0x1421ab2a8",
+            "function": null
+          },
+          {
+            "from": "0x1421ab388",
+            "function": null
+          },
+          {
+            "from": "0x1421abe28",
+            "function": null
+          },
+          {
+            "from": "0x1421ad308",
+            "function": null
+          },
+          {
+            "from": "0x1421ad770",
+            "function": null
+          },
+          {
+            "from": "0x1421adb68",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorMode"
+      },
+      {
+        "address": "0x141ad3c28",
+        "references": [
+          {
+            "from": "0x1421aa8a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorMatrix"
+      },
+      {
+        "address": "0x141ad3c70",
+        "references": [
+          {
+            "from": "0x1421aa918",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorMatrixNumber"
+      },
+      {
+        "address": "0x141ad3d10",
+        "references": [
+          {
+            "from": "0x1421aaa08",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorControl"
+      },
+      {
+        "address": "0x141ad40a0",
+        "references": [
+          {
+            "from": "0x1421aaf48",
+            "function": null
+          },
+          {
+            "from": "0x1421ad260",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorCompensationFilter"
+      },
+      {
+        "address": "0x141ad41f0",
+        "references": [
+          {
+            "from": "0x1421ab508",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorBalanceA"
+      },
+      {
+        "address": "0x141ad4320",
+        "references": [
+          {
+            "from": "0x1421ab7d8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorHue"
+      },
+      {
+        "address": "0x141ad45c0",
+        "references": [
+          {
+            "from": "0x1421abd50",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorEffect"
+      },
+      {
+        "address": "0x141ad4d88",
+        "references": [
+          {
+            "from": "0x1421acc10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorMatrixA"
+      },
+      {
+        "address": "0x141ad4d98",
+        "references": [
+          {
+            "from": "0x1421acc28",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorMatrixB"
+      },
+      {
+        "address": "0x141ad51c8",
+        "references": [
+          {
+            "from": "0x1421ad230",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorReproduction"
+      },
+      {
+        "address": "0x141d226b0",
+        "references": [],
+        "section": ".rdata",
+        "text": "color_buffer_packed_float"
+      },
+      {
+        "address": "0x141d22768",
+        "references": [],
+        "section": ".rdata",
+        "text": "specular_vector"
+      },
+      {
+        "address": "0x141d22978",
+        "references": [
+          {
+            "from": "0x14116d941",
+            "function": "sub_141169e80"
+          },
+          {
+            "from": "0x1411725f8",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_buffer_float"
+      },
+      {
+        "address": "0x141d239e8",
+        "references": [
+          {
+            "from": "0x14117262a",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_buffer_half_float"
+      },
+      {
+        "address": "0x141d23a00",
+        "references": [
+          {
+            "from": "0x14117265c",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_subtable"
+      },
+      {
+        "address": "0x141d24620",
+        "references": [],
+        "section": ".rdata",
+        "text": "color_clamp"
+      },
+      {
+        "address": "0x141d249b8",
+        "references": [],
+        "section": ".rdata",
+        "text": "alpha_to_coverage_dither_control"
+      },
+      {
+        "address": "0x141d24e20",
+        "references": [
+          {
+            "from": "0x141177b5a",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh_shader"
+      },
+      {
+        "address": "0x141d25820",
+        "references": [
+          {
+            "from": "0x141179f2e",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "alpha_test"
+      },
+      {
+        "address": "0x141d25a00",
+        "references": [
+          {
+            "from": "0x14117a52e",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_range"
+      },
+      {
+        "address": "0x141d25bb0",
+        "references": [
+          {
+            "from": "0x14117ab05",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_matrix_accuracy"
+      },
+      {
+        "address": "0x141d25bc8",
+        "references": [
+          {
+            "from": "0x14117ab37",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_table_index_mode"
+      },
+      {
+        "address": "0x141d26030",
+        "references": [
+          {
+            "from": "0x14117b923",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_matrix"
+      },
+      {
+        "address": "0x141d26040",
+        "references": [
+          {
+            "from": "0x14117b967",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color_table"
+      },
+      {
+        "address": "0x141d260b8",
+        "references": [
+          {
+            "from": "0x14117bb37",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh_array"
+      },
+      {
+        "address": "0x141d26130",
+        "references": [
+          {
+            "from": "0x14117bd04",
+            "function": "sub_141169e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "specular_fog"
+      },
+      {
+        "address": "0x141d69a9c",
+        "references": [
+          {
+            "from": "0x141207681",
+            "function": "sub_141207000"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141d6ada0",
+        "references": [
+          {
+            "from": "0x1411fbe15",
+            "function": "sub_1411fbd50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorRGB"
+      },
+      {
+        "address": "0x141d6adb0",
+        "references": [
+          {
+            "from": "0x1411fbe3a",
+            "function": "sub_1411fbd50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorRGBA"
+      },
+      {
+        "address": "0x141d6b658",
+        "references": [
+          {
+            "from": "0x14120013d",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d6b680",
+        "references": [
+          {
+            "from": "0x14120018d",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material::"
+      },
+      {
+        "address": "0x141d6b95c",
+        "references": [
+          {
+            "from": "0x14120083f",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141d6bb74",
+        "references": [
+          {
+            "from": "0x141200edb",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141d6beb0",
+        "references": [
+          {
+            "from": "0x141201781",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d6bed8",
+        "references": [
+          {
+            "from": "0x141201807",
+            "function": "sub_1411fe960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d6c0ac",
+        "references": [
+          {
+            "from": "0x141202c2d",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141202c51",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141202c86",
+            "function": "sub_141201be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d6c0b8",
+        "references": [
+          {
+            "from": "0x141202cbc",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141202ce0",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141202d15",
+            "function": "sub_141201be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorAndAlpha"
+      },
+      {
+        "address": "0x141d6c208",
+        "references": [
+          {
+            "from": "0x141203904",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141203928",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x14120395d",
+            "function": "sub_141201be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "NormalMap"
+      },
+      {
+        "address": "0x141d6c248",
+        "references": [
+          {
+            "from": "0x141203b40",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141203b64",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141203b99",
+            "function": "sub_141201be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d6c258",
+        "references": [
+          {
+            "from": "0x141203bcf",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141203bf3",
+            "function": "sub_141201be0"
+          },
+          {
+            "from": "0x141203c28",
+            "function": "sub_141201be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpecularFactor"
+      },
+      {
+        "address": "0x141d6d5cc",
+        "references": [
+          {
+            "from": "0x1412187af",
+            "function": "sub_141217d40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141d6d850",
+        "references": [
+          {
+            "from": "0x141218b50",
+            "function": "sub_141217d40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomFrameRate"
+      },
+      {
+        "address": "0x141d6dad8",
+        "references": [
+          {
+            "from": "0x1421b5a60",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d6dae0",
+        "references": [
+          {
+            "from": "0x14121bf49",
+            "function": "sub_14121bee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d6ee20",
+        "references": [
+          {
+            "from": "0x14124f0cb",
+            "function": "sub_14124eda0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d6ff08",
+        "references": [
+          {
+            "from": "0x1412577bf",
+            "function": "sub_141257380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d70f88",
+        "references": [
+          {
+            "from": "0x1421b5b80",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpecularColor"
+      },
+      {
+        "address": "0x141d70f98",
+        "references": [
+          {
+            "from": "0x1421b5b88",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpecularFactor"
+      },
+      {
+        "address": "0x141d70fc8",
+        "references": [
+          {
+            "from": "0x1421b5ba0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "NormalMap"
+      },
+      {
+        "address": "0x141d71180",
+        "references": [
+          {
+            "from": "0x141271c3c",
+            "function": "sub_141271b70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d71910",
+        "references": [
+          {
+            "from": "0x141282d09",
+            "function": "sub_1412827b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "custom unit"
+      },
+      {
+        "address": "0x141d71980",
+        "references": [
+          {
+            "from": "0x141282fa7",
+            "function": "sub_141282d40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom unit"
+      },
+      {
+        "address": "0x141d71cd8",
+        "references": [
+          {
+            "from": "0x1412a530e",
+            "function": "sub_1412a5010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d722a0",
+        "references": [
+          {
+            "from": "0x1412ab44f",
+            "function": "sub_1412a9510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom Format"
+      },
+      {
+        "address": "0x141d734f0",
+        "references": [
+          {
+            "from": "0x1412b9d5d",
+            "function": "sub_1412b9c70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d73918",
+        "references": [
+          {
+            "from": "0x1421b5dd8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorRGB"
+      },
+      {
+        "address": "0x141d73928",
+        "references": [
+          {
+            "from": "0x1421b5de8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorRGBA"
+      },
+      {
+        "address": "0x141d75cf8",
+        "references": [
+          {
+            "from": "0x1412e11f5",
+            "function": "sub_1412e0ef0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d7612c",
+        "references": [
+          {
+            "from": "0x1412e2897",
+            "function": "sub_1412e2860"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d76790",
+        "references": [
+          {
+            "from": "0x1412e4a8e",
+            "function": "sub_1412e4a50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomHeight"
+      },
+      {
+        "address": "0x141d767a0",
+        "references": [
+          {
+            "from": "0x1412e4b3a",
+            "function": "sub_1412e4a50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CustomWidth"
+      },
+      {
+        "address": "0x141d7c004",
+        "references": [
+          {
+            "from": "0x1412f1348",
+            "function": "sub_1412ea8e0"
+          },
+          {
+            "from": "0x1412f2bc6",
+            "function": "sub_1412f2bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normal"
+      },
+      {
+        "address": "0x141d7c028",
+        "references": [
+          {
+            "from": "0x1412f14bb",
+            "function": "sub_1412ea8e0"
+          },
+          {
+            "from": "0x1412f2c16",
+            "function": "sub_1412f2c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normal"
+      },
+      {
+        "address": "0x141d85104",
+        "references": [
+          {
+            "from": "0x141332c7c",
+            "function": "sub_141332c77"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8515c",
+        "references": [
+          {
+            "from": "0x141332f44",
+            "function": "sub_141332d50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d85a58",
+        "references": [
+          {
+            "from": "0x141342d61",
+            "function": "sub_141342b60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d86d2c",
+        "references": [
+          {
+            "from": "0x1413713f8",
+            "function": "sub_141371290"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Colors"
+      },
+      {
+        "address": "0x141d86ddc",
+        "references": [
+          {
+            "from": "0x14136b5e3",
+            "function": "sub_14136b230"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d86e44",
+        "references": [
+          {
+            "from": "0x14136b705",
+            "function": "sub_14136b230"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d86e7c",
+        "references": [
+          {
+            "from": "0x141370527",
+            "function": "sub_141370440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Colors"
+      },
+      {
+        "address": "0x141d871d8",
+        "references": [
+          {
+            "from": "0x141370e3d",
+            "function": "sub_141370cd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials"
+      },
+      {
+        "address": "0x141d87248",
+        "references": [
+          {
+            "from": "0x14137110a",
+            "function": "sub_141370f90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d872b0",
+        "references": [
+          {
+            "from": "0x1413714af",
+            "function": "sub_141371290"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorIndex"
+      },
+      {
+        "address": "0x141d87458",
+        "references": [
+          {
+            "from": "0x14136c237",
+            "function": "sub_14136c200"
+          },
+          {
+            "from": "0x14136c2a1",
+            "function": "sub_14136c200"
+          },
+          {
+            "from": "0x14136c567",
+            "function": "sub_14136c530"
+          },
+          {
+            "from": "0x14136c5d1",
+            "function": "sub_14136c530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d875cc",
+        "references": [
+          {
+            "from": "0x14136d2dc",
+            "function": "sub_14136d190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d875f8",
+        "references": [
+          {
+            "from": "0x14136d42e",
+            "function": "sub_14136d190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d87b3c",
+        "references": [
+          {
+            "from": "0x14136b914",
+            "function": "sub_14136b230"
+          },
+          {
+            "from": "0x14136eb58",
+            "function": "sub_14136eb10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d87b88",
+        "references": [
+          {
+            "from": "0x14136ed40",
+            "function": "sub_14136ed00"
+          },
+          {
+            "from": "0x14136f7b5",
+            "function": "sub_14136f7a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertices"
+      },
+      {
+        "address": "0x141d87bd0",
+        "references": [
+          {
+            "from": "0x14136ef1b",
+            "function": "sub_14136eed6"
+          },
+          {
+            "from": "0x14136f896",
+            "function": "sub_14136f850"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d87bd8",
+        "references": [
+          {
+            "from": "0x14136f044",
+            "function": "sub_14136eed6"
+          },
+          {
+            "from": "0x14136f9ac",
+            "function": "sub_14136f980"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialAssignation"
+      },
+      {
+        "address": "0x141d87cb0",
+        "references": [
+          {
+            "from": "0x14136f114",
+            "function": "sub_14136eed6"
+          },
+          {
+            "from": "0x14136fda1",
+            "function": "sub_14136fd90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials"
+      },
+      {
+        "address": "0x141d87da8",
+        "references": [
+          {
+            "from": "0x1413705e7",
+            "function": "sub_141370440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorIndex"
+      },
+      {
+        "address": "0x141d88198",
+        "references": [
+          {
+            "from": "0x141372d5f",
+            "function": "sub_1413729f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha_Black"
+      },
+      {
+        "address": "0x141d88240",
+        "references": [
+          {
+            "from": "0x141372fa6",
+            "function": "sub_1413729f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialMode"
+      },
+      {
+        "address": "0x141d88388",
+        "references": [
+          {
+            "from": "0x1413732b0",
+            "function": "sub_1413729f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha_Black"
+      },
+      {
+        "address": "0x141d883d0",
+        "references": [
+          {
+            "from": "0x14137353a",
+            "function": "sub_141373380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d88410",
+        "references": [
+          {
+            "from": "0x1413736f2",
+            "function": "sub_141373380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha"
+      },
+      {
+        "address": "0x141d886f8",
+        "references": [
+          {
+            "from": "0x1413743cf",
+            "function": "sub_141374280"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertices"
+      },
+      {
+        "address": "0x141d887a8",
+        "references": [
+          {
+            "from": "0x14137460f",
+            "function": "sub_141374280"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d89818",
+        "references": [
+          {
+            "from": "0x141362049",
+            "function": "sub_141361f60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d89a50",
+        "references": [
+          {
+            "from": "0x1413636a1",
+            "function": "sub_141363060"
+          },
+          {
+            "from": "0x14136375a",
+            "function": "sub_141363060"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8b2d8",
+        "references": [
+          {
+            "from": "0x141378dc7",
+            "function": "sub_1413788c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8b2e8",
+        "references": [
+          {
+            "from": "0x141378dd8",
+            "function": "sub_1413788c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8b6c8",
+        "references": [
+          {
+            "from": "0x141379a2e",
+            "function": "sub_1413794d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8b6d8",
+        "references": [
+          {
+            "from": "0x141379a3f",
+            "function": "sub_1413794d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8ba18",
+        "references": [
+          {
+            "from": "0x14137a56f",
+            "function": "sub_14137a430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8ba28",
+        "references": [
+          {
+            "from": "0x14137a580",
+            "function": "sub_14137a430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8ba54",
+        "references": [
+          {
+            "from": "0x14137a601",
+            "function": "sub_14137a430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141d8ba5c",
+        "references": [
+          {
+            "from": "0x14137a612",
+            "function": "sub_14137a430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141d8bb58",
+        "references": [
+          {
+            "from": "0x14137a9a8",
+            "function": "sub_14137a820"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8bb68",
+        "references": [
+          {
+            "from": "0x14137a9b9",
+            "function": "sub_14137a820"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8bb94",
+        "references": [
+          {
+            "from": "0x14137aa3a",
+            "function": "sub_14137a820"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141d8bb9c",
+        "references": [
+          {
+            "from": "0x14137aa4b",
+            "function": "sub_14137a820"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141d8d348",
+        "references": [
+          {
+            "from": "0x14138fec9",
+            "function": "sub_14138fe00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material"
+      },
+      {
+        "address": "0x141d8d378",
+        "references": [
+          {
+            "from": "0x14138ff71",
+            "function": "sub_14138fe00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "normals"
+      },
+      {
+        "address": "0x141d8e4c8",
+        "references": [
+          {
+            "from": "0x1413aff10",
+            "function": "sub_1413af930"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials animation"
+      },
+      {
+        "address": "0x141d8e518",
+        "references": [
+          {
+            "from": "0x1413aff62",
+            "function": "sub_1413af930"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d8e72c",
+        "references": [
+          {
+            "from": "0x1413b8f39",
+            "function": "sub_1413b8bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141d8e754",
+        "references": [
+          {
+            "from": "0x1413b9162",
+            "function": "sub_1413b8bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141d8e804",
+        "references": [
+          {
+            "from": "0x1413bb7ed",
+            "function": "sub_1413bb670"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Colors"
+      },
+      {
+        "address": "0x141d8f554",
+        "references": [
+          {
+            "from": "0x1413b75ff",
+            "function": "sub_1413b7510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8f55c",
+        "references": [
+          {
+            "from": "0x1413b7616",
+            "function": "sub_1413b7510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8f564",
+        "references": [
+          {
+            "from": "0x1413b7630",
+            "function": "sub_1413b7510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8f57c",
+        "references": [
+          {
+            "from": "0x1413b7653",
+            "function": "sub_1413b7510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8fb58",
+        "references": [
+          {
+            "from": "0x1413b896b",
+            "function": "sub_1413b87d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d8fba0",
+        "references": [
+          {
+            "from": "0x1413b8a73",
+            "function": "sub_1413b87d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d9026c",
+        "references": [
+          {
+            "from": "0x1413b9cd3",
+            "function": "sub_1413b9bf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d90298",
+        "references": [
+          {
+            "from": "0x1413ba7b6",
+            "function": "sub_1413ba720"
+          },
+          {
+            "from": "0x1413babac",
+            "function": "sub_1413bab50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertices"
+      },
+      {
+        "address": "0x141d902a8",
+        "references": [
+          {
+            "from": "0x1413bad56",
+            "function": "sub_1413bacc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d902c0",
+        "references": [
+          {
+            "from": "0x1413baf47",
+            "function": "sub_1413baeb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialAssignation"
+      },
+      {
+        "address": "0x141d902e8",
+        "references": [
+          {
+            "from": "0x1413baf1c",
+            "function": "sub_1413baeb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialAssignation"
+      },
+      {
+        "address": "0x141d90308",
+        "references": [
+          {
+            "from": "0x1413baf6e",
+            "function": "sub_1413baeb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialAssignation"
+      },
+      {
+        "address": "0x141d90320",
+        "references": [
+          {
+            "from": "0x1413bafb1",
+            "function": "sub_1413baeb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials"
+      },
+      {
+        "address": "0x141d904b0",
+        "references": [
+          {
+            "from": "0x1413bb8c0",
+            "function": "sub_1413bb670"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorIndex"
+      },
+      {
+        "address": "0x141d905a0",
+        "references": [
+          {
+            "from": "0x1413bbe6d",
+            "function": "sub_1413bb9e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials"
+      },
+      {
+        "address": "0x141d90620",
+        "references": [
+          {
+            "from": "0x1413bc204",
+            "function": "sub_1413bbee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials"
+      },
+      {
+        "address": "0x141d90728",
+        "references": [
+          {
+            "from": "0x1413bc4db",
+            "function": "sub_1413bc2f0"
+          },
+          {
+            "from": "0x1413bc755",
+            "function": "sub_1413bc680"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d90788",
+        "references": [
+          {
+            "from": "0x1413bc3c5",
+            "function": "sub_1413bc2f0"
+          },
+          {
+            "from": "0x1413bc881",
+            "function": "sub_1413bc7e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d90868",
+        "references": [
+          {
+            "from": "0x1413bcc2f",
+            "function": "sub_1413bc970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha_Black"
+      },
+      {
+        "address": "0x141d90a68",
+        "references": [
+          {
+            "from": "0x1413bce05",
+            "function": "sub_1413bc970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MaterialMode"
+      },
+      {
+        "address": "0x141d90bd8",
+        "references": [
+          {
+            "from": "0x1413bcfa5",
+            "function": "sub_1413bc970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha"
+      },
+      {
+        "address": "0x141d90be0",
+        "references": [
+          {
+            "from": "0x1413bd0f0",
+            "function": "sub_1413bd050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material"
+      },
+      {
+        "address": "0x141d90c18",
+        "references": [
+          {
+            "from": "0x1413bd203",
+            "function": "sub_1413bd050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d90c44",
+        "references": [
+          {
+            "from": "0x1413bd2a3",
+            "function": "sub_1413bd050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha"
+      },
+      {
+        "address": "0x141d90ca8",
+        "references": [
+          {
+            "from": "0x1413bd385",
+            "function": "sub_1413bd050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d90cb8",
+        "references": [
+          {
+            "from": "0x1413bd39b",
+            "function": "sub_1413bd050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Opacity"
+      },
+      {
+        "address": "0x141d90d90",
+        "references": [
+          {
+            "from": "0x1413bdd4d",
+            "function": "sub_1413bd810"
+          },
+          {
+            "from": "0x1413bdd65",
+            "function": "sub_1413bd810"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertices"
+      },
+      {
+        "address": "0x141d90da0",
+        "references": [
+          {
+            "from": "0x1413be0fc",
+            "function": "sub_1413bd810"
+          },
+          {
+            "from": "0x1413be129",
+            "function": "sub_1413bd810"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Normals"
+      },
+      {
+        "address": "0x141d90e68",
+        "references": [
+          {
+            "from": "0x1413befc3",
+            "function": "sub_1413bee84"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Alpha"
+      },
+      {
+        "address": "0x141d90ea0",
+        "references": [
+          {
+            "from": "0x1413bf0e2",
+            "function": "sub_1413bf010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d90eb0",
+        "references": [
+          {
+            "from": "0x1413bf0ff",
+            "function": "sub_1413bf010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d90ec0",
+        "references": [
+          {
+            "from": "0x1413bf119",
+            "function": "sub_1413bf010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specular"
+      },
+      {
+        "address": "0x141d90f00",
+        "references": [
+          {
+            "from": "0x1413bf17e",
+            "function": "sub_1413bf010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Opacity"
+      },
+      {
+        "address": "0x141d91234",
+        "references": [
+          {
+            "from": "0x14002330d",
+            "function": "sub_140023300"
+          },
+          {
+            "from": "0x1421b7118",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Color"
+      },
+      {
+        "address": "0x141d91268",
+        "references": [
+          {
+            "from": "0x1400233ed",
+            "function": "sub_1400233e0"
+          },
+          {
+            "from": "0x1421b7138",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ColorAndAlpha"
+      },
+      {
+        "address": "0x141d93bb0",
+        "references": [
+          {
+            "from": "0x1413eb5e3",
+            "function": "sub_1413eb3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "color"
+      },
+      {
+        "address": "0x141d93bc8",
+        "references": [
+          {
+            "from": "0x1413eb660",
+            "function": "sub_1413eb3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "specularColor"
+      }
+    ],
+    "total": 597
+  },
+  "summary": "597 strings match \"^(Color|Opacity|Normal|Gloss|Specular|Subsurface|AO|Custom|Two[- ]sided|Alpha|Mesh|Cutout|Vertices|Anchor|Material)[A-Za-z0-9 _:]{0,30}$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 200,
+    "total": 597,
+    "next_offset": 200
+  },
+  "locations": [],
+  "links": []
+}

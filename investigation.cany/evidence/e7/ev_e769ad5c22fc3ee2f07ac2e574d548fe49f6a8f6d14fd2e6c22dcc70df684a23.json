@@ -1,0 +1,532 @@
+{
+  "id": "ev_e769ad5c22fc3ee2f07ac2e574d548fe49f6a8f6d14fd2e6c22dcc70df684a23",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Edit Cutout|[Ee]mbedded|Improve folding|Show opacity|Show all +meshes|Tessellation"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141036e50",
+        "references": [
+          {
+            "from": "0x14007f1a4",
+            "function": "sub_14007e690"
+          },
+          {
+            "from": "0x14007f1e2",
+            "function": "sub_14007e690"
+          },
+          {
+            "from": "0x14007f224",
+            "function": "sub_14007e690"
+          },
+          {
+            "from": "0x1400a3cd3",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4a8b",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Embedded"
+      },
+      {
+        "address": "0x141036e60",
+        "references": [
+          {
+            "from": "0x14007ed37",
+            "function": "sub_14007e690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<Embedded>"
+      },
+      {
+        "address": "0x141036f10",
+        "references": [
+          {
+            "from": "0x140080642",
+            "function": "sub_1400805d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Loading a file will delete this asset's embedded data.\n\nDo you wish to continue?"
+      },
+      {
+        "address": "0x1410371d0",
+        "references": [
+          {
+            "from": "0x140082957",
+            "function": "sub_1400828d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Editing this mesh will convert it to embedded.\nIt will no longer reference files on disk.\n\nDo you wish to continue?"
+      },
+      {
+        "address": "0x141040150",
+        "references": [
+          {
+            "from": "0x1400a55bf",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b85bd",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1402f3a6b",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Tessellation"
+      },
+      {
+        "address": "0x141040220",
+        "references": [
+          {
+            "from": "0x1400a455a",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a4d3f",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4d3e",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b65ba",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "EmbeddedData_v7"
+      },
+      {
+        "address": "0x141040f80",
+        "references": [
+          {
+            "from": "0x1400b5a65",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b7946",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "EmbeddedData"
+      },
+      {
+        "address": "0x141040f90",
+        "references": [
+          {
+            "from": "0x1400b5403",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b6e55",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "EmbeddedData_v6"
+      },
+      {
+        "address": "0x141075478",
+        "references": [
+          {
+            "from": "0x1402b406a",
+            "function": "sub_1402b3f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The following meshes were unembedded but their "
+      },
+      {
+        "address": "0x14107bf40",
+        "references": [
+          {
+            "from": "0x1402f3b7a",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Improve folding"
+      },
+      {
+        "address": "0x14107bfa0",
+        "references": [
+          {
+            "from": "0x1402f35b3",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Show all  meshes"
+      },
+      {
+        "address": "0x14107bfb8",
+        "references": [
+          {
+            "from": "0x1402f356e",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Show opacity"
+      },
+      {
+        "address": "0x14107c1e0",
+        "references": [
+          {
+            "from": "0x1402f57d9",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pTessellation"
+      },
+      {
+        "address": "0x14107ca78",
+        "references": [
+          {
+            "from": "0x1402fca17",
+            "function": "sub_1402fc9c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Edit Cutout - "
+      },
+      {
+        "address": "0x1410974b0",
+        "references": [
+          {
+            "from": "0x1403ae5f2",
+            "function": "sub_1403ae380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GeometryEmbedded"
+      },
+      {
+        "address": "0x1410a2c80",
+        "references": [
+          {
+            "from": "0x14041ba3d",
+            "function": "sub_14041b960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning>Unembedded mesh data detected: %s\n"
+      },
+      {
+        "address": "0x1410d1588",
+        "references": [
+          {
+            "from": "0x1405ba19b",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "glTessellationModeAMD"
+      },
+      {
+        "address": "0x1410d15a0",
+        "references": [
+          {
+            "from": "0x1405ba18e",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "glTessellationFactorAMD"
+      },
+      {
+        "address": "0x1410ddaf8",
+        "references": [
+          {
+            "from": "0x1405bb05d",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ARB_tessellation_shader"
+      },
+      {
+        "address": "0x1410dfc50",
+        "references": [
+          {
+            "from": "0x1405c7b89",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "tessellation_program5"
+      },
+      {
+        "address": "0x1410e0b10",
+        "references": [
+          {
+            "from": "0x1405c3b70",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "tessellation_shader"
+      },
+      {
+        "address": "0x1410fc890",
+        "references": [
+          {
+            "from": "0x14063b4e6",
+            "function": "sub_14063b110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Embedded Profile"
+      },
+      {
+        "address": "0x141159230",
+        "references": [
+          {
+            "from": "0x1406beba3",
+            "function": "sub_1406be950"
+          }
+        ],
+        "section": ".rdata",
+        "text": "invalid embedded Abstract ICC profile"
+      },
+      {
+        "address": "0x14139bc20",
+        "references": [
+          {
+            "from": "0x140b11882",
+            "function": "sub_140b10ef0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "DocumentEmbeddedUrl"
+      },
+      {
+        "address": "0x1413a8d98",
+        "references": [
+          {
+            "from": "0x140b4a8a4",
+            "function": "sub_140b4a7e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export|AdvOptGrp|Fbx|EMBEDDED"
+      },
+      {
+        "address": "0x1413a9ae8",
+        "references": [
+          {
+            "from": "0x140b3b9b1",
+            "function": "sub_140b3b770"
+          },
+          {
+            "from": "0x140b3dec8",
+            "function": "sub_140b3dbb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export|AdvOptGrp|Fbx|EMBEDDED"
+      },
+      {
+        "address": "0x1413b0ce0",
+        "references": [
+          {
+            "from": "0x140b80d28",
+            "function": "sub_140b80ac0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The following texture(s) will not be embedded in your scene, as the plug-in cannot locate them:"
+      },
+      {
+        "address": "0x1413b1100",
+        "references": [
+          {
+            "from": "0x141a8f5e0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "EmbeddedFileProject"
+      },
+      {
+        "address": "0x1413bbc60",
+        "references": [
+          {
+            "from": "0x140bb5964",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413bbc78",
+        "references": [
+          {
+            "from": "0x140bb5975",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413bbf68",
+        "references": [
+          {
+            "from": "0x140bb642a",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Embedded"
+      },
+      {
+        "address": "0x1413bbf78",
+        "references": [
+          {
+            "from": "0x140bb643b",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "EMBEDDED"
+      },
+      {
+        "address": "0x1413bc080",
+        "references": [
+          {
+            "from": "0x140bb6641",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Embedded_Skipped_Properties"
+      },
+      {
+        "address": "0x1413c39c0",
+        "references": [
+          {
+            "from": "0x140bc7f01",
+            "function": "sub_140bc7a90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413c3a58",
+        "references": [
+          {
+            "from": "0x140bbf56e",
+            "function": "sub_140bbf470"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413c3a90",
+        "references": [
+          {
+            "from": "0x140bbf5ee",
+            "function": "sub_140bbf470"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413c5278",
+        "references": [
+          {
+            "from": "0x140bcceb5",
+            "function": "sub_140bccd70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413efa60",
+        "references": [
+          {
+            "from": "0x140ca9f73",
+            "function": "sub_140ca9ee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413f06c0",
+        "references": [
+          {
+            "from": "0x140c9b6bd",
+            "function": "sub_140c9b670"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      },
+      {
+        "address": "0x1413f0fb0",
+        "references": [
+          {
+            "from": "0x140cac31e",
+            "function": "sub_140cac220"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|AdvOptGrp|FileFormat|Fbx|ExtractEmbeddedData"
+      }
+    ],
+    "total": 70
+  },
+  "summary": "70 strings match \"Edit Cutout|[Ee]mbedded|Improve folding|Show opacity|Show all +meshes|Tessellation\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 40,
+    "total": 70,
+    "next_offset": 40
+  },
+  "locations": [],
+  "links": []
+}

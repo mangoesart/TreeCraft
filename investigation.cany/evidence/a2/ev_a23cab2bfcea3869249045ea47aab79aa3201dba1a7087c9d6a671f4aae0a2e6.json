@@ -1,0 +1,133 @@
+{
+  "id": "ev_a23cab2bfcea3869249045ea47aab79aa3201dba1a7087c9d6a671f4aae0a2e6",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 80,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "\\.\\?AV(CGenAlg\\w+|C\\w*Spine\\w*|C\\w*Skin\\w*|CBranch\\w*|CLeaf\\w*)@@"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1422320a8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCLeafNode@@"
+      },
+      {
+        "address": "0x1422320c8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCSpineNode@@"
+      },
+      {
+        "address": "0x142232568",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCBranchNode@@"
+      },
+      {
+        "address": "0x1422325e0",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCLeafMeshNode@@"
+      },
+      {
+        "address": "0x142277530",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgAbsoluteNumber@@"
+      },
+      {
+        "address": "0x142277560",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgAbsoluteSteps@@"
+      },
+      {
+        "address": "0x142277590",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgBifurcation@@"
+      },
+      {
+        "address": "0x1422775c0",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgClassic@@"
+      },
+      {
+        "address": "0x1422775e8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgFlood@@"
+      },
+      {
+        "address": "0x142277610",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgInterval@@"
+      },
+      {
+        "address": "0x142277638",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgParent@@"
+      },
+      {
+        "address": "0x142277660",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgPhyllotaxy@@"
+      },
+      {
+        "address": "0x142277688",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgProportional@@"
+      },
+      {
+        "address": "0x1422776b8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgProportionalSteps@@"
+      },
+      {
+        "address": "0x142279628",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCBranchMeshNode@@"
+      }
+    ],
+    "total": 15
+  },
+  "summary": "15 strings match \"\\.\\?AV(CGenAlg\\w+|C\\w*Spine\\w*|C\\w*Skin\\w*|CBranch\\w*|CLeaf\\w*)@@\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 15,
+    "total": 15
+  },
+  "locations": [],
+  "links": []
+}

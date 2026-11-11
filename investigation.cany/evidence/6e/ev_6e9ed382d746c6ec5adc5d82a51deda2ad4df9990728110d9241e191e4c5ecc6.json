@@ -1,0 +1,57 @@
+{
+  "id": "ev_6e9ed382d746c6ec5adc5d82a51deda2ad4df9990728110d9241e191e4c5ecc6",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 14000,
+      "name": "pseudo_code",
+      "offset": 62000
+    },
+    "source": {
+      "evidence_id": "ev_491280af2ab003070856cc87fd335ce5239bccce6f7843cfb05685f2d276de99",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": true,
+      "examined": 0,
+      "next_offset": null,
+      "status": "empty",
+      "total": 59454
+    },
+    "from_evidence": "ev_491280af2ab003070856cc87fd335ce5239bccce6f7843cfb05685f2d276de99",
+    "from_tool": "native_function_pseudocode",
+    "shown": {
+      "list": "pseudo_code",
+      "offset": 62000,
+      "text": "",
+      "total_utf16_units": 59454
+    }
+  },
+  "summary": "Part of native_function_pseudocode evidence (empty).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 0,
+    "total": 59454
+  },
+  "locations": [],
+  "links": [
+    "ev_491280af2ab003070856cc87fd335ce5239bccce6f7843cfb05685f2d276de99"
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "id": "ev_1671224dd5516b9b0ea03a170d4702b8bed08e6eeb1cd77617e0d076abc38128",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Gravity|Spine:Shape:Gravity|Spine:Gravity.*|Gravity:.*|Jink|Noise|Taper|Radius:Taper|Shape)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141045e80",
+        "references": [
+          {
+            "from": "0x14010ce99",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Gravity"
+      },
+      {
+        "address": "0x141046780",
+        "references": [
+          {
+            "from": "0x140111f24",
+            "function": "sub_140110f30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gravity"
+      },
+      {
+        "address": "0x141047ef0",
+        "references": [
+          {
+            "from": "0x140136fba",
+            "function": "sub_140136e00"
+          },
+          {
+            "from": "0x140389fc8",
+            "function": "sub_140389ce0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1410628d0",
+        "references": [
+          {
+            "from": "0x14024b0bc",
+            "function": "sub_14024b010"
+          },
+          {
+            "from": "0x1402e4ccf",
+            "function": "sub_1402e4a90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Noise"
+      },
+      {
+        "address": "0x14138230c",
+        "references": [
+          {
+            "from": "0x140a8fb56",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x141382c2c",
+        "references": [
+          {
+            "from": "0x140a8c631",
+            "function": "sub_140a8b490"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x14139a5e0",
+        "references": [
+          {
+            "from": "0x140b0a204",
+            "function": "sub_140b0a1d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413abb18",
+        "references": [
+          {
+            "from": "0x140b4784d",
+            "function": "sub_140b47680"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413b7bfc",
+        "references": [
+          {
+            "from": "0x140bb56d3",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413b7c34",
+        "references": [
+          {
+            "from": "0x140bb56e4",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413bbe94",
+        "references": [
+          {
+            "from": "0x140bb61e2",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413bbe9c",
+        "references": [
+          {
+            "from": "0x140bb61f3",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413c4310",
+        "references": [
+          {
+            "from": "0x140bcbd81",
+            "function": "sub_140bcbd10"
+          },
+          {
+            "from": "0x140bcbe49",
+            "function": "sub_140bcbd10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413c77ec",
+        "references": [
+          {
+            "from": "0x141a901c0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413f0578",
+        "references": [
+          {
+            "from": "0x140caad7f",
+            "function": "sub_140caacf0"
+          },
+          {
+            "from": "0x140caaee2",
+            "function": "sub_140caacf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413f79bc",
+        "references": [
+          {
+            "from": "0x140ccf767",
+            "function": "sub_140ccf390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x1413f8e70",
+        "references": [
+          {
+            "from": "0x140cbfcbc",
+            "function": "sub_140cbfc30"
+          },
+          {
+            "from": "0x140cbfe1f",
+            "function": "sub_140cbfc30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x141402190",
+        "references": [
+          {
+            "from": "0x140ce42c7",
+            "function": "sub_140ce4100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      },
+      {
+        "address": "0x14140aba4",
+        "references": [
+          {
+            "from": "0x140cfc5a4",
+            "function": "sub_140cfc380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape"
+      }
+    ],
+    "total": 19
+  },
+  "summary": "19 strings match \"^(Gravity|Spine:Shape:Gravity|Spine:Gravity.*|Gravity:.*|Jink|Noise|Taper|Radius:Taper|Shape)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 19,
+    "total": 19
+  },
+  "locations": [],
+  "links": []
+}

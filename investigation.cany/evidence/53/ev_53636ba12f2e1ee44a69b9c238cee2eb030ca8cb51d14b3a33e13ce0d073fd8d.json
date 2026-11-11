@@ -1,0 +1,411 @@
+{
+  "id": "ev_53636ba12f2e1ee44a69b9c238cee2eb030ca8cb51d14b3a33e13ce0d073fd8d",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Add new|Duplicate|Rename|Remove|Move up|Move down|Up|Down)$|AddRemove|ListEditor|EditList"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410303fc",
+        "references": [
+          {
+            "from": "0x14004e6da",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14033b78d",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Remove"
+      },
+      {
+        "address": "0x141030420",
+        "references": [
+          {
+            "from": "0x14004e620",
+            "function": "sub_14004e3a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Move down"
+      },
+      {
+        "address": "0x141030430",
+        "references": [
+          {
+            "from": "0x14004e5ab",
+            "function": "sub_14004e3a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Move up"
+      },
+      {
+        "address": "0x141030438",
+        "references": [
+          {
+            "from": "0x14004e566",
+            "function": "sub_14004e3a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Rename"
+      },
+      {
+        "address": "0x141030450",
+        "references": [
+          {
+            "from": "0x14004e4dc",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x140056b73",
+            "function": "sub_140056970"
+          },
+          {
+            "from": "0x140061123",
+            "function": "sub_140060ef0"
+          },
+          {
+            "from": "0x14006e75a",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x1400752de",
+            "function": "sub_140075100"
+          },
+          {
+            "from": "0x140084fa7",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Duplicate"
+      },
+      {
+        "address": "0x141030478",
+        "references": [
+          {
+            "from": "0x14004e452",
+            "function": "sub_14004e3a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Add new"
+      },
+      {
+        "address": "0x141030490",
+        "references": [
+          {
+            "from": "0x14004e3d0",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e414",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e459",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e49e",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e4e3",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e528",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e56d",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e5b2",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e627",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e69c",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e6e1",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e726",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e76b",
+            "function": "sub_14004e3a0"
+          },
+          {
+            "from": "0x14004e814",
+            "function": "sub_14004e7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AssetAddRemove"
+      },
+      {
+        "address": "0x141031b78",
+        "references": [
+          {
+            "from": "0x140053043",
+            "function": "sub_1400529d0"
+          },
+          {
+            "from": "0x14005a323",
+            "function": "sub_140059c60"
+          },
+          {
+            "from": "0x14006566d",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x140070a00",
+            "function": "sub_1400703d0"
+          },
+          {
+            "from": "0x140079c98",
+            "function": "sub_1400795e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwAddRemove"
+      },
+      {
+        "address": "0x141032018",
+        "references": [
+          {
+            "from": "0x140056cfa",
+            "function": "sub_140056970"
+          },
+          {
+            "from": "0x1400612aa",
+            "function": "sub_140060ef0"
+          },
+          {
+            "from": "0x14006e8e8",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x140075446",
+            "function": "sub_140075100"
+          },
+          {
+            "from": "0x140085143",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1AddRemove()"
+      },
+      {
+        "address": "0x141072a98",
+        "references": [
+          {
+            "from": "0x1402a3386",
+            "function": "sub_1402a3180"
+          },
+          {
+            "from": "0x1410e8470",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "rename"
+      },
+      {
+        "address": "0x141092e3c",
+        "references": [],
+        "section": ".rdata",
+        "text": "Down"
+      },
+      {
+        "address": "0x1410e8334",
+        "references": [
+          {
+            "from": "0x1410e8460",
+            "function": null
+          },
+          {
+            "from": "0x1410e90e0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "remove"
+      },
+      {
+        "address": "0x1410e9a80",
+        "references": [
+          {
+            "from": "0x141798ad8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CAssetAddRemoveDialog"
+      },
+      {
+        "address": "0x1410e9cd8",
+        "references": [],
+        "section": ".rdata",
+        "text": "AddRemove()"
+      },
+      {
+        "address": "0x1410ea1f0",
+        "references": [],
+        "section": ".rdata",
+        "text": "AddRemove()"
+      },
+      {
+        "address": "0x1410ea844",
+        "references": [],
+        "section": ".rdata",
+        "text": "AddRemove()"
+      },
+      {
+        "address": "0x1410eacda",
+        "references": [],
+        "section": ".rdata",
+        "text": "AddRemove()"
+      },
+      {
+        "address": "0x1410eb120",
+        "references": [],
+        "section": ".rdata",
+        "text": "AddRemove()"
+      },
+      {
+        "address": "0x1411596f8",
+        "references": [
+          {
+            "from": "0x1406bff80",
+            "function": "sub_1406bff50"
+          },
+          {
+            "from": "0x14073b99b",
+            "function": "sub_14073b970"
+          },
+          {
+            "from": "0x14073bd4e",
+            "function": "sub_14073bcf0"
+          },
+          {
+            "from": "0x14073c13c",
+            "function": "sub_14073bf52"
+          },
+          {
+            "from": "0x14073cb96",
+            "function": "sub_14073cb30"
+          },
+          {
+            "from": "0x14073ce16",
+            "function": "sub_14073cdb0"
+          },
+          {
+            "from": "0x14073d01a",
+            "function": "sub_14073cfd0"
+          },
+          {
+            "from": "0x14073d1d0",
+            "function": "sub_14073d170"
+          },
+          {
+            "from": "0x14073d323",
+            "function": "sub_14073d2c0"
+          },
+          {
+            "from": "0x14073d473",
+            "function": "sub_14073d410"
+          },
+          {
+            "from": "0x14073d7b1",
+            "function": "sub_14073d750"
+          },
+          {
+            "from": "0x14073d9fd",
+            "function": "sub_14073d9c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "duplicate"
+      },
+      {
+        "address": "0x14132a568",
+        "references": [
+          {
+            "from": "0x140942abb",
+            "function": "sub_140942a10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "down"
+      },
+      {
+        "address": "0x141785f08",
+        "references": [],
+        "section": ".rdata",
+        "text": "remove"
+      },
+      {
+        "address": "0x141785f12",
+        "references": [],
+        "section": ".rdata",
+        "text": "rename"
+      },
+      {
+        "address": "0x141788b08",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCAssetAddRemoveDialog@@"
+      }
+    ],
+    "total": 23
+  },
+  "summary": "23 strings match \"^(Add new|Duplicate|Rename|Remove|Move up|Move down|Up|Down)$|AddRemove|ListEditor|EditList\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 23,
+    "total": 23
+  },
+  "locations": [],
+  "links": []
+}

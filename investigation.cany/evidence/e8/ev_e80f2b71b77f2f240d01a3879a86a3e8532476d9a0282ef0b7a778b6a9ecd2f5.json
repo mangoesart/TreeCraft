@@ -1,0 +1,320 @@
+{
+  "id": "ev_e80f2b71b77f2f240d01a3879a86a3e8532476d9a0282ef0b7a778b6a9ecd2f5",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 20,
+    "mode": "literal",
+    "offset": 0,
+    "pattern": "fold"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141040160",
+        "references": [
+          {
+            "from": "0x1400a5544",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b87d1",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ImproveFolding"
+      },
+      {
+        "address": "0x141041860",
+        "references": [
+          {
+            "from": "0x1400c026d",
+            "function": "sub_1400c0260"
+          },
+          {
+            "from": "0x1401e13cd",
+            "function": "sub_1401e13c0"
+          },
+          {
+            "from": "0x14026b59d",
+            "function": "sub_14026b590"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Deformation:Fold"
+      },
+      {
+        "address": "0x141041900",
+        "references": [
+          {
+            "from": "0x1400c0dd5",
+            "function": "sub_1400c0920"
+          },
+          {
+            "from": "0x1401e2032",
+            "function": "sub_1401e1d60"
+          },
+          {
+            "from": "0x14026c1f5",
+            "function": "sub_14026bd40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:Fold"
+      },
+      {
+        "address": "0x141041a68",
+        "references": [
+          {
+            "from": "0x1400c2af6",
+            "function": "sub_1400c170d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fold (deformation)"
+      },
+      {
+        "address": "0x141041aec",
+        "references": [
+          {
+            "from": "0x1400c1720",
+            "function": "sub_1400c170d"
+          },
+          {
+            "from": "0x1401e3024",
+            "function": "sub_1401e2620"
+          },
+          {
+            "from": "0x14020130f",
+            "function": "sub_140200ab0"
+          },
+          {
+            "from": "0x14026dba2",
+            "function": "sub_14026cdb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fold"
+      },
+      {
+        "address": "0x141042270",
+        "references": [
+          {
+            "from": "0x1400cece5",
+            "function": "sub_1400ce980"
+          },
+          {
+            "from": "0x1402736e5",
+            "function": "sub_140273380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Local Orientation:Fold"
+      },
+      {
+        "address": "0x14104c950",
+        "references": [
+          {
+            "from": "0x14016cc3a",
+            "function": "sub_14016b390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0Subdivision error: a non-manifold edge incident to more than 2 faces was found"
+      },
+      {
+        "address": "0x1410525b8",
+        "references": [
+          {
+            "from": "0x1401acd49",
+            "function": "sub_1401acab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "folder.png"
+      },
+      {
+        "address": "0x14105a208",
+        "references": [
+          {
+            "from": "0x1401e7005",
+            "function": "sub_1401e6900"
+          },
+          {
+            "from": "0x1401fc041",
+            "function": "sub_1401fbc20"
+          },
+          {
+            "from": "0x1402752d5",
+            "function": "sub_140274ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Growth:Transitions:Fold"
+      },
+      {
+        "address": "0x14105a258",
+        "references": [
+          {
+            "from": "0x1401e6d78",
+            "function": "sub_1401e6900"
+          },
+          {
+            "from": "0x140275048",
+            "function": "sub_140274ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fold out"
+      },
+      {
+        "address": "0x14105bba0",
+        "references": [
+          {
+            "from": "0x140204fb5",
+            "function": "sub_140204e70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape:Fold"
+      },
+      {
+        "address": "0x1410733e8",
+        "references": [
+          {
+            "from": "0x1402a5ac0",
+            "function": "sub_1402a5870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CurrentVersion/Explorer/Shell Folders"
+      },
+      {
+        "address": "0x14107bf40",
+        "references": [
+          {
+            "from": "0x1402f3b7a",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Improve folding"
+      },
+      {
+        "address": "0x14107c1a8",
+        "references": [
+          {
+            "from": "0x1402f5bd2",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pImproveFolding"
+      },
+      {
+        "address": "0x14108d9f8",
+        "references": [
+          {
+            "from": "0x14033ad4e",
+            "function": "sub_14033ab90"
+          },
+          {
+            "from": "0x14033ada0",
+            "function": "sub_14033ab90"
+          },
+          {
+            "from": "0x14033b0ee",
+            "function": "sub_14033afe0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Simplify/m_pwFoldMeshes"
+      },
+      {
+        "address": "0x14108e1f0",
+        "references": [
+          {
+            "from": "0x14033c84c",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Use this option to add a center point to the mesh.  Doing so adds triangles but may help when manipulating the mesh (e.g., folding or addiing displacement) after the 'Simplify' operation is complete.</span></p></body></html>"
+      },
+      {
+        "address": "0x14108e4d0",
+        "references": [
+          {
+            "from": "0x14033c630",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">'</span><span style=\" font-size:8pt; font-weight:600;\">Adaptive</span><span style=\" font-size:8pt;\">' surrounds the mesh with the number of 'Corners' entered the best it can.  Use this option for the lowest triangle count in most situations.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">'</span><span style=\" font-size:8pt; font-weight:600;\">Grid</span><span style=\" font-size:8pt;\">' is best used for meshes you wish to fold to add depth to the output.  Using this option you can ensure there is a center line down the middle.</span></p></body></html>"
+      },
+      {
+        "address": "0x1410908d8",
+        "references": [
+          {
+            "from": "0x14033bfb9",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fold output meshes"
+      },
+      {
+        "address": "0x141090b70",
+        "references": [
+          {
+            "from": "0x14033beab",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Output meshes will be folded along their center line.  This option prevents the output meshes from being perfectly flat by default.  There must be vertices near the center line of each cutout mesh for this technique to be effective."
+      },
+      {
+        "address": "0x141090c60",
+        "references": [
+          {
+            "from": "0x14033be59",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Note: </span>Folded meshes work best when the mesh geometry has vertices on or near the center line.  Use the 'Add center' option on your cutouts for best results.</p></body></html>"
+      }
+    ],
+    "total": 41
+  },
+  "summary": "41 strings match \"fold\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 20,
+    "total": 41,
+    "next_offset": 20
+  },
+  "locations": [],
+  "links": []
+}

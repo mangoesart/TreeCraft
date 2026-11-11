@@ -1,0 +1,45 @@
+{
+  "id": "ev_e605fdda9f1be517d0f3b22942dc129d3d5f68667a9f0fcacc4db346934c3c98",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402ed1ac"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402ed1ac",
+    "function": "FUN_1402ed110",
+    "pseudo_code": "\r\nvoid FUN_1402ed110(longlong param_1)\r\n\r\n{\r\n  float fVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  uint uVar4;\r\n  uint uVar5;\r\n  longlong lVar6;\r\n  int iVar7;\r\n  void *pvVar8;\r\n  float *pfVar9;\r\n  float *pfVar10;\r\n  uint uVar11;\r\n  undefined1 *puVar12;\r\n  longlong lVar13;\r\n  longlong lVar14;\r\n  uint uVar15;\r\n  ulonglong uVar16;\r\n  float fVar17;\r\n  float fVar18;\r\n  float local_res8 [2];\r\n  float local_res10 [2];\r\n  undefined8 in_stack_ffffffffffffff78;\r\n  undefined4 uVar19;\r\n  undefined8 in_stack_ffffffffffffff80;\r\n  undefined4 uVar20;\r\n  \r\n  uVar19 = (undefined4)((ulonglong)in_stack_ffffffffffffff78 >> 0x20);\r\n  uVar20 = (undefined4)((ulonglong)in_stack_ffffffffffffff80 >> 0x20);\r\n  lVar14 = *(longlong *)(param_1 + 0x30);\r\n  if (lVar14 != 0) {\r\n    lVar6 = *(longlong *)(lVar14 + 0x70);\r\n    if (lVar6 == 0) {\r\n      if (*(longlong *)(lVar14 + 0x40) != 0) {\r\n        iVar2 = *(int *)(param_1 + 0x50);\r\n        iVar3 = *(int *)(param_1 + 0x4c);\r\n        iVar7 = iVar2;\r\n        if (iVar3 < iVar2) {\r\n          iVar7 = iVar3;\r\n        }\r\n        glViewport((iVar3 - iVar7) / 2,(iVar2 - iVar7) / 2,iVar7,iVar7);\r\n        FUN_1402ec9b0(param_1);\r\n        return;\r\n      }\r\n    }\r\n    else {\r\n      uVar4 = *(uint *)(lVar14 + 0x78);\r\n      uVar5 = *(uint *)(lVar14 + 0x7c);\r\n      if ((*(int *)(param_1 + 0x40) == 0) || (*(char *)(param_1 + 0x3c) != '\\0')) {\r\n        uVar15 = uVar5 * uVar4;\r\n        pvVar8 = operator_new((ulonglong)uVar15);\r\n        fVar17 = DAT_1415433b4;\r\n        lVar14 = 0;\r\n        uVar11 = 0;\r\n        if (3 < (int)uVar15) {\r\n          uVar11 = (uVar15 - 4 >> 2) + 1;\r\n          uVar16 = (ulonglong)uVar11;\r\n          uVar11 = uVar11 * 4;\r\n          lVar13 = lVar14;\r\n          pfVar9 = (float *)(lVar6 + 8);\r\n          do {\r\n            lVar14 = lVar13 + 4;\r\n            uVar16 = uVar16 - 1;\r\n            *(char *)((longlong)pvVar8 + lVar13) = (char)(longlong)(pfVar9[-2] * fVar17);\r\n            *(char *)((longlong)pvVar8 + lVar13 + 1) = (char)(longlong)(pfVar9[-1] * fVar17);\r\n            *(char *)((longlong)pvVar8 + lVar13 + 2) = (char)(longlong)(*pfVar9 * fVar17);\r\n            *(char *)((longlong)pvVar8 + lVar13 + 3) = (char)(longlong)(pfVar9[1] * fVar17);\r\n            lVar13 = lVar14;\r\n            pfVar9 = pfVar9 + 4;\r\n          } while (uVar16 != 0);\r\n        }\r\n        if (uVar11 < uVar15) {\r\n          pfVar9 = (float *)(lVar6 + lVar14 * 4);\r\n          uVar16 = (ulonglong)(uVar15 - uVar11);\r\n          puVar12 = (undefined1 *)(lVar14 + (longlong)pvVar8);\r\n          do {\r\n            fVar18 = *pfVar9;\r\n            pfVar9 = pfVar9 + 1;\r\n            uVar16 = uVar16 - 1;\r\n            *puVar12 = (char)(longlong)(fVar18 * fVar17);\r\n            puVar12 = puVar12 + 1;\r\n          } while (uVar16 != 0);\r\n        }\r\n        if (*(int *)(param_1 + 0x40) == 0) {\r\n          glGenTextures(1,param_1 + 0x40);\r\n        }\r\n        glPushClientAttrib(1);\r\n        glPushAttrib(0x20);\r\n        glBindTexture(0xde1,*(undefined4 *)(param_1 + 0x40));\r\n        glPixelStorei(0xcf1,0);\r\n        glPixelStorei(0xd02,uVar4);\r\n        glPixelStorei(0xd03,0);\r\n        glPixelStorei(0xd04,0);\r\n        glPixelStorei(0xd05,1);\r\n        glPixelStorei(0xcf5,1);\r\n        glTexParameterf(0xde1,0x2801,DAT_14107b744);\r\n        glTexParameterf(0xde1,0x2800,DAT_14107b740);\r\n        gluBuild2DMipmaps(0xde1,1,uVar4,uVar5,CONCAT44(uVar19,0x1909),CONCAT44(uVar20,0x1401),pvVar8\r\n                         );\r\n        glPopAttrib();\r\n        glPopClientAttrib();\r\n        operator_delete__(pvVar8);\r\n        *(undefined1 *)(param_1 + 0x3c) = 0;\r\n      }\r\n      uVar11 = DAT_141543430;\r\n      fVar17 = (float)*(int *)(param_1 + 0x4c) / (float)uVar4;\r\n      fVar18 = (float)*(int *)(param_1 + 0x50) / (float)uVar5;\r\n      if (fVar18 <= fVar17) {\r\n        fVar17 = fVar17 / fVar18;\r\n        fVar18 = DAT_1415432f4;\r\n      }\r\n      else {\r\n        fVar18 = fVar18 / fVar17;\r\n        fVar17 = DAT_1415432f4;\r\n      }\r\n      fVar1 = *(float *)(param_1 + 0x54);\r\n      pfVar9 = local_res8;\r\n      local_res10[0] = 0.0;\r\n      local_res8[0] = fVar1 - fVar17;\r\n      if (fVar1 - fVar17 <= 0.0) {\r\n        pfVar9 = local_res10;\r\n      }\r\n      pfVar10 = (float *)(param_1 + 0x58);\r\n      local_res8[0] = (*pfVar9 / fVar17) / fVar1;\r\n      local_res10[0] = (float)((uint)local_res8[0] ^ DAT_141543430);\r\n      if (*(float *)(param_1 + 0x58) <= (float)((uint)local_res8[0] ^ DAT_141543430)) {\r\n        pfVar10 = local_res10;\r\n      }\r\n      if (local_res8[0] < *pfVar10) {\r\n        pfVar10 = local_res8;\r\n      }\r\n      local_res10[0] = 0.0;\r\n      *(float *)(param_1 + 0x58) = *pfVar10;\r\n      pfVar9 = local_res8;\r\n      local_res8[0] = fVar1 - fVar18;\r\n      if (fVar1 - fVar18 <= 0.0) {\r\n        pfVar9 = local_res10;\r\n      }\r\n      pfVar10 = (float *)(param_1 + 0x5c);\r\n      local_res8[0] = (*pfVar9 / fVar18) / fVar1;\r\n      local_res10[0] = (float)((uint)local_res8[0] ^ uVar11);\r\n      if (*(float *)(param_1 + 0x5c) <= (float)((uint)local_res8[0] ^ uVar11)) {\r\n        pfVar10 = local_res10;\r\n      }\r\n      if (local_res8[0] < *pfVar10) {\r\n        pfVar10 = local_res8;\r\n      }\r\n      *(float *)(param_1 + 0x5c) = *pfVar10;\r\n      glOrtho((double)(float)((uint)fVar17 ^ uVar11),(double)fVar17,\r\n              (double)(float)((uint)fVar18 ^ uVar11),(double)fVar18,DAT_141033438,DAT_141543260);\r\n      glTranslatef();\r\n      glScalef();\r\n      glEnable(0xde1);\r\n      glBindTexture(0xde1,*(undefined4 *)(param_1 + 0x40));\r\n      glColor4f();\r\n      glBegin(7);\r\n      glTexCoord2f();\r\n      glVertex2f();\r\n      glTexCoord2f();\r\n      glVertex2f();\r\n      glTexCoord2f();\r\n      glVertex2f();\r\n      glTexCoord2f();\r\n      glVertex2f();\r\n      glEnd();\r\n      glDisable(0xde1);\r\n      glBindTexture(0xde1,0);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1402ed110(longlong param_1);"
+  },
+  "summary": "Pseudo-C for FUN_1402ed110 from the Deep engine (174 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ed1ac"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

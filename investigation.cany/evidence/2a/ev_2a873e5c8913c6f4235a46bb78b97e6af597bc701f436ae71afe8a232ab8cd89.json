@@ -1,0 +1,45 @@
+{
+  "id": "ev_2a873e5c8913c6f4235a46bb78b97e6af597bc701f436ae71afe8a232ab8cd89",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402ebfc0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402ebfc0",
+    "function": "FUN_1402ebfc0",
+    "pseudo_code": "\r\nQString * FUN_1402ebfc0(QString *param_1,undefined8 param_2,QString *param_3,QString *param_4,\r\n                       QString *param_5)\r\n\r\n{\r\n  void **ppvVar1;\r\n  int *piVar2;\r\n  int iVar3;\r\n  undefined8 uVar4;\r\n  undefined8 uVar5;\r\n  undefined8 uVar6;\r\n  QFileInfo *this;\r\n  QVariant *this_00;\r\n  int *piVar7;\r\n  int *local_148;\r\n  Data *local_140;\r\n  Data *local_138;\r\n  undefined4 local_130;\r\n  Data *local_128;\r\n  void **local_120;\r\n  QString local_118 [8];\r\n  QFileInfo local_110 [8];\r\n  QSettings local_108 [16];\r\n  QString local_f8 [8];\r\n  QVariant local_f0 [16];\r\n  QString *local_e0;\r\n  undefined8 local_d8;\r\n  QString local_d0 [16];\r\n  QString *local_c0;\r\n  QVariant local_b8 [16];\r\n  QString local_a8 [16];\r\n  QDialog local_98 [56];\r\n  QString local_60 [40];\r\n  \r\n  local_d8 = 0xfffffffffffffffe;\r\n  *(code **)param_1 = shared_null_exref;\r\n  LOCK();\r\n  *(int *)shared_null_exref = *(int *)shared_null_exref + 1;\r\n  UNLOCK();\r\n  local_130 = 1;\r\n  local_c0 = local_118;\r\n  local_e0 = local_f8;\r\n  uVar4 = QString::QString(local_118,param_5);\r\n  uVar5 = QString::QString(local_f8,param_4);\r\n  uVar6 = QString::QString(local_a8,param_3);\r\n  FUN_1402e9c50(local_98,uVar6,uVar5,uVar4,param_2);\r\n  iVar3 = QDialog::exec(local_98);\r\n  if (iVar3 == 1) {\r\n    QString::operator=(param_1,local_60);\r\n    this = (QFileInfo *)QFileInfo::QFileInfo(local_110,param_1);\r\n    QFileInfo::absolutePath(this);\r\n    QFileInfo::~QFileInfo(local_110);\r\n    QSettings::QSettings(local_108,(QObject *)0x0);\r\n    local_138 = QString::fromAscii_helper(\"OpenDialog/Recents\",-1);\r\n    QVariant::QVariant(local_b8);\r\n    this_00 = (QVariant *)QSettings::value(local_108,local_d0,(QVariant *)&local_138);\r\n    QVariant::toStringList(this_00);\r\n    QVariant::~QVariant((QVariant *)local_d0);\r\n    QVariant::~QVariant(local_b8);\r\n    LOCK();\r\n    *(int *)local_138 = *(int *)local_138 + -1;\r\n    UNLOCK();\r\n    if (*(int *)local_138 == 0) {\r\n      QString::free(local_138);\r\n    }\r\n    FUN_1402a1aa0(&local_148,&local_140);\r\n    FUN_1402a0d70(&local_148,&local_140);\r\n    iVar3 = local_148[3] - local_148[2];\r\n    while (0x10 < iVar3) {\r\n      if (*local_148 != 1) {\r\n        FUN_14004f450(&local_148,local_148[1]);\r\n      }\r\n      ppvVar1 = (void **)(local_148 + (longlong)local_148[3] * 2 + 4);\r\n      piVar7 = *ppvVar1;\r\n      LOCK();\r\n      *piVar7 = *piVar7 + -1;\r\n      UNLOCK();\r\n      local_120 = ppvVar1;\r\n      if (*piVar7 == 0) {\r\n        QString::free(*ppvVar1);\r\n      }\r\n      QListData::erase((QListData *)&local_148,ppvVar1);\r\n      iVar3 = local_148[3] - local_148[2];\r\n    }\r\n    QVariant::QVariant(local_f0,(QStringList *)&local_148);\r\n    local_128 = QString::fromAscii_helper(\"OpenDialog/Recents\",-1);\r\n    QSettings::setValue(local_108,(QString *)&local_128,local_f0);\r\n    LOCK();\r\n    *(int *)local_128 = *(int *)local_128 + -1;\r\n    UNLOCK();\r\n    if (*(int *)local_128 == 0) {\r\n      QString::free(local_128);\r\n    }\r\n    QVariant::~QVariant(local_f0);\r\n    LOCK();\r\n    *local_148 = *local_148 + -1;\r\n    UNLOCK();\r\n    if (*local_148 == 0) {\r\n      piVar7 = local_148 + (longlong)local_148[3] * 2 + 6;\r\n      iVar3 = local_148[2];\r\n      while (local_148 + (longlong)iVar3 * 2 + 6 != piVar7) {\r\n        piVar7 = piVar7 + -2;\r\n        piVar2 = *(int **)piVar7;\r\n        LOCK();\r\n        *piVar2 = *piVar2 + -1;\r\n        UNLOCK();\r\n        if (*piVar2 == 0) {\r\n          QString::free(*(Data **)piVar7);\r\n        }\r\n      }\r\n      qFree(local_148);\r\n    }\r\n    QSettings::~QSettings(local_108);\r\n    LOCK();\r\n    *(int *)local_140 = *(int *)local_140 + -1;\r\n    UNLOCK();\r\n    if (*(int *)local_140 == 0) {\r\n      QString::free(local_140);\r\n    }\r\n  }\r\n  FUN_1402e8b60(local_98);\r\n  piVar7 = *(int **)param_3;\r\n  LOCK();\r\n  *piVar7 = *piVar7 + -1;\r\n  UNLOCK();\r\n  if (*piVar7 == 0) {\r\n    QString::free(*(Data **)param_3);\r\n  }\r\n  piVar7 = *(int **)param_4;\r\n  LOCK();\r\n  *piVar7 = *piVar7 + -1;\r\n  UNLOCK();\r\n  if (*piVar7 == 0) {\r\n    QString::free(*(Data **)param_4);\r\n  }\r\n  piVar7 = *(int **)param_5;\r\n  LOCK();\r\n  *piVar7 = *piVar7 + -1;\r\n  UNLOCK();\r\n  if (*piVar7 == 0) {\r\n    QString::free(*(Data **)param_5);\r\n  }\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "QString * FUN_1402ebfc0(QString *param_1,undefined8 param_2,QString *param_3,QString *param_4,QString *param_5);"
+  },
+  "summary": "Pseudo-C for FUN_1402ebfc0 from the Deep engine (145 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ebfc0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

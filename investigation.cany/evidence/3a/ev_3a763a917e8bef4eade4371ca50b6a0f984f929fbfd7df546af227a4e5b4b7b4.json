@@ -1,0 +1,136 @@
+{
+  "id": "ev_3a763a917e8bef4eade4371ca50b6a0f984f929fbfd7df546af227a4e5b4b7b4",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Skin:Radius:(Length compensation|Length kill ratio|Absolute|\\+ % of parent)|Leaves:Size|Leaves:\\+ % of parent|Local Orientation:(Fold|Align|Face)|Spine:Shape:Straightness|Generation:Absolute:Number|Generation:Interval:(Frequency|Count|Spread|Spiral))$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141efeb00",
+        "references": [
+          {
+            "from": "0x1402bba73",
+            "function": "sub_1402baf90"
+          },
+          {
+            "from": "0x140508fef",
+            "function": "sub_140508860"
+          },
+          {
+            "from": "0x140652360",
+            "function": "sub_140651bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Local Orientation:Align"
+      },
+      {
+        "address": "0x141f1e990",
+        "references": [
+          {
+            "from": "0x1405090b3",
+            "function": "sub_140508860"
+          },
+          {
+            "from": "0x140652424",
+            "function": "sub_140651bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Local Orientation:Face"
+      },
+      {
+        "address": "0x141f1e9a8",
+        "references": [
+          {
+            "from": "0x140508f2b",
+            "function": "sub_140508860"
+          },
+          {
+            "from": "0x14065228b",
+            "function": "sub_140651bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Local Orientation:Fold"
+      },
+      {
+        "address": "0x141f23090",
+        "references": [
+          {
+            "from": "0x14053d746",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Straightness"
+      },
+      {
+        "address": "0x141f23460",
+        "references": [
+          {
+            "from": "0x140541553",
+            "function": "sub_140540c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Radius:Length compensation"
+      },
+      {
+        "address": "0x141f234a0",
+        "references": [
+          {
+            "from": "0x140541636",
+            "function": "sub_140540c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Radius:Length kill ratio"
+      },
+      {
+        "address": "0x141f31c48",
+        "references": [
+          {
+            "from": "0x140651185",
+            "function": "sub_140651090"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:+ % of parent"
+      }
+    ],
+    "total": 7
+  },
+  "summary": "7 strings match \"^(Skin:Radius:(Length compensation|Length kill ratio|Absolute|\\+ % of parent)|Leaves:Size|Leaves:\\+ % of parent|Local Orientation:(Fold|Align|Face)|Spine:Shape:Straightness|Generation:Absolute:Number|Generation:Interval:(Frequency|Count|Spread|Spiral))$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 7,
+    "total": 7
+  },
+  "locations": [],
+  "links": []
+}

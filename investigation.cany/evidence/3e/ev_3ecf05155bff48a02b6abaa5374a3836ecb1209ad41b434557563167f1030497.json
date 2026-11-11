@@ -1,0 +1,46 @@
+{
+  "id": "ev_3ecf05155bff48a02b6abaa5374a3836ecb1209ad41b434557563167f1030497",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_data_show",
+  "params": {
+    "address": "0x141033ce4",
+    "type": "cstring"
+  },
+  "result": {
+    "address": "0x141033ce4",
+    "name": null,
+    "references_to": 8,
+    "section": ".rdata",
+    "type": "cstring",
+    "value": "256"
+  },
+  "summary": "0x141033ce4 looks like cstring.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "no_type_recovery",
+      "message": "the clean-room engine doesn't recover declared types; this reads the bytes and infers what they look like"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x141033ce4"
+    }
+  ],
+  "links": []
+}

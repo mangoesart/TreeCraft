@@ -1,0 +1,73 @@
+{
+  "id": "ev_abcd433d90bde1d5cd63214d2e66cb8d5130f19cdfc822486d35a191599475eb",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 30,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^\\.\\?AVC[A-Za-z]*(Leaf|Mesh|Frond)[A-Za-z]*Node@@$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1417896d0",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCBatchedLeafNode@@"
+      },
+      {
+        "address": "0x141789af8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCBranchMeshNode@@"
+      },
+      {
+        "address": "0x14178b3b8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCLeafNode@@"
+      },
+      {
+        "address": "0x14178b400",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCLeafMeshNode@@"
+      },
+      {
+        "address": "0x14178b428",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCFrondNode@@"
+      }
+    ],
+    "total": 5
+  },
+  "summary": "5 strings match \"^\\.\\?AVC[A-Za-z]*(Leaf|Mesh|Frond)[A-Za-z]*Node@@$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 5,
+    "total": 5
+  },
+  "locations": [],
+  "links": []
+}

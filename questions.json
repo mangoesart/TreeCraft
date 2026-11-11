@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "question": "where can I find the handoff.md file? And to start a new session with it, how to add it to the new session?",
+      "answer": "**Where it is:** `C:\\Users\\sgv3d\\Documents\\Craft Anything\\speedtree-modeler\\app\\handoff.md`\n\nIt's in the app folder, next to `README.md` and `MECHANICS.md`. You can open it with Notepad or any text editor to read it.\n\n**Using it in a new session:** you don't need to upload or attach it. The builder works inside this project's folder, so it can read the file as soon as you mention it.\n\n- **New message on this same project:** start with something like:\n  > Read app/handoff.md first, then continue with next step 1 (trace how the original bends branches).\n- **Fresh Claude Code session:** open it in the project folder (`C:\\Users\\sgv3d\\Documents\\Craft Anything\\speedtree-modeler`) and type `@app/handoff.md` followed by your request. The `@` pulls the file straight into the conversation.\n\nIf you want different work next, name it in the same message, for example \"read app/handoff.md, then add saving and loading trees\". The file already lists the six next steps in order, so you can just pick one by number.",
+      "from_session": true,
+      "backend": "Claude Code",
+      "after": 170,
+      "at_ms": 1794148025899,
+      "deep": false,
+      "told": true
+    },
+    {
+      "question": "how to continue the project using handoff.md after wiping everything before? This is to save tokens used by Claude",
+      "answer": "The safe way is to clear only the conversation, not the project, then start the new one by pointing it at handoff.md.\n\n**Don't wipe the project.** Everything is kept in the project folder, including handoff.md. Deleting the project would also delete the app folder and the handoff file with it. Only the conversation history is what costs tokens.\n\n**Clearing the conversation:**\n- **In Claude Code:** open it in `C:\\Users\\sgv3d\\Documents\\Craft Anything\\speedtree-modeler` and type `/clear`. That starts an empty conversation in the same folder. `/compact` is the softer option: it squeezes the old conversation into a short summary instead of dropping it.\n- **In Craft Anything:** I'm not sure it has a button that starts the builder with an empty conversation. If you don't see one, use Claude Code as above.\n\n**First message of the new session** (copy and paste):\n\n> Read app/handoff.md first and only open other files when you need them. The app is TreeCraft (Rust + macroquad) in app/. The original is now SpeedTree Games Indie 8.4.2 at C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe. Next: [what you want, for example \"match the Material editor to my screenshot\" or \"add saving and loading trees\"]. Build it and run the check when done.\n\nIn plain Claude Code, `@app/handoff.md` pulls the file straight into your message, so you can start with that instead of \"Read app/handoff.md first\".\n\n**Tips to keep tokens low:**\n- **One task per session.** When it's done, ask for handoff.md to be updated, then clear again.\n- **Name exact files** you want touched (they're listed in the handoff's code map), so it doesn't read everything.\n- **Attach screenshots** of the part you mean, as you did for the Meshes panel. That's cheaper than having it hunt through the original program.\n\n**One gap in the handoff:** the last run stopped partway through. It was decompiling the 8.4.2 program to replace my guessed Orient/Flip axis maths with the original's real rules, and that isn't recorded in handoff.md yet. To pick it up, put \"finish decompiling how Orient and Flip transform a mesh\" in your \"Next:\" line.",
+      "from_session": true,
+      "backend": "Claude Code",
+      "after": 243,
+      "at_ms": 1794195101387,
+      "deep": true,
+      "told": true
+    },
+    {
+      "question": "did you create the handoff.md as per the latest instruction I gave?",
+      "answer": "Yes. handoff.md is in the app folder (`C:\\Users\\sgv3d\\Documents\\Craft Anything\\speedtree-modeler\\app\\handoff.md`), last updated 2026-11-09 right after the Meshes window was added. It has the progress summary, what's still open, next steps, and tips for starting a fresh session.\n\nOne small gap: after that update I went back into the original's code and changed how the Meshes window behaves. Duplicate now names the copy \"… Copy\" and puts it at the end, the arrows move every selected mesh, and repeated names count up (\"Mesh 2\", \"Mesh 3\"). Those details are written in MECHANICS.md, but handoff.md only says the window matches the original, without spelling them out.\n\nEverything else in the file is current. Want me to add those details to handoff.md too?",
+      "from_session": true,
+      "backend": "Claude Code",
+      "after": 360,
+      "at_ms": 1794251588878,
+      "deep": true,
+      "told": true
+    },
+    {
+      "question": "Generate a brief progress summary and save it to a handoff.md file",
+      "answer": "I couldn't save anything this time: this conversation only lets me read files, not edit them or run the build. You don't need a new save, though, because handoff.md in the app folder is already a current progress summary. The last update was today, after the Meshes window and empty new meshes were added.\n\n**What it says:**\n- **Status:** TreeCraft (Rust + macroquad) builds and passed Craft Anything's checks at the last build.\n- **Built:**\n  - **Node graph:** Tree, Trunk, Branch and Leaf nodes, using the original's placement rules for Classic, Absolute and Interval modes.\n  - **Properties panel** on the left.\n  - **Materials tab** with a live preview.\n  - **Meshes tab** matching the original's 8.4.2 panel: the +/− Meshes window (add, duplicate, rename, reorder, remove, OK/Cancel), empty new meshes, detail levels, and Orient/Flip/winding rules taken from the original's code.\n  - **Viewport** with perspective and orthographic views.\n- **Still open:** how the original bends branches; the Material editor's layout (a screenshot would settle it); Ripple and collision settings are saved but don't affect anything yet; the Displacements tab, edit modes, six more generation modes, curves, save/load/export and wind aren't built.\n- **Next steps:** match the Material editor to a screenshot, then save/load and export, then property curves, then trace branch bending.\n\nThe only thing the file doesn't spell out is that new meshes start with the same settings as in the original (Growth +Y, Orient Z-Up Right-handed, Flip X Y Z, collision scale and weight 1). That detail is in MECHANICS.md. To add it to handoff.md, ask again in a builder session where I can edit files.",
+      "from_session": true,
+      "backend": "Claude Code",
+      "after": 391,
+      "at_ms": 1794278201467,
+      "deep": true,
+      "told": true
+    }
+  ]
+}

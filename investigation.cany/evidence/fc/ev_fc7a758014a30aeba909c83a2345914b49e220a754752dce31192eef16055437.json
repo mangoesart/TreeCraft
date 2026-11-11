@@ -1,0 +1,367 @@
+{
+  "id": "ev_fc7a758014a30aeba909c83a2345914b49e220a754752dce31192eef16055437",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Spine:(Orientation:Start angle|Shape:Gravity|Length:\\+ % of parent|Noise:Late:Amount|Jink:Amount)|Skin:Radius:(\\+ % of parent|Absolute|Clamp to parent)|Generation:(Frequency|First|Last|Orientation:Roll|Interval:Frequency)|Leaves:Size|Local Orientation:Face|Deformation:Fold|Deformation:Curl|Segments:Radial:Absolute|Segments:Length:Absolute)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141ee7a58",
+        "references": [
+          {
+            "from": "0x1401adc1a",
+            "function": "sub_1401adbd0"
+          },
+          {
+            "from": "0x1401adea9",
+            "function": "sub_1401adbd0"
+          },
+          {
+            "from": "0x14030a3eb",
+            "function": "sub_14030a3a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:First"
+      },
+      {
+        "address": "0x141ee7ac8",
+        "references": [
+          {
+            "from": "0x1402b41bf",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b42a1",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b42f7",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b43eb",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4441",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bcac7",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcba0",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcbf6",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bccf2",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcd48",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14053c602",
+            "function": "sub_14053b8c0"
+          },
+          {
+            "from": "0x141eb0140",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Start angle"
+      },
+      {
+        "address": "0x141ee7b98",
+        "references": [
+          {
+            "from": "0x1402b4acf",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4e21",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4e77",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4fb8",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b505e",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bd04a",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd39c",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd3f2",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd604",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd6aa",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14054a764",
+            "function": "sub_14054a510"
+          },
+          {
+            "from": "0x141eb0150",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Amount"
+      },
+      {
+        "address": "0x141efe0e8",
+        "references": [
+          {
+            "from": "0x1402b5eff",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x14054149f",
+            "function": "sub_140540c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Radius:Clamp to parent"
+      },
+      {
+        "address": "0x141efe508",
+        "references": [
+          {
+            "from": "0x1402b76c5",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7838",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7886",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b78d4",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7910",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402bea44",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1405410cf",
+            "function": "sub_140540c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Radial:Absolute"
+      },
+      {
+        "address": "0x141efe560",
+        "references": [
+          {
+            "from": "0x1402b723f",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7297",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7403",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7451",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7585",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7a06",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402b7a42",
+            "function": "sub_1402b55e0"
+          },
+          {
+            "from": "0x1402be651",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402be6a9",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402be822",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402be870",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402be9a4",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14053bc4d",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length:Absolute"
+      },
+      {
+        "address": "0x141f17e88",
+        "references": [
+          {
+            "from": "0x1404773af",
+            "function": "sub_1404766f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Orientation:Roll"
+      },
+      {
+        "address": "0x141f1e990",
+        "references": [
+          {
+            "from": "0x1405090b3",
+            "function": "sub_140508860"
+          },
+          {
+            "from": "0x140652424",
+            "function": "sub_140651bc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Local Orientation:Face"
+      },
+      {
+        "address": "0x141f1ea28",
+        "references": [
+          {
+            "from": "0x140509836",
+            "function": "sub_140509730"
+          },
+          {
+            "from": "0x140615ebd",
+            "function": "sub_140615e90"
+          },
+          {
+            "from": "0x140652ba6",
+            "function": "sub_140652aa0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Deformation:Curl"
+      },
+      {
+        "address": "0x141f1ea40",
+        "references": [
+          {
+            "from": "0x14050975d",
+            "function": "sub_140509730"
+          },
+          {
+            "from": "0x140615e9d",
+            "function": "sub_140615e90"
+          },
+          {
+            "from": "0x140652acd",
+            "function": "sub_140652aa0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Deformation:Fold"
+      },
+      {
+        "address": "0x141f203e0",
+        "references": [
+          {
+            "from": "0x14053d554",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Gravity"
+      },
+      {
+        "address": "0x141f22f60",
+        "references": [
+          {
+            "from": "0x14053dbde",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Jink:Amount"
+      }
+    ],
+    "total": 12
+  },
+  "summary": "12 strings match \"^(Spine:(Orientation:Start angle|Shape:Gravity|Length:\\+ % of parent|Noise:Late:Amount|Jink:Amount)|Skin:Radius:(\\+ % of parent|Absolute|Clamp to parent)|Generation:(Frequency|First|Last|Orientation:Roll|Interval:Frequency)|Leaves:Size|Local Orientation:Face|Deformation:Fold|Deformation:Curl|Segments:Radial:Absolute|Segments:Length:Absolute)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 12,
+    "total": 12
+  },
+  "locations": [],
+  "links": []
+}

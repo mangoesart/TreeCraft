@@ -1,0 +1,916 @@
+{
+  "id": "ev_8b7c7ef3694040a4946a11eaa331c499940f7ceff7fbd115c274c8988ab46079",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Gravity|Spine:Shape:|Spine:Noise|Spine:Jink"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410383b0",
+        "references": [
+          {
+            "from": "0x14103a310",
+            "function": null
+          },
+          {
+            "from": "0x14103a320",
+            "function": null
+          },
+          {
+            "from": "0x141058820",
+            "function": null
+          },
+          {
+            "from": "0x141058830",
+            "function": null
+          },
+          {
+            "from": "0x14106b3f0",
+            "function": null
+          },
+          {
+            "from": "0x14106b400",
+            "function": null
+          },
+          {
+            "from": "0x1410a0920",
+            "function": null
+          },
+          {
+            "from": "0x1410a0930",
+            "function": null
+          },
+          {
+            "from": "0x1410a9990",
+            "function": null
+          },
+          {
+            "from": "0x1410a99a0",
+            "function": null
+          },
+          {
+            "from": "0x1410ab520",
+            "function": null
+          },
+          {
+            "from": "0x1410ab530",
+            "function": null
+          },
+          {
+            "from": "0x1410b4010",
+            "function": null
+          },
+          {
+            "from": "0x1410b4020",
+            "function": null
+          },
+          {
+            "from": "0x1410bd890",
+            "function": null
+          },
+          {
+            "from": "0x1410bd8a0",
+            "function": null
+          },
+          {
+            "from": "0x1410c0900",
+            "function": null
+          },
+          {
+            "from": "0x1410c0910",
+            "function": null
+          },
+          {
+            "from": "0x1410c2220",
+            "function": null
+          },
+          {
+            "from": "0x1410c2230",
+            "function": null
+          },
+          {
+            "from": "0x1410c3e10",
+            "function": null
+          },
+          {
+            "from": "0x1410c3e20",
+            "function": null
+          },
+          {
+            "from": "0x1410c5750",
+            "function": null
+          },
+          {
+            "from": "0x1410c5760",
+            "function": null
+          },
+          {
+            "from": "0x1410c70e0",
+            "function": null
+          },
+          {
+            "from": "0x1410c70f0",
+            "function": null
+          },
+          {
+            "from": "0x1410c8b70",
+            "function": null
+          },
+          {
+            "from": "0x1410c8b80",
+            "function": null
+          },
+          {
+            "from": "0x1410ca760",
+            "function": null
+          },
+          {
+            "from": "0x1410ca770",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141045e28",
+        "references": [
+          {
+            "from": "0x14010d0c6",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Straightness"
+      },
+      {
+        "address": "0x141045e80",
+        "references": [
+          {
+            "from": "0x14010ce99",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Gravity"
+      },
+      {
+        "address": "0x141045e98",
+        "references": [
+          {
+            "from": "0x14010cdb1",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Ancestor"
+      },
+      {
+        "address": "0x141045eb0",
+        "references": [
+          {
+            "from": "0x14010ccc9",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Shape:Twist"
+      },
+      {
+        "address": "0x1410464f8",
+        "references": [
+          {
+            "from": "0x14010fd8d",
+            "function": "sub_14010f780"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Seed"
+      },
+      {
+        "address": "0x141046510",
+        "references": [
+          {
+            "from": "0x14010fc8f",
+            "function": "sub_14010f780"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Smooth"
+      },
+      {
+        "address": "0x141046528",
+        "references": [
+          {
+            "from": "0x14010fb8c",
+            "function": "sub_14010f780"
+          },
+          {
+            "from": "0x141790f98",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Turbulence"
+      },
+      {
+        "address": "0x141046548",
+        "references": [
+          {
+            "from": "0x14010fa8e",
+            "function": "sub_14010f780"
+          },
+          {
+            "from": "0x140193480",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140193719",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140193740",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x1401937f5",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x14019386a",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x1401972ec",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14019765d",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140197690",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1401978e0",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140197988",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x141790f90",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Amount"
+      },
+      {
+        "address": "0x141046560",
+        "references": [
+          {
+            "from": "0x14010f98b",
+            "function": "sub_14010f780"
+          },
+          {
+            "from": "0x14019363e",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140197542",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Early:Threshold"
+      },
+      {
+        "address": "0x141046580",
+        "references": [
+          {
+            "from": "0x14010f888",
+            "function": "sub_14010f780"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Early:Turbulence"
+      },
+      {
+        "address": "0x1410465a0",
+        "references": [
+          {
+            "from": "0x14010f78d",
+            "function": "sub_14010f780"
+          },
+          {
+            "from": "0x14019355f",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x1401938e3",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x14019395c",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140197417",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140197798",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1401977cb",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140197a30",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140197ad8",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Early:Amount"
+      },
+      {
+        "address": "0x141046780",
+        "references": [
+          {
+            "from": "0x140111f24",
+            "function": "sub_140110f30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gravity"
+      },
+      {
+        "address": "0x141051358",
+        "references": [
+          {
+            "from": "0x140193617",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140385a52",
+            "function": "sub_140384f20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Jink frequency"
+      },
+      {
+        "address": "0x141051370",
+        "references": [
+          {
+            "from": "0x140193538",
+            "function": "sub_140192780"
+          },
+          {
+            "from": "0x140385b45",
+            "function": "sub_140384f20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Jink amount"
+      },
+      {
+        "address": "0x14105b898",
+        "references": [
+          {
+            "from": "0x1401fbd3e",
+            "function": "sub_1401fbc20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Growth:Transitions:Gravity"
+      },
+      {
+        "address": "0x14105bbb0",
+        "references": [
+          {
+            "from": "0x140204eb0",
+            "function": "sub_140204e70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape:Gravity"
+      },
+      {
+        "address": "0x1410b7770",
+        "references": [
+          {
+            "from": "0x140534c1e",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Access force functions.  Forces are modeling tools that manipulate growth in world-space.  Examples\nof their use include gravity (downward direction forces) and growing geometry around 3d\ngeometry (mesh forces)\n\nHot key: 6 (toggles forces in the viewport)"
+      },
+      {
+        "address": "0x141373210",
+        "references": [
+          {
+            "from": "0x1413751c0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141373228",
+        "references": [
+          {
+            "from": "0x1413751d0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14137a798",
+        "references": [
+          {
+            "from": "0x14137c750",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14137a7b0",
+        "references": [
+          {
+            "from": "0x14137c760",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14137ed60",
+        "references": [
+          {
+            "from": "0x141380d10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14137ed78",
+        "references": [
+          {
+            "from": "0x141380d20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141389978",
+        "references": [
+          {
+            "from": "0x14138b930",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141389990",
+        "references": [
+          {
+            "from": "0x14138b940",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413939c0",
+        "references": [
+          {
+            "from": "0x141395980",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413939d8",
+        "references": [
+          {
+            "from": "0x141395990",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141396dc0",
+        "references": [
+          {
+            "from": "0x140b0004a",
+            "function": "sub_140afc390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14139dba0",
+        "references": [
+          {
+            "from": "0x14139fb50",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14139dbb8",
+        "references": [
+          {
+            "from": "0x14139fb60",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413a64c0",
+        "references": [
+          {
+            "from": "0x1413a8470",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413a64d8",
+        "references": [
+          {
+            "from": "0x1413a8480",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413b8ef0",
+        "references": [
+          {
+            "from": "0x1413baea0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413b8f08",
+        "references": [
+          {
+            "from": "0x1413baeb0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413bf4d8",
+        "references": [
+          {
+            "from": "0x1413c1490",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413bf4f0",
+        "references": [
+          {
+            "from": "0x1413c14a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413cbd48",
+        "references": [
+          {
+            "from": "0x1413cdd00",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413cbd60",
+        "references": [
+          {
+            "from": "0x1413cdd10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413d0a70",
+        "references": [
+          {
+            "from": "0x1413d2a20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413d0a88",
+        "references": [
+          {
+            "from": "0x1413d2a30",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413d58a0",
+        "references": [
+          {
+            "from": "0x1413d7850",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413d58b8",
+        "references": [
+          {
+            "from": "0x1413d7860",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413dbf48",
+        "references": [
+          {
+            "from": "0x1413ddf20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413dbf60",
+        "references": [
+          {
+            "from": "0x1413ddf30",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413eb560",
+        "references": [
+          {
+            "from": "0x1413ed510",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413eb578",
+        "references": [
+          {
+            "from": "0x1413ed520",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413f4710",
+        "references": [
+          {
+            "from": "0x1413f66c0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413f4728",
+        "references": [
+          {
+            "from": "0x1413f66d0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413fcf58",
+        "references": [
+          {
+            "from": "0x1413fef30",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x1413fcf70",
+        "references": [
+          {
+            "from": "0x1413fef40",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141405aa0",
+        "references": [
+          {
+            "from": "0x141407a50",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141405ab8",
+        "references": [
+          {
+            "from": "0x141407a60",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14140ee70",
+        "references": [
+          {
+            "from": "0x141410e20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14140ee88",
+        "references": [
+          {
+            "from": "0x141410e30",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141415a60",
+        "references": [
+          {
+            "from": "0x141417b10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141415a78",
+        "references": [
+          {
+            "from": "0x141417b20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14141c0c8",
+        "references": [
+          {
+            "from": "0x14141e090",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x14141c0e0",
+        "references": [
+          {
+            "from": "0x14141e0a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141420988",
+        "references": [
+          {
+            "from": "0x141422950",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      }
+    ],
+    "total": 140
+  },
+  "summary": "140 strings match \"Gravity|Spine:Shape:|Spine:Noise|Spine:Jink\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 60,
+    "total": 140,
+    "next_offset": 60
+  },
+  "locations": [],
+  "links": []
+}

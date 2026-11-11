@@ -1,0 +1,228 @@
+{
+  "id": "ev_8becc64882fc4eb878b8cba210b73f34dd7c04f3702b4831c7e583b95629ffa2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_bytes_find",
+  "params": {
+    "encoding": "both",
+    "limit": 60,
+    "offset": 0,
+    "path": null,
+    "pattern": "ba b4 00 00 00",
+    "text": null
+  },
+  "result": {
+    "file_size": 37325232,
+    "limit": 60,
+    "match_cap_reached": false,
+    "matches": [
+      {
+        "address": "0x14014975d",
+        "bytes": "bab4000000",
+        "file_offset": 1346397,
+        "file_offset_hex": "0x148b5d",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14014a0cc",
+        "bytes": "bab4000000",
+        "file_offset": 1348812,
+        "file_offset_hex": "0x1494cc",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x1404adc19",
+        "bytes": "bab4000000",
+        "file_offset": 4902937,
+        "file_offset_hex": "0x4ad019",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dc40",
+        "bytes": "bab4000000",
+        "file_offset": 5492800,
+        "file_offset_hex": "0x53d040",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dc57",
+        "bytes": "bab4000000",
+        "file_offset": 5492823,
+        "file_offset_hex": "0x53d057",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dc72",
+        "bytes": "bab4000000",
+        "file_offset": 5492850,
+        "file_offset_hex": "0x53d072",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dc8a",
+        "bytes": "bab4000000",
+        "file_offset": 5492874,
+        "file_offset_hex": "0x53d08a",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dca2",
+        "bytes": "bab4000000",
+        "file_offset": 5492898,
+        "file_offset_hex": "0x53d0a2",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dcc2",
+        "bytes": "bab4000000",
+        "file_offset": 5492930,
+        "file_offset_hex": "0x53d0c2",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dce2",
+        "bytes": "bab4000000",
+        "file_offset": 5492962,
+        "file_offset_hex": "0x53d0e2",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14053dcfd",
+        "bytes": "bab4000000",
+        "file_offset": 5492989,
+        "file_offset_hex": "0x53d0fd",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14071890e",
+        "bytes": "bab4000000",
+        "file_offset": 7437582,
+        "file_offset_hex": "0x717d0e",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x14145f92d",
+        "bytes": "bab4000000",
+        "file_offset": 21359917,
+        "file_offset_hex": "0x145ed2d",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x1416f0a76",
+        "bytes": "bab4000000",
+        "file_offset": 24051318,
+        "file_offset_hex": "0x16efe76",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".text"
+      },
+      {
+        "address": "0x141c6448e",
+        "bytes": "bab4000000",
+        "file_offset": 29766286,
+        "file_offset_hex": "0x1c6328e",
+        "length": 5,
+        "matched": "pattern",
+        "section": ".rdata"
+      }
+    ],
+    "native_container": "pe",
+    "offset": 0,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe",
+    "searched_for": [
+      {
+        "kind": "pattern",
+        "length": 5
+      }
+    ],
+    "total_matches": 15
+  },
+  "summary": "15 match(es) for pattern in SpeedTree_Modeler.exe; showing 15 from #0.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "file_bytes_only",
+      "message": "The file's bytes are searched as stored: compressed, encrypted or packed regions and data built at run time are not seen, so no match is not proof of absence."
+    },
+    {
+      "code": "unmapped_regions",
+      "message": "Matches in headers, overlays or debug data that are not loaded into memory have no virtual address."
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 15,
+    "total": 15
+  },
+  "locations": [
+    {
+      "kind": "file_offset",
+      "value": "0x148b5d"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x1494cc"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x4ad019"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x53d040"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x53d057"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x53d072"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x53d08a"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x53d0a2"
+    }
+  ],
+  "links": []
+}

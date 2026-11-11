@@ -1,0 +1,49 @@
+{
+  "id": "ev_7cc9df0872f5136dc61b21be80d4b391be55333a334604fd8f277e17745ec257",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^\\.\\?AVCOptimalMeshWidget@@$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14178fb20",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCOptimalMeshWidget@@"
+      }
+    ],
+    "total": 1
+  },
+  "summary": "1 strings match \"^\\.\\?AVCOptimalMeshWidget@@$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [],
+  "links": []
+}

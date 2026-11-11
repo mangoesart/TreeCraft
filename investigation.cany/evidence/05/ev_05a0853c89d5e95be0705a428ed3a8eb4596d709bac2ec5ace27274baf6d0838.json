@@ -1,0 +1,79 @@
+{
+  "id": "ev_05a0853c89d5e95be0705a428ed3a8eb4596d709bac2ec5ace27274baf6d0838",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x140301210",
+      "0x1403013f0"
+    ]
+  },
+  "result": {
+    "failed": 0,
+    "items": [
+      {
+        "entry": "0x140301210",
+        "input": "0x140301210",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_140301210(int64_t rcx)\n{\n    stack_10 = rbx;\n    *(uint16_t*)(rcx + 0x38) = 0;\n    *(uint64_t*)(rcx + 0x3c) = -1;\n    *(uint32_t*)(rcx + 0x28) = 0;\n    rdx = *(uint64_t*)(rcx + 0x48);\n    r8 = *(uint64_t*)(rcx + 0x50);\n    rsi = rcx;\n    rcx += 0x48;\n    if (rdx != r8) {\n        if (r8 != r8) {\n            r9 = r8;\n            r9 -= rdx;\n            while (true) {\n                eax = *(uint32_t*)(r9 + rdx);\n                rdx += 12;\n                *(uint32_t*)(rdx - 12) = eax;\n                eax = *(uint32_t*)(r9 + rdx - 8);\n                *(uint32_t*)(rdx - 8) = eax;\n                eax = *(uint32_t*)(r9 + rdx - 4);\n                *(uint32_t*)(rdx - 4) = eax;\n                rax = r9 + rdx;\n                if (rax == r8) break;\n            }\n        }\n        *(uint64_t*)(rcx + 8) = rdx;\n    }\n    __asm(\"movss xmm0, [0x1415433a0]\");\n    __asm(\"movss xmm1, [0x141543440]\");\n    __asm(\"movss [rsp+0x20], xmm0\");\n    __asm(\"xorps xmm0, xmm0\");\n    __asm(\"movss [rsp+0x24], xmm1\");\n    __asm(\"movss [rsp+0x28], xmm0\");\n    sub_140097f50(rcx, &stack_20);\n    rcx = *(uint64_t*)(rsi + 0x68);\n    r8 = *(uint64_t*)(rsi + 0x70);\n    if (rcx != r8) {\n        if (r8 != r8) {\n            rdx = r8;\n            rdx -= rcx;\n            while (true) {\n                eax = *(uint32_t*)(rdx + rcx);\n                rcx += 12;\n                *(uint32_t*)(rcx - 12) = eax;\n                eax = *(uint32_t*)(rdx + rcx - 8);\n                *(uint32_t*)(rcx - 8) = eax;\n                eax = *(uint32_t*)(rdx + rcx - 4);\n                *(uint32_t*)(rcx - 4) = eax;\n                rax = rdx + rcx;\n                if (rax == r8) break;\n            }\n        }\n        *(uint64_t*)(rsi + 0x70) = rcx;\n    }\n    rbx = *(uint64_t*)(rsi + 0x88);\n    rdx = *(uint64_t*)(rsi + 0x90);\n    stack_40 = rdi;\n    if (rbx != rdx) {\n        rax = rdx;\n        rax -= rdx;\n        rax >>= 2;\n        rdi = rax * 4;\n        memmove(rbx, rdx, rdi);\n        r11 = rdi + rbx;\n        *(uint64_t*)(rsi + 0x90) = r11;\n    }\n    rbx = *(uint64_t*)(rsi + 0xa8);\n    rdx = *(uint64_t*)(rsi + 0xb0);\n    if (rbx != rdx) {\n        rax = rdx;\n        rax -= rdx;\n        rax >>= 2;\n        rdi = rax * 4;\n        memmove(rbx, rdx, rdi);\n        r11 = rdi + rbx;\n        *(uint64_t*)(rsi + 0xb0) = r11;\n    }\n    ?update@QWidget@@QEAAXXZ(rsi);\n    rdi = stack_40;\n    rbx = stack_48;\n    return sub_140603bd0(rsi); /* tail call */\n}\n",
+        "signature": "int64_t sub_140301210(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1403013f0",
+        "input": "0x1403013f0",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1403013f0(int64_t rcx)\n{\n    stack_10 = rbx;\n    rsi = rcx;\n    *(uint16_t*)(rcx + 0x38) = 0;\n    *(uint64_t*)(rcx + 0x3c) = -1;\n    *(uint32_t*)(rcx + 0x28) = 4;\n    r8 = *(uint64_t*)(rsi + 0x70);\n    rcx = *(uint64_t*)(rcx + 0x68);\n    if (rcx != r8) {\n        if (r8 != r8) {\n            rdx = r8;\n            rdx -= rcx;\n            while (true) {\n                eax = *(uint32_t*)(rdx + rcx);\n                rcx += 12;\n                *(uint32_t*)(rcx - 12) = eax;\n                eax = *(uint32_t*)(rdx + rcx - 8);\n                *(uint32_t*)(rcx - 8) = eax;\n                eax = *(uint32_t*)(rdx + rcx - 4);\n                *(uint32_t*)(rcx - 4) = eax;\n                rax = rdx + rcx;\n                if (rax == r8) break;\n            }\n        }\n        *(uint64_t*)(rsi + 0x70) = rcx;\n    }\n    rbx = *(uint64_t*)(rsi + 0x88);\n    rdx = *(uint64_t*)(rsi + 0x90);\n    stack_30 = rdi;\n    if (rbx != rdx) {\n        rax = rdx;\n        rax -= rdx;\n        rax >>= 2;\n        rdi = rax * 4;\n        memmove(rbx, rdx, rdi);\n        r11 = rdi + rbx;\n        *(uint64_t*)(rsi + 0x90) = r11;\n    }\n    rbx = *(uint64_t*)(rsi + 0xa8);\n    rdx = *(uint64_t*)(rsi + 0xb0);\n    if (rbx != rdx) {\n        rax = rdx;\n        rax -= rdx;\n        rax >>= 2;\n        rdi = rax * 4;\n        memmove(rbx, rdx, rdi);\n        r11 = rdi + rbx;\n        *(uint64_t*)(rsi + 0xb0) = r11;\n    }\n    ?update@QWidget@@QEAAXXZ(rsi);\n    rdi = stack_30;\n    rbx = stack_38;\n    return sub_140603bd0(rsi); /* tail call */\n}\n",
+        "signature": "int64_t sub_1403013f0(int64_t rcx)",
+        "structured": true
+      }
+    ],
+    "succeeded": 2
+  },
+  "summary": "Decompiled 2 of 2 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 2,
+    "total": 2
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x140301210"
+    },
+    {
+      "kind": "address",
+      "value": "0x1403013f0"
+    }
+  ],
+  "links": []
+}

@@ -1,0 +1,18 @@
+{
+  "id": "unk_ba47fa666813340b",
+  "revision": 4,
+  "question": "Exact on-screen layout of the original's Material editor and Mesh editor panels (no screenshots of the running app are available).",
+  "severity": "medium",
+  "domain": "ui",
+  "status": "resolved",
+  "probes": [
+    "Screenshots of the original from the person",
+    "native_window_capture of the running modeler"
+  ],
+  "evidence_for": [
+    "ev_070694066ca0cc5c3004aee854b3aac37c86d5e51ba4df8139cfeb9ec0f0b4d8",
+    "ev_4d8ab40e54c5e6a53043eb2fa600e1d27d91166775e3df5b77d2ec00edd4d10f"
+  ],
+  "evidence_against": [],
+  "resolution": "Settled by the person's pictures of the original's Materials and Meshes panels (reference/picture-1..6) plus the panel code: Materials panel fn 0x140063f80, Make New Set fn 0x14006d8c0, material defaults fn 0x1400a7390. The build now follows that layout."
+}

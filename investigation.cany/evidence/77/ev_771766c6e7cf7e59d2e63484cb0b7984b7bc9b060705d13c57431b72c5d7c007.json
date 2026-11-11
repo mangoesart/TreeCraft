@@ -1,0 +1,332 @@
+{
+  "id": "ev_771766c6e7cf7e59d2e63484cb0b7984b7bc9b060705d13c57431b72c5d7c007",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Sphere|Plane|Cylinder|Cube|Custom|Wireframe|Wire frame|Show wireframe|Preview|preview_.*\\.(obj|srt|stm))$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141035034",
+        "references": [
+          {
+            "from": "0x14006e634",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x14008d54a",
+            "function": "sub_14008d330"
+          },
+          {
+            "from": "0x1401b222c",
+            "function": "sub_1401b1570"
+          },
+          {
+            "from": "0x140a6108e",
+            "function": "sub_140a60c50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141040468",
+        "references": [
+          {
+            "from": "0x1400a27c4",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b2f15",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x14031d0a1",
+            "function": "sub_14031d020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Preview"
+      },
+      {
+        "address": "0x141047510",
+        "references": [
+          {
+            "from": "0x14012f8fb",
+            "function": "sub_14012f7b0"
+          },
+          {
+            "from": "0x1401886c2",
+            "function": "sub_1401884c0"
+          },
+          {
+            "from": "0x140224d37",
+            "function": "sub_140224a40"
+          },
+          {
+            "from": "0x140411e8a",
+            "function": "sub_140411d50"
+          },
+          {
+            "from": "0x1404b03d4",
+            "function": "sub_1404ae0b0"
+          },
+          {
+            "from": "0x1405270a6",
+            "function": "sub_140527030"
+          },
+          {
+            "from": "0x140531463",
+            "function": "sub_140530ed0"
+          },
+          {
+            "from": "0x140537235",
+            "function": "sub_140536ec0"
+          },
+          {
+            "from": "0x140537c9e",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Sphere"
+      },
+      {
+        "address": "0x1410a4318",
+        "references": [
+          {
+            "from": "0x14043442f",
+            "function": "sub_140433e30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "custom"
+      },
+      {
+        "address": "0x1410a7ac0",
+        "references": [
+          {
+            "from": "0x14047d997",
+            "function": "sub_14047c240"
+          }
+        ],
+        "section": ".rdata",
+        "text": "sphere"
+      },
+      {
+        "address": "0x1410b4f58",
+        "references": [
+          {
+            "from": "0x14051d581",
+            "function": "sub_14051d3d0"
+          },
+          {
+            "from": "0x1405232b6",
+            "function": "sub_140522c60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Wireframe"
+      },
+      {
+        "address": "0x141152638",
+        "references": [
+          {
+            "from": "0x14068c884",
+            "function": "sub_14068c880"
+          },
+          {
+            "from": "0x14068d329",
+            "function": "sub_14068d310"
+          },
+          {
+            "from": "0x14068d789",
+            "function": "sub_14068d770"
+          },
+          {
+            "from": "0x14068f699",
+            "function": "sub_14068f650"
+          },
+          {
+            "from": "0x14068ffa9",
+            "function": "sub_14068ff60"
+          },
+          {
+            "from": "0x14069a986",
+            "function": "sub_14069a820"
+          },
+          {
+            "from": "0x1407a9eb9",
+            "function": "sub_1407a9e70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "preview"
+      },
+      {
+        "address": "0x14138212c",
+        "references": [
+          {
+            "from": "0x140a8f515",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x1413837d8",
+        "references": [
+          {
+            "from": "0x140a86361",
+            "function": "sub_140a85cd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x141384c24",
+        "references": [
+          {
+            "from": "0x140a9651c",
+            "function": "sub_140a95a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x1413869e4",
+        "references": [
+          {
+            "from": "0x140aa12bf",
+            "function": "sub_140aa01a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Sphere"
+      },
+      {
+        "address": "0x141390750",
+        "references": [
+          {
+            "from": "0x140af0b6a",
+            "function": "sub_140af0a70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cube"
+      },
+      {
+        "address": "0x141390774",
+        "references": [
+          {
+            "from": "0x140af0ba3",
+            "function": "sub_140af0a70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Sphere"
+      },
+      {
+        "address": "0x1413a93c8",
+        "references": [
+          {
+            "from": "0x140b3d558",
+            "function": "sub_140b3d4c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Plane"
+      },
+      {
+        "address": "0x1413aaa6c",
+        "references": [
+          {
+            "from": "0x140b426b9",
+            "function": "sub_140b42390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x1413aac58",
+        "references": [
+          {
+            "from": "0x140b428e5",
+            "function": "sub_140b42390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Custom"
+      },
+      {
+        "address": "0x1413c2cb8",
+        "references": [
+          {
+            "from": "0x140bc27be",
+            "function": "sub_140bc2799"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Plane"
+      },
+      {
+        "address": "0x1413eee88",
+        "references": [
+          {
+            "from": "0x140c9c9fe",
+            "function": "sub_140c9c9d9"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Plane"
+      },
+      {
+        "address": "0x1414006b8",
+        "references": [
+          {
+            "from": "0x140cd6da8",
+            "function": "sub_140cd6d10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Plane"
+      }
+    ],
+    "total": 19
+  },
+  "summary": "19 strings match \"^(Sphere|Plane|Cylinder|Cube|Custom|Wireframe|Wire frame|Show wireframe|Preview|preview_.*\\.(obj|srt|stm))$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 19,
+    "total": 19
+  },
+  "locations": [],
+  "links": []
+}

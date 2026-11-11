@@ -1,0 +1,45 @@
+{
+  "id": "ev_d9cd616662caca3f3a145006236fa3ac3815a7929117d36745e7939d672bd0f2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14026f500"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14026f500",
+    "function": "FUN_14026f500",
+    "pseudo_code": "\r\nvoid FUN_14026f500(longlong param_1,undefined8 param_2,longlong param_3,int param_4,float param_5,\r\n                  float param_6,int param_7)\r\n\r\n{\r\n  char cVar1;\r\n  short sVar2;\r\n  longlong lVar3;\r\n  float fVar4;\r\n  int iVar5;\r\n  longlong lVar6;\r\n  undefined8 uVar7;\r\n  undefined8 uVar8;\r\n  longlong lVar9;\r\n  ulonglong uVar10;\r\n  byte bVar11;\r\n  int iVar12;\r\n  ulonglong uVar13;\r\n  undefined8 uVar14;\r\n  undefined4 uVar15;\r\n  float fVar16;\r\n  float fVar17;\r\n  uint local_118;\r\n  undefined1 local_114 [4];\r\n  undefined1 local_110 [8];\r\n  float local_108;\r\n  float local_104;\r\n  undefined4 local_100;\r\n  undefined4 local_fc;\r\n  longlong local_f8;\r\n  undefined8 local_f0;\r\n  undefined4 local_e8;\r\n  undefined8 local_e4;\r\n  uint local_dc;\r\n  undefined4 local_d8;\r\n  undefined4 local_d4;\r\n  undefined4 local_d0;\r\n  undefined8 local_cc;\r\n  int local_c4;\r\n  byte local_c0;\r\n  longlong local_b8;\r\n  \r\n  lVar6 = 0;\r\n  if (*(int *)(param_1 + 0x6d8) != -3) {\r\n    lVar6 = FUN_140094490(*(longlong *)(*(longlong *)(param_1 + 0x140) + 200) + 0x6e8);\r\n  }\r\n  if ((*(byte *)(param_1 + 0x1ec) & 2) == 0) {\r\n    return;\r\n  }\r\n  if (*(int *)(param_1 + 0x4e0) == 0) {\r\n    return;\r\n  }\r\n  if (lVar6 == 0) {\r\n    return;\r\n  }\r\n  cVar1 = *(char *)(lVar6 + 0x62);\r\n  uVar7 = FUN_14023a620(*(undefined8 *)(param_1 + 0x140),0x38);\r\n  sVar2 = *(short *)(*(longlong *)(param_1 + 0x150) + 0x1c4);\r\n  if (sVar2 != -1) {\r\n    if (*(longlong *)(*(longlong *)(param_1 + 0x1c0) + 8 + (longlong)sVar2 * 0x18) != 0) {\r\n      uVar8 = *(undefined8 *)(*(longlong *)(param_1 + 0x1c0) + 8 + (longlong)sVar2 * 0x18);\r\n      uVar14 = uVar7;\r\n      goto LAB_14026f5da;\r\n    }\r\n  }\r\n  uVar14 = 0;\r\n  uVar8 = uVar7;\r\nLAB_14026f5da:\r\n  uVar15 = FUN_140087a60(uVar8,0,uVar14);\r\n  iVar5 = FUN_140266560(param_1,lVar6,cVar1 != '\\0',uVar15);\r\n  lVar3 = *(longlong *)(lVar6 + 0x68);\r\n  local_b8 = (longlong)iVar5 * 0x208;\r\n  lVar9 = *(longlong *)(local_b8 + 0x108 + lVar3);\r\n  if (*(longlong *)(local_b8 + 0x100 + lVar3) == lVar9) {\r\n    iVar5 = (int)((*(longlong *)(local_b8 + 0xe8 + lVar3) - *(longlong *)(local_b8 + 0xe0 + lVar3))\r\n                 / 0x28);\r\n    iVar12 = FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(local_114,param_4 + iVar12);\r\n    iVar12 = FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(local_110,iVar12 - param_4);\r\n    FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(&local_118);\r\n    uVar15 = DAT_1415433a0;\r\n    fVar4 = DAT_1415432f4;\r\n    uVar10 = 0;\r\n    lVar9 = (longlong)iVar5;\r\n    uVar13 = uVar10;\r\n    if (0 < iVar5) {\r\n      do {\r\n        lVar3 = *(longlong *)(local_b8 + 0xe0 + *(longlong *)(lVar6 + 0x68));\r\n        if ((((param_7 == 0) || (*(int *)(uVar13 + 0x20 + lVar3) == param_7)) &&\r\n            (local_108 = *(float *)(uVar13 + 4 + lVar3), param_5 <= local_108)) &&\r\n           (local_108 <= param_6)) {\r\n          local_100 = 0;\r\n          local_d8 = 0;\r\n          bVar11 = local_c0 & 0xe0;\r\n          local_f0 = 0;\r\n          local_e4 = 0xffffffffffffffff;\r\n          local_d0 = uVar15;\r\n          local_d4 = 0;\r\n          local_cc = 0;\r\n          fVar16 = local_108;\r\n          if (((param_6 - param_5 != 0.0) &&\r\n              (fVar17 = (local_108 - param_5) / (param_6 - param_5), fVar16 = fVar4, fVar17 < fVar4)\r\n              ) && (fVar16 = fVar17, fVar17 <= 0.0)) {\r\n            fVar16 = 0.0;\r\n          }\r\n          local_dc = (uint)(*(char *)(uVar13 + 0x24 + lVar3) != '\\0');\r\n          local_104 = fVar16;\r\n          local_f8 = param_3;\r\n          local_c4 = (int)uVar10;\r\n          local_c0 = bVar11;\r\n          local_fc = FUN_14023adc0(param_3,param_1,*(undefined8 *)(param_3 + 0x1c8),local_114,fVar16\r\n                                   ,0,DAT_141064d64);\r\n          local_e8 = FUN_14023adc0(param_3,param_1,*(undefined8 *)(param_3 + 0x1d0),local_110,fVar16\r\n                                   ,0,DAT_141064d54);\r\n          fVar16 = (float)FUN_14023acb0(param_3,param_1,*(undefined8 *)(param_3 + 0x1d8),fVar16);\r\n          local_118 = local_118 + 1;\r\n          if (9999 < local_118) {\r\n            local_118 = 0;\r\n          }\r\n          if (fVar16 < *(float *)(PTR_DAT_1417901e0 + (ulonglong)local_118 * 4)) {\r\n            local_c0 = bVar11 | 1;\r\n          }\r\n          FUN_140354c80(param_2);\r\n        }\r\n        uVar10 = (ulonglong)((int)uVar10 + 1);\r\n        lVar9 = lVar9 + -1;\r\n        uVar13 = uVar13 + 0x28;\r\n      } while (lVar9 != 0);\r\n    }\r\n  }\r\n  else {\r\n    lVar9 = lVar9 - *(longlong *)(local_b8 + 0x100 + lVar3);\r\n    lVar9 = lVar9 + SUB168(SEXT816(-0x7777777777777777) * SEXT816(lVar9),8);\r\n    iVar12 = (int)(lVar9 >> 5) - (int)(lVar9 >> 0x3f);\r\n    iVar5 = FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(local_110,param_4 + iVar5);\r\n    iVar5 = FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(local_114,iVar5 - param_4);\r\n    FUN_14059b650(*(undefined8 *)(param_3 + 0x1f0));\r\n    FUN_1403116c0(&local_118);\r\n    uVar15 = DAT_1415433a0;\r\n    fVar4 = DAT_1415432f4;\r\n    uVar10 = 0;\r\n    lVar9 = (longlong)iVar12;\r\n    uVar13 = uVar10;\r\n    if (0 < iVar12) {\r\n      do {\r\n        lVar3 = *(longlong *)(local_b8 + 0x100 + *(longlong *)(lVar6 + 0x68));\r\n        if (((param_7 == 0) || (*(int *)(uVar13 + 0x38 + lVar3) == param_7)) &&\r\n           ((local_108 = *(float *)(uVar13 + 4 + lVar3), param_5 <= local_108 &&\r\n            (local_108 <= param_6)))) {\r\n          local_100 = 0;\r\n          local_d8 = 0;\r\n          bVar11 = local_c0 & 0xe0;\r\n          local_f0 = 0;\r\n          local_e4 = 0xffffffffffffffff;\r\n          local_d0 = uVar15;\r\n          local_d4 = 0;\r\n          local_cc = 0;\r\n          fVar16 = local_108;\r\n          if (((param_6 - param_5 != 0.0) &&\r\n              (fVar17 = (local_108 - param_5) / (param_6 - param_5), fVar16 = fVar4, fVar17 < fVar4)\r\n              ) && (fVar16 = fVar17, fVar17 <= 0.0)) {\r\n            fVar16 = 0.0;\r\n          }\r\n          local_dc = 2;\r\n          local_104 = fVar16;\r\n          local_f8 = param_3;\r\n          local_c4 = (int)uVar10;\r\n          local_c0 = bVar11;\r\n          local_fc = FUN_14023adc0(param_3,param_1,*(undefined8 *)(param_3 + 0x1c8),local_110,fVar16\r\n                                   ,0,DAT_141064d64);\r\n          local_e8 = FUN_14023adc0(param_3,param_1,*(undefined8 *)(param_3 + 0x1d0),local_114,fVar16\r\n                                   ,0,DAT_141064d54);\r\n          fVar16 = (float)FUN_14023acb0(param_3,param_1,*(undefined8 *)(param_3 + 0x1d8),fVar16);\r\n          local_118 = local_118 + 1;\r\n          if (9999 < local_118) {\r\n            local_118 = 0;\r\n          }\r\n          if (fVar16 < *(float *)(PTR_DAT_1417901e0 + (ulonglong)local_118 * 4)) {\r\n            local_c0 = bVar11 | 1;\r\n          }\r\n          FUN_140354c80(param_2);\r\n        }\r\n        uVar10 = (ulonglong)((int)uVar10 + 1);\r\n        lVar9 = lVar9 + -1;\r\n        uVar13 = uVar13 + 0x3c;\r\n      } while (lVar9 != 0);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_14026f500(longlong param_1,undefined8 param_2,longlong param_3,int param_4,float param_5,float param_6,int param_7);"
+  },
+  "summary": "Pseudo-C for FUN_14026f500 from the Deep engine (195 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14026f500"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

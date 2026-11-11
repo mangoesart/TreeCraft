@@ -1,0 +1,537 @@
+{
+  "id": "ev_1c283f71c396cbf544738a0c998986735ef2f6727164ecf84642a92e5c93b7b0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 80,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Right-handed|Left-handed|Edit Mesh|Proxy collision|Wind direction|Fix winding|Flip normals|^Ripple$|^Growth$|^Pivot$|^Spines$|^Collection$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102e110",
+        "references": [
+          {
+            "from": "0x140048f70",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip normals on backsides"
+      },
+      {
+        "address": "0x141035f28",
+        "references": [
+          {
+            "from": "0x140079398",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy collision"
+      },
+      {
+        "address": "0x141035fa4",
+        "references": [
+          {
+            "from": "0x1400790ec",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1404a0e05",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Ripple"
+      },
+      {
+        "address": "0x141036000",
+        "references": [
+          {
+            "from": "0x140078d9a",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1401b201e",
+            "function": "sub_1401b1570"
+          },
+          {
+            "from": "0x14040ab49",
+            "function": "sub_14040a1f0"
+          },
+          {
+            "from": "0x1404ed5f1",
+            "function": "sub_1404ecd30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Growth"
+      },
+      {
+        "address": "0x141036008",
+        "references": [
+          {
+            "from": "0x140078d49",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x14007904a",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Specifies the axis that will align with the wind direction."
+      },
+      {
+        "address": "0x141036048",
+        "references": [
+          {
+            "from": "0x140078cf8",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Wind direction"
+      },
+      {
+        "address": "0x141036158",
+        "references": [
+          {
+            "from": "0x140078aed",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x14033c70b",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pivot"
+      },
+      {
+        "address": "0x1410361b4",
+        "references": [
+          {
+            "from": "0x1400788e0",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1404b0796",
+            "function": "sub_1404ae0b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spines"
+      },
+      {
+        "address": "0x1410361c0",
+        "references": [
+          {
+            "from": "0x14007888f",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1400a43cf",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4bcd",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1402b121c",
+            "function": "sub_1402b1140"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x141036338",
+        "references": [
+          {
+            "from": "0x140078769",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fix winding"
+      },
+      {
+        "address": "0x141036388",
+        "references": [
+          {
+            "from": "0x1400786a6",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip normals"
+      },
+      {
+        "address": "0x141036688",
+        "references": [
+          {
+            "from": "0x140077ac5",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Edit Mesh..."
+      },
+      {
+        "address": "0x141036d08",
+        "references": [
+          {
+            "from": "0x14007e14e",
+            "function": "sub_14007e100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "wind direction change"
+      },
+      {
+        "address": "0x141036fd0",
+        "references": [
+          {
+            "from": "0x140080c30",
+            "function": "sub_140080be0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "flip normals change"
+      },
+      {
+        "address": "0x141037900",
+        "references": [
+          {
+            "from": "0x140084a1b",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Y-Up Left-handed"
+      },
+      {
+        "address": "0x141037918",
+        "references": [
+          {
+            "from": "0x140084984",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Z-Up Left-handed"
+      },
+      {
+        "address": "0x141037930",
+        "references": [
+          {
+            "from": "0x1400848f1",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Y-Up Right-handed"
+      },
+      {
+        "address": "0x141037948",
+        "references": [
+          {
+            "from": "0x140084860",
+            "function": "sub_140084750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Z-Up Right-handed"
+      },
+      {
+        "address": "0x141041688",
+        "references": [
+          {
+            "from": "0x1400bff34",
+            "function": "sub_1400bf800"
+          },
+          {
+            "from": "0x14017f8ba",
+            "function": "sub_14017f4c0"
+          },
+          {
+            "from": "0x14026afdc",
+            "function": "sub_14026aa80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:Fix winding"
+      },
+      {
+        "address": "0x14107c020",
+        "references": [
+          {
+            "from": "0x1402f32cf",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Edit Mesh"
+      },
+      {
+        "address": "0x14107ca00",
+        "references": [
+          {
+            "from": "0x1402f9cc9",
+            "function": "sub_1402f9c20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "edit mesh"
+      },
+      {
+        "address": "0x141097418",
+        "references": [
+          {
+            "from": "0x1403ae146",
+            "function": "sub_1403adff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy Collision:Scale"
+      },
+      {
+        "address": "0x141097430",
+        "references": [
+          {
+            "from": "0x1403ae0e3",
+            "function": "sub_1403adff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy Collision:Restore culled"
+      },
+      {
+        "address": "0x141097450",
+        "references": [
+          {
+            "from": "0x1403ae080",
+            "function": "sub_1403adff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy Collision:Cull"
+      },
+      {
+        "address": "0x141097468",
+        "references": [
+          {
+            "from": "0x1403adffb",
+            "function": "sub_1403adff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy Collision:Automatic"
+      },
+      {
+        "address": "0x1410aec88",
+        "references": [
+          {
+            "from": "0x1404d77bc",
+            "function": "sub_1404d7710"
+          }
+        ],
+        "section": ".rdata",
+        "text": "growth"
+      },
+      {
+        "address": "0x1413818c0",
+        "references": [
+          {
+            "from": "0x140a8ddac",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x141381a78",
+        "references": [
+          {
+            "from": "0x140a8e229",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1413bbbd0",
+        "references": [
+          {
+            "from": "0x140bb5840",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pivot"
+      },
+      {
+        "address": "0x1413bbbd8",
+        "references": [
+          {
+            "from": "0x140bb5851",
+            "function": "sub_140bb5450"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pivot"
+      },
+      {
+        "address": "0x1413bbf18",
+        "references": [
+          {
+            "from": "0x140bb634f",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pivot"
+      },
+      {
+        "address": "0x1413bbf20",
+        "references": [
+          {
+            "from": "0x140bb6360",
+            "function": "sub_140bb5c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pivot"
+      },
+      {
+        "address": "0x1413ef1c0",
+        "references": [
+          {
+            "from": "0x140cb3774",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1413ef9b0",
+        "references": [
+          {
+            "from": "0x140ca9e59",
+            "function": "sub_140ca9e40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1413f7bf0",
+        "references": [
+          {
+            "from": "0x140cd0090",
+            "function": "sub_140ccf390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1413f9b08",
+        "references": [
+          {
+            "from": "0x140ccbf33",
+            "function": "sub_140ccbf20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1414011a0",
+        "references": [
+          {
+            "from": "0x140ce8e23",
+            "function": "sub_140ce8d90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x141402328",
+        "references": [
+          {
+            "from": "0x140ce529a",
+            "function": "sub_140ce5290"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x141409b88",
+        "references": [
+          {
+            "from": "0x140d01ce3",
+            "function": "sub_140d01c40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x14140ac78",
+        "references": [
+          {
+            "from": "0x140cfd33c",
+            "function": "sub_140cfd320"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collection"
+      },
+      {
+        "address": "0x1414ec4bc",
+        "references": [],
+        "section": ".rdata",
+        "text": "PIVOT"
+      }
+    ],
+    "total": 41
+  },
+  "summary": "41 strings match \"Right-handed|Left-handed|Edit Mesh|Proxy collision|Wind direction|Fix winding|Flip normals|^Ripple$|^Growth$|^Pivot$|^Spines$|^Collection$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 41,
+    "total": 41
+  },
+  "locations": [],
+  "links": []
+}

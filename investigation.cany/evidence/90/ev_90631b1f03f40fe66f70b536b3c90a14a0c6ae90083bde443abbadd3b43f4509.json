@@ -1,0 +1,97 @@
+{
+  "id": "ev_90631b1f03f40fe66f70b536b3c90a14a0c6ae90083bde443abbadd3b43f4509",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1400823a0",
+      "0x1400822a0",
+      "0x14007e100"
+    ]
+  },
+  "result": {
+    "failed": 0,
+    "items": [
+      {
+        "entry": "0x1400823a0",
+        "input": "0x1400823a0",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1400823a0(int64_t rcx, int64_t rdx)\n{\n    r11 = rsp;\n    stack_30 = -2;\n    *(uint64_t*)(r11 + 0x18) = rbx;\n    *(uint64_t*)(r11 + 0x20) = rsi;\n    rax = *(uint64_t*)0x141a96e80;\n    rax ^= rsp;\n    stack_60 = rax;\n    esi = edx;\n    rdi = rcx;\n    if (*(uint8_t*)(rcx + 0x44) == 0) {\n        *(uint64_t*)(r11 - 0x28) = 15;\n        *(uint64_t*)(r11 - 0x30) = 0;\n        stack_38 = 0;\n        sub_14003a980(r11 - 0x40, \"orient change\", 13);\n        rcx = *(uint64_t*)0x141a9c730;\n        rax = *(uint64_t*)(rcx);\n        (**(uint64_t*)(rax + 0x2b0))(rcx, *(uint64_t*)(rdi + 0x38), &stack_38, 0);\n        if (stack_50 >= 16 /* unsigned */) {\n            sub_140ec75a8(stack_38);\n        }\n        rbx = *(uint32_t*)(rdi + 0x40);\n        rbx *= 0xb8;\n        rax = *(uint64_t*)(rdi + 0x38);\n        rbx += *(uint64_t*)(rax + 0xf08);\n        rcx = *(uint64_t*)(rdi + 0x30);\n        rax = ?itemData@QComboBox@@QEBA?AVQVariant@@HH@Z(*(uint64_t*)(rcx + 0x188), &stack_20, esi, 0x20);\n        rax = ?toInt@QVariant@@QEBAHPEA_N@Z(rax, 0);\n        *(uint32_t*)(rbx + 0x20) = eax;\n        ??1QVariant@@QEAA@XZ(&stack_20);\n        r8d |= -1;\n        sub_1400ab6c0(*(uint64_t*)(rdi + 0x38), rbx);\n        sub_14007e690(rdi);\n        rcx = *(uint64_t*)(rdi + 0x38);\n        r9l = 1;\n        sub_1404e50b0(*(uint64_t*)(rcx + 0xb8), r9l, r9l);\n    }\n    rcx = stack_60;\n    rcx ^= rsp;\n    sub_140ec7740();\n    r11 = &stack_70;\n    rbx = *(uint64_t*)(r11 + 0x20);\n    rsi = *(uint64_t*)(r11 + 0x28);\n    return rax;\n}\n",
+        "signature": "int64_t sub_1400823a0(int64_t rcx, int64_t rdx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1400822a0",
+        "input": "0x1400822a0",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1400822a0(int64_t rcx, int64_t rdx)\n{\n    stack_20 = -2;\n    stack_78 = rbx;\n    rax = *(uint64_t*)0x141a96e80;\n    rax ^= rsp;\n    stack_50 = rax;\n    edi = edx;\n    rbx = rcx;\n    if (*(uint8_t*)(rcx + 0x44) == 0) {\n        stack_40 = 15;\n        stack_38 = 0;\n        stack_28 = 0;\n        sub_14003a980(&stack_28, \"flip change\", 11);\n        rcx = *(uint64_t*)0x141a9c730;\n        rax = *(uint64_t*)(rcx);\n        (**(uint64_t*)(rax + 0x2b0))(rcx, *(uint64_t*)(rbx + 0x38), &stack_28, 0);\n        if (stack_40 >= 16 /* unsigned */) {\n            sub_140ec75a8(stack_28);\n        }\n        rdx = *(uint32_t*)(rbx + 0x40);\n        rdx *= 0xb8;\n        rax = *(uint64_t*)(rbx + 0x38);\n        rdx += *(uint64_t*)(rax + 0xf08);\n        *(uint32_t*)(rdx + 0x1c) = edi;\n        r8d |= -1;\n        sub_1400ab6c0(*(uint64_t*)(rbx + 0x38));\n        sub_14007e690(rbx);\n        rcx = *(uint64_t*)(rbx + 0x38);\n        r9l = 1;\n        sub_1404e50b0(*(uint64_t*)(rcx + 0xb8), r9l, r9l);\n    }\n    rcx = stack_50;\n    rcx ^= rsp;\n    sub_140ec7740();\n    rbx = stack_78;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1400822a0(int64_t rcx, int64_t rdx)",
+        "structured": true
+      },
+      {
+        "entry": "0x14007e100",
+        "input": "0x14007e100",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_14007e100(int64_t rcx, int64_t rdx)\n{\n    r11 = rsp;\n    stack_20 = -2;\n    *(uint64_t*)(r11 + 0x18) = rbx;\n    rax = *(uint64_t*)0x141a96e80;\n    rax ^= rsp;\n    stack_50 = rax;\n    edi = edx;\n    rbx = rcx;\n    if (*(uint8_t*)(rcx + 0x44) == 0) {\n        *(uint64_t*)(r11 - 0x28) = 15;\n        *(uint64_t*)(r11 - 0x30) = 0;\n        stack_28 = 0;\n        sub_14003a980(r11 - 0x40, \"wind direction change\", 0x15);\n        rcx = *(uint64_t*)0x141a9c730;\n        rax = *(uint64_t*)(rcx);\n        (**(uint64_t*)(rax + 0x2b0))(rcx, *(uint64_t*)(rbx + 0x38), &stack_28, 0);\n        if (stack_40 >= 16 /* unsigned */) {\n            sub_140ec75a8(stack_28);\n        }\n        rcx = *(uint32_t*)(rbx + 0x40);\n        rcx *= 0xb8;\n        rax = *(uint64_t*)(rbx + 0x38);\n        rcx += *(uint64_t*)(rax + 0xf08);\n        __asm(\"movss xmm0, [0x141a9c668]\");\n        __asm(\"movss [rcx], xmm0\");\n        __asm(\"movss xmm1, [0x141a9c66c]\");\n        __asm(\"movss [rcx+4], xmm1\");\n        __asm(\"movss xmm0, [0x141a9c670]\");\n        __asm(\"movss [rcx+8], xmm0\");\n        if (edi <= 2) {\n            __asm(\"movss xmm0, [0x1415432f4]\");\n        } else {\n            __asm(\"movss xmm0, [0x14102c874]\");\n        }\n        eax = 0x55555556;\n        rdx:rax = rax * edi;\n        eax = edx;\n        eax >>= 0x1f;\n        edx += eax;\n        eax = rdx + rdx * 2;\n        edi -= eax;\n        rax = edi;\n        __asm(\"movss [rcx+rax*4], xmm0\");\n        rcx = *(uint64_t*)(rbx + 0x38);\n        r9l = 1;\n        sub_1404e50b0(*(uint64_t*)(rcx + 0xb8), r9l, r9l);\n    }\n    rcx = stack_50;\n    rcx ^= rsp;\n    sub_140ec7740();\n    rbx = stack_80;\n    return rax;\n}\n",
+        "signature": "int64_t sub_14007e100(int64_t rcx, int64_t rdx)",
+        "structured": true
+      }
+    ],
+    "succeeded": 3
+  },
+  "summary": "Decompiled 3 of 3 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 3,
+    "total": 3
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1400823a0"
+    },
+    {
+      "kind": "address",
+      "value": "0x1400822a0"
+    },
+    {
+      "kind": "address",
+      "value": "0x14007e100"
+    }
+  ],
+  "links": []
+}

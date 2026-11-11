@@ -1,0 +1,317 @@
+{
+  "id": "ev_b280c8b945a4ae4235a84dab877d5b3b12ff5238f582e604ce2ee1692fae93c1",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(New mesh|New Mesh|Mesh|mesh|Meshes)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141033c40",
+        "references": [
+          {
+            "from": "0x140064e3d",
+            "function": "sub_140063f80"
+          },
+          {
+            "from": "0x140077013",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x140086156",
+            "function": "sub_1400860d0"
+          },
+          {
+            "from": "0x14028b53e",
+            "function": "sub_14028b3c0"
+          },
+          {
+            "from": "0x1404ab894",
+            "function": "sub_1404ab520"
+          },
+          {
+            "from": "0x1404f3be9",
+            "function": "sub_1404f3620"
+          },
+          {
+            "from": "0x14178d860",
+            "function": null
+          },
+          {
+            "from": "0x141792a18",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Meshes"
+      },
+      {
+        "address": "0x141037a08",
+        "references": [
+          {
+            "from": "0x140086181",
+            "function": "sub_1400860d0"
+          },
+          {
+            "from": "0x1400a397c",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b437c",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400f1bf3",
+            "function": "sub_1400f1ab0"
+          },
+          {
+            "from": "0x1400f21f9",
+            "function": "sub_1400f21e0"
+          },
+          {
+            "from": "0x1401f4a70",
+            "function": "sub_1401f4210"
+          },
+          {
+            "from": "0x140443e02",
+            "function": "sub_1404439e0"
+          },
+          {
+            "from": "0x1404776c0",
+            "function": "sub_140477360"
+          },
+          {
+            "from": "0x1404abbfd",
+            "function": "sub_1404ab520"
+          },
+          {
+            "from": "0x140537034",
+            "function": "sub_140536ec0"
+          },
+          {
+            "from": "0x14053783e",
+            "function": "sub_140537430"
+          },
+          {
+            "from": "0x14053b1bb",
+            "function": "sub_14053ab20"
+          },
+          {
+            "from": "0x14178c620",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x14104b5e8",
+        "references": [
+          {
+            "from": "0x140166442",
+            "function": "sub_140166310"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x1410766b0",
+        "references": [
+          {
+            "from": "0x1402be0a4",
+            "function": "sub_1402bdaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x141382344",
+        "references": [
+          {
+            "from": "0x140a8fc2d",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc1f4",
+        "references": [
+          {
+            "from": "0x140bb6b4c",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc1fc",
+        "references": [
+          {
+            "from": "0x140bb6b5d",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc334",
+        "references": [
+          {
+            "from": "0x140bb6f95",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc33c",
+        "references": [
+          {
+            "from": "0x140bb6fa6",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413eefa8",
+        "references": [
+          {
+            "from": "0x140cb27e5",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413eefcc",
+        "references": [
+          {
+            "from": "0x140cb291e",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413efc74",
+        "references": [
+          {
+            "from": "0x140cb114d",
+            "function": "sub_140cb0a80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413f7954",
+        "references": [
+          {
+            "from": "0x140ccf522",
+            "function": "sub_140ccf390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141411d9c",
+        "references": [
+          {
+            "from": "0x140d18294",
+            "function": "sub_140d181b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x141418c04",
+        "references": [
+          {
+            "from": "0x140d2c25e",
+            "function": "sub_140d2c200"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141418c78",
+        "references": [
+          {
+            "from": "0x140d2ab72",
+            "function": "sub_140d2ab40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x141418ccc",
+        "references": [
+          {
+            "from": "0x140d2826d",
+            "function": "sub_140d281d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141418cdc",
+        "references": [
+          {
+            "from": "0x140d282ba",
+            "function": "sub_140d281d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      }
+    ],
+    "total": 18
+  },
+  "summary": "18 strings match \"^(New mesh|New Mesh|Mesh|mesh|Meshes)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 18,
+    "total": 18
+  },
+  "locations": [],
+  "links": []
+}

@@ -1,0 +1,45 @@
+{
+  "id": "ev_21158f883abf18c0ac9970d3829e450391817d071bdf3cfa4c6e77c36f98259b",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1404adc00"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1404adc00",
+    "function": "FUN_1404adc00",
+    "pseudo_code": "\r\nvoid * FUN_1404adc00(void *param_1,ulonglong param_2)\r\n\r\n{\r\n  FUN_1404adba0();\r\n  if ((param_2 & 1) != 0) {\r\n    free(param_1);\r\n  }\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "void * FUN_1404adc00(void *param_1,ulonglong param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1404adc00 from the Deep engine (11 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1404adc00"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

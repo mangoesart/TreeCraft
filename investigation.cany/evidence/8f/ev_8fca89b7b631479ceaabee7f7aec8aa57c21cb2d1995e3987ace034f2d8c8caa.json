@@ -1,0 +1,45 @@
+{
+  "id": "ev_8fca89b7b631479ceaabee7f7aec8aa57c21cb2d1995e3987ace034f2d8c8caa",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1400509b0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1400509b0",
+    "function": "FUN_1400509b0",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_1400509b0(longlong param_1,char *param_2)\r\n\r\n{\r\n  int *piVar1;\r\n  Data *pDVar2;\r\n  bool bVar3;\r\n  int iVar4;\r\n  QString *pQVar5;\r\n  undefined8 uVar6;\r\n  char *pcVar7;\r\n  char *pcVar8;\r\n  int *piVar9;\r\n  undefined1 auStack_c8 [32];\r\n  undefined4 local_a8;\r\n  bool local_98 [8];\r\n  int *local_90;\r\n  QChar local_88 [8];\r\n  Data *local_80;\r\n  Data *local_78;\r\n  Data *local_70;\r\n  Data *local_68;\r\n  Data *local_60;\r\n  undefined8 local_58;\r\n  void *local_50;\r\n  ulonglong local_38;\r\n  ulonglong local_28;\r\n  \r\n  local_58 = 0xfffffffffffffffe;\r\n  local_28 = DAT_141a96e80 ^ (ulonglong)auStack_c8;\r\n  pcVar8 = param_2;\r\n  if (0xf < *(ulonglong *)(param_2 + 0x18)) {\r\n    pcVar8 = *(char **)param_2;\r\n  }\r\n  local_80 = QString::fromAscii_helper(pcVar8,-1);\r\n  QChar::QChar(local_88,' ');\r\n  local_a8 = 1;\r\n  QString::split((QString *)&local_80,(QChar *)&local_90,(SplitBehavior)local_88,0);\r\n  pcVar8 = *(char **)(param_1 + 0x28);\r\n  if (pcVar8 != *(char **)(param_1 + 0x30)) {\r\n    do {\r\n      pcVar7 = pcVar8;\r\n      if (0xf < *(ulonglong *)(pcVar8 + 0x18)) {\r\n        pcVar7 = *(char **)pcVar8;\r\n      }\r\n      bVar3 = QString::operator==((QString *)&local_80,pcVar7);\r\n      if (bVar3) {\r\n        local_98[0] = false;\r\n        if (*local_90 != 1) {\r\n          FUN_14004f450(&local_90,local_90[1]);\r\n        }\r\n        iVar4 = QString::toInt((QString *)(local_90 + (longlong)local_90[3] * 2 + 4),local_98,10);\r\n        if (local_98[0] == false) {\r\n          local_78 = QString::fromAscii_helper(\"2\",-1);\r\n          FUN_140047890(&local_90,&local_78);\r\n          LOCK();\r\n          *(int *)local_78 = *(int *)local_78 + -1;\r\n          iVar4 = *(int *)local_78;\r\n          UNLOCK();\r\n          pDVar2 = local_78;\r\n        }\r\n        else {\r\n          pQVar5 = (QString *)QString::number((int)&local_60,iVar4 + 1);\r\n          if (*local_90 != 1) {\r\n            FUN_14004f450(&local_90,local_90[1]);\r\n          }\r\n          QString::operator=((QString *)(local_90 + (longlong)local_90[3] * 2 + 4),pQVar5);\r\n          LOCK();\r\n          *(int *)local_60 = *(int *)local_60 + -1;\r\n          iVar4 = *(int *)local_60;\r\n          UNLOCK();\r\n          pDVar2 = local_60;\r\n        }\r\n        if (iVar4 == 0) {\r\n          QString::free(pDVar2);\r\n        }\r\n        local_70 = QString::fromAscii_helper(\" \",-1);\r\n        pQVar5 = (QString *)FUN_14004e370(&local_90,&local_68,&local_70);\r\n        QString::operator=((QString *)&local_80,pQVar5);\r\n        LOCK();\r\n        *(int *)local_68 = *(int *)local_68 + -1;\r\n        UNLOCK();\r\n        if (*(int *)local_68 == 0) {\r\n          QString::free(local_68);\r\n        }\r\n        LOCK();\r\n        *(int *)local_70 = *(int *)local_70 + -1;\r\n        UNLOCK();\r\n        if (*(int *)local_70 == 0) {\r\n          QString::free(local_70);\r\n        }\r\n        pcVar8 = *(char **)(param_1 + 0x28);\r\n      }\r\n      else {\r\n        pcVar8 = pcVar8 + 0x30;\r\n      }\r\n    } while (pcVar8 != *(char **)(param_1 + 0x30));\r\n  }\r\n  uVar6 = QString::toStdString((QString *)&local_80);\r\n  FUN_140040ad0(param_2,uVar6);\r\n  if (0xf < local_38) {\r\n    operator_delete(local_50);\r\n  }\r\n  LOCK();\r\n  *local_90 = *local_90 + -1;\r\n  UNLOCK();\r\n  if (*local_90 == 0) {\r\n    piVar9 = local_90 + (longlong)local_90[3] * 2 + 6;\r\n    iVar4 = local_90[2];\r\n    while (local_90 + (longlong)iVar4 * 2 + 6 != piVar9) {\r\n      piVar9 = piVar9 + -2;\r\n      piVar1 = *(int **)piVar9;\r\n      LOCK();\r\n      *piVar1 = *piVar1 + -1;\r\n      UNLOCK();\r\n      if (*piVar1 == 0) {\r\n        QString::free(*(Data **)piVar9);\r\n      }\r\n    }\r\n    qFree(local_90);\r\n  }\r\n  LOCK();\r\n  *(int *)local_80 = *(int *)local_80 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_80 == 0) {\r\n    QString::free(local_80);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1400509b0(longlong param_1,char *param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1400509b0 from the Deep engine (132 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1400509b0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

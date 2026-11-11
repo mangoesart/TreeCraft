@@ -1,0 +1,39 @@
+{
+  "id": "ev_14d06709f361839180c698b37145d23ffb9fb54aeab0b71a60296afe1fb3242a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": []
+  },
+  "result": {
+    "failed": 0,
+    "items": [],
+    "succeeded": 0
+  },
+  "summary": "Decompiled 0 of 0 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 0,
+    "total": 0
+  },
+  "locations": [],
+  "links": []
+}

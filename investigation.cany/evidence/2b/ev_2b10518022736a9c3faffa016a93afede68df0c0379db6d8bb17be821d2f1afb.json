@@ -1,0 +1,102 @@
+{
+  "id": "ev_2b10518022736a9c3faffa016a93afede68df0c0379db6d8bb17be821d2f1afb",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "(generate|create|add|delete|remove|change) (cutout|supplemental|material mesh|mesh)"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141036ec8",
+        "references": [
+          {
+            "from": "0x14007f8b7",
+            "function": "sub_14007f720"
+          },
+          {
+            "from": "0x14008209e",
+            "function": "sub_1400817d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "add mesh"
+      },
+      {
+        "address": "0x14108ea10",
+        "references": [
+          {
+            "from": "0x14033c444",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Enable this group to automatically generate meshes for the images created.  The settings in this group control the algorithm and resolution of the resulting geometry.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">These meshes can be edited further after the simplification process is complete.  Look for the'Generate mesh' button on the 'Materials' docking bar.  You can use this feature replace any mesh created during the simplification process.  You can also import your own meshes for use with the generated materials.</span></p></body></html>"
+      },
+      {
+        "address": "0x1410908f0",
+        "references": [
+          {
+            "from": "0x14033bf2f",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">A second generator will be used to add meshes at a 90 degree angle to each piece of new geometry (forming a cross-hatch style final mesh).</span></p></body></html>"
+      },
+      {
+        "address": "0x141091870",
+        "references": [
+          {
+            "from": "0x14033b5f7",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Entries in this list represent images/meshes that will be generated during the 'Simplify' operation.  Press 'Add' to add a random shot to this list.  Then use the controls in the 'Editor' group to change the source, line up the image in the window, and create cutout meshes.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Note:</span> There must be at least one saved image for the operation to work.</p></body></html>"
+      },
+      {
+        "address": "0x1410aee48",
+        "references": [
+          {
+            "from": "0x1404dddfa",
+            "function": "sub_1404dd6e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Add mesh force to the scene"
+      }
+    ],
+    "total": 5
+  },
+  "summary": "5 strings match \"(generate|create|add|delete|remove|change) (cutout|supplemental|material mesh|mesh)\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 5,
+    "total": 5
+  },
+  "locations": [],
+  "links": []
+}

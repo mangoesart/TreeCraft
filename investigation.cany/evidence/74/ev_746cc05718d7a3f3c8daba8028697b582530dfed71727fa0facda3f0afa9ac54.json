@@ -1,0 +1,61 @@
+{
+  "id": "ev_746cc05718d7a3f3c8daba8028697b582530dfed71727fa0facda3f0afa9ac54",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(GenerateMesh\\(\\)|GoToMesh\\(\\)|DeleteSupplementalMesh\\(\\)|AddSupplementalMesh\\(\\)|VariationAmountChanged.*)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410eaa99",
+        "references": [],
+        "section": ".rdata",
+        "text": "GenerateMesh()"
+      },
+      {
+        "address": "0x1410eaaa8",
+        "references": [],
+        "section": ".rdata",
+        "text": "GoToMesh()"
+      },
+      {
+        "address": "0x1410eaab3",
+        "references": [],
+        "section": ".rdata",
+        "text": "DeleteSupplementalMesh()"
+      }
+    ],
+    "total": 3
+  },
+  "summary": "3 strings match \"^(GenerateMesh\\(\\)|GoToMesh\\(\\)|DeleteSupplementalMesh\\(\\)|AddSupplementalMesh\\(\\)|VariationAmountChanged.*)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 3,
+    "total": 3
+  },
+  "locations": [],
+  "links": []
+}

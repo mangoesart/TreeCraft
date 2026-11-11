@@ -1,0 +1,986 @@
+{
+  "id": "ev_368989b98eaabecc8c4a556bdddd1c67b2259e99d508d6ea7b22bd852b5b40ee",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "[Aa]nchor"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102d020",
+        "references": [
+          {
+            "from": "0x14004257a",
+            "function": "sub_1400424a0"
+          },
+          {
+            "from": "0x140042839",
+            "function": "sub_140042820"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Anchor"
+      },
+      {
+        "address": "0x14102d410",
+        "references": [
+          {
+            "from": "0x140043c9a",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x14004474d",
+            "function": "sub_140044220"
+          },
+          {
+            "from": "0x140045295",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1402d0988",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c46d8",
+            "function": "sub_1403c41e0"
+          },
+          {
+            "from": "0x140405804",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Angle"
+      },
+      {
+        "address": "0x14102d428",
+        "references": [
+          {
+            "from": "0x140043c0d",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x1400446de",
+            "function": "sub_140044220"
+          },
+          {
+            "from": "0x140045225",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1402d0933",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c466d",
+            "function": "sub_1403c41e0"
+          },
+          {
+            "from": "0x140405799",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Axis Z"
+      },
+      {
+        "address": "0x14102d440",
+        "references": [
+          {
+            "from": "0x140043b80",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x14004466f",
+            "function": "sub_140044220"
+          },
+          {
+            "from": "0x1400451b5",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1402d08de",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c4602",
+            "function": "sub_1403c41e0"
+          },
+          {
+            "from": "0x14040572e",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Axis Y"
+      },
+      {
+        "address": "0x14102d458",
+        "references": [
+          {
+            "from": "0x140043af3",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x140044600",
+            "function": "sub_140044220"
+          },
+          {
+            "from": "0x14004513b",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1402d0889",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c458d",
+            "function": "sub_1403c41e0"
+          },
+          {
+            "from": "0x1404056c3",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Axis X"
+      },
+      {
+        "address": "0x14102d470",
+        "references": [
+          {
+            "from": "0x140043766",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x140043ff8",
+            "function": "sub_140043e10"
+          },
+          {
+            "from": "0x140044ad7",
+            "function": "sub_140044890"
+          },
+          {
+            "from": "0x140044e61",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1400455d1",
+            "function": "sub_140045380"
+          },
+          {
+            "from": "0x1402d0834",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c3fad",
+            "function": "sub_1403c3c10"
+          },
+          {
+            "from": "0x140405428",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Z"
+      },
+      {
+        "address": "0x14102d480",
+        "references": [
+          {
+            "from": "0x1400436db",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x140043f8a",
+            "function": "sub_140043e10"
+          },
+          {
+            "from": "0x140044a63",
+            "function": "sub_140044890"
+          },
+          {
+            "from": "0x140044de9",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x14004555d",
+            "function": "sub_140045380"
+          },
+          {
+            "from": "0x1402d07df",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c3f44",
+            "function": "sub_1403c3c10"
+          },
+          {
+            "from": "0x1404053bd",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:Y"
+      },
+      {
+        "address": "0x14102d490",
+        "references": [
+          {
+            "from": "0x140043650",
+            "function": "sub_140042a30"
+          },
+          {
+            "from": "0x140043f1c",
+            "function": "sub_140043e10"
+          },
+          {
+            "from": "0x1400449ef",
+            "function": "sub_140044890"
+          },
+          {
+            "from": "0x140044d71",
+            "function": "sub_140044bd0"
+          },
+          {
+            "from": "0x1400454e9",
+            "function": "sub_140045380"
+          },
+          {
+            "from": "0x1402d078a",
+            "function": "sub_1402d03d0"
+          },
+          {
+            "from": "0x1403c3edb",
+            "function": "sub_1403c3c10"
+          },
+          {
+            "from": "0x140405352",
+            "function": "sub_140405110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Common:Anchor:X"
+      },
+      {
+        "address": "0x141040118",
+        "references": [
+          {
+            "from": "0x1400a5b17",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a5bb3",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b8b8f",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b8c25",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorSides"
+      },
+      {
+        "address": "0x141040128",
+        "references": [
+          {
+            "from": "0x1400a59ed",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a5a89",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b8a7b",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b8b11",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorIds"
+      },
+      {
+        "address": "0x141040198",
+        "references": [
+          {
+            "from": "0x1400a4ab8",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a52a1",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a58c3",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a595f",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4f0f",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b68fe",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b8967",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b89fd",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1402f3601",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Anchors"
+      },
+      {
+        "address": "0x1410401e0",
+        "references": [
+          {
+            "from": "0x1400a472b",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400a4f08",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4de5",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400b679e",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "NumAnchors"
+      },
+      {
+        "address": "0x141042328",
+        "references": [
+          {
+            "from": "0x1400cf065",
+            "function": "sub_1400cef60"
+          },
+          {
+            "from": "0x1402739a8",
+            "function": "sub_140273970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Sensitivity:Parent:Anchor"
+      },
+      {
+        "address": "0x1410423d0",
+        "references": [
+          {
+            "from": "0x1400cf471",
+            "function": "sub_1400cf370"
+          },
+          {
+            "from": "0x14018354c",
+            "function": "sub_140183440"
+          },
+          {
+            "from": "0x14018f80a",
+            "function": "sub_14018eba0"
+          },
+          {
+            "from": "0x140205d20",
+            "function": "sub_140205a50"
+          },
+          {
+            "from": "0x140273f55",
+            "function": "sub_140273d80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Parent Puffiness:Anchor"
+      },
+      {
+        "address": "0x141044238",
+        "references": [
+          {
+            "from": "0x1400e4c5b",
+            "function": "sub_1400e4b10"
+          },
+          {
+            "from": "0x1400e517d",
+            "function": "sub_1400e5060"
+          },
+          {
+            "from": "0x1400e8f38",
+            "function": "sub_1400e8e8d"
+          },
+          {
+            "from": "0x14017c9af",
+            "function": "sub_14017c8fa"
+          },
+          {
+            "from": "0x14017d2a7",
+            "function": "sub_14017d1fc"
+          },
+          {
+            "from": "0x1401f9d2c",
+            "function": "sub_1401f9c8c"
+          },
+          {
+            "from": "0x1401fa5b3",
+            "function": "sub_1401fa4a0"
+          },
+          {
+            "from": "0x1401fa8fe",
+            "function": "sub_1401fa7f0"
+          },
+          {
+            "from": "0x140266f33",
+            "function": "sub_140266aa0"
+          },
+          {
+            "from": "0x1402677d7",
+            "function": "sub_14026772c"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0[INTERNAL] Anchor index out of bounds"
+      },
+      {
+        "address": "0x1410475b8",
+        "references": [
+          {
+            "from": "0x140130abd",
+            "function": "sub_14012ff90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "UV Mapping:V:Anchor"
+      },
+      {
+        "address": "0x141057190",
+        "references": [
+          {
+            "from": "0x1401d74c3",
+            "function": "sub_1401d70e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Settings:Wind Anchor:Distance scale"
+      },
+      {
+        "address": "0x1410571b8",
+        "references": [
+          {
+            "from": "0x1401d7470",
+            "function": "sub_1401d70e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Settings:Wind Anchor:Vertical offset"
+      },
+      {
+        "address": "0x1410620d0",
+        "references": [
+          {
+            "from": "0x140245898",
+            "function": "sub_14024576b"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Unable to find anchor for node (check mesh anchors (including LOD meshes), first/last, and anchor restrictions)"
+      },
+      {
+        "address": "0x141062928",
+        "references": [
+          {
+            "from": "0x14024be8f",
+            "function": "sub_14024b880"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All anchors"
+      },
+      {
+        "address": "0x141062938",
+        "references": [
+          {
+            "from": "0x14024be30",
+            "function": "sub_14024b880"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Anchors"
+      },
+      {
+        "address": "0x1410669b0",
+        "references": [
+          {
+            "from": "0x140289420",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Global anchor"
+      },
+      {
+        "address": "0x1410669e8",
+        "references": [
+          {
+            "from": "0x1402892e5",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Anatomical anchor"
+      },
+      {
+        "address": "0x141078078",
+        "references": [
+          {
+            "from": "0x14178f140",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_angle"
+      },
+      {
+        "address": "0x141078088",
+        "references": [
+          {
+            "from": "0x14178f138",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_axis_z"
+      },
+      {
+        "address": "0x141078098",
+        "references": [
+          {
+            "from": "0x14178f130",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_axis_y"
+      },
+      {
+        "address": "0x1410780a8",
+        "references": [
+          {
+            "from": "0x14178f128",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_axis_x"
+      },
+      {
+        "address": "0x1410780b8",
+        "references": [
+          {
+            "from": "0x14178f120",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_z"
+      },
+      {
+        "address": "0x1410780c8",
+        "references": [
+          {
+            "from": "0x14178f118",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_y"
+      },
+      {
+        "address": "0x1410780d8",
+        "references": [
+          {
+            "from": "0x14178f110",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor_x"
+      },
+      {
+        "address": "0x1410797c8",
+        "references": [
+          {
+            "from": "0x1402d7ad1",
+            "function": "sub_1402d6fb0"
+          },
+          {
+            "from": "0x1402da6dc",
+            "function": "sub_1402da3e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_nAnchorIndex"
+      },
+      {
+        "address": "0x14107c250",
+        "references": [
+          {
+            "from": "0x1402f4d90",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pResetAnchors"
+      },
+      {
+        "address": "0x14107c260",
+        "references": [
+          {
+            "from": "0x1402f4cde",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pRemoveAnchors"
+      },
+      {
+        "address": "0x14107c278",
+        "references": [
+          {
+            "from": "0x1402f4c33",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pAddAnchors"
+      },
+      {
+        "address": "0x14107c4f8",
+        "references": [
+          {
+            "from": "0x1402f82a1",
+            "function": "sub_1402f8270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Reset Anchors"
+      },
+      {
+        "address": "0x14107c510",
+        "references": [
+          {
+            "from": "0x1402f828d",
+            "function": "sub_1402f8270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the Anchors?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14107c798",
+        "references": [
+          {
+            "from": "0x1402f8895",
+            "function": "sub_1402f83f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ResetAnchors()"
+      },
+      {
+        "address": "0x14107c7a8",
+        "references": [
+          {
+            "from": "0x1402f886f",
+            "function": "sub_1402f83f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ModeRemoveAnchors()"
+      },
+      {
+        "address": "0x14107c7c0",
+        "references": [
+          {
+            "from": "0x1402f884c",
+            "function": "sub_1402f83f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ModeAddAnchors()"
+      },
+      {
+        "address": "0x14108cd68",
+        "references": [
+          {
+            "from": "0x140332b1e",
+            "function": "sub_140332aa0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "in_vAnchor"
+      },
+      {
+        "address": "0x141093560",
+        "references": [
+          {
+            "from": "0x140355093",
+            "function": "sub_140354ee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorZ"
+      },
+      {
+        "address": "0x141093568",
+        "references": [
+          {
+            "from": "0x14035504a",
+            "function": "sub_140354ee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorY"
+      },
+      {
+        "address": "0x141093570",
+        "references": [
+          {
+            "from": "0x140355001",
+            "function": "sub_140354ee0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorX"
+      },
+      {
+        "address": "0x1410a7728",
+        "references": [
+          {
+            "from": "0x140471c54",
+            "function": "sub_140471310"
+          },
+          {
+            "from": "0x1405832be",
+            "function": "sub_140583080"
+          },
+          {
+            "from": "0x140584569",
+            "function": "sub_1405843a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "anchor"
+      },
+      {
+        "address": "0x1410ace28",
+        "references": [
+          {
+            "from": "0x1404a1e7a",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FrondStyleBranchAnchorZ"
+      },
+      {
+        "address": "0x1410ace40",
+        "references": [
+          {
+            "from": "0x1404a1e04",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FrondStyleBranchAnchorY"
+      },
+      {
+        "address": "0x1410ace58",
+        "references": [
+          {
+            "from": "0x1404a1d8f",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FrondStyleBranchAnchorX"
+      },
+      {
+        "address": "0x1410ace98",
+        "references": [
+          {
+            "from": "0x1404a17c6",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorDistanceScale"
+      },
+      {
+        "address": "0x1410aceb0",
+        "references": [
+          {
+            "from": "0x1404a174e",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnchorOffset"
+      },
+      {
+        "address": "0x1410ad0e0",
+        "references": [
+          {
+            "from": "0x1404a810d",
+            "function": "sub_1404a4760"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindAnchorZ"
+      },
+      {
+        "address": "0x1410ad0f0",
+        "references": [
+          {
+            "from": "0x1404a8094",
+            "function": "sub_1404a4760"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindAnchorY"
+      },
+      {
+        "address": "0x1410ad100",
+        "references": [
+          {
+            "from": "0x1404a801b",
+            "function": "sub_1404a4760"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindAnchorX"
+      },
+      {
+        "address": "0x1410b8e18",
+        "references": [
+          {
+            "from": "0x140537dce",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotAddSceneAnchor( )"
+      },
+      {
+        "address": "0x1410b8e30",
+        "references": [
+          {
+            "from": "0x140537dae",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Add scene anchor"
+      },
+      {
+        "address": "0x1410cc780",
+        "references": [
+          {
+            "from": "0x1405919cc",
+            "function": "sub_140591730"
+          },
+          {
+            "from": "0x1405925de",
+            "function": "sub_140592330"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_vecAnchor"
+      },
+      {
+        "address": "0x1410eef6d",
+        "references": [],
+        "section": ".rdata",
+        "text": "ModeAddAnchors()"
+      },
+      {
+        "address": "0x1410eef7e",
+        "references": [],
+        "section": ".rdata",
+        "text": "ModeRemoveAnchors()"
+      },
+      {
+        "address": "0x1410eef92",
+        "references": [],
+        "section": ".rdata",
+        "text": "ResetAnchors()"
+      },
+      {
+        "address": "0x1410f3203",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotAddSceneAnchor()"
+      },
+      {
+        "address": "0x1417882b8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCAnchor@@"
+      }
+    ],
+    "total": 60
+  },
+  "summary": "60 strings match \"[Aa]nchor\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 60,
+    "total": 60
+  },
+  "locations": [],
+  "links": []
+}

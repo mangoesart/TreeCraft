@@ -1,0 +1,53 @@
+{
+  "id": "ev_ba9aac7242f694a278c1e209e81a10f3deb23a76f1eb3e309e56ec436318c2c8",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_data_show",
+  "params": {
+    "address": "0x141f181a0",
+    "type": "pointer"
+  },
+  "result": {
+    "address": "0x141f181a0",
+    "name": null,
+    "references_to": 1,
+    "section": ".rdata",
+    "type": "pointer",
+    "value": {
+      "target": {
+        "address": "0x1404766c0",
+        "name": "sub_1404766c0",
+        "points_to": "function"
+      },
+      "value": "0x1404766c0"
+    }
+  },
+  "summary": "0x141f181a0 looks like pointer.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "no_type_recovery",
+      "message": "the clean-room engine doesn't recover declared types; this reads the bytes and infers what they look like"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x141f181a0"
+    }
+  ],
+  "links": []
+}

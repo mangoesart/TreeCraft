@@ -1,0 +1,124 @@
+{
+  "id": "ev_96cbb1e92684726788eacff90692763066aa1c358e1e6934448fe51d14d0e5cd",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 30,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Make New Set|New set|material set"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141033d80",
+        "references": [
+          {
+            "from": "0x1400643e1",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Make New Set..."
+      },
+      {
+        "address": "0x141034a00",
+        "references": [
+          {
+            "from": "0x14006d905",
+            "function": "sub_14006d8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "add material set"
+      },
+      {
+        "address": "0x141035188",
+        "references": [
+          {
+            "from": "0x14006fe99",
+            "function": "sub_14006fe70"
+          },
+          {
+            "from": "0x140075839",
+            "function": "sub_1400757b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material Sets"
+      },
+      {
+        "address": "0x141035720",
+        "references": [
+          {
+            "from": "0x140073bb7",
+            "function": "sub_140073050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "No material sets"
+      },
+      {
+        "address": "0x141035cb0",
+        "references": [
+          {
+            "from": "0x140075cc8",
+            "function": "sub_1400757b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "material sets change"
+      },
+      {
+        "address": "0x141035cc8",
+        "references": [
+          {
+            "from": "0x140075863",
+            "function": "sub_1400757b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material Set"
+      },
+      {
+        "address": "0x14106c148",
+        "references": [
+          {
+            "from": "0x140296623",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material sets"
+      }
+    ],
+    "total": 7
+  },
+  "summary": "7 strings match \"Make New Set|New set|material set\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 7,
+    "total": 7
+  },
+  "locations": [],
+  "links": []
+}

@@ -1,0 +1,89 @@
+{
+  "id": "ev_75d9689c5cbf6f4a7fde4d34c87c48897360988ec9844fdda5975f95d8be4d75",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 20,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(COptimalMeshDialog|ResetPoints\\(\\)|ResetAnchors\\(\\)|ModeAddPoints\\(\\)|PivotMoved\\(\\)|COptimalMeshWidget|CCutout.*)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410eee80",
+        "references": [
+          {
+            "from": "0x1410ef020",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "COptimalMeshDialog"
+      },
+      {
+        "address": "0x1410eeed4",
+        "references": [],
+        "section": ".rdata",
+        "text": "ModeAddPoints()"
+      },
+      {
+        "address": "0x1410eeef7",
+        "references": [],
+        "section": ".rdata",
+        "text": "ResetPoints()"
+      },
+      {
+        "address": "0x1410eef92",
+        "references": [],
+        "section": ".rdata",
+        "text": "ResetAnchors()"
+      },
+      {
+        "address": "0x1410ef0a0",
+        "references": [
+          {
+            "from": "0x1417999a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "COptimalMeshWidget"
+      },
+      {
+        "address": "0x1410ef0b4",
+        "references": [],
+        "section": ".rdata",
+        "text": "PivotMoved()"
+      }
+    ],
+    "total": 6
+  },
+  "summary": "6 strings match \"^(COptimalMeshDialog|ResetPoints\\(\\)|ResetAnchors\\(\\)|ModeAddPoints\\(\\)|PivotMoved\\(\\)|COptimalMeshWidget|CCutout.*)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 6,
+    "total": 6
+  },
+  "locations": [],
+  "links": []
+}

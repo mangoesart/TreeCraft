@@ -1,0 +1,46 @@
+{
+  "id": "ev_9a049c680c3da17f0c0ffb47027b932f1b01dcd4f8faeb1ecd14fb2597b66411",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_data_show",
+  "params": {
+    "address": "0x141f4040c",
+    "type": "f32"
+  },
+  "result": {
+    "address": "0x141f4040c",
+    "name": null,
+    "references_to": 4,
+    "section": ".rdata",
+    "type": "f32",
+    "value": "0.02500000037252903"
+  },
+  "summary": "0x141f4040c looks like f32.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "no_type_recovery",
+      "message": "the clean-room engine doesn't recover declared types; this reads the bytes and infers what they look like"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x141f4040c"
+    }
+  ],
+  "links": []
+}

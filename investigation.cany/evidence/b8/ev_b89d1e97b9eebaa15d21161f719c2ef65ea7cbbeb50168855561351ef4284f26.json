@@ -1,0 +1,42 @@
+{
+  "id": "ev_b89d1e97b9eebaa15d21161f719c2ef65ea7cbbeb50168855561351ef4284f26",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_bytes_show",
+  "params": {
+    "address": "0x141f181a0",
+    "length": 96
+  },
+  "result": {
+    "address": "0x141f181a0",
+    "ascii": ".fG@.....fG@.....vG@.....|G@....@~G@......G@......G@....0I0@....@I0@....PI0@.......@......G@....",
+    "file_offset": 32599968,
+    "hex": "c066474001000000f0664740010000009076474001000000807c474001000000407e474001000000b0984740010000001099474001000000304930400100000040493040010000005049304001000000d0e70640010000008099474001000000",
+    "length": 96
+  },
+  "summary": "96 bytes at 0x141f181a0.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 96,
+    "total": 96
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x141f181a0"
+    }
+  ],
+  "links": []
+}

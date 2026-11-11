@@ -1,0 +1,45 @@
+{
+  "id": "ev_6aac7c46c666a31bac246289a6751d5a62bcdec7ec820bbbfa78e1eb7d36fd34",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x140477c80"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x140477c80",
+    "function": "FUN_140477c80",
+    "pseudo_code": "\r\nvoid FUN_140477c80(longlong param_1)\r\n\r\n{\r\n  byte *pbVar1;\r\n  longlong lVar2;\r\n  char cVar3;\r\n  int iVar4;\r\n  \r\n  *(undefined2 *)(param_1 + 0x10) = 0;\r\n  *(undefined1 *)(param_1 + 0x12) = 0;\r\n  cVar3 = (**(code **)(**(longlong **)(param_1 + 0x18) + 0x68))();\r\n  if (cVar3 == '\\0') {\r\n    cVar3 = (**(code **)(**(longlong **)(param_1 + 0x20) + 0x68))();\r\n    if (cVar3 == '\\0') {\r\n      cVar3 = (**(code **)(**(longlong **)(param_1 + 0x28) + 0x68))();\r\n      if (cVar3 == '\\0') {\r\n        cVar3 = (**(code **)(**(longlong **)(param_1 + 0x70) + 0x68))();\r\n        if (cVar3 == '\\0') {\r\n          cVar3 = (**(code **)(**(longlong **)(param_1 + 0x30) + 0x68))();\r\n          if (cVar3 == '\\0') {\r\n            cVar3 = (**(code **)(**(longlong **)(param_1 + 0x38) + 0x68))();\r\n            if (cVar3 == '\\0') {\r\n              cVar3 = (**(code **)(**(longlong **)(param_1 + 0x40) + 0x68))();\r\n              if (cVar3 == '\\0') {\r\n                cVar3 = (**(code **)(**(longlong **)(param_1 + 0x48) + 0x68))();\r\n                if (cVar3 == '\\0') {\r\n                  cVar3 = (**(code **)(**(longlong **)(param_1 + 0x58) + 0x68))();\r\n                  if (cVar3 == '\\0') {\r\n                    cVar3 = (**(code **)(**(longlong **)(param_1 + 0x60) + 0x68))();\r\n                    if (cVar3 == '\\0') {\r\n                      cVar3 = (**(code **)(**(longlong **)(param_1 + 0x68) + 0x68))();\r\n                      if (cVar3 == '\\0') {\r\n                        cVar3 = (**(code **)(**(longlong **)(param_1 + 0x50) + 0x68))();\r\n                        if (cVar3 == '\\0') goto LAB_140477da3;\r\n                      }\r\n                    }\r\n                  }\r\n                }\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n  *(undefined1 *)(param_1 + 0x11) = 1;\r\n  iVar4 = FUN_14045f140(*(undefined8 *)(param_1 + 0x30));\r\n  if (iVar4 == 0) {\r\n    pbVar1 = (byte *)(*(longlong *)(param_1 + 0x38) + 0xad);\r\n    *pbVar1 = *pbVar1 | 2;\r\n    FUN_1403a0750();\r\n    pbVar1 = (byte *)(*(longlong *)(param_1 + 0x20) + 0xad);\r\n    *pbVar1 = *pbVar1 | 2;\r\n  }\r\n  else {\r\n    pbVar1 = (byte *)(*(longlong *)(param_1 + 0x38) + 0xad);\r\n    *pbVar1 = *pbVar1 & 0xfd;\r\n    FUN_1403a0750();\r\n    pbVar1 = (byte *)(*(longlong *)(param_1 + 0x20) + 0xad);\r\n    *pbVar1 = *pbVar1 & 0xfd;\r\n  }\r\n  FUN_1403a0750();\r\n  cVar3 = (**(code **)(**(longlong **)(param_1 + 0x18) + 0x68))();\r\n  if (cVar3 != '\\0') {\r\n    *(undefined1 *)(param_1 + 0x12) = 1;\r\n  }\r\nLAB_140477da3:\r\n  lVar2 = *(longlong *)(param_1 + 0x18);\r\n  FUN_14045ea10(lVar2);\r\n  cVar3 = *(char *)(lVar2 + 0x10);\r\n  (**(code **)(**(longlong **)(param_1 + 0x20) + 0x50))(*(longlong **)(param_1 + 0x20),cVar3);\r\n  (**(code **)(**(longlong **)(param_1 + 0x28) + 0x50))(*(longlong **)(param_1 + 0x28),cVar3);\r\n  (**(code **)(**(longlong **)(param_1 + 0x70) + 0x50))(*(longlong **)(param_1 + 0x70),cVar3);\r\n  (**(code **)(**(longlong **)(param_1 + 0x68) + 0x50))(*(longlong **)(param_1 + 0x68),cVar3);\r\n  if (cVar3 != '\\0') {\r\n    lVar2 = *(longlong *)(param_1 + 0x68);\r\n    FUN_14045ea10(lVar2);\r\n    if (*(char *)(lVar2 + 0x10) != '\\0') {\r\n      pbVar1 = (byte *)(*(longlong *)(param_1 + 0x38) + 0xac);\r\n      *pbVar1 = *pbVar1 & 0xef;\r\n      FUN_1403a0750();\r\n      return;\r\n    }\r\n  }\r\n  pbVar1 = (byte *)(*(longlong *)(param_1 + 0x38) + 0xac);\r\n  *pbVar1 = *pbVar1 | 0x10;\r\n  FUN_1403a0750();\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_140477c80(longlong param_1);"
+  },
+  "summary": "Pseudo-C for FUN_140477c80 from the Deep engine (91 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x140477c80"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

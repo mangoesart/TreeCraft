@@ -1,0 +1,45 @@
+{
+  "id": "ev_f72c35fe5190c7dddd522990326133969b171bc818258d3dd13d9c9e78e76c6e",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402ecb70"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402ecb70",
+    "function": "FUN_1402ecb70",
+    "pseudo_code": "\r\nvoid FUN_1402ecb70(QWidget *param_1,longlong param_2)\r\n\r\n{\r\n  QAction *this;\r\n  QAction *this_00;\r\n  QAction *this_01;\r\n  QAction *this_02;\r\n  QPoint *pQVar1;\r\n  QAction *pQVar2;\r\n  Data *local_res8;\r\n  Data *local_res18;\r\n  Data *local_res20;\r\n  Data *local_78;\r\n  undefined8 local_70;\r\n  QPoint local_68 [8];\r\n  QMenu local_60 [40];\r\n  \r\n  local_70 = 0xfffffffffffffffe;\r\n  if (param_1[0xca] == (QWidget)0x0) {\r\n    *(undefined8 *)(param_1 + 0x44) = *(undefined8 *)(param_2 + 0x20);\r\n    if ((*(int *)(param_2 + 0x30) == 2) && (*(int *)(param_1 + 0x28) == 1)) {\r\n      QMenu::QMenu(local_60,(QWidget *)0x0);\r\n      local_res8 = QString::fromAscii_helper(\"Lit\",-1);\r\n      this = QMenu::addAction(local_60,(QString *)&local_res8);\r\n      LOCK();\r\n      *(int *)local_res8 = *(int *)local_res8 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_res8 == 0) {\r\n        QString::free(local_res8);\r\n      }\r\n      QAction::setCheckable(this,true);\r\n      QAction::setChecked(this,(bool)param_1[0x88]);\r\n      local_res18 = QString::fromAscii_helper(\"Cull backfaces\",-1);\r\n      this_00 = QMenu::addAction(local_60,(QString *)&local_res18);\r\n      LOCK();\r\n      *(int *)local_res18 = *(int *)local_res18 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_res18 == 0) {\r\n        QString::free(local_res18);\r\n      }\r\n      QAction::setCheckable(this_00,true);\r\n      QAction::setChecked(this_00,(bool)param_1[0x89]);\r\n      local_res20 = QString::fromAscii_helper(\"Scribed\",-1);\r\n      this_01 = QMenu::addAction(local_60,(QString *)&local_res20);\r\n      LOCK();\r\n      *(int *)local_res20 = *(int *)local_res20 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_res20 == 0) {\r\n        QString::free(local_res20);\r\n      }\r\n      QAction::setCheckable(this_01,true);\r\n      QAction::setChecked(this_01,(bool)param_1[0x8a]);\r\n      local_78 = QString::fromAscii_helper(\"Show unique uvs\",-1);\r\n      this_02 = QMenu::addAction(local_60,(QString *)&local_78);\r\n      LOCK();\r\n      *(int *)local_78 = *(int *)local_78 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_78 == 0) {\r\n        QString::free(local_78);\r\n      }\r\n      QAction::setCheckable(this_02,true);\r\n      QAction::setChecked(this_02,(bool)param_1[0xc9]);\r\n      pQVar1 = (QPoint *)QWidget::mapToGlobal(param_1,local_68);\r\n      pQVar2 = QMenu::exec(local_60,pQVar1,(QAction *)0x0);\r\n      if (pQVar2 == this) {\r\n        param_1[0x88] = (QWidget)(param_1[0x88] == (QWidget)0x0);\r\n      }\r\n      else if (pQVar2 == this_00) {\r\n        param_1[0x89] = (QWidget)(param_1[0x89] == (QWidget)0x0);\r\n      }\r\n      else if (pQVar2 == this_01) {\r\n        param_1[0x8a] = (QWidget)(param_1[0x8a] == (QWidget)0x0);\r\n        param_1[0x3c] = (QWidget)0x1;\r\n      }\r\n      else if (pQVar2 == this_02) {\r\n        param_1[0xc9] = (QWidget)(param_1[0xc9] == (QWidget)0x0);\r\n      }\r\n      (**(code **)(*(longlong *)param_1 + 400))(param_1);\r\n      QMenu::~QMenu(local_60);\r\n    }\r\n  }\r\n  else {\r\n    FUN_140603630();\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1402ecb70(QWidget *param_1,longlong param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1402ecb70 from the Deep engine (88 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ecb70"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

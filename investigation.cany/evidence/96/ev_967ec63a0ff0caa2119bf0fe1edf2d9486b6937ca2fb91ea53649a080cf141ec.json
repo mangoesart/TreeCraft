@@ -1,0 +1,45 @@
+{
+  "id": "ev_967ec63a0ff0caa2119bf0fe1edf2d9486b6937ca2fb91ea53649a080cf141ec",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1404799a0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1404799a0",
+    "function": "FUN_1404799a0",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_1404799a0(longlong param_1)\r\n\r\n{\r\n  float fVar1;\r\n  longlong lVar2;\r\n  code *pcVar3;\r\n  int iVar4;\r\n  int iVar5;\r\n  undefined8 uVar6;\r\n  longlong *plVar7;\r\n  void *_Memory;\r\n  float fVar8;\r\n  undefined1 auStack_58 [32];\r\n  void *local_38 [3];\r\n  ulonglong local_20;\r\n  ulonglong local_18;\r\n  \r\n  local_18 = DAT_142214960 ^ (ulonglong)auStack_58;\r\n  lVar2 = *(longlong *)(param_1 + 0x18);\r\n  if (lVar2 != 0) {\r\n    FUN_14045ea10(lVar2);\r\n    if ((*(char *)(lVar2 + 0x10) == '\\0') ||\r\n       (lVar2 = *(longlong *)(param_1 + 0x68), FUN_14045ea10(lVar2),\r\n       *(char *)(lVar2 + 0x10) != '\\x01')) {\r\n      iVar4 = FUN_14045f140(*(undefined8 *)(param_1 + 0x30));\r\n      plVar7 = *(longlong **)(param_1 + 0x38);\r\n      fVar1 = *(float *)(plVar7 + 0xf);\r\n      if (iVar4 == 0) {\r\n        iVar5 = (int)(fVar1 + DAT_141f407a8) + -1;\r\n        iVar4 = 0;\r\n        if (-1 < iVar5) {\r\n          iVar4 = iVar5;\r\n        }\r\n        fVar8 = (float)iVar4;\r\n      }\r\n      else {\r\n        fVar8 = fVar1 * DAT_141f40938;\r\n      }\r\n      if (fVar1 != fVar8) {\r\n        *(float *)(plVar7 + 0xf) = fVar8;\r\n        FUN_1403a0750();\r\n        plVar7 = *(longlong **)(param_1 + 0x38);\r\n      }\r\n      (**(code **)(*plVar7 + 0x30))();\r\n      pcVar3 = *(code **)(*DAT_1424b51a8 + 0x138);\r\n      uVar6 = (**(code **)(**(longlong **)(param_1 + 0x38) + 0x58))\r\n                        (*(longlong **)(param_1 + 0x38),local_38);\r\n      (*pcVar3)(DAT_1424b51a8,uVar6);\r\n      if (local_20 < 0x10) {\r\n        return;\r\n      }\r\n      _Memory = local_38[0];\r\n      if ((0xfff < local_20 + 1) &&\r\n         (_Memory = *(void **)((longlong)local_38[0] + -8),\r\n         0x1f < (ulonglong)((longlong)local_38[0] + (-8 - (longlong)_Memory)))) {\r\n                    /* WARNING: Subroutine does not return */\r\n        _invalid_parameter_noinfo_noreturn();\r\n      }\r\n    }\r\n    else {\r\n      iVar4 = FUN_14045f140(*(undefined8 *)(param_1 + 0x30));\r\n      plVar7 = *(longlong **)(param_1 + 0x20);\r\n      fVar1 = *(float *)(plVar7 + 0xf);\r\n      if (iVar4 == 0) {\r\n        iVar5 = (int)(fVar1 + DAT_141f407a8) + -1;\r\n        iVar4 = 0;\r\n        if (-1 < iVar5) {\r\n          iVar4 = iVar5;\r\n        }\r\n        fVar8 = (float)iVar4;\r\n      }\r\n      else {\r\n        fVar8 = fVar1 * DAT_141f40938;\r\n      }\r\n      if (fVar1 != fVar8) {\r\n        *(float *)(plVar7 + 0xf) = fVar8;\r\n        FUN_1403a0750();\r\n        plVar7 = *(longlong **)(param_1 + 0x20);\r\n      }\r\n      (**(code **)(*plVar7 + 0x30))();\r\n      pcVar3 = *(code **)(*DAT_1424b51a8 + 0x138);\r\n      uVar6 = (**(code **)(**(longlong **)(param_1 + 0x20) + 0x58))\r\n                        (*(longlong **)(param_1 + 0x20),local_38);\r\n      (*pcVar3)(DAT_1424b51a8,uVar6);\r\n      if (local_20 < 0x10) {\r\n        return;\r\n      }\r\n      _Memory = local_38[0];\r\n      if ((0xfff < local_20 + 1) &&\r\n         (_Memory = *(void **)((longlong)local_38[0] + -8),\r\n         0x1f < (ulonglong)\r\n                ((longlong)local_38[0] + (-8 - (longlong)*(void **)((longlong)local_38[0] + -8)))))\r\n      {\r\n                    /* WARNING: Subroutine does not return */\r\n        _invalid_parameter_noinfo_noreturn();\r\n      }\r\n    }\r\n    free(_Memory);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1404799a0(longlong param_1);"
+  },
+  "summary": "Pseudo-C for FUN_1404799a0 from the Deep engine (105 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1404799a0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

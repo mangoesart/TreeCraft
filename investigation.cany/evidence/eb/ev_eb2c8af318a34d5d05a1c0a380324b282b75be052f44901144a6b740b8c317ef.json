@@ -1,0 +1,45 @@
+{
+  "id": "ev_eb2c8af318a34d5d05a1c0a380324b282b75be052f44901144a6b740b8c317ef",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x140409be0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x140409be0",
+    "function": "FUN_140409be0",
+    "pseudo_code": "\r\nQWidget * FUN_140409be0(QWidget *param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)\r\n\r\n{\r\n  undefined4 local_res18 [4];\r\n  \r\n  local_res18[0] = 0;\r\n  QWidget::QWidget(param_1,param_2,local_res18,param_4,0xfffffffffffffffe);\r\n  *(undefined ***)param_1 = CThumbWheel::vftable;\r\n  *(undefined ***)(param_1 + 0x10) = CThumbWheel::vftable;\r\n  *(undefined8 *)(param_1 + 0x28) = 0;\r\n  *(undefined8 *)(param_1 + 0x30) = 0;\r\n  *(undefined8 *)(param_1 + 0x38) = 0;\r\n  param_1[0x40] = (QWidget)0x1;\r\n  *(undefined8 *)(param_1 + 0x48) = 0;\r\n  *(undefined4 *)(param_1 + 0x50) = 0xffffffff;\r\n  *(undefined4 *)(param_1 + 0x54) = 0x14;\r\n  QWidget::setFocusPolicy(param_1,3);\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "QWidget * FUN_140409be0(QWidget *param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4);"
+  },
+  "summary": "Pseudo-C for FUN_140409be0 from the Deep engine (21 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x140409be0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

@@ -1,0 +1,55 @@
+{
+  "id": "ev_fc31c74eb0cc629904875e0907fc833988796b942f554923f3194762fd1f9482",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_instruction_show",
+  "params": {
+    "address": "0x1402f9190"
+  },
+  "result": {
+    "address": "0x1402f9190",
+    "bytes": "488b4158",
+    "condition": null,
+    "flow": {
+      "kind": "next"
+    },
+    "function": null,
+    "kind": "instruction",
+    "length": 4,
+    "mnemonic": "mov",
+    "operands": "rax, [rcx+0x58]",
+    "reads": [
+      "rcx"
+    ],
+    "references": [],
+    "text": "mov rax, [rcx+0x58]",
+    "writes": [
+      "rax"
+    ],
+    "xrefs_from": null,
+    "xrefs_to": 0
+  },
+  "summary": "0x1402f9190: mov rax, [rcx+0x58]",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402f9190"
+    }
+  ],
+  "links": []
+}

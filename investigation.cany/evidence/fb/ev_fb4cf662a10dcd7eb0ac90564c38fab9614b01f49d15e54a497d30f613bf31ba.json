@@ -1,0 +1,54 @@
+{
+  "id": "ev_fb4cf662a10dcd7eb0ac90564c38fab9614b01f49d15e54a497d30f613bf31ba",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_xrefs_list",
+  "params": {
+    "address": "0x1403154a0",
+    "limit": 10,
+    "offset": 0
+  },
+  "result": {
+    "address": "0x1403154a0",
+    "name": "sub_1403154a0",
+    "references_from": [],
+    "references_to": [
+      {
+        "from": "0x140315887",
+        "function": "sub_1403157a0",
+        "kind": "data"
+      }
+    ],
+    "total_to": 1
+  },
+  "summary": "0x1403154a0 is referenced from 1 places and refers to 0.",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "static_references",
+      "message": "references made through computed pointers at run time are not seen"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1403154a0"
+    }
+  ],
+  "links": []
+}

@@ -1,0 +1,1444 @@
+{
+  "nodes": [
+    {
+      "class": "MainWindow",
+      "depth": 0,
+      "frame": {
+        "h": 2053,
+        "w": 3840,
+        "x": 0,
+        "y": 34
+      },
+      "identifier": "MainWindow",
+      "role": "Window",
+      "title": "SpeedTree  Modeler 10.2.0"
+    },
+    {
+      "class": "CLicensingDialog",
+      "depth": 1,
+      "frame": {
+        "h": 942,
+        "w": 780,
+        "x": 1503,
+        "y": 517
+      },
+      "identifier": "MainWindow.CLicensingDialog",
+      "role": "Window",
+      "title": "SpeedTree Licensing"
+    },
+    {
+      "class": "QWidget",
+      "depth": 2,
+      "frame": {
+        "h": 67,
+        "w": 762,
+        "x": 1512,
+        "y": 553
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pLicenseImageBackground",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 3,
+      "frame": {
+        "h": 67,
+        "w": 271,
+        "x": 1512,
+        "y": 553
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pLicenseImageBackground.m_pLogo",
+      "role": "Button"
+    },
+    {
+      "class": "QLabel",
+      "depth": 3,
+      "frame": {
+        "h": 67,
+        "w": 268,
+        "x": 1990,
+        "y": 553
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pLicenseImageBackground.m_pVersion",
+      "role": "Text",
+      "title": "SpeedTree® Modeler \nVersion 10.2.0 (Build Apr 30 2026)"
+    },
+    {
+      "class": "QGroupBox",
+      "depth": 2,
+      "frame": {
+        "h": 829,
+        "w": 762,
+        "x": 1512,
+        "y": 621
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup",
+      "role": "Group"
+    },
+    {
+      "class": "QLabel",
+      "depth": 3,
+      "frame": {
+        "h": 48,
+        "w": 738,
+        "x": 1524,
+        "y": 627
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.LicenseTypeLabel",
+      "role": "Text",
+      "title": "License type"
+    },
+    {
+      "class": "QWidget",
+      "depth": 3,
+      "frame": {
+        "h": 51,
+        "w": 738,
+        "x": 1524,
+        "y": 681
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.Ribbon",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 4,
+      "frame": {
+        "h": 51,
+        "w": 174,
+        "x": 1524,
+        "y": 681
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.Ribbon.LeftRibbon",
+      "role": "RadioButton",
+      "title": "Login with Unity ID"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 4,
+      "frame": {
+        "h": 51,
+        "w": 135,
+        "x": 1698,
+        "y": 681
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.Ribbon.RightRibbon",
+      "role": "RadioButton",
+      "title": "Use a license"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 4,
+      "frame": {
+        "h": 45,
+        "w": 84,
+        "x": 2178,
+        "y": 684
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.Ribbon.m_pHelp",
+      "role": "Button",
+      "title": "Help"
+    },
+    {
+      "class": "QStackedWidget",
+      "depth": 3,
+      "frame": {
+        "h": 700,
+        "w": 738,
+        "x": 1524,
+        "y": 738
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack",
+      "role": "Custom"
+    },
+    {
+      "class": "QWidget",
+      "depth": 4,
+      "frame": {
+        "h": 700,
+        "w": 738,
+        "x": 1524,
+        "y": 738
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense",
+      "role": "Group"
+    },
+    {
+      "class": "QLabel",
+      "depth": 5,
+      "frame": {
+        "h": 40,
+        "w": 738,
+        "x": 1524,
+        "y": 738
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.InformationLabel",
+      "role": "Text",
+      "title": "Information"
+    },
+    {
+      "class": "QTextEdit",
+      "depth": 5,
+      "frame": {
+        "h": 348,
+        "w": 738,
+        "x": 1524,
+        "y": 784
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseInfo",
+      "role": "Edit",
+      "value": "ISV: idvinc\nHost IDs: 30d042ec8391, cc6b1e4166b7, ce6b1e4166b7, de6b1e4166b7, cc6b1e4166b8, disksn=836F0_51_6031CF_97.3\n\nThis application failed to acquire a license:\nDemo license has expired (-49)\n\nPlease purchase a new license or request a license for this machine.\nIf you have already received a license, enter it in the box below.\n\nPlease contact licensing@speedtree.com with any licensing issues."
+    },
+    {
+      "class": "QWidget",
+      "depth": 6,
+      "frame": {
+        "h": 340,
+        "w": 738,
+        "x": 1524,
+        "y": 792
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseInfo.qt_scrollarea_viewport",
+      "role": "Group"
+    },
+    {
+      "class": "QLabel",
+      "depth": 5,
+      "frame": {
+        "h": 40,
+        "w": 738,
+        "x": 1524,
+        "y": 1138
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.LicenseLabel",
+      "role": "Text",
+      "title": "License"
+    },
+    {
+      "class": "QTextEdit",
+      "depth": 5,
+      "frame": {
+        "h": 208,
+        "w": 738,
+        "x": 1524,
+        "y": 1185
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseKey",
+      "role": "Edit"
+    },
+    {
+      "class": "QWidget",
+      "depth": 6,
+      "frame": {
+        "h": 201,
+        "w": 738,
+        "x": 1524,
+        "y": 1192
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseKey.qt_scrollarea_viewport",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 5,
+      "frame": {
+        "h": 33,
+        "w": 168,
+        "x": 1524,
+        "y": 1405
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseRequest",
+      "role": "Button",
+      "title": "Request license..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 5,
+      "frame": {
+        "h": 33,
+        "w": 154,
+        "x": 1698,
+        "y": 1405
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicensePurchase",
+      "role": "Button",
+      "title": "Purchase now..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 5,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 141,
+        "x": 2121,
+        "y": 1405
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pMainGroup.m_pStack.m_pLicense.m_pLicenseApply",
+      "role": "Button",
+      "title": "Apply License"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 2,
+      "frame": {
+        "h": 33,
+        "w": 33,
+        "x": 2248,
+        "y": 517
+      },
+      "identifier": "MainWindow.CLicensingDialog.m_pClose",
+      "role": "Button"
+    },
+    {
+      "depth": 1,
+      "enabled": false,
+      "frame": {
+        "h": 34,
+        "w": 3840,
+        "x": 0,
+        "y": 0
+      },
+      "identifier": "TitleBar",
+      "role": "TitleBar",
+      "title": "SpeedTree  Modeler 10.2.0"
+    },
+    {
+      "depth": 2,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 33,
+        "x": 0,
+        "y": 0
+      },
+      "identifier": "SystemMenuBar",
+      "role": "MenuBar",
+      "title": "System Menu Bar"
+    },
+    {
+      "depth": 3,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 33,
+        "x": 0,
+        "y": 0
+      },
+      "identifier": "Item 1",
+      "role": "MenuItem",
+      "title": "System"
+    },
+    {
+      "depth": 2,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 71,
+        "x": 3627,
+        "y": 0
+      },
+      "identifier": "Minimize",
+      "role": "Button",
+      "title": "Minimize"
+    },
+    {
+      "depth": 2,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 70,
+        "x": 3698,
+        "y": 0
+      },
+      "identifier": "Restore",
+      "role": "Button",
+      "title": "Restore"
+    },
+    {
+      "depth": 2,
+      "enabled": false,
+      "frame": {
+        "h": 33,
+        "w": 72,
+        "x": 3768,
+        "y": 0
+      },
+      "identifier": "Close",
+      "role": "Button",
+      "title": "Close"
+    },
+    {
+      "class": "QMenuBar",
+      "depth": 1,
+      "frame": {
+        "h": 30,
+        "w": 3840,
+        "x": 0,
+        "y": 34
+      },
+      "identifier": "MainWindow.menuBar",
+      "role": "MenuBar"
+    },
+    {
+      "class": "QAction",
+      "depth": 2,
+      "frame": {
+        "h": 30,
+        "w": 46,
+        "x": 9,
+        "y": 34
+      },
+      "role": "MenuItem",
+      "title": "File"
+    },
+    {
+      "class": "QAction",
+      "depth": 2,
+      "frame": {
+        "h": 30,
+        "w": 48,
+        "x": 64,
+        "y": 34
+      },
+      "role": "MenuItem",
+      "title": "Edit"
+    },
+    {
+      "class": "QAction",
+      "depth": 2,
+      "enabled": false,
+      "frame": {
+        "h": 30,
+        "w": 60,
+        "x": 121,
+        "y": 34
+      },
+      "role": "MenuItem",
+      "title": "Tools"
+    },
+    {
+      "class": "QAction",
+      "depth": 2,
+      "frame": {
+        "h": 30,
+        "w": 82,
+        "x": 190,
+        "y": 34
+      },
+      "role": "MenuItem",
+      "title": "Window"
+    },
+    {
+      "class": "QAction",
+      "depth": 2,
+      "frame": {
+        "h": 30,
+        "w": 60,
+        "x": 282,
+        "y": 34
+      },
+      "role": "MenuItem",
+      "title": "Help "
+    },
+    {
+      "class": "ads::CDockManager",
+      "depth": 1,
+      "frame": {
+        "h": 2023,
+        "w": 3840,
+        "x": 0,
+        "y": 64
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockSplitter",
+      "depth": 2,
+      "frame": {
+        "h": 2017,
+        "w": 3840,
+        "x": 0,
+        "y": 70
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockSplitter",
+      "depth": 3,
+      "frame": {
+        "h": 2014,
+        "w": 1068,
+        "x": 2770,
+        "y": 72
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaWidget",
+      "depth": 4,
+      "frame": {
+        "h": 2011,
+        "w": 1065,
+        "x": 2772,
+        "y": 73
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaTitleBar",
+      "depth": 5,
+      "frame": {
+        "h": 46,
+        "w": 1059,
+        "x": 2775,
+        "y": 76
+      },
+      "identifier": "dockAreaTitleBar",
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaTabBar",
+      "depth": 6,
+      "frame": {
+        "h": 46,
+        "w": 465,
+        "x": 2775,
+        "y": 76
+      },
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 7,
+      "frame": {
+        "h": 46,
+        "w": 465,
+        "x": 2775,
+        "y": 76
+      },
+      "identifier": "qt_scrollarea_viewport",
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 8,
+      "frame": {
+        "h": 46,
+        "w": 465,
+        "x": 2775,
+        "y": 76
+      },
+      "identifier": "qt_scrollarea_viewport.tabsContainerWidget",
+      "role": "Group"
+    },
+    {
+      "class": "ads::CDockWidgetTab",
+      "depth": 9,
+      "frame": {
+        "h": 46,
+        "w": 118,
+        "x": 2775,
+        "y": 76
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CElidingLabel",
+      "depth": 10,
+      "frame": {
+        "h": 22,
+        "w": 93,
+        "x": 2787,
+        "y": 88
+      },
+      "identifier": "dockWidgetTabLabel",
+      "role": "Text",
+      "title": "Generation"
+    },
+    {
+      "class": "ads::CDockWidgetTab",
+      "depth": 9,
+      "frame": {
+        "h": 46,
+        "w": 103,
+        "x": 2893,
+        "y": 76
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CElidingLabel",
+      "depth": 10,
+      "frame": {
+        "h": 22,
+        "w": 78,
+        "x": 2905,
+        "y": 88
+      },
+      "identifier": "dockWidgetTabLabel",
+      "role": "Text",
+      "title": "Materials"
+    },
+    {
+      "class": "ads::CDockWidgetTab",
+      "depth": 9,
+      "frame": {
+        "h": 46,
+        "w": 93,
+        "x": 2997,
+        "y": 76
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CElidingLabel",
+      "depth": 10,
+      "frame": {
+        "h": 22,
+        "w": 67,
+        "x": 3009,
+        "y": 88
+      },
+      "identifier": "dockWidgetTabLabel",
+      "role": "Text",
+      "title": "Meshes"
+    },
+    {
+      "class": "ads::CDockWidgetTab",
+      "depth": 9,
+      "frame": {
+        "h": 46,
+        "w": 150,
+        "x": 3090,
+        "y": 76
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CElidingLabel",
+      "depth": 10,
+      "frame": {
+        "h": 22,
+        "w": 124,
+        "x": 3102,
+        "y": 88
+      },
+      "identifier": "dockWidgetTabLabel",
+      "role": "Text",
+      "title": "Displacements"
+    },
+    {
+      "class": "ads::CSpacerWidget",
+      "depth": 6,
+      "frame": {
+        "h": 46,
+        "w": 553,
+        "x": 3240,
+        "y": 76
+      },
+      "role": "Group"
+    },
+    {
+      "class": "ads::CTitleBarButton",
+      "depth": 6,
+      "frame": {
+        "h": 39,
+        "w": 40,
+        "x": 3793,
+        "y": 79
+      },
+      "identifier": "dockAreaTitleBar.dockAreaCloseButton",
+      "role": "Button"
+    },
+    {
+      "class": "ads::CDockWidget",
+      "depth": 5,
+      "frame": {
+        "h": 1959,
+        "w": 1059,
+        "x": 2775,
+        "y": 123
+      },
+      "identifier": "GenerationDockWidget",
+      "role": "Custom"
+    },
+    {
+      "class": "CGenerationEditorDockWidget",
+      "depth": 6,
+      "frame": {
+        "h": 1957,
+        "w": 1056,
+        "x": 2776,
+        "y": 123
+      },
+      "identifier": "GenerationDockWidget.Generation",
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 7,
+      "frame": {
+        "h": 1951,
+        "w": 1056,
+        "x": 2776,
+        "y": 123
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem",
+      "role": "Group"
+    },
+    {
+      "class": "QToolBar",
+      "depth": 8,
+      "frame": {
+        "h": 51,
+        "w": 1056,
+        "x": 2776,
+        "y": 2023
+      },
+      "role": "ToolBar"
+    },
+    {
+      "class": "QWidget",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 376,
+        "x": 2779,
+        "y": 2026
+      },
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3157,
+        "y": 2026
+      },
+      "identifier": "RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QToolBarSeparator",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 10,
+        "x": 3207,
+        "y": 2026
+      },
+      "identifier": "ToolbarSpacer",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3219,
+        "y": 2026
+      },
+      "identifier": "RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QToolBarSeparator",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 10,
+        "x": 3268,
+        "y": 2026
+      },
+      "identifier": "ToolbarSpacer",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3280,
+        "y": 2026
+      },
+      "identifier": "RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QToolBarSeparator",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 10,
+        "x": 3330,
+        "y": 2026
+      },
+      "identifier": "ToolbarSpacer",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3342,
+        "y": 2026
+      },
+      "identifier": "RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QToolBarSeparator",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 10,
+        "x": 3391,
+        "y": 2026
+      },
+      "identifier": "ToolbarSpacer",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3403,
+        "y": 2026
+      },
+      "identifier": "RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QWidget",
+      "depth": 9,
+      "frame": {
+        "h": 45,
+        "w": 376,
+        "x": 3453,
+        "y": 2026
+      },
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 8,
+      "frame": {
+        "h": 57,
+        "w": 1056,
+        "x": 2776,
+        "y": 123
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem.Ribbon",
+      "role": "Group"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 81,
+        "x": 2782,
+        "y": 129
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem.Ribbon.RibbonButton",
+      "role": "Button",
+      "title": "Add"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 106,
+        "x": 2869,
+        "y": 129
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem.Ribbon.RibbonButton",
+      "role": "Button",
+      "title": "Actions"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 135,
+        "x": 2982,
+        "y": 129
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem.Ribbon.RibbonButton",
+      "role": "Button",
+      "title": "Randomize"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 9,
+      "enabled": false,
+      "frame": {
+        "h": 45,
+        "w": 48,
+        "x": 3778,
+        "y": 129
+      },
+      "identifier": "GenerationDockWidget.Generation.DisplaySystem.Ribbon.RibbonButton",
+      "role": "Button"
+    },
+    {
+      "class": "QFrame",
+      "depth": 8,
+      "frame": {
+        "h": 1840,
+        "w": 1056,
+        "x": 2776,
+        "y": 181
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "QOpenGLWidget",
+      "depth": 9,
+      "frame": {
+        "h": 1840,
+        "w": 1056,
+        "x": 2776,
+        "y": 181
+      },
+      "role": "Group"
+    },
+    {
+      "class": "ads::CDockSplitter",
+      "depth": 3,
+      "frame": {
+        "h": 2014,
+        "w": 2059,
+        "x": 708,
+        "y": 72
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaWidget",
+      "depth": 4,
+      "frame": {
+        "h": 2011,
+        "w": 2056,
+        "x": 709,
+        "y": 73
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockWidget",
+      "depth": 5,
+      "frame": {
+        "h": 2005,
+        "w": 2050,
+        "x": 712,
+        "y": 76
+      },
+      "identifier": "MDI",
+      "role": "Custom"
+    },
+    {
+      "class": "QMdiArea",
+      "depth": 6,
+      "frame": {
+        "h": 2005,
+        "w": 2050,
+        "x": 712,
+        "y": 76
+      },
+      "identifier": "MDI.mdiArea",
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaWidget",
+      "depth": 3,
+      "frame": {
+        "h": 2014,
+        "w": 703,
+        "x": 1,
+        "y": 72
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaTitleBar",
+      "depth": 4,
+      "frame": {
+        "h": 46,
+        "w": 697,
+        "x": 4,
+        "y": 75
+      },
+      "identifier": "dockAreaTitleBar",
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CDockAreaTabBar",
+      "depth": 5,
+      "frame": {
+        "h": 46,
+        "w": 112,
+        "x": 4,
+        "y": 75
+      },
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 6,
+      "frame": {
+        "h": 46,
+        "w": 112,
+        "x": 4,
+        "y": 75
+      },
+      "identifier": "qt_scrollarea_viewport",
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 7,
+      "frame": {
+        "h": 46,
+        "w": 112,
+        "x": 4,
+        "y": 75
+      },
+      "identifier": "qt_scrollarea_viewport.tabsContainerWidget",
+      "role": "Group"
+    },
+    {
+      "class": "ads::CDockWidgetTab",
+      "depth": 8,
+      "frame": {
+        "h": 46,
+        "w": 112,
+        "x": 4,
+        "y": 75
+      },
+      "role": "Custom"
+    },
+    {
+      "class": "ads::CElidingLabel",
+      "depth": 9,
+      "frame": {
+        "h": 22,
+        "w": 87,
+        "x": 16,
+        "y": 87
+      },
+      "identifier": "dockWidgetTabLabel",
+      "role": "Text",
+      "title": "Properties"
+    },
+    {
+      "class": "ads::CSpacerWidget",
+      "depth": 5,
+      "frame": {
+        "h": 46,
+        "w": 544,
+        "x": 117,
+        "y": 75
+      },
+      "role": "Group"
+    },
+    {
+      "class": "ads::CTitleBarButton",
+      "depth": 5,
+      "frame": {
+        "h": 39,
+        "w": 40,
+        "x": 661,
+        "y": 78
+      },
+      "identifier": "dockAreaTitleBar.dockAreaCloseButton",
+      "role": "Button"
+    },
+    {
+      "class": "ads::CDockWidget",
+      "depth": 4,
+      "frame": {
+        "h": 1962,
+        "w": 697,
+        "x": 4,
+        "y": 121
+      },
+      "identifier": "PropertiesDockWidget",
+      "role": "Custom"
+    },
+    {
+      "class": "CPropertyBar",
+      "depth": 5,
+      "frame": {
+        "h": 1960,
+        "w": 694,
+        "x": 6,
+        "y": 121
+      },
+      "identifier": "PropertiesDockWidget.Properties",
+      "role": "Group"
+    },
+    {
+      "class": "QWidget",
+      "depth": 6,
+      "frame": {
+        "h": 76,
+        "w": 670,
+        "x": 18,
+        "y": 127
+      },
+      "identifier": "PropertiesDockWidget.Properties.Ribbon",
+      "role": "Group"
+    },
+    {
+      "class": "QLabel",
+      "depth": 7,
+      "enabled": false,
+      "frame": {
+        "h": 64,
+        "w": 172,
+        "x": 24,
+        "y": 133
+      },
+      "identifier": "PropertiesDockWidget.Properties.Ribbon.m_pName",
+      "role": "Text",
+      "title": "Nothing selected"
+    },
+    {
+      "class": "QToolButton",
+      "depth": 7,
+      "frame": {
+        "h": 51,
+        "w": 153,
+        "x": 262,
+        "y": 139
+      },
+      "identifier": "PropertiesDockWidget.Properties.Ribbon.LeftRibbon",
+      "role": "CheckBox",
+      "title": "Generator"
+    },
+    {
+      "class": "QToolButton",
+      "depth": 7,
+      "frame": {
+        "h": 51,
+        "w": 117,
+        "x": 415,
+        "y": 139
+      },
+      "identifier": "PropertiesDockWidget.Properties.Ribbon.MiddleRibbon",
+      "role": "CheckBox",
+      "title": "Node"
+    },
+    {
+      "class": "QToolButton",
+      "depth": 7,
+      "frame": {
+        "h": 51,
+        "w": 150,
+        "x": 532,
+        "y": 139
+      },
+      "identifier": "PropertiesDockWidget.Properties.Ribbon.RightRibbon",
+      "role": "CheckBox",
+      "title": "Freehand"
+    },
+    {
+      "class": "QWidget",
+      "depth": 6,
+      "frame": {
+        "h": 1866,
+        "w": 670,
+        "x": 18,
+        "y": 204
+      },
+      "identifier": "PropertiesDockWidget.Properties.m_pNoSelectionContainer",
+      "role": "Group"
+    },
+    {
+      "class": "QGroupBox",
+      "depth": 7,
+      "enabled": false,
+      "frame": {
+        "h": 184,
+        "w": 670,
+        "x": 18,
+        "y": 216
+      },
+      "role": "Group",
+      "title": "Edit"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 267
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Wind"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 267
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Lighting"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 328
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Window properties"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 328
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Global properties"
+    },
+    {
+      "class": "QGroupBox",
+      "depth": 7,
+      "enabled": false,
+      "frame": {
+        "h": 184,
+        "w": 670,
+        "x": 18,
+        "y": 409
+      },
+      "role": "Group",
+      "title": "Actions"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 460
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Wind wizard..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 460
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Compute AO"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 522
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Export..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "enabled": false,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 522
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Randomize"
+    },
+    {
+      "class": "QGroupBox",
+      "depth": 7,
+      "frame": {
+        "h": 184,
+        "w": 670,
+        "x": 18,
+        "y": 603
+      },
+      "role": "Group",
+      "title": "File"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 654
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "New..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 654
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Open..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 643,
+        "x": 31,
+        "y": 715
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Browse samples..."
+    },
+    {
+      "class": "QGroupBox",
+      "depth": 7,
+      "frame": {
+        "h": 184,
+        "w": 670,
+        "x": 18,
+        "y": 796
+      },
+      "role": "Group",
+      "title": "Help"
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 847
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Documentation..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 316,
+        "x": 358,
+        "y": 847
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Video tutorials..."
+    },
+    {
+      "class": "QPushButton",
+      "depth": 8,
+      "frame": {
+        "h": 52,
+        "w": 318,
+        "x": 31,
+        "y": 909
+      },
+      "identifier": "SimpleModeButton",
+      "role": "Button",
+      "title": "Forum..."
+    },
+    {
+      "class": "QSplitterHandle",
+      "depth": 3,
+      "frame": {
+        "h": 2014,
+        "w": 6,
+        "x": 703,
+        "y": 72
+      },
+      "identifier": "qt_splithandle_",
+      "role": "Thumb"
+    },
+    {
+      "class": "QSplitterHandle",
+      "depth": 3,
+      "frame": {
+        "h": 2014,
+        "w": 6,
+        "x": 2766,
+        "y": 72
+      },
+      "identifier": "qt_splithandle_",
+      "role": "Thumb"
+    }
+  ],
+  "truncated": false,
+  "windows": 1
+}

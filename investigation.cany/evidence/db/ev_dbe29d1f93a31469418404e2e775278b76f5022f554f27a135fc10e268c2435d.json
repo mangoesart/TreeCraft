@@ -1,0 +1,117 @@
+{
+  "id": "ev_dbe29d1f93a31469418404e2e775278b76f5022f554f27a135fc10e268c2435d",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(orient|flip|fix winding|ripple|collision scale|weight|spine style|pivot style|collection|growth|wind direction|lod index|more) change$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141036c40",
+        "references": [
+          {
+            "from": "0x14007de04",
+            "function": "sub_14007ddc0"
+          },
+          {
+            "from": "0x14007df69",
+            "function": "sub_14007df00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "collision scale change"
+      },
+      {
+        "address": "0x141036c80",
+        "references": [
+          {
+            "from": "0x14007dea4",
+            "function": "sub_14007de60"
+          },
+          {
+            "from": "0x14007e069",
+            "function": "sub_14007e000"
+          }
+        ],
+        "section": ".rdata",
+        "text": "weight change"
+      },
+      {
+        "address": "0x141036d08",
+        "references": [
+          {
+            "from": "0x14007e14e",
+            "function": "sub_14007e100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "wind direction change"
+      },
+      {
+        "address": "0x141036dc8",
+        "references": [
+          {
+            "from": "0x14007e4cf",
+            "function": "sub_14007e480"
+          }
+        ],
+        "section": ".rdata",
+        "text": "pivot style change"
+      },
+      {
+        "address": "0x141037098",
+        "references": [
+          {
+            "from": "0x1400822ef",
+            "function": "sub_1400822a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "flip change"
+      },
+      {
+        "address": "0x1410370d0",
+        "references": [
+          {
+            "from": "0x1400823f2",
+            "function": "sub_1400823a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "orient change"
+      }
+    ],
+    "total": 6
+  },
+  "summary": "6 strings match \"^(orient|flip|fix winding|ripple|collision scale|weight|spine style|pivot style|collection|growth|wind direction|lod index|more) change$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 6,
+    "total": 6
+  },
+  "locations": [],
+  "links": []
+}

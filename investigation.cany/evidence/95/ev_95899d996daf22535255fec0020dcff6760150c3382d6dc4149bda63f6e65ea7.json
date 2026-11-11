@@ -1,0 +1,204 @@
+{
+  "id": "ev_95899d996daf22535255fec0020dcff6760150c3382d6dc4149bda63f6e65ea7",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "m_pAngle|m_pDoubleSided|m_pImproveFolding|m_pTessellation|Tessellation|ImproveFolding|DoubleSided|AngleChanged|Folding"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141040150",
+        "references": [
+          {
+            "from": "0x1400a55bf",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b85bd",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1402f3a6b",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Tessellation"
+      },
+      {
+        "address": "0x141040160",
+        "references": [
+          {
+            "from": "0x1400a5544",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b87d1",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ImproveFolding"
+      },
+      {
+        "address": "0x14107bf40",
+        "references": [
+          {
+            "from": "0x1402f3b7a",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Improve folding"
+      },
+      {
+        "address": "0x14107c1a8",
+        "references": [
+          {
+            "from": "0x1402f5bd2",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pImproveFolding"
+      },
+      {
+        "address": "0x14107c1c0",
+        "references": [
+          {
+            "from": "0x1402f5a9e",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwDoubleSided"
+      },
+      {
+        "address": "0x14107c1e0",
+        "references": [
+          {
+            "from": "0x1402f57d9",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pTessellation"
+      },
+      {
+        "address": "0x14107c810",
+        "references": [
+          {
+            "from": "0x1402f8797",
+            "function": "sub_1402f83f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1AngleChanged(int)"
+      },
+      {
+        "address": "0x14108e1f0",
+        "references": [
+          {
+            "from": "0x14033c84c",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Use this option to add a center point to the mesh.  Doing so adds triangles but may help when manipulating the mesh (e.g., folding or addiing displacement) after the 'Simplify' operation is complete.</span></p></body></html>"
+      },
+      {
+        "address": "0x1410d1588",
+        "references": [
+          {
+            "from": "0x1405ba19b",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "glTessellationModeAMD"
+      },
+      {
+        "address": "0x1410d15a0",
+        "references": [
+          {
+            "from": "0x1405ba18e",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "glTessellationFactorAMD"
+      },
+      {
+        "address": "0x1410ddaf8",
+        "references": [
+          {
+            "from": "0x1405bb05d",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ARB_tessellation_shader"
+      },
+      {
+        "address": "0x1410dfc50",
+        "references": [
+          {
+            "from": "0x1405c7b89",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "tessellation_program5"
+      },
+      {
+        "address": "0x1410e0b10",
+        "references": [
+          {
+            "from": "0x1405c3b70",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "tessellation_shader"
+      },
+      {
+        "address": "0x1410eeea4",
+        "references": [],
+        "section": ".rdata",
+        "text": "AngleChanged(int)"
+      }
+    ],
+    "total": 14
+  },
+  "summary": "14 strings match \"m_pAngle|m_pDoubleSided|m_pImproveFolding|m_pTessellation|Tessellation|ImproveFolding|DoubleSided|AngleChanged|Folding\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 14,
+    "total": 14
+  },
+  "locations": [],
+  "links": []
+}

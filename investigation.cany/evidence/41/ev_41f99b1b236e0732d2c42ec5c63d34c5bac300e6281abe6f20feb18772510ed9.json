@@ -1,0 +1,45 @@
+{
+  "id": "ev_41f99b1b236e0732d2c42ec5c63d34c5bac300e6281abe6f20feb18772510ed9",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1400828d0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1400828d0",
+    "function": "FUN_1400828d0",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_1400828d0(longlong param_1,int param_2)\r\n\r\n{\r\n  StandardButton SVar1;\r\n  longlong *plVar2;\r\n  longlong *plVar3;\r\n  longlong lVar4;\r\n  undefined1 auStack_a8 [32];\r\n  undefined4 local_88;\r\n  Data *local_78;\r\n  undefined4 local_70 [2];\r\n  Data *local_68;\r\n  Data *local_60;\r\n  undefined8 local_58;\r\n  void *local_50;\r\n  undefined1 local_48;\r\n  undefined7 uStack_47;\r\n  undefined8 local_38;\r\n  ulonglong local_30;\r\n  ulonglong local_20;\r\n  \r\n  local_58 = 0xfffffffffffffffe;\r\n  local_20 = DAT_141a96e80 ^ (ulonglong)auStack_a8;\r\n  if (*(char *)(param_1 + 0x44) == '\\0') {\r\n    plVar2 = (longlong *)0x0;\r\n    plVar3 = DAT_141a9c730 + -5;\r\n    if (DAT_141a9c730 == (longlong *)0x0) {\r\n      plVar3 = plVar2;\r\n    }\r\n    FUN_14029f410(plVar3);\r\n    lVar4 = (longlong)*(int *)(param_1 + 0x40) * 0xb8 +\r\n            *(longlong *)(*(longlong *)(param_1 + 0x38) + 0xf08);\r\n    if (*(char *)(lVar4 + 0x8e) == '\\0') {\r\n      local_68 = QString::fromAscii_helper\r\n                           (\"Editing this mesh will convert it to embedded.\\nIt will no longer reference files on disk.\\n\\nDo you wish to continue?\"\r\n                            ,-1);\r\n      local_60 = QString::fromAscii_helper(\"\",-1);\r\n      plVar3 = plVar2;\r\n      if (DAT_141a9c730 != (longlong *)0x0) {\r\n        plVar3 = DAT_141a9c730 + -5;\r\n      }\r\n      local_70[0] = 0x14000;\r\n      local_88 = 0;\r\n      SVar1 = QMessageBox::question(plVar3,&local_60,&local_68,local_70);\r\n      LOCK();\r\n      *(int *)local_60 = *(int *)local_60 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_60 == 0) {\r\n        QString::free(local_60);\r\n      }\r\n      LOCK();\r\n      *(int *)local_68 = *(int *)local_68 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_68 == 0) {\r\n        QString::free(local_68);\r\n      }\r\n      if (SVar1 == 0x10000) {\r\n        return;\r\n      }\r\n      local_30 = 0xf;\r\n      local_38 = 0;\r\n      local_48 = SVar1 == 0x10000;\r\n      FUN_14003a980(&local_48,\"embed mesh\",10);\r\n      (**(code **)(*DAT_141a9c730 + 0x2b0))\r\n                (DAT_141a9c730,*(undefined8 *)(param_1 + 0x38),&local_48,0);\r\n      if (0xf < local_30) {\r\n        operator_delete((void *)CONCAT71(uStack_47,local_48));\r\n      }\r\n      *(undefined1 *)(lVar4 + 0x8e) = 1;\r\n      FUN_14007e690(param_1);\r\n    }\r\n    if (param_2 != -1) {\r\n      *(int *)(lVar4 + 0xa4) = param_2;\r\n    }\r\n    if (*(longlong *)(param_1 + 0x48) == 0) {\r\n      local_50 = operator_new(0xb0);\r\n      if (local_50 != (void *)0x0) {\r\n        if (DAT_141a9c730 != (longlong *)0x0) {\r\n          plVar2 = DAT_141a9c730 + -5;\r\n        }\r\n        plVar2 = (longlong *)FUN_1402f83f0(local_50,plVar2);\r\n      }\r\n      *(longlong **)(param_1 + 0x48) = plVar2;\r\n      local_78 = QString::fromAscii_helper(\"CutoutEditor\",-1);\r\n      QObject::setObjectName(*(QObject **)(param_1 + 0x48),(QString *)&local_78);\r\n      LOCK();\r\n      *(int *)local_78 = *(int *)local_78 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_78 == 0) {\r\n        QString::free(local_78);\r\n      }\r\n    }\r\n    FUN_1402fc9c0(*(undefined8 *)(param_1 + 0x48),*(undefined8 *)(param_1 + 0x38),lVar4);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1400828d0(longlong param_1,int param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1400828d0 from the Deep engine (100 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1400828d0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

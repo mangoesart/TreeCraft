@@ -1,0 +1,45 @@
+{
+  "id": "ev_030202930e9a3c9e5db761973a4fc7cabfc0abe8592a9cfd8fc3a2c33c724187",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1406038b0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1406038b0",
+    "function": "FUN_1406038b0",
+    "pseudo_code": "\r\nvoid FUN_1406038b0(undefined8 param_1,int param_2,undefined4 param_3,longlong param_4)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  undefined4 uStack_18;\r\n  undefined8 uStack_14;\r\n  undefined2 uStack_c;\r\n  \r\n  if (param_2 == 0) {\r\n    switch(param_3) {\r\n    case 0:\r\n      func_0x0001402f9180(param_1,**(undefined4 **)(param_4 + 8));\r\n      return;\r\n    case 1:\r\n      func_0x0001402f9190(param_1,**(undefined4 **)(param_4 + 8));\r\n      return;\r\n    case 2:\r\n      FUN_1402f9160(param_1,**(undefined8 **)(param_4 + 8));\r\n      return;\r\n    case 3:\r\n      FUN_1402f8980(param_1);\r\n      return;\r\n    case 4:\r\n      FUN_1402f7b30(param_1);\r\n      return;\r\n    case 5:\r\n      FUN_1402f7be0(param_1);\r\n      return;\r\n    case 6:\r\n      FUN_1402f7c90(param_1);\r\n      return;\r\n    case 7:\r\n      FUN_1402f7d60(param_1);\r\n      return;\r\n    case 8:\r\n      FUN_1402f7e10(param_1);\r\n      return;\r\n    case 9:\r\n      FUN_1402f7ec0(param_1);\r\n      return;\r\n    case 10:\r\n      FUN_1402f7f90(param_1);\r\n      return;\r\n    case 0xb:\r\n      FUN_1402f3f90(param_1);\r\n      return;\r\n    case 0xc:\r\n      puVar1 = *(undefined4 **)(param_4 + 8);\r\n      uStack_18 = *puVar1;\r\n      uStack_14 = *(undefined8 *)(puVar1 + 1);\r\n      uStack_c = *(undefined2 *)(puVar1 + 3);\r\n      FUN_1402f4050(param_1,&uStack_18);\r\n      return;\r\n    case 0xd:\r\n      FUN_1402f8040(param_1);\r\n      return;\r\n    case 0xe:\r\n      FUN_1402f8110(param_1);\r\n      return;\r\n    case 0xf:\r\n      FUN_1402f81c0(param_1);\r\n      return;\r\n    case 0x10:\r\n      FUN_1402f8270(param_1);\r\n      return;\r\n    case 0x11:\r\n      FUN_1402f7620(param_1);\r\n      return;\r\n    case 0x12:\r\n      FUN_1402f94e0(param_1,**(undefined4 **)(param_4 + 8));\r\n      return;\r\n    case 0x13:\r\n      FUN_1402f9c20(param_1);\r\n      return;\r\n    case 0x14:\r\n      FUN_1402fc2c0(param_1);\r\n      return;\r\n    case 0x15:\r\n      FUN_1402f94e0(param_1,0);\r\n      return;\r\n    case 0x16:\r\n      FUN_1402f7710(param_1);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1406038b0(undefined8 param_1,int param_2,undefined4 param_3,longlong param_4);"
+  },
+  "summary": "Pseudo-C for FUN_1406038b0 from the Deep engine (88 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1406038b0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

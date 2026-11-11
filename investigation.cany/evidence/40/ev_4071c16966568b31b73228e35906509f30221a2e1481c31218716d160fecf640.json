@@ -1,0 +1,45 @@
+{
+  "id": "ev_4071c16966568b31b73228e35906509f30221a2e1481c31218716d160fecf640",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1401a6550"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1401a6550",
+    "function": "FUN_1401a6550",
+    "pseudo_code": "\r\nvoid FUN_1401a6550(undefined8 param_1,uint param_2)\r\n\r\n{\r\n  ulonglong uVar1;\r\n  \r\n  if (0 < (int)param_2) {\r\n    uVar1 = (ulonglong)param_2;\r\n    do {\r\n      FUN_1401a4320(param_1);\r\n      uVar1 = uVar1 - 1;\r\n    } while (uVar1 != 0);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1401a6550(undefined8 param_1,uint param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1401a6550 from the Deep engine (16 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1401a6550"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

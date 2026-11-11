@@ -1,0 +1,21 @@
+{
+  "id": "unk_cb364103d504cff6",
+  "revision": 4,
+  "question": "The exact spine-walk formulas (how Gravity, Noise and Jink bend a branch) and the radius taper curve in the original.",
+  "severity": "medium",
+  "domain": "generation",
+  "status": "investigating",
+  "probes": [
+    "Ruled out: fn 0x140192780 and fn 0x140196510 are old-file converters (rename settings only); fn 0x1403154a0 is an OpenMP worker for image processing (forked by fn 0x1403157a0 via _vcomp_fork), not a spine evaluator.",
+    "Next: find the code that reads the Spine:Shape:Gravity property value (property 130) from the branch node's cached property table, e.g. by locating the property-index constant 130 (0x82) near reads of Spine:Shape:Straightness/Ancestor/Twist (strings used by fn 0x14010bb90)."
+  ],
+  "evidence_for": [
+    "ev_e016dd97c4acdd6eab4c7a3e6ea7c2aa631e9270a6915491fed898e900c3f94a",
+    "ev_4e6c54850cc07ef1bcfee74b1e7931491b6a31e9d942e6d2264963dcb45bc80c"
+  ],
+  "evidence_against": [
+    "ev_b3b09751693f51ccd0321543d5bdb52347340938b1db5c592ceae4f8bff1d7dc",
+    "ev_8e87760430ea2f776497877326f11f049977a3b0356996a629c1964fef3bc6d9",
+    "ev_103e77a0850b3f31eb2fb833f1657c490437ad43ba2cc10ccaffe38a6a467e42"
+  ]
+}

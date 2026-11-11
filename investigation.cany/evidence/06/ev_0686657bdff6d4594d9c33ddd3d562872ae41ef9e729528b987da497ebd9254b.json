@@ -1,0 +1,98 @@
+{
+  "id": "ev_0686657bdff6d4594d9c33ddd3d562872ae41ef9e729528b987da497ebd9254b",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1402ec7e0",
+      "0x1402ec9b0",
+      "0x1402ec500"
+    ]
+  },
+  "result": {
+    "failed": 0,
+    "items": [
+      {
+        "entry": "0x1402ec7e0",
+        "input": "0x1402ec7e0",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402ec7e0(int64_t rcx, int64_t rdx, int64_t r8)\n{\n    stack_8 = rbx;\n    stack_10 = rsi;\n    *(uint64_t*)(rcx + 0x30) = rdx;\n    *(uint32_t*)(rcx + 0x28) = 1;\n    eax = 0;\n    rsi = rcx;\n    *(uint64_t*)(rcx + 0x54) = 0x3f800000;\n    *(uint64_t*)(rcx + 0x64) = 0x3f800000;\n    *(uint64_t*)(rcx + 0x5c) = rax;\n    *(uint64_t*)(rcx + 0x6c) = rax;\n    *(uint32_t*)(rcx + 0x74) = 0x3f800000;\n    rcx += 0x54;\n    edi = r8l;\n    sub_140594750(rcx, &data_14107b460);\n    __asm(\"movss xmm5, [0x141543428]\");\n    __asm(\"movss [rsp+0x40], xmm5\");\n    sub_1405942b0(rsi + 0x54, &stack_40);\n    *(uint8_t*)(rsi + 0x3c) = 1;\n    *(uint8_t*)(rsi + 0xcb) = dil;\n    ?updateGeometry@QWidget@@QEAAXXZ(rsi);\n    rcx = rsi;\n    rbx = stack_30;\n    rsi = stack_38;\n    return ?update@QWidget@@QEAAXXZ(); /* tail call */\n}\n",
+        "signature": "int64_t sub_1402ec7e0(int64_t rcx, int64_t rdx, int64_t r8)",
+        "structured": true
+      },
+      {
+        "entry": "0x1402ec9b0",
+        "input": "0x1402ec9b0",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402ec9b0()\n{\n    __asm(\"movss xmm1, [0x14104598c]\");\n    __asm(\"movss xmm0, [0x141041ae8]\");\n    __asm(\"movaps [rsp+0x60], xmm6\");\n    __asm(\"movaps [rsp+0x50], xmm7\");\n    __asm(\"movaps [rsp+0x40], xmm8\");\n    __asm(\"movaps [rsp+0x30], xmm9\");\n    __asm(\"movaps [rsp+0x20], xmm10\");\n    __asm(\"movss xmm10, [0x1415432f4]\");\n    __asm(\"movaps xmm2, xmm10\");\n    sub_140607106();\n    __asm(\"movss xmm1, [0x14102cfcc]\");\n    __asm(\"movss xmm0, [0x141042840]\");\n    __asm(\"movaps xmm3, xmm10\");\n    __asm(\"movaps xmm2, xmm1\");\n    sub_14060704c();\n    sub_1406070a0(4);\n    __asm(\"movss xmm7, [0x14102c874]\");\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm7\");\n    sub_140607124();\n    __asm(\"movss xmm8, [0x14105ea38]\");\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"xorps xmm9, xmm9\");\n    __asm(\"movaps xmm0, xmm8\");\n    __asm(\"movaps xmm1, xmm9\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm7\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm10\");\n    sub_140607124();\n    __asm(\"movss xmm6, [0x141041458]\");\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm10\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm6\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm10\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movss xmm1, [0x1415433a0]\");\n    __asm(\"movaps xmm0, xmm9\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm7\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movaps xmm1, xmm9\");\n    __asm(\"movaps xmm0, xmm8\");\n    sub_140607124();\n    __asm(\"movss xmm1, [0x141042120]\");\n    __asm(\"movaps xmm0, xmm9\");\n    sub_140607124();\n    __asm(\"movaps xmm6, [rsp+0x60]\");\n    __asm(\"movaps xmm7, [rsp+0x50]\");\n    __asm(\"movaps xmm8, [rsp+0x40]\");\n    __asm(\"movaps xmm9, [rsp+0x30]\");\n    __asm(\"movaps xmm10, [rsp+0x20]\");\n    return sub_140607094(); /* tail call */\n}\n",
+        "signature": "int64_t sub_1402ec9b0()",
+        "structured": true
+      },
+      {
+        "entry": "0x1402ec500",
+        "input": "0x1402ec500",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402ec500(int64_t rcx)\n{\n    stack_20 = -2;\n    stack_50 = rbx;\n    rdi = rcx;\n    rdx = *(uint64_t*)(rcx + 0x48);\n    eax = *(uint32_t*)(rdx + 8);\n    if (*(uint32_t*)(rdx + 12) != eax) {\n        rax = sub_1402e90b0(rcx, &stack_40);\n        sub_140047890(rdi + 0x40, rax);\n        rax = stack_40;\n        *(uint32_t*)(rax)--;\n        if (*(uint32_t*)(rax) == 0) {\n            ?free@QString@@CAXPEAUData@1@@Z(stack_40);\n        }\n        rax = *(uint64_t*)(rdi + 0x48);\n        ecx = *(uint32_t*)(rax);\n        if (ecx != 1) {\n            rax = *(uint64_t*)(rdi + 0x48);\n            sub_14004f450(rdi + 0x48, *(uint32_t*)(rax + 4));\n        }\n        rdx = *(uint64_t*)(rdi + 0x48);\n        rax = *(uint32_t*)(rdx + 12);\n        rax = ??0QString@@QEAA@AEBV0@@Z(&stack_48, rdx + rax * 8 + 16);\n        sub_1402e9340(rdi, rax);\n        sub_1402e9be0(rdi + 0x48);\n    }\n    rbx = stack_50;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1402ec500(int64_t rcx)",
+        "structured": true
+      }
+    ],
+    "succeeded": 3
+  },
+  "summary": "Decompiled 3 of 3 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 3,
+    "total": 3
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ec7e0"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402ec9b0"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402ec500"
+    }
+  ],
+  "links": []
+}

@@ -1,0 +1,42 @@
+{
+  "id": "ev_33c7c2924aaeb7dcda16e31f61c6dfef1e80276b228b641d8298d393028eb9b2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_bytes_show",
+  "params": {
+    "address": "0x14053f7c0",
+    "length": 400
+  },
+  "result": {
+    "address": "0x14053f7c0",
+    "ascii": "...}..L.}.L.}.L.}.H..........L.............A.....H......H.......|....H..(f..A..A.....H......I.......H......H.......r.H.......g}..H..........L.............H..0.......L..(..........A.....H......H............H..(f..A..A.....H......I...$...H......H..0....r.H........|..H..0.......L..(..........H..........L..x.....h....A.....H..X...H..h....l....H..(f..A..A.....H..h...I.......H......H.......r.H..h....W|.",
+    "file_offset": 5499840,
+    "hex": "f8e8e27d98004c897df84c897d004c897d0848c785e00600000f0000004c89bdd8060000c685c80600000041b815000000488d15a0a2b700488d8dc8060000e87cb1afff90488b9f2866000041b10141b802000000488d95c8060000498bcce8acc60500488983d00000004883bde006000010720c488b8dc8060000e8677d980048c785e00600000f0000004c89bdd8060000c685c80600000048c785300700000f0000004c89bd28070000c685180700000041b818000000488d15f8a1b700488d8d18070000e8f4b0afff90488b9f2866000041b10141b802000000488d9518070000498bcce824c60500488983d80000004883bd3007000010720c488b8d18070000e8df7c980048c785300700000f0000004c89bd28070000c685180700000048c785800700000f0000004c89bd78070000c685680700000041b816000000488d1558a1b700488d8d68070000e86cb0afff90488b9f2866000041b10141b804000000488d9568070000498bcce89cc50500488983e00000004883bd8007000010720c488b8d68070000e8577c98",
+    "length": 400
+  },
+  "summary": "400 bytes at 0x14053f7c0.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 400,
+    "total": 400
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14053f7c0"
+    }
+  ],
+  "links": []
+}

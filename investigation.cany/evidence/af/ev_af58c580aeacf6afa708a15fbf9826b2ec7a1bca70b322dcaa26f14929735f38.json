@@ -1,0 +1,44 @@
+{
+  "id": "ev_af58c580aeacf6afa708a15fbf9826b2ec7a1bca70b322dcaa26f14929735f38",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_functions_search",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "CGenAlg|CSpineNode|CBranchNode|CLeafMeshNode"
+  },
+  "result": {
+    "functions": 0,
+    "imports": 0,
+    "matches": [],
+    "total": 0
+  },
+  "summary": "0 functions and 0 imports match \"CGenAlg|CSpineNode|CBranchNode|CLeafMeshNode\".",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "function_limit",
+      "message": "function discovery stopped after 50000 functions; the function list is incomplete and some code is not analysed"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 0,
+    "total": 0
+  },
+  "locations": [],
+  "links": []
+}

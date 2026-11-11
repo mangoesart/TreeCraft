@@ -1,0 +1,58 @@
+{
+  "id": "ev_420e4328d8ef5ed3de4b370a8a471d8e60452f95d4637ccd24d965e1bf54d233",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^CAssetMeshPane$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410eb0e0",
+        "references": [
+          {
+            "from": "0x14060063b",
+            "function": "sub_140600636"
+          },
+          {
+            "from": "0x141798df8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CAssetMeshPane"
+      }
+    ],
+    "total": 1
+  },
+  "summary": "1 strings match \"^CAssetMeshPane$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [],
+  "links": []
+}

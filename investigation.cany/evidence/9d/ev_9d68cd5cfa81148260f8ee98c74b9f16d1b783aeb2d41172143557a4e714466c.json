@@ -1,0 +1,45 @@
+{
+  "id": "ev_9d68cd5cfa81148260f8ee98c74b9f16d1b783aeb2d41172143557a4e714466c",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402ecdd0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402ecdd0",
+    "function": "FUN_1402ecdd0",
+    "pseudo_code": "\r\nvoid FUN_1402ecdd0(longlong *param_1)\r\n\r\n{\r\n  undefined4 local_res8 [2];\r\n  \r\n  *(undefined8 *)((longlong)param_1 + 0x54) = 0x3f800000;\r\n  *(undefined8 *)((longlong)param_1 + 100) = 0x3f800000;\r\n  *(undefined4 *)((longlong)param_1 + 0x74) = 0x3f800000;\r\n  *(undefined8 *)((longlong)param_1 + 0x5c) = 0;\r\n  *(undefined8 *)((longlong)param_1 + 0x6c) = 0;\r\n  *(undefined4 *)(param_1 + 0x14) = 0;\r\n  if ((int)param_1[5] == 0) {\r\n    *(undefined4 *)((longlong)param_1 + 0x54) = 0xbfc90fdb;\r\n    *(undefined4 *)(param_1 + 0xb) = 0xbfdd2b0b;\r\n  }\r\n  else if ((int)param_1[5] == 1) {\r\n    FUN_140594750((longlong)param_1 + 0x54,&DAT_14107b460);\r\n    local_res8[0] = DAT_141543428;\r\n    FUN_1405942b0((longlong)param_1 + 0x54,local_res8);\r\n  }\r\n                    /* WARNING: Could not recover jumptable at 0x0001402ece5b. Too many branches */\r\n                    /* WARNING: Treating indirect jump as call */\r\n  (**(code **)(*param_1 + 400))(param_1);\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1402ecdd0(longlong *param_1);"
+  },
+  "summary": "Pseudo-C for FUN_1402ecdd0 from the Deep engine (27 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ecdd0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

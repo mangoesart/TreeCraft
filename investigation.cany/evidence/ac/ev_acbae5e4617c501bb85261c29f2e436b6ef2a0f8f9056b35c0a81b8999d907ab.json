@@ -1,0 +1,1464 @@
+{
+  "id": "ev_acbae5e4617c501bb85261c29f2e436b6ef2a0f8f9056b35c0a81b8999d907ab",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 100,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "spine|gravity|Spine:Noise|Skin:Radius:Length"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141d7a3d0",
+        "references": [
+          {
+            "from": "0x141d78df0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141d7a3e8",
+        "references": [
+          {
+            "from": "0x141d78e00",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141d7a850",
+        "references": [
+          {
+            "from": "0x141d79030",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ParamCtrlSpineStiffness"
+      },
+      {
+        "address": "0x141d7a868",
+        "references": [
+          {
+            "from": "0x141d79040",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlSpineStiffness"
+      },
+      {
+        "address": "0x141d7b208",
+        "references": [
+          {
+            "from": "0x141d79570",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141d7b218",
+        "references": [
+          {
+            "from": "0x141d79580",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141d7b228",
+        "references": [
+          {
+            "from": "0x141d79590",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141d7b240",
+        "references": [
+          {
+            "from": "0x141d795a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141d7b258",
+        "references": [
+          {
+            "from": "0x141d795b0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141d7b268",
+        "references": [
+          {
+            "from": "0x141d795c0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141d7d3d0",
+        "references": [
+          {
+            "from": "0x1412efc5d",
+            "function": "sub_1412ea8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlEnforceGravity"
+      },
+      {
+        "address": "0x141d7d610",
+        "references": [
+          {
+            "from": "0x1412f00ef",
+            "function": "sub_1412ea8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CtrlSpineStiffness"
+      },
+      {
+        "address": "0x141d7deb8",
+        "references": [
+          {
+            "from": "0x1412f1b5a",
+            "function": "sub_1412ea8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141d7dec8",
+        "references": [
+          {
+            "from": "0x1412f1b9b",
+            "function": "sub_1412ea8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141d7dee0",
+        "references": [
+          {
+            "from": "0x1412f1be3",
+            "function": "sub_1412ea8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141d7e10c",
+        "references": [
+          {
+            "from": "0x141d7e000",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine"
+      },
+      {
+        "address": "0x141d7e2e4",
+        "references": [
+          {
+            "from": "0x141d7e2f8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine1"
+      },
+      {
+        "address": "0x141d7e3c8",
+        "references": [
+          {
+            "from": "0x141d7e310",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine2"
+      },
+      {
+        "address": "0x141d7e3d0",
+        "references": [
+          {
+            "from": "0x141d7e328",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine3"
+      },
+      {
+        "address": "0x141d7e3d8",
+        "references": [
+          {
+            "from": "0x141d7e340",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine4"
+      },
+      {
+        "address": "0x141d7e3e0",
+        "references": [
+          {
+            "from": "0x141d7e358",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine5"
+      },
+      {
+        "address": "0x141d7e3e8",
+        "references": [
+          {
+            "from": "0x141d7e370",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine6"
+      },
+      {
+        "address": "0x141d7e3f0",
+        "references": [
+          {
+            "from": "0x141d7e388",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine7"
+      },
+      {
+        "address": "0x141d7e3f8",
+        "references": [
+          {
+            "from": "0x141d7e3a0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine8"
+      },
+      {
+        "address": "0x141d7e400",
+        "references": [
+          {
+            "from": "0x141d7e3b8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine9"
+      },
+      {
+        "address": "0x141d89db4",
+        "references": [
+          {
+            "from": "0x1413663e0",
+            "function": "sub_141366110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141d8a04c",
+        "references": [
+          {
+            "from": "0x14136736b",
+            "function": "sub_141367210"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141d8e5ac",
+        "references": [
+          {
+            "from": "0x1413b2171",
+            "function": "sub_1413b1e40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141d8e724",
+        "references": [
+          {
+            "from": "0x1413b2fb6",
+            "function": "sub_1413b2e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141d9d674",
+        "references": [
+          {
+            "from": "0x14146ac16",
+            "function": "sub_14146a850"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141da2c3c",
+        "references": [
+          {
+            "from": "0x14148df92",
+            "function": "sub_14148dc60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141da75a0",
+        "references": [
+          {
+            "from": "0x1414ab45e",
+            "function": "sub_1414a8c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141da75b8",
+        "references": [],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141da75c8",
+        "references": [
+          {
+            "from": "0x1414ab4c5",
+            "function": "sub_1414a8c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141da75e8",
+        "references": [],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141da7600",
+        "references": [
+          {
+            "from": "0x1414ab52c",
+            "function": "sub_1414a8c10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141da7618",
+        "references": [],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141dab414",
+        "references": [
+          {
+            "from": "0x1414b626f",
+            "function": "sub_1414b5f40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141dacb10",
+        "references": [
+          {
+            "from": "0x1414d01cf",
+            "function": "sub_1414cdb20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpine"
+      },
+      {
+        "address": "0x141dacb20",
+        "references": [],
+        "section": ".rdata",
+        "text": "\"SnSScaleSpine\"Link"
+      },
+      {
+        "address": "0x141dacb38",
+        "references": [
+          {
+            "from": "0x1414d022a",
+            "function": "sub_1414cdb20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSScaleSpineChildren"
+      },
+      {
+        "address": "0x141dacb50",
+        "references": [],
+        "section": ".rdata",
+        "text": "\"SnSScaleSpineChildren\"Link"
+      },
+      {
+        "address": "0x141dacb70",
+        "references": [
+          {
+            "from": "0x1414d0285",
+            "function": "sub_1414cdb20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SnSSpineFreedom"
+      },
+      {
+        "address": "0x141dacb80",
+        "references": [],
+        "section": ".rdata",
+        "text": "\"SnSSpineFreedom\"Link"
+      },
+      {
+        "address": "0x141dad51c",
+        "references": [
+          {
+            "from": "0x1414d7b8b",
+            "function": "sub_1414d79a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x141dbc648",
+        "references": [
+          {
+            "from": "0x1421b8680",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "GlobalAxisofGravity"
+      },
+      {
+        "address": "0x141dbca30",
+        "references": [
+          {
+            "from": "0x1415885ef",
+            "function": "sub_141588520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GlobalAxisofGravity Y\n"
+      },
+      {
+        "address": "0x141dbcc58",
+        "references": [],
+        "section": ".rdata",
+        "text": "Unknown axis of gravity"
+      },
+      {
+        "address": "0x141eaa10d",
+        "references": [],
+        "section": ".rdata",
+        "text": "VertexPickSpine"
+      },
+      {
+        "address": "0x141eaa11d",
+        "references": [],
+        "section": ".rdata",
+        "text": "VertexForgetSpine"
+      },
+      {
+        "address": "0x141eaa169",
+        "references": [],
+        "section": ".rdata",
+        "text": "VertexSelectForSpine"
+      },
+      {
+        "address": "0x141eacd2d",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotSpineStyle"
+      },
+      {
+        "address": "0x141ed0b28",
+        "references": [],
+        "section": ".rdata",
+        "text": "spine collection change"
+      },
+      {
+        "address": "0x141ed3970",
+        "references": [
+          {
+            "from": "0x1400b66f5",
+            "function": "sub_1400b5ae0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Include:Branch spines"
+      },
+      {
+        "address": "0x141ed4660",
+        "references": [
+          {
+            "from": "0x1400c3d29",
+            "function": "sub_1400c3660"
+          },
+          {
+            "from": "0x1400c3d4b",
+            "function": "sub_1400c3660"
+          },
+          {
+            "from": "0x1400c5f43",
+            "function": "sub_1400c5be0"
+          },
+          {
+            "from": "0x1400c959f",
+            "function": "sub_1400c8df0"
+          },
+          {
+            "from": "0x1400c95bf",
+            "function": "sub_1400c8df0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "IncludeBranchSpines"
+      },
+      {
+        "address": "0x141ed81e8",
+        "references": [
+          {
+            "from": "0x1400faafc",
+            "function": "sub_1400f68d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwVertexPickSpine"
+      },
+      {
+        "address": "0x141ed8270",
+        "references": [
+          {
+            "from": "0x1400fab8c",
+            "function": "sub_1400f68d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwVertexForgetSpine"
+      },
+      {
+        "address": "0x141ed8288",
+        "references": [
+          {
+            "from": "0x1400fac1c",
+            "function": "sub_1400f68d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwVertexSelectForSpine"
+      },
+      {
+        "address": "0x141ed8b60",
+        "references": [
+          {
+            "from": "0x1400fe926",
+            "function": "sub_1400fe440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1VertexPickSpine( )"
+      },
+      {
+        "address": "0x141ed8bf8",
+        "references": [
+          {
+            "from": "0x1400fe99a",
+            "function": "sub_1400fe440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1VertexForgetSpine( )"
+      },
+      {
+        "address": "0x141ed8c40",
+        "references": [
+          {
+            "from": "0x1400feae1",
+            "function": "sub_1400fe440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1VertexSelectForSpine( )"
+      },
+      {
+        "address": "0x141ee7a90",
+        "references": [
+          {
+            "from": "0x1402b39ed",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3cbc",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3ec9",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3f72",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4084",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bc30e",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc5dd",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc7d1",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc87a",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc98c",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14040f767",
+            "function": "sub_14040f610"
+          },
+          {
+            "from": "0x14053c024",
+            "function": "sub_14053b8c0"
+          },
+          {
+            "from": "0x141eb0130",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length:Abs"
+      },
+      {
+        "address": "0x141ee7aa8",
+        "references": [
+          {
+            "from": "0x1402b3ada",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3b9c",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3dd7",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bc3fb",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc4bd",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc6f8",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14053c0e8",
+            "function": "sub_14053b8c0"
+          },
+          {
+            "from": "0x141eb0138",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length:+ %"
+      },
+      {
+        "address": "0x141ee7ac8",
+        "references": [
+          {
+            "from": "0x1402b41bf",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b42a1",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b42f7",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b43eb",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4441",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bcac7",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcba0",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcbf6",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bccf2",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bcd48",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14053c602",
+            "function": "sub_14053b8c0"
+          },
+          {
+            "from": "0x141eb0140",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Start angle"
+      },
+      {
+        "address": "0x141ee7b98",
+        "references": [
+          {
+            "from": "0x1402b4acf",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4e21",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4e77",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b4fb8",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b505e",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bd04a",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd39c",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd3f2",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd604",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd6aa",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14054a764",
+            "function": "sub_14054a510"
+          },
+          {
+            "from": "0x141eb0150",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Amount"
+      },
+      {
+        "address": "0x141ee7bb0",
+        "references": [
+          {
+            "from": "0x14054a809",
+            "function": "sub_14054a510"
+          },
+          {
+            "from": "0x141eb0158",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Turbulence"
+      },
+      {
+        "address": "0x141ef61d0",
+        "references": [
+          {
+            "from": "0x140232971",
+            "function": "sub_1402304a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Access force functions.  Forces are modeling tools that manipulate growth in world-space.  Examples\nof their use include gravity (downward direction forces) and growing geometry around 3d\ngeometry (geometry forces)\n\nHot key: 6 (toggles forces in the viewport)"
+      },
+      {
+        "address": "0x141ef9198",
+        "references": [
+          {
+            "from": "0x1402591bd",
+            "function": "sub_140258dc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwSpinesGroup"
+      },
+      {
+        "address": "0x141ef91a8",
+        "references": [
+          {
+            "from": "0x1402591cc",
+            "function": "sub_140258dc0"
+          },
+          {
+            "from": "0x14025a07d",
+            "function": "sub_140259f90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine generators"
+      },
+      {
+        "address": "0x141efc638",
+        "references": [
+          {
+            "from": "0x1402830f0",
+            "function": "sub_140281360"
+          },
+          {
+            "from": "0x140286c34",
+            "function": "sub_1402857c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpineStyle"
+      },
+      {
+        "address": "0x141efdea0",
+        "references": [
+          {
+            "from": "0x1402b398f",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b3c51",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bc2b0",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc572",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14056d476",
+            "function": "sub_14056c9a0"
+          },
+          {
+            "from": "0x14056f3b6",
+            "function": "sub_14056ea20"
+          },
+          {
+            "from": "0x14069ed20",
+            "function": "sub_14069e4e0"
+          },
+          {
+            "from": "0x14071d7bd",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Le"
+      },
+      {
+        "address": "0x141efdeb0",
+        "references": [
+          {
+            "from": "0x1402b3d6d",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b400e",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bc68e",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bc916",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14069edea",
+            "function": "sub_14069e4e0"
+          },
+          {
+            "from": "0x14071d887",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Le"
+      },
+      {
+        "address": "0x141efdee0",
+        "references": [
+          {
+            "from": "0x1402b3909",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bc22a",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14069eb4b",
+            "function": "sub_14069e4e0"
+          },
+          {
+            "from": "0x14071d5ad",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length sty"
+      },
+      {
+        "address": "0x141efdf10",
+        "references": [
+          {
+            "from": "0x1402b4792",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f3bc",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Break chance"
+      },
+      {
+        "address": "0x141efdf28",
+        "references": [
+          {
+            "from": "0x1402b4917",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14053c810",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Break:Spot"
+      },
+      {
+        "address": "0x141efdf40",
+        "references": [
+          {
+            "from": "0x1402b4663",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bce3c",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14069f764",
+            "function": "sub_14069e4e0"
+          },
+          {
+            "from": "0x14071df22",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Roll"
+      },
+      {
+        "address": "0x141efdf50",
+        "references": [
+          {
+            "from": "0x1402b47e8",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14053c6d0",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Break:Chance"
+      },
+      {
+        "address": "0x141efdf68",
+        "references": [
+          {
+            "from": "0x1402b4534",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f69e",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Alignment"
+      },
+      {
+        "address": "0x141efdf78",
+        "references": [
+          {
+            "from": "0x1402b46b9",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bce92",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14053cdee",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Roll"
+      },
+      {
+        "address": "0x141efdf90",
+        "references": [
+          {
+            "from": "0x1402b4169",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bca71",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14069ef5e",
+            "function": "sub_14069e4e0"
+          },
+          {
+            "from": "0x14071d94d",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Start angle"
+      },
+      {
+        "address": "0x141efdfa8",
+        "references": [
+          {
+            "from": "0x1402b458a",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14053c9b7",
+            "function": "sub_14053b8c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Alignment"
+      },
+      {
+        "address": "0x141efdfc8",
+        "references": [
+          {
+            "from": "0x1402b4d2d",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f10e",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Jink frequency"
+      },
+      {
+        "address": "0x141efdff8",
+        "references": [
+          {
+            "from": "0x1402b4ba8",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f1f0",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Jink amount"
+      },
+      {
+        "address": "0x141efe010",
+        "references": [
+          {
+            "from": "0x1402b4cd7",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bd252",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14054a62d",
+            "function": "sub_14054a510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Early:Threshold"
+      },
+      {
+        "address": "0x141efe030",
+        "references": [
+          {
+            "from": "0x1402b4a79",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f024",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Disturbance"
+      },
+      {
+        "address": "0x141efe048",
+        "references": [
+          {
+            "from": "0x1402b4bfe",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b5104",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402b51aa",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1402bd179",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd4de",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd534",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd750",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x1402bd7f6",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14054a51d",
+            "function": "sub_14054a510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Early:Amount"
+      },
+      {
+        "address": "0x141efe068",
+        "references": [
+          {
+            "from": "0x1402b48c1",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x14069f504",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Break spot"
+      },
+      {
+        "address": "0x141efe080",
+        "references": [
+          {
+            "from": "0x1402b49f0",
+            "function": "sub_1402b38b0"
+          },
+          {
+            "from": "0x1406a0910",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Perturbance"
+      },
+      {
+        "address": "0x141efeb30",
+        "references": [
+          {
+            "from": "0x1402bd123",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14071dc74",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Perturbance:Jink amount"
+      },
+      {
+        "address": "0x141efeb50",
+        "references": [
+          {
+            "from": "0x1402bd2a8",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14071db92",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Perturbance:Jink frequency"
+      },
+      {
+        "address": "0x141efeb78",
+        "references": [
+          {
+            "from": "0x1402bcf6b",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14071da0f",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Perturbance:Enabled"
+      },
+      {
+        "address": "0x141efeb98",
+        "references": [
+          {
+            "from": "0x1402bcff4",
+            "function": "sub_1402bc1d0"
+          },
+          {
+            "from": "0x14071daa8",
+            "function": "sub_14071d580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Perturbance:Disturbance"
+      },
+      {
+        "address": "0x141f04210",
+        "references": [
+          {
+            "from": "0x1403248a8",
+            "function": "sub_140324400"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine Actions:Se"
+      },
+      {
+        "address": "0x141f04220",
+        "references": [
+          {
+            "from": "0x1403248b2",
+            "function": "sub_140324400"
+          }
+        ],
+        "section": ".rdata",
+        "text": "nd spine"
+      },
+      {
+        "address": "0x141f04230",
+        "references": [
+          {
+            "from": "0x140324749",
+            "function": "sub_140324400"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine Actions:Cl"
+      },
+      {
+        "address": "0x141f04258",
+        "references": [
+          {
+            "from": "0x1403245ea",
+            "function": "sub_140324400"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine Actions:Se"
+      },
+      {
+        "address": "0x141f04470",
+        "references": [
+          {
+            "from": "0x140326b7d",
+            "function": "sub_1403268e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error>INTERNAL: Invalid spine template.\n"
+      },
+      {
+        "address": "0x141f044a0",
+        "references": [
+          {
+            "from": "0x140326b51",
+            "function": "sub_1403268e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error>INTERNAL: Could not create spine generator.\n"
+      },
+      {
+        "address": "0x141f044d8",
+        "references": [
+          {
+            "from": "0x140326a58",
+            "function": "sub_1403268e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../internal_templates/spine.stt"
+      },
+      {
+        "address": "0x141f06998",
+        "references": [
+          {
+            "from": "0x1400175ca",
+            "function": "sub_140016660"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Empty spine detected"
+      }
+    ],
+    "total": 204
+  },
+  "summary": "204 strings match \"spine|gravity|Spine:Noise|Skin:Radius:Length\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 100,
+    "total": 204,
+    "next_offset": 100
+  },
+  "locations": [],
+  "links": []
+}

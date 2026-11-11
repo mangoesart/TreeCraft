@@ -1,0 +1,115 @@
+{
+  "id": "ev_ae242fe561339e321a940419aa405f2554341b1f97af8a7e21187bda14ed9bb7",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1402f7f90",
+      "0x1402f3f90",
+      "0x1402f8040",
+      "0x1402f8110"
+    ]
+  },
+  "result": {
+    "failed": 0,
+    "items": [
+      {
+        "entry": "0x1402f7f90",
+        "input": "0x1402f7f90",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f7f90(int64_t rcx)\n{\n    rbx = rcx;\n    rcx = *(uint64_t*)(rcx + 0x58);\n    sub_1402fcd50(*(uint64_t*)(rcx + 0x150), 6);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x20), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x28), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xa0), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xa8), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x78), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x80), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xc8), 1);\n    return sub_1402f7710(rbx); /* tail call */\n}\n",
+        "signature": "int64_t sub_1402f7f90(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1402f3f90",
+        "input": "0x1402f3f90",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f3f90(int64_t rcx)\n{\n    stack_18 = rbx;\n    *(uint8_t*)(rcx + 0x4c) = 0;\n    rax = *(uint64_t*)0x141a9c730;\n    rbx = rcx;\n    if (rax == 0) {\n        edi = 0;\n    } else {\n        rdi = rax - 0x28;\n    }\n    rcx = *(uint64_t*)(rcx + 0x58);\n    rax = ?rect@QWidget@@QEBA?AVQRect@@XZ(*(uint64_t*)(rcx + 0xd0), &stack_40);\n    ecx = *(uint32_t*)(rax + 12);\n    eax = *(uint32_t*)(rax);\n    stack_64 = ecx;\n    rcx = *(uint64_t*)(rbx + 0x58);\n    stack_60 = eax;\n    rdx = *(uint64_t*)(rcx + 0xd0);\n    eax = *(uint32_t*)(rdx + 0x28);\n    stack_30 = eax;\n    rax = *(uint64_t*)(rdx + 0x2c);\n    stack_34 = rax;\n    eax = *(uint16_t*)(rdx + 0x34);\n    stack_3c = ax;\n    rax = ?mapToGlobal@QWidget@@QEBA?AVQPoint@@AEBV2@@Z(*(uint64_t*)(rcx + 0xd0), &stack_68, &stack_60);\n    rax = *(uint64_t*)(rax);\n    stack_28 = rax;\n    rax = \"1ColorChanged(QColor)\";\n    stack_20 = rax;\n    sub_140298120(rdi, &data_14102d3e0, &stack_30, rbx);\n    *(uint8_t*)(rbx + 0x4c) = 1;\n    rbx = stack_70;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1402f3f90(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1402f8040",
+        "input": "0x1402f8040",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f8040(int64_t rcx)\n{\n    stack_30 = -2;\n    rbx = rcx;\n    *(uint8_t*)(rcx + 0x4c) = 0;\n    edi |= -1;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Are you sure you wish to reset the color?\\nThis cannot be undone\", edi);\n    stack_70 = rax;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Reset Color\", edi);\n    stack_68 = rax;\n    stack_60 = 0x14000;\n    rax = ?question@QMessageBox@@SA?AW4StandardButton@1@PEAVQWidget@@AEBVQString@@1V?$QFlags@W4StandardButton@QMessageBox@@@@W421@@Z(rbx, &stack_68, &stack_70, &stack_60, 0);\n    __asm(\"sete sil\");\n    rax = stack_68;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_68);\n    }\n    rax = stack_70;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_70);\n    }\n    if (sil != 0) {\n        rcx = *(uint64_t*)(rbx + 0x58);\n        sub_1402fd070(*(uint64_t*)(rcx + 0x150));\n        sub_1402f7f90(rbx);\n    }\n    *(uint8_t*)(rbx + 0x4c) = 1;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1402f8040(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1402f8110",
+        "input": "0x1402f8110",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f8110(int64_t rcx)\n{\n    rbx = rcx;\n    rcx = *(uint64_t*)(rcx + 0x58);\n    sub_1402fcd50(*(uint64_t*)(rcx + 0x150), 4);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x20), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x28), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xa0), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xa8), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x78), 1);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0x80), 0);\n    rcx = *(uint64_t*)(rbx + 0x58);\n    ?setChecked@QAbstractButton@@QEAAX_N@Z(*(uint64_t*)(rcx + 0xc8), 0);\n    return sub_1402f7710(rbx); /* tail call */\n}\n",
+        "signature": "int64_t sub_1402f8110(int64_t rcx)",
+        "structured": true
+      }
+    ],
+    "succeeded": 4
+  },
+  "summary": "Decompiled 4 of 4 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 4,
+    "total": 4
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402f7f90"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402f3f90"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402f8040"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402f8110"
+    }
+  ],
+  "links": []
+}

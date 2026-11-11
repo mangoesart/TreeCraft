@@ -1,0 +1,86 @@
+{
+  "id": "ev_2b4232b5aca8978b7356f6a70d72859c55cb7c032e9a61371ef1ca5059c36ffe",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1402f7c90",
+      "0x1402f8270",
+      "0x1402f9190"
+    ]
+  },
+  "result": {
+    "failed": 1,
+    "items": [
+      {
+        "entry": "0x1402f7c90",
+        "input": "0x1402f7c90",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f7c90(int64_t rcx)\n{\n    stack_30 = -2;\n    rbx = rcx;\n    *(uint8_t*)(rcx + 0x4c) = 0;\n    edi |= -1;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Are you sure you wish to reset the points?\\nThis cannot be undone\", edi);\n    stack_70 = rax;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Reset Points\", edi);\n    stack_68 = rax;\n    stack_60 = 0x14000;\n    rax = ?question@QMessageBox@@SA?AW4StandardButton@1@PEAVQWidget@@AEBVQString@@1V?$QFlags@W4StandardButton@QMessageBox@@@@W421@@Z(rbx, &stack_68, &stack_70, &stack_60, 0);\n    __asm(\"sete sil\");\n    rax = stack_68;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_68);\n    }\n    rax = stack_70;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_70);\n    }\n    if (sil != 0) {\n        rcx = *(uint64_t*)(rbx + 0x58);\n        sub_140301210(*(uint64_t*)(rcx + 0x150));\n        sub_1402f7b30(rbx);\n    }\n    *(uint8_t*)(rbx + 0x4c) = 1;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1402f7c90(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "entry": "0x1402f8270",
+        "input": "0x1402f8270",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags",
+          "inline_asm"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402f8270(int64_t rcx)\n{\n    stack_30 = -2;\n    rbx = rcx;\n    *(uint8_t*)(rcx + 0x4c) = 0;\n    edi |= -1;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Are you sure you wish to reset the Anchors?\\nThis cannot be undone\", edi);\n    stack_70 = rax;\n    rax = ?fromAscii_helper@QString@@CAPEAUData@1@PEBDH@Z(\"Reset Anchors\", edi);\n    stack_68 = rax;\n    stack_60 = 0x14000;\n    rax = ?question@QMessageBox@@SA?AW4StandardButton@1@PEAVQWidget@@AEBVQString@@1V?$QFlags@W4StandardButton@QMessageBox@@@@W421@@Z(rbx, &stack_68, &stack_70, &stack_60, 0);\n    __asm(\"sete sil\");\n    rax = stack_68;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_68);\n    }\n    rax = stack_70;\n    *(uint32_t*)(rax)--;\n    if (*(uint32_t*)(rax) == 0) {\n        ?free@QString@@CAXPEAUData@1@@Z(stack_70);\n    }\n    if (sil != 0) {\n        rcx = *(uint64_t*)(rbx + 0x58);\n        sub_1403013f0(*(uint64_t*)(rcx + 0x150));\n        sub_1402f8110(rbx);\n    }\n    *(uint8_t*)(rbx + 0x4c) = 1;\n    return rax;\n}\n",
+        "signature": "int64_t sub_1402f8270(int64_t rcx)",
+        "structured": true
+      },
+      {
+        "error": "No function named or at 0x1402f9190",
+        "input": "0x1402f9190",
+        "ok": false
+      }
+    ],
+    "succeeded": 2
+  },
+  "summary": "Decompiled 2 of 3 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 3,
+    "total": 3
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402f7c90"
+    },
+    {
+      "kind": "address",
+      "value": "0x1402f8270"
+    }
+  ],
+  "links": []
+}

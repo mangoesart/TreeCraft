@@ -1,0 +1,42 @@
+{
+  "id": "ev_6a6a9756ed3b6e91f2ab7b2c18ec9ecf991003dffd86b6b0db025808a7b2371a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_bytes_show",
+  "params": {
+    "address": "0x1410eee80",
+    "length": 512
+  },
+  "result": {
+    "address": "0x1410eee80",
+    "ascii": "COptimalMeshDialog..IntChanged(int).AngleChanged(int).SpinnerChange(double).Other().ModeAddPoints().ModeRemovePoints().ResetPoints().ModeAddMask().ModeRemoveMask().ResetMask().ModeColor().ColorClicked().ColorChanged(QColor).ResetColor().ModeAddAnchors().ModeRemoveAnchors().ResetAnchors().ColorTypeChanged().MaterialChanged(int).SaveButton().LoadButton().TimerFirstShow().UpdatePreviews().............8`@......yA.......A....p..A.......A............#.JB...8.4.:....................................................",
+    "file_offset": 17749120,
+    "hex": "434f7074696d616c4d6573684469616c6f670000496e744368616e67656428696e742900416e676c654368616e67656428696e7429005370696e6e65724368616e676528646f75626c6529004f746865722829004d6f6465416464506f696e74732829004d6f646552656d6f7665506f696e74732829005265736574506f696e74732829004d6f64654164644d61736b2829004d6f646552656d6f76654d61736b28290052657365744d61736b2829004d6f6465436f6c6f72282900436f6c6f72436c69636b6564282900436f6c6f724368616e6765642851436f6c6f7229005265736574436f6c6f722829004d6f6465416464416e63686f72732829004d6f646552656d6f7665416e63686f72732829005265736574416e63686f7273282900436f6c6f72547970654368616e6765642829004d6174657269616c4368616e67656428696e74290053617665427574746f6e2829004c6f6164427574746f6e28290054696d6572466972737453686f7728290055706461746550726576696577732829000000000000000000000000b038604001000000108e79410100000080ee0e410100000070ec0e410100000008f00e41010000000000000000000000230a4a4217b7d1380534833a0000000006000000000000000000000000000000010000000e000000000000000000000000000000000000000000000000000000",
+    "length": 512
+  },
+  "summary": "512 bytes at 0x1410eee80.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 512,
+    "total": 512
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1410eee80"
+    }
+  ],
+  "links": []
+}

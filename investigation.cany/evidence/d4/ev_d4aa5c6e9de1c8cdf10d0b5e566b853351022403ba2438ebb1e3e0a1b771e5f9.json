@@ -1,0 +1,69 @@
+{
+  "id": "ev_d4aa5c6e9de1c8cdf10d0b5e566b853351022403ba2438ebb1e3e0a1b771e5f9",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 30,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Unwrap|Edit\\.\\.\\.|add material mesh|remove material mesh|material mesh.*|.*mesh assignment.*)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141033c64",
+        "references": [
+          {
+            "from": "0x140064c89",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Unwrap"
+      },
+      {
+        "address": "0x1410345a8",
+        "references": [
+          {
+            "from": "0x14006990e",
+            "function": "sub_140068ed0"
+          },
+          {
+            "from": "0x140331114",
+            "function": "sub_140330fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Edit..."
+      }
+    ],
+    "total": 2
+  },
+  "summary": "2 strings match \"^(Unwrap|Edit\\.\\.\\.|add material mesh|remove material mesh|material mesh.*|.*mesh assignment.*)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 2,
+    "total": 2
+  },
+  "locations": [],
+  "links": []
+}

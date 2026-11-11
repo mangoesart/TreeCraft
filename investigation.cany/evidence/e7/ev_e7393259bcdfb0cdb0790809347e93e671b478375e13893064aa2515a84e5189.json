@@ -1,0 +1,58 @@
+{
+  "id": "ev_e7393259bcdfb0cdb0790809347e93e671b478375e13893064aa2515a84e5189",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 64,
+      "name": "pseudo_code",
+      "offset": 0
+    },
+    "source": {
+      "evidence_id": "ev_8e87760430ea2f776497877326f11f049977a3b0356996a629c1964fef3bc6d9",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": false,
+      "examined": 4096,
+      "next_offset": 4096,
+      "status": "page",
+      "total": 78447
+    },
+    "from_evidence": "ev_8e87760430ea2f776497877326f11f049977a3b0356996a629c1964fef3bc6d9",
+    "from_tool": "native_function_pseudocode",
+    "shown": {
+      "list": "pseudo_code",
+      "offset": 0,
+      "text": "\r\n/* WARNING: Function: __chkstk replaced with injection: alloca_probe */\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_140196510(longlong param_1,undefined8 param_2,longlong *param_3,char param_4)\r\n\r\n{\r\n  char cVar1;\r\n  undefined1 uVar2;\r\n  int iVar3;\r\n  undefined4 uVar4;\r\n  undefined8 uVar5;\r\n  undefined8 uVar6;\r\n  longlong lVar7;\r\n  float *pfVar8;\r\n  float fVar9;\r\n  float fVar10;\r\n  undefined1 auStack_13f8 [32];\r\n  undefined4 local_13d8;\r\n  float local_13c8;\r\n  float local_13c4;\r\n  float local_13c0;\r\n  float local_13bc [3];\r\n  undefined1 local_13b0;\r\n  undefined7 uStack_13af;\r\n  undefined8 local_13a0;\r\n  ulonglong local_1398;\r\n  undefined1 local_1388;\r\n  undefined7 uStack_1387;\r\n  undefined8 local_1378;\r\n  ulonglong local_1370;\r\n  undefined1 local_1360;\r\n  undefined7 uStack_135f;\r\n  undefined8 local_1350;\r\n  ulonglong local_1348;\r\n  undefined1 local_1338;\r\n  undefined7 uStack_1337;\r\n  undefined8 local_1328;\r\n  ulonglong local_1320;\r\n  undefined1 local_1310;\r\n  undefined7 uStack_130f;\r\n  undefined8 local_1300;\r\n  ulonglong local_12f8;\r\n  undefined1 local_12e8;\r\n  undefined7 uStack_12e7;\r\n  undefined8 local_12d8;\r\n  ulonglong local_12d0;\r\n  undefined1 local_12c0;\r\n  undefined7 uStack_12bf;\r\n  undefined8 local_12b0;\r\n  ulonglong local_12a8;\r\n  undefined1 local_1298;\r\n  undefined7 uStack_1297;\r\n  undefined8 local_1288;\r\n  ulonglong local_1280;\r\n  undefined1 local_1270;\r\n  undefined7 uStack_126f;\r\n  undefined8 local_1260;\r\n  ulonglong local_1258;\r\n  undefined1 local_1248;\r\n  undefined7 uStack_1247;\r\n  undefined8 local_1238;\r\n  ulonglong local_1230;\r\n  undefined1 local_1220;\r\n  undefined7 uStack_121f;\r\n  undefined8 local_1210;\r\n  ulonglong local_1208;\r\n  undefined1 local_11f8;\r\n  undefined7 uStack_11f7;\r\n  undefined8 local_11e8;\r\n  ulonglong local_11e0;\r\n  undefined1 local_11d0;\r\n  undefined7 uStack_11cf;\r\n  undefined8 local_11c0;\r\n  ulonglong local_11b8;\r\n  undefined1 local_11a8;\r\n  undefined7 uStack_11a7;\r\n  undefined8 local_1198;\r\n  ulonglong local_1190;\r\n  undefined1 local_1180;\r\n  undefined7 uStack_117f;\r\n  undefined8 local_1170;\r\n  ulonglong local_1168;\r\n  undefined1 local_1158;\r\n  undefined7 uStack_1157;\r\n  undefined8 local_1148;\r\n  ulonglong local_1140;\r\n  undefined1 local_1130;\r\n  undefined7 uStack_112f;\r\n  undefined8 local_1120;\r\n  ulonglong local_1118;\r\n  undefined1 local_1108;\r\n  undefined7 uStack_1107;\r\n  undefined8 local_10f8;\r\n  ulonglong local_10f0;\r\n  undefined1 local_10e0;\r\n  undefined7 uStack_10df;\r\n  undefined8 local_10d0;\r\n  ulonglong local_10c8;\r\n  undefined1 local_10b8;\r\n  undefined7 uStack_10b7;\r\n  undefined8 local_10a8;\r\n  ulonglong local_10a0;\r\n  undefined1 local_1090;\r\n  undefined7 uStack_108f;\r\n  undefined8 local_1080;\r\n  ulonglong local_1078;\r\n  undefined1 local_1068;\r\n  undefined7 uStack_1067;\r\n  undefined8 local_1058;\r\n  ulonglong local_1050;\r\n  undefined1 local_1040;\r\n  undefined7 uStack_103f;\r\n  undefined8 local_1030;\r\n  ulonglong local_1028;\r\n  undefined1 local_1018;\r\n  undefined7 uStack_1017;\r\n  undefined8 local_1008;\r\n  ulonglong local_1000;\r\n  undefined1 local_ff0;\r\n  undefined7 uStack_fef;\r\n  undefined8 local_fe0;\r\n  ulonglong local_fd8;\r\n  undefined1 local_fc8;\r\n  undefined7 uStack_fc7;\r\n  undefined8 local_fb8;\r\n  ulonglong local_fb0;\r\n  undefined1 local_fa0;\r\n  undefined7 uStack_f9f;\r\n  undefined8 local_f90;\r\n  ulonglong local_f88;\r\n  undefined1 local_f78;\r\n  undefined7 uStack_f77;\r\n  undefined8 local_f68;\r\n  ulonglong local_f60;\r\n  undefined1 local_f50;\r\n  undefined7 uStack_f4f;\r\n  undefined8 local_f40;\r\n  ulonglong local_f38;\r\n  undefined1 local_f28;\r\n  undefined7 uStack_f27;\r\n  undefined8 local_f18;\r\n  ulonglong local_f10;\r\n  undefined1 local_f00;\r\n  undefined7 uStack_eff;\r\n  undefined8 local_ef0;\r\n  ulonglong local_ee8;\r\n  undefined1 local_ed8;\r\n  undefined7 uStack_ed7;\r\n  undefined8 local_ec8;\r\n  ulonglong local_ec0;\r\n  undefined1 local_eb0;\r\n  undefined7 uStack_eaf;\r\n  undefined8 local_ea0;\r\n  ulonglong local_e98;\r\n  undefined1 local_e88;\r\n  undefined7 uStack_e87;\r\n  undefined8 local_e78;\r\n  ulonglong local_e70;\r\n  u",
+      "total_utf16_units": 78447
+    }
+  },
+  "summary": "Part of native_function_pseudocode evidence (page).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "partial",
+    "examined": 4096,
+    "total": 78447,
+    "next_offset": 4096
+  },
+  "locations": [],
+  "links": [
+    "ev_8e87760430ea2f776497877326f11f049977a3b0356996a629c1964fef3bc6d9"
+  ]
+}

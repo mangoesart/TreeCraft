@@ -1,0 +1,45 @@
+{
+  "id": "ev_4d8ab40e54c5e6a53043eb2fa600e1d27d91166775e3df5b77d2ec00edd4d10f",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1400a7390"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1400a7390",
+    "function": "FUN_1400a7390",
+    "pseudo_code": "\r\nundefined1 * FUN_1400a7390(undefined1 *param_1)\r\n\r\n{\r\n  *(undefined8 *)(param_1 + 0x18) = 0xf;\r\n  *(undefined8 *)(param_1 + 0x10) = 0;\r\n  *param_1 = 0;\r\n  *(undefined4 *)(param_1 + 0x28) = 0xffffffff;\r\n  param_1[0x2c] = 0;\r\n  *(undefined8 *)(param_1 + 0x30) = 0;\r\n  *(undefined8 *)(param_1 + 0x38) = 0;\r\n  *(undefined8 *)(param_1 + 0x40) = 0;\r\n  *(undefined8 *)(param_1 + 0x48) = 0;\r\n  *(undefined8 *)(param_1 + 0x50) = 0;\r\n  *(undefined4 *)(param_1 + 0x58) = 0x3f800000;\r\n  *(undefined8 *)(param_1 + 0x78) = 0xf;\r\n  *(undefined8 *)(param_1 + 0x70) = 0;\r\n  param_1[0x60] = 0;\r\n  FUN_1400a7300(param_1 + 0x88);\r\n  *(undefined4 *)(param_1 + 0x128) = 0xffffffff;\r\n  *(undefined8 *)(param_1 + 0x130) = 0;\r\n  *(undefined8 *)(param_1 + 0x138) = 0;\r\n  *(undefined8 *)(param_1 + 0x140) = 0;\r\n  *(undefined8 *)(param_1 + 0x150) = 0;\r\n  *(undefined4 *)(param_1 + 0x158) = 0;\r\n  _eh_vector_constructor_iterator_\r\n            (param_1 + 0x160,0x78,10,(_func_void_void_ptr *)&LAB_14008a820,FUN_1403fe6d0);\r\n  *(undefined8 *)(param_1 + 0x624) = 0;\r\n  *(undefined8 *)(param_1 + 0x62c) = 0;\r\n  *(undefined8 *)(param_1 + 0x634) = 0;\r\n  *(undefined8 *)(param_1 + 0x63c) = 0;\r\n  *(undefined8 *)(param_1 + 0x644) = 0;\r\n  *(undefined8 *)(param_1 + 0x650) = 0;\r\n  *(undefined8 *)(param_1 + 0x658) = 0;\r\n  *(undefined8 *)(param_1 + 0x660) = 0;\r\n  *(undefined8 *)(param_1 + 0x688) = 0xf;\r\n  *(undefined8 *)(param_1 + 0x680) = 0;\r\n  param_1[0x670] = 0;\r\n  *(undefined8 *)(param_1 + 0x698) = 0;\r\n  *(undefined8 *)(param_1 + 0x6a0) = 0;\r\n  *(undefined8 *)(param_1 + 0x6a8) = 0;\r\n  *(undefined8 *)(param_1 + 0x6b0) = 0;\r\n  *(undefined8 *)(param_1 + 0x6c0) = 0xffffffffffffffff;\r\n  *(undefined4 *)(param_1 + 0x6c8) = 0xff8080ff;\r\n  *(undefined2 *)(param_1 + 0x6cc) = 0;\r\n  *(undefined8 *)(param_1 + 0x6d0) = 0;\r\n  *(undefined8 *)(param_1 + 0x6d8) = 0;\r\n  *(undefined8 *)(param_1 + 0x6e0) = 0;\r\n  *(undefined4 *)(param_1 + 0x160) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x164) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x168) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x1d8) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x1dc) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x1e0) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x250) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x254) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 600) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x2c8) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x2cc) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x2d0) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x340) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x344) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x348) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x430) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x434) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x438) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x520) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x524) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x528) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x598) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x59c) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x5a0) = DAT_141796e10;\r\n  *(undefined4 *)(param_1 + 0x198) = 0;\r\n  *(undefined4 *)(param_1 + 0x288) = 0;\r\n  *(undefined4 *)(param_1 + 0x378) = 0;\r\n  *(undefined4 *)(param_1 + 0x468) = 0;\r\n  *(undefined4 *)(param_1 + 0x5d0) = 0;\r\n  *(uint *)(param_1 + 0x1bc) = *(uint *)(param_1 + 0x1bc) | 2;\r\n  *(uint *)(param_1 + 0x39c) = *(uint *)(param_1 + 0x39c) | 2;\r\n  *(uint *)(param_1 + 0x48c) = *(uint *)(param_1 + 0x48c) | 2;\r\n  *(uint *)(param_1 + 0x5f4) = *(uint *)(param_1 + 0x5f4) | 2;\r\n  *(undefined4 *)(param_1 + 0x2c8) = 0x3e800000;\r\n  *(undefined4 *)(param_1 + 0x340) = 0x3f400000;\r\n  *(undefined4 *)(param_1 + 0x344) = 0x3f400000;\r\n  *(undefined4 *)(param_1 + 0x348) = 0x3f400000;\r\n  *(undefined4 *)(param_1 + 0x520) = 0x3f800000;\r\n  *(undefined4 *)(param_1 + 0x524) = 0x3f800000;\r\n  *(undefined4 *)(param_1 + 0x528) = 0x3f800000;\r\n  *(undefined4 *)(param_1 + 0x598) = DAT_141a9c668;\r\n  *(undefined4 *)(param_1 + 0x59c) = DAT_141a9c66c;\r\n  *(undefined4 *)(param_1 + 0x5a0) = DAT_141a9c670;\r\n  *(undefined4 *)(param_1 + 0x160) = DAT_141796e08;\r\n  *(undefined4 *)(param_1 + 0x164) = DAT_141796e0c;\r\n  *(undefined4 *)(param_1 + 0x168) = DAT_141796e10;\r\n  *(undefined8 *)(param_1 + 0x610) = 0;\r\n  *(undefined8 *)(param_1 + 0x618) = 0;\r\n  *(undefined4 *)(param_1 + 0x620) = 0;\r\n  *(undefined4 *)(param_1 + 0x30) = 0x3e8f5c29;\r\n  *(undefined8 *)(param_1 + 0x34) = 0x3ebd70a4;\r\n  *(undefined4 *)(param_1 + 0x3c) = 0x3f170a3d;\r\n  *(undefined4 *)(param_1 + 0x40) = 0x3f3851ec;\r\n  *(undefined4 *)(param_1 + 0x44) = 0x3ea3d70a;\r\n  *(undefined4 *)(param_1 + 0x48) = 0x3eeb851f;\r\n  *(undefined4 *)(param_1 + 0x4c) = 0x3f0ccccd;\r\n  *(undefined4 *)(param_1 + 0x50) = 0x3eeb851f;\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "undefined1 * FUN_1400a7390(undefined1 *param_1);"
+  },
+  "summary": "Pseudo-C for FUN_1400a7390 from the Deep engine (108 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1400a7390"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

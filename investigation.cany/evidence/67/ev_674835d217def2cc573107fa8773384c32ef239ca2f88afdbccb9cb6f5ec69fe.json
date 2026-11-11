@@ -1,0 +1,60 @@
+{
+  "id": "ev_674835d217def2cc573107fa8773384c32ef239ca2f88afdbccb9cb6f5ec69fe",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1402fd070"
+    ]
+  },
+  "result": {
+    "failed": 0,
+    "items": [
+      {
+        "entry": "0x1402fd070",
+        "input": "0x1402fd070",
+        "limitations": [
+          "register_level",
+          "calling_convention_assumed",
+          "conditions_from_flags"
+        ],
+        "ok": true,
+        "pseudo_code": "int64_t sub_1402fd070(int64_t rcx)\n{\n    rax = *(uint64_t*)(rcx + 0x108);\n    edx = 0;\n    rbx = rcx;\n    rax -= *(uint64_t*)(rcx + 0x100);\n    rax >>= 2;\n    if (rax != 0) {\n        r8d = edx;\n        while (true) {\n            rcx = *(uint64_t*)(rbx + 0x100);\n            eax = *(uint32_t*)(rbx + 0x124);\n            edx++;\n            *(uint32_t*)(r8 + rcx) = eax;\n            rcx = *(uint64_t*)(rbx + 0x108);\n            rax = edx;\n            rcx -= *(uint64_t*)(rbx + 0x100);\n            r8 += 4;\n            rcx >>= 2;\n            if (rax >= rcx /* unsigned */) break;\n        }\n    }\n    *(uint8_t*)(rbx + 0xfc) = 1;\n    ?update@QWidget@@QEAAXXZ(rbx);\n    return sub_140603bd0(rbx); /* tail call */\n}\n",
+        "signature": "int64_t sub_1402fd070(int64_t rcx)",
+        "structured": true
+      }
+    ],
+    "succeeded": 1
+  },
+  "summary": "Decompiled 1 of 1 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402fd070"
+    }
+  ],
+  "links": []
+}

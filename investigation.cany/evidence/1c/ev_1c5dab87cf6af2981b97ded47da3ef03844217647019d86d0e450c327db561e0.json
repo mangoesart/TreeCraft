@@ -1,0 +1,45 @@
+{
+  "id": "ev_1c5dab87cf6af2981b97ded47da3ef03844217647019d86d0e450c327db561e0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1400af740"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1400af740",
+    "function": "FUN_1400af740",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nulonglong FUN_1400af740(longlong param_1,undefined8 *param_2,int param_3)\r\n\r\n{\r\n  ulonglong *puVar1;\r\n  ulonglong uVar2;\r\n  ulonglong uVar3;\r\n  undefined1 *puVar4;\r\n  int iVar5;\r\n  int iVar6;\r\n  longlong lVar7;\r\n  int *piVar8;\r\n  undefined8 uVar9;\r\n  undefined8 *puVar10;\r\n  uint uVar11;\r\n  longlong lVar12;\r\n  undefined8 *_Buf1;\r\n  undefined1 *puVar13;\r\n  undefined8 *puVar14;\r\n  ulonglong _Size;\r\n  ulonglong uVar15;\r\n  undefined1 auStack_7c8 [32];\r\n  char local_7a8;\r\n  longlong local_7a0;\r\n  longlong local_798;\r\n  undefined8 local_790;\r\n  undefined1 local_788 [32];\r\n  undefined8 *local_768;\r\n  void *local_760 [3];\r\n  ulonglong local_748;\r\n  undefined1 local_738 [40];\r\n  int local_710;\r\n  ulonglong local_48;\r\n  \r\n  local_790 = 0xfffffffffffffffe;\r\n  local_48 = DAT_141a96e80 ^ (ulonglong)auStack_7c8;\r\n  puVar1 = (ulonglong *)(param_1 + 0xd0);\r\n  lVar12 = *(longlong *)(param_1 + 0xd8) - *puVar1;\r\n  lVar12 = lVar12 + SUB168(SEXT816(-0x6c657a3bf6c657a3) * SEXT816(lVar12),8);\r\n  iVar5 = (int)(lVar12 >> 10);\r\n  iVar6 = (int)(lVar12 >> 0x3f);\r\n  if (param_3 == -1) {\r\n    while( true ) {\r\n      param_3 = DAT_1417893b0;\r\n      DAT_1417893b0 = param_3 + 1;\r\n      uVar11 = 0;\r\n      if (iVar5 == iVar6) break;\r\n      piVar8 = (int *)(*puVar1 + 0x28);\r\n      while (param_3 != *piVar8) {\r\n        uVar11 = uVar11 + 1;\r\n        piVar8 = piVar8 + 0x1bc;\r\n        if ((uint)(iVar5 - iVar6) <= uVar11) goto LAB_1400af7eb;\r\n      }\r\n    }\r\n  }\r\nLAB_1400af7eb:\r\n  uVar15 = 0;\r\n  local_7a0 = param_1;\r\n  local_768 = param_2;\r\n  if (iVar5 != iVar6) {\r\n    uVar2 = param_2[2];\r\n    puVar14 = (undefined8 *)*puVar1;\r\n    do {\r\n      local_7a8 = *(int *)(puVar14 + 5) == param_3;\r\n      puVar10 = param_2;\r\n      if (0xf < (ulonglong)param_2[3]) {\r\n        puVar10 = (undefined8 *)*param_2;\r\n      }\r\n      uVar3 = puVar14[2];\r\n      _Buf1 = puVar14;\r\n      if (0xf < (ulonglong)puVar14[3]) {\r\n        _Buf1 = (undefined8 *)*puVar14;\r\n      }\r\n      _Size = uVar2;\r\n      if (uVar3 < uVar2) {\r\n        _Size = uVar3;\r\n      }\r\n      uVar11 = memcmp(_Buf1,puVar10,_Size);\r\n      if (uVar11 == 0) {\r\n        if (uVar3 < uVar2) {\r\n          uVar11 = 0xffffffff;\r\n        }\r\n        else {\r\n          uVar11 = (uint)(uVar3 != uVar2);\r\n        }\r\n      }\r\n      if (local_7a8 != '\\0') {\r\n        if (uVar11 != 0) {\r\n          uVar9 = FUN_1400af060(local_788,puVar1);\r\n          puVar10 = (undefined8 *)FUN_1400af200(local_760,param_2,uVar9);\r\n          if (param_2 != puVar10) {\r\n            if (0xf < (ulonglong)param_2[3]) {\r\n              operator_delete((void *)*param_2);\r\n            }\r\n            param_2[3] = 0xf;\r\n            param_2[2] = 0;\r\n            *(undefined1 *)param_2 = 0;\r\n            if ((ulonglong)puVar10[3] < 0x10) {\r\n              memmove(param_2,puVar10,puVar10[2] + 1);\r\n            }\r\n            else {\r\n              *param_2 = *puVar10;\r\n              *puVar10 = 0;\r\n            }\r\n            param_2[2] = puVar10[2];\r\n            param_2[3] = puVar10[3];\r\n            puVar10[2] = 0;\r\n            puVar10[3] = 0;\r\n          }\r\n          if (0xf < local_748) {\r\n            operator_delete(local_760[0]);\r\n          }\r\n          FUN_14003a870(puVar14,param_2,0,0xffffffffffffffff);\r\n        }\r\n        goto LAB_1400afaaa;\r\n      }\r\n      if (uVar11 == 0) {\r\n        uVar9 = FUN_1400af060(local_788,puVar1);\r\n        uVar9 = FUN_1400af200(local_760,param_2,uVar9);\r\n        FUN_140040ad0(param_2,uVar9);\r\n        if (0xf < local_748) {\r\n          operator_delete(local_760[0]);\r\n        }\r\n        break;\r\n      }\r\n      uVar11 = (int)uVar15 + 1;\r\n      uVar15 = (ulonglong)uVar11;\r\n      puVar14 = puVar14 + 0xde;\r\n    } while (uVar11 < (uint)(iVar5 - iVar6));\r\n  }\r\n  lVar7 = local_7a0;\r\n  FUN_1400a7390(local_738);\r\n  local_710 = param_3;\r\n  FUN_14003a870(local_738,param_2,0,0xffffffffffffffff);\r\n  lVar12 = *(longlong *)(param_1 + 0xd8) - *puVar1;\r\n  lVar12 = lVar12 + SUB168(SEXT816(-0x6c657a3bf6c657a3) * SEXT816(lVar12),8);\r\n  uVar15 = (lVar12 >> 10) - (lVar12 >> 0x3f);\r\n  puVar4 = *(undefined1 **)(param_1 + 0xd8);\r\n  if ((local_738 < puVar4) && ((undefined1 *)*puVar1 <= local_738)) {\r\n    puVar13 = local_738 + -(longlong)*puVar1;\r\n    if (puVar4 == *(undefined1 **)(param_1 + 0xe0)) {\r\n      FUN_1400af150(puVar1,1);\r\n    }\r\n    local_7a0 = *(longlong *)(param_1 + 0xd8);\r\n    local_798 = local_7a0;\r\n    if (local_7a0 != 0) {\r\n      FUN_14006eeb0(local_7a0,\r\n                    (((longlong)\r\n                      (puVar13 + SUB168(SEXT816(-0x6c657a3bf6c657a3) * SEXT816((longlong)puVar13),8)\r\n                      ) >> 10) -\r\n                    ((longlong)\r\n                     (puVar13 + SUB168(SEXT816(-0x6c657a3bf6c657a3) * SEXT816((longlong)puVar13),8))\r\n                    >> 0x3f)) * 0x6f0 + *puVar1);\r\n    }\r\n  }\r\n  else {\r\n    if (puVar4 == *(undefined1 **)(param_1 + 0xe0)) {\r\n      FUN_1400af150(puVar1,1);\r\n    }\r\n    local_7a0 = *(longlong *)(param_1 + 0xd8);\r\n    local_798 = local_7a0;\r\n    if (local_7a0 != 0) {\r\n      FUN_14006eeb0(local_7a0,local_738);\r\n    }\r\n  }\r\n  *(longlong *)(param_1 + 0xd8) = *(longlong *)(param_1 + 0xd8) + 0x6f0;\r\n  FUN_140096630(lVar7);\r\n  FUN_14006e0d0(local_738);\r\nLAB_1400afaaa:\r\n  if (0xf < (ulonglong)param_2[3]) {\r\n    operator_delete((void *)*param_2);\r\n  }\r\n  param_2[3] = 0xf;\r\n  param_2[2] = 0;\r\n  *(undefined1 *)param_2 = 0;\r\n  return uVar15 & 0xffffffff;\r\n}\r\n\r\n",
+    "signature": "ulonglong FUN_1400af740(longlong param_1,undefined8 *param_2,int param_3);"
+  },
+  "summary": "Pseudo-C for FUN_1400af740 from the Deep engine (180 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1400af740"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

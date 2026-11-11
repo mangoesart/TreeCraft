@@ -1,0 +1,138 @@
+{
+  "id": "ev_4dc554f58e762a4609cbbd56edfe33af94508c36607da95d43f467f0471e7f92",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_show",
+  "params": {
+    "function": "0x14056b570"
+  },
+  "result": {
+    "basic_blocks": 21,
+    "body_ranges": [
+      [
+        "0x14056b570",
+        "0x14056b593"
+      ],
+      [
+        "0x14056b593",
+        "0x14056b5a7"
+      ],
+      [
+        "0x14056b5a7",
+        "0x14056b5c2"
+      ],
+      [
+        "0x14056b5c2",
+        "0x14056b5d2"
+      ],
+      [
+        "0x14056b5d2",
+        "0x14056b5f0"
+      ],
+      [
+        "0x14056b5f0",
+        "0x14056b614"
+      ],
+      [
+        "0x14056b614",
+        "0x14056b630"
+      ],
+      [
+        "0x14056b630",
+        "0x14056b641"
+      ],
+      [
+        "0x14056b641",
+        "0x14056b651"
+      ],
+      [
+        "0x14056b651",
+        "0x14056b66f"
+      ],
+      [
+        "0x14056b66f",
+        "0x14056b68f"
+      ],
+      [
+        "0x14056b68f",
+        "0x14056b69f"
+      ],
+      [
+        "0x14056b69f",
+        "0x14056b6c6"
+      ],
+      [
+        "0x14056b6c6",
+        "0x14056b6e7"
+      ],
+      [
+        "0x14056b6e7",
+        "0x14056b6f7"
+      ],
+      [
+        "0x14056b6f7",
+        "0x14056b71e"
+      ],
+      [
+        "0x14056b71e",
+        "0x14056b740"
+      ],
+      [
+        "0x14056b740",
+        "0x14056b750"
+      ],
+      [
+        "0x14056b750",
+        "0x14056b771"
+      ],
+      [
+        "0x14056b771",
+        "0x14056b78a"
+      ],
+      [
+        "0x14056b78a",
+        "0x14056b799"
+      ]
+    ],
+    "callers": 0,
+    "calls_out": 24,
+    "default_name": "sub_14056b570",
+    "discovered_by": "function_starts",
+    "end": "0x14056b799",
+    "entry": "0x14056b570",
+    "instructions": 123,
+    "jump_tables": [],
+    "name": "sub_14056b570",
+    "name_source": "generated",
+    "returns": false,
+    "signature": "int64_t sub_14056b570(int64_t rcx, int64_t rdx)",
+    "size": 553,
+    "tail_calls": 4,
+    "thunk_of": null,
+    "truncated": false,
+    "unresolved_indirect_jumps": 0
+  },
+  "summary": "sub_14056b570 at 0x14056b570: 553 bytes in 21 blocks.",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14056b570"
+    }
+  ],
+  "links": []
+}

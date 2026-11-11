@@ -1,0 +1,45 @@
+{
+  "id": "ev_070694066ca0cc5c3004aee854b3aac37c86d5e51ba4df8139cfeb9ec0f0b4d8",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14006d8c0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14006d8c0",
+    "function": "FUN_14006d8c0",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_14006d8c0(longlong param_1)\r\n\r\n{\r\n  ulonglong *puVar1;\r\n  undefined4 *puVar2;\r\n  undefined4 *puVar3;\r\n  uint uVar4;\r\n  undefined8 uVar5;\r\n  longlong *plVar6;\r\n  longlong lVar7;\r\n  longlong *plVar8;\r\n  undefined1 auStack_78 [32];\r\n  undefined4 local_58;\r\n  undefined4 uStack_54;\r\n  undefined8 local_50;\r\n  undefined1 local_48;\r\n  undefined7 uStack_47;\r\n  undefined8 local_38;\r\n  ulonglong local_30;\r\n  ulonglong local_20;\r\n  \r\n  local_50 = 0xfffffffffffffffe;\r\n  local_20 = DAT_141a96e80 ^ (ulonglong)auStack_78;\r\n  local_30 = 0xf;\r\n  plVar8 = (longlong *)0x0;\r\n  local_38 = 0;\r\n  local_48 = 0;\r\n  FUN_14003a980(&local_48,\"add material set\",0x10);\r\n  (**(code **)(*DAT_141a9c730 + 0x2b0))(DAT_141a9c730,*(undefined8 *)(param_1 + 0x80),&local_48,0);\r\n  if (0xf < local_30) {\r\n    operator_delete((void *)CONCAT71(uStack_47,local_48));\r\n  }\r\n  lVar7 = (longlong)*(int *)(param_1 + 0x1d8) * 0x6f0 +\r\n          *(longlong *)(*(longlong *)(param_1 + 0x80) + 0xd0);\r\n  local_58 = *(undefined4 *)(lVar7 + 0x28);\r\n  uStack_54 = DAT_1415432f4;\r\n  uVar5 = FUN_140056690(&local_48,lVar7,&DAT_1410349f8);\r\n  uVar4 = FUN_1400af740(*(undefined8 *)(param_1 + 0x80),uVar5,0xffffffff);\r\n  lVar7 = (ulonglong)uVar4 * 0x6f0 + *(longlong *)(*(longlong *)(param_1 + 0x80) + 0xd0);\r\n  *(undefined1 *)(lVar7 + 0x6cc) = 1;\r\n  puVar1 = (ulonglong *)(lVar7 + 0x6d0);\r\n  puVar2 = *(undefined4 **)(lVar7 + 0x6d8);\r\n  if ((&local_58 < puVar2) && (puVar3 = (undefined4 *)*puVar1, puVar3 <= &local_58)) {\r\n    if (puVar2 == *(undefined4 **)(lVar7 + 0x6e0)) {\r\n      FUN_14011b240(puVar1,1);\r\n    }\r\n    if (*(undefined8 **)(lVar7 + 0x6d8) != (undefined8 *)0x0) {\r\n      **(undefined8 **)(lVar7 + 0x6d8) =\r\n           *(undefined8 *)(*puVar1 + ((longlong)&local_58 - (longlong)puVar3 >> 3) * 8);\r\n    }\r\n  }\r\n  else {\r\n    if (puVar2 == *(undefined4 **)(lVar7 + 0x6e0)) {\r\n      FUN_14011b240(puVar1,1);\r\n    }\r\n    if (*(undefined8 **)(lVar7 + 0x6d8) != (undefined8 *)0x0) {\r\n      **(undefined8 **)(lVar7 + 0x6d8) = CONCAT44(uStack_54,local_58);\r\n    }\r\n  }\r\n  *(longlong *)(lVar7 + 0x6d8) = *(longlong *)(lVar7 + 0x6d8) + 8;\r\n  *(undefined1 *)(*(longlong *)(param_1 + 0x80) + 0xc0) = 1;\r\n  FUN_140096630(*(undefined8 *)(param_1 + 0x80));\r\n  FUN_140068ed0(param_1);\r\n  plVar6 = plVar8;\r\n  if (DAT_141a9c730 != (longlong *)0x0) {\r\n    plVar6 = DAT_141a9c730 + -5;\r\n  }\r\n  FUN_140297aa0(plVar6);\r\n  if (DAT_141a9c730 != (longlong *)0x0) {\r\n    plVar8 = DAT_141a9c730 + -5;\r\n  }\r\n  FUN_1402b0d20(plVar8,1,uVar4,1);\r\n  FUN_1404e4f20(*(undefined8 *)(*(longlong *)(param_1 + 0x80) + 0xb8),1,1);\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_14006d8c0(longlong param_1);"
+  },
+  "summary": "Pseudo-C for FUN_14006d8c0 from the Deep engine (79 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14006d8c0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

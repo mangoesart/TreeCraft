@@ -1,0 +1,87 @@
+{
+  "id": "ev_ec4f52b156c75faf7d63024ba7b6eb41e52cdb7056a9566b10b921b1326cc34b",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_bytes_find",
+  "params": {
+    "encoding": "both",
+    "limit": 10,
+    "offset": 0,
+    "path": null,
+    "pattern": "b0 75 27 02",
+    "text": null
+  },
+  "result": {
+    "file_size": 37325232,
+    "limit": 10,
+    "match_cap_reached": false,
+    "matches": [
+      {
+        "address": "0x141f92a4c",
+        "bytes": "b0752702",
+        "file_offset": 33101900,
+        "file_offset_hex": "0x1f9184c",
+        "length": 4,
+        "matched": "pattern",
+        "section": ".rdata"
+      },
+      {
+        "address": "0x141f92a80",
+        "bytes": "b0752702",
+        "file_offset": 33101952,
+        "file_offset_hex": "0x1f91880",
+        "length": 4,
+        "matched": "pattern",
+        "section": ".rdata"
+      }
+    ],
+    "native_container": "pe",
+    "offset": 0,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe",
+    "searched_for": [
+      {
+        "kind": "pattern",
+        "length": 4
+      }
+    ],
+    "total_matches": 2
+  },
+  "summary": "2 match(es) for pattern in SpeedTree_Modeler.exe; showing 2 from #0.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "file_bytes_only",
+      "message": "The file's bytes are searched as stored: compressed, encrypted or packed regions and data built at run time are not seen, so no match is not proof of absence."
+    },
+    {
+      "code": "unmapped_regions",
+      "message": "Matches in headers, overlays or debug data that are not loaded into memory have no virtual address."
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 2,
+    "total": 2
+  },
+  "locations": [
+    {
+      "kind": "file_offset",
+      "value": "0x1f9184c"
+    },
+    {
+      "kind": "file_offset",
+      "value": "0x1f91880"
+    }
+  ],
+  "links": []
+}

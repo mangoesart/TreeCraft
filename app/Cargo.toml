@@ -1,0 +1,15 @@
+[package]
+name = "treecraft"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+macroquad = "0.4"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "tga", "bmp"] }
+rfd = "0.15"
+
+[profile.dev]
+opt-level = 2
+
+[profile.dev.package."*"]
+opt-level = 3

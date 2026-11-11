@@ -1,0 +1,45 @@
+{
+  "id": "ev_93a145dff6de04c6453e1b0fc428fb25bbb2386871310caab0dd77d605a1cbd0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402cad40"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402cad40",
+    "function": "FUN_1402cad40",
+    "pseudo_code": "\r\nulonglong FUN_1402cad40(longlong param_1,uint *param_2,undefined4 *param_3)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  longlong lVar2;\r\n  ulonglong in_RAX;\r\n  uint uVar3;\r\n  ulonglong uVar4;\r\n  uint uVar5;\r\n  float fVar6;\r\n  float fVar7;\r\n  \r\n  if ((*(byte *)(param_1 + 0x74) & 2) != 0) {\r\n    in_RAX = FUN_1402cacb0();\r\n  }\r\n  fVar7 = *(float *)(param_1 + 0x60);\r\n  if (0.0 < fVar7) {\r\n    *param_2 = *param_2 + 1;\r\n    uVar4 = 0;\r\n    in_RAX = (ulonglong)*param_2;\r\n    if (9999 < *param_2) {\r\n      *param_2 = 0;\r\n      in_RAX = uVar4;\r\n    }\r\n    lVar2 = *(longlong *)(param_1 + 0x48);\r\n    uVar5 = (uint)(*(longlong *)(param_1 + 0x50) - lVar2 >> 3);\r\n    fVar7 = (fVar7 - 0.0) * (float)(&DAT_141eb5fa0)[in_RAX] + 0.0;\r\n    if (uVar5 != 0) {\r\n      do {\r\n        fVar6 = fVar7 - *(float *)(lVar2 + 4 + uVar4 * 8);\r\n        if (fVar6 <= 0.0) {\r\n          uVar1 = *(undefined4 *)(lVar2 + uVar4 * 8);\r\n          param_3[1] = fVar7;\r\n          *param_3 = uVar1;\r\n          return CONCAT71((int7)(in_RAX >> 8),1);\r\n        }\r\n        uVar3 = (int)uVar4 + 1;\r\n        uVar4 = (ulonglong)uVar3;\r\n        fVar7 = fVar6;\r\n      } while (uVar3 < uVar5);\r\n    }\r\n  }\r\n  return in_RAX & 0xffffffffffffff00;\r\n}\r\n\r\n",
+    "signature": "ulonglong FUN_1402cad40(longlong param_1,uint *param_2,undefined4 *param_3);"
+  },
+  "summary": "Pseudo-C for FUN_1402cad40 from the Deep engine (46 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402cad40"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

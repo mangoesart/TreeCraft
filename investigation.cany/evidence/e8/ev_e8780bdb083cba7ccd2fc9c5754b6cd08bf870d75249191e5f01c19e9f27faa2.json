@@ -1,0 +1,60 @@
+{
+  "id": "ev_e8780bdb083cba7ccd2fc9c5754b6cd08bf870d75249191e5f01c19e9f27faa2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 20,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "MaterialPreview|PreviewWidget|CMaterialView|MaterialGL"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141035610",
+        "references": [
+          {
+            "from": "0x140072ccf",
+            "function": "sub_140072890"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ChildMaterialPreviewClicked()"
+      },
+      {
+        "address": "0x1410eadf0",
+        "references": [],
+        "section": ".rdata",
+        "text": "ChildMaterialPreviewClicked()"
+      }
+    ],
+    "total": 2
+  },
+  "summary": "2 strings match \"MaterialPreview|PreviewWidget|CMaterialView|MaterialGL\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 2,
+    "total": 2
+  },
+  "locations": [],
+  "links": []
+}

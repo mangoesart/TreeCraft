@@ -1,0 +1,391 @@
+{
+  "id": "ev_b07fbf1da86f507a2b5621269af77d78f5dd20ad0525c9428c760a5989aa3645",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Phyllotaxy|Proportional steps|Bifurcation|Flood"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141f03c28",
+        "references": [
+          {
+            "from": "0x140317b8e",
+            "function": "sub_1403175a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation"
+      },
+      {
+        "address": "0x141f03c34",
+        "references": [
+          {
+            "from": "0x140317c2d",
+            "function": "sub_1403175a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flood"
+      },
+      {
+        "address": "0x141f18228",
+        "references": [
+          {
+            "from": "0x140479e41",
+            "function": "sub_140479e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Flood"
+      },
+      {
+        "address": "0x141f18248",
+        "references": [
+          {
+            "from": "0x140479f1a",
+            "function": "sub_140479e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Flood"
+      },
+      {
+        "address": "0x141f18560",
+        "references": [
+          {
+            "from": "0x14047cf6f",
+            "function": "sub_14047c960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Phyllotaxy:Nodes:Spread"
+      },
+      {
+        "address": "0x141f18588",
+        "references": [
+          {
+            "from": "0x14047cfe9",
+            "function": "sub_14047c960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Phyllotaxy:Nodes:Spiral"
+      },
+      {
+        "address": "0x141f185b0",
+        "references": [
+          {
+            "from": "0x14047d05f",
+            "function": "sub_14047c960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Phyllotaxy:Nodes:Limit"
+      },
+      {
+        "address": "0x141f188e0",
+        "references": [
+          {
+            "from": "0x140481464",
+            "function": "sub_140480c90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Proportional Steps:Align"
+      },
+      {
+        "address": "0x141f36a78",
+        "references": [
+          {
+            "from": "0x14069f9e2",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Bifurcated"
+      },
+      {
+        "address": "0x141f36a90",
+        "references": [
+          {
+            "from": "0x14069fa66",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Spot"
+      },
+      {
+        "address": "0x141f36aa8",
+        "references": [
+          {
+            "from": "0x14069f838",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Seed"
+      },
+      {
+        "address": "0x141f36ac0",
+        "references": [
+          {
+            "from": "0x14069f91e",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Chance"
+      },
+      {
+        "address": "0x141f36ad8",
+        "references": [
+          {
+            "from": "0x14069fcad",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Right angle"
+      },
+      {
+        "address": "0x141f36af0",
+        "references": [
+          {
+            "from": "0x14069fd73",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Right radius scale"
+      },
+      {
+        "address": "0x141f36b10",
+        "references": [
+          {
+            "from": "0x14069fb1d",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Left angle"
+      },
+      {
+        "address": "0x141f36b28",
+        "references": [
+          {
+            "from": "0x14069fbe3",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Left radius scale"
+      },
+      {
+        "address": "0x141f36be0",
+        "references": [
+          {
+            "from": "0x1406a0679",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Break:Style"
+      },
+      {
+        "address": "0x141f36c00",
+        "references": [
+          {
+            "from": "0x1406a04cf",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Break:Right break spot"
+      },
+      {
+        "address": "0x141f36c28",
+        "references": [
+          {
+            "from": "0x1406a05a4",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Break:Cap variance"
+      },
+      {
+        "address": "0x141f36c80",
+        "references": [
+          {
+            "from": "0x1406a08a7",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Adjust frond start"
+      },
+      {
+        "address": "0x141f36cb8",
+        "references": [
+          {
+            "from": "0x14069ff92",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Web:Angle"
+      },
+      {
+        "address": "0x141f36cd0",
+        "references": [
+          {
+            "from": "0x1406a0067",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Web:Thickness"
+      },
+      {
+        "address": "0x141f36cf0",
+        "references": [
+          {
+            "from": "0x14069fe3d",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Adjust frequency"
+      },
+      {
+        "address": "0x141f36d10",
+        "references": [
+          {
+            "from": "0x14069fec1",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Distance"
+      },
+      {
+        "address": "0x141f36d28",
+        "references": [
+          {
+            "from": "0x1406a02f9",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Angle"
+      },
+      {
+        "address": "0x141f36d40",
+        "references": [
+          {
+            "from": "0x1406a03fa",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Break:Left break spot"
+      },
+      {
+        "address": "0x141f36d68",
+        "references": [
+          {
+            "from": "0x1406a0138",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Radius scale"
+      },
+      {
+        "address": "0x141f36d88",
+        "references": [
+          {
+            "from": "0x1406a0228",
+            "function": "sub_14069e4e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Bifurcation:Web:Spread"
+      },
+      {
+        "address": "0x141f378d0",
+        "references": [
+          {
+            "from": "0x1406d334b",
+            "function": "sub_1406d2df0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning> node '%s' failed to complete bifurcation due to mismatched segment counts.\n"
+      },
+      {
+        "address": "0x141f37930",
+        "references": [
+          {
+            "from": "0x1406d2e82",
+            "function": "sub_1406d2df0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning> node '%s' failed to complete bifurcation due to an odd segment count at the bifurcation spot.\n"
+      },
+      {
+        "address": "0x142277590",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgBifurcation@@"
+      },
+      {
+        "address": "0x1422775e8",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgFlood@@"
+      },
+      {
+        "address": "0x142277660",
+        "references": [],
+        "section": ".data",
+        "text": ".?AVCGenAlgPhyllotaxy@@"
+      }
+    ],
+    "total": 33
+  },
+  "summary": "33 strings match \"Phyllotaxy|Proportional steps|Bifurcation|Flood\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 33,
+    "total": 33
+  },
+  "locations": [],
+  "links": []
+}

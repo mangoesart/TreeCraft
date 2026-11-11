@@ -1,0 +1,49 @@
+{
+  "id": "ev_0982dc4e1c69580982850f48a8cdd87c3bb2fb44601acbd158bc0ad493badfb7",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_callers_list",
+  "params": {
+    "function": "0x1403154a0"
+  },
+  "result": {
+    "address_taken": 1,
+    "callers": [],
+    "entry": "0x1403154a0",
+    "function": "sub_1403154a0"
+  },
+  "summary": "sub_1403154a0 is called from 0 places and its address is taken 1 times.",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "direct_calls_only",
+      "message": "callers that reach it through function pointers are not listed (see address_taken)"
+    },
+    {
+      "code": "no_static_callers",
+      "message": "no direct callers found; it may be an entry point, a callback or only reached indirectly"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 0,
+    "total": 0
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1403154a0"
+    }
+  ],
+  "links": []
+}

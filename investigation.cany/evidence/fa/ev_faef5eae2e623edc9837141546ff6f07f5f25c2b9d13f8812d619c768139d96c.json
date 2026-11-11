@@ -1,0 +1,45 @@
+{
+  "id": "ev_faef5eae2e623edc9837141546ff6f07f5f25c2b9d13f8812d619c768139d96c",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402f83f0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402f83f0",
+    "function": "FUN_1402f83f0",
+    "pseudo_code": "\r\nQObject * FUN_1402f83f0(QObject *param_1)\r\n\r\n{\r\n  void *pvVar1;\r\n  undefined8 uVar2;\r\n  undefined4 local_res18 [2];\r\n  undefined4 local_res20 [2];\r\n  undefined4 local_48 [2];\r\n  code *local_40;\r\n  undefined8 local_38;\r\n  QColor local_30 [24];\r\n  \r\n  local_38 = 0xfffffffffffffffe;\r\n  FUN_140186140();\r\n  *(undefined ***)param_1 = COptimalMeshDialog::vftable;\r\n  *(undefined ***)(param_1 + 0x10) = COptimalMeshDialog::vftable;\r\n  param_1[0x60] = (QObject)0x0;\r\n  *(undefined8 *)(param_1 + 0x70) = 0;\r\n  *(undefined8 *)(param_1 + 0x78) = 0;\r\n  local_res18[0] = 0;\r\n  *(undefined8 *)(param_1 + 0x80) = 0;\r\n  *(undefined8 *)(param_1 + 0x88) = 0;\r\n  *(undefined8 *)(param_1 + 0x90) = 0;\r\n  FUN_14003aec0(param_1 + 0x80,0,local_res18);\r\n  *(undefined8 *)(param_1 + 0xa0) = 0;\r\n  param_1[0xa8] = (QObject)0x0;\r\n  pvVar1 = operator_new(0x278);\r\n  *(void **)(param_1 + 0x58) = pvVar1;\r\n  FUN_1402f4120(pvVar1,param_1);\r\n  QWidget::setSizePolicy(*(QWidget **)(*(longlong *)(param_1 + 0x58) + 0x1b8),0x4055);\r\n  QWidget::setSizePolicy(*(QWidget **)(*(longlong *)(param_1 + 0x58) + 0x210),0x4055);\r\n  QWidget::setSizePolicy(*(QWidget **)(*(longlong *)(param_1 + 0x58) + 0x268),0x4055);\r\n  local_48[0] = 100;\r\n  local_res20[0] = 600;\r\n  local_40 = shared_null_exref;\r\n  LOCK();\r\n  *(int *)shared_null_exref = *(int *)shared_null_exref + 1;\r\n  UNLOCK();\r\n  FUN_1402b73a0(&local_40,local_res20);\r\n  FUN_1402b73a0(&local_40,local_48);\r\n  QSplitter::setSizes(*(QSplitter **)(*(longlong *)(param_1 + 0x58) + 0x138),(QList<int> *)&local_40\r\n                     );\r\n  LOCK();\r\n  *(int *)local_40 = *(int *)local_40 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_40 == 0) {\r\n    qFree(local_40);\r\n  }\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x20),\"2clicked()\",param_1,\r\n                   \"1ModeAddPoints()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x28),\"2clicked()\",param_1,\r\n                   \"1ModeRemovePoints()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x30),\"2clicked()\",param_1,\r\n                   \"1ResetPoints()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xa0),\"2clicked()\",param_1,\r\n                   \"1ModeAddMask()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xa8),\"2clicked()\",param_1,\r\n                   \"1ModeRemoveMask()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xb0),\"2clicked()\",param_1,\r\n                   \"1ResetMask()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xf8),\"2valueChanged(int)\",param_1,\r\n                   \"1IntChanged(int)\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x118),\"2stateChanged(int)\",param_1\r\n                   ,\"1IntChanged(int)\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x60),\"2currentIndexChanged(int)\",\r\n                   param_1,\"1MaterialChanged(int)\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x150),\"2PivotMoved()\",param_1,\r\n                   \"1Other()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x1a0),\"2clicked()\",param_1,\r\n                   \"1SaveButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x1f8),\"2clicked()\",param_1,\r\n                   \"1SaveButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x250),\"2clicked()\",param_1,\r\n                   \"1SaveButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 400),\"2clicked()\",param_1,\r\n                   \"1LoadButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x1e8),\"2clicked()\",param_1,\r\n                   \"1LoadButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x240),\"2clicked()\",param_1,\r\n                   \"1LoadButton()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x108),\"2SignalValueChanged(int)\",\r\n                   param_1,\"1AngleChanged(int)\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x48),\"2clicked()\",param_1,\r\n                   \"1ColorTypeChanged()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x50),\"2clicked()\",param_1,\r\n                   \"1ColorTypeChanged()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x58),\"2clicked()\",param_1,\r\n                   \"1ColorTypeChanged()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x128),\"2clicked()\",param_1,\r\n                   \"1Other()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x78),\"2clicked()\",param_1,\r\n                   \"1ModeAddAnchors()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x80),\"2clicked()\",param_1,\r\n                   \"1ModeRemoveAnchors()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0x88),\"2clicked()\",param_1,\r\n                   \"1ResetAnchors()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 200),\"2clicked()\",param_1,\r\n                   \"1ModeColor()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xd8),\"2clicked()\",param_1,\r\n                   \"1ResetColor()\",0);\r\n  QObject::connect(*(QObject **)(*(longlong *)(param_1 + 0x58) + 0xd0),\"2clicked()\",param_1,\r\n                   \"1ColorClicked()\",0);\r\n  uVar2 = QColor::QColor(local_30,7);\r\n  FUN_140188990(*(undefined8 *)(*(longlong *)(param_1 + 0x58) + 0xd0),uVar2);\r\n  FUN_1404096d0(*(undefined8 *)(*(longlong *)(param_1 + 0x58) + 0x108));\r\n  *(undefined4 *)(*(longlong *)(*(longlong *)(param_1 + 0x58) + 0x108) + 0x54) = 2;\r\n  FUN_1402f7b30(param_1);\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "QObject * FUN_1402f83f0(QObject *param_1);"
+  },
+  "summary": "Pseudo-C for FUN_1402f83f0 from the Deep engine (111 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402f83f0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

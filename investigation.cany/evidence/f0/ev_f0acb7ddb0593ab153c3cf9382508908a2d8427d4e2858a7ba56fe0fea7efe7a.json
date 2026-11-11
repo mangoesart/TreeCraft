@@ -1,0 +1,320 @@
+{
+  "id": "ev_f0acb7ddb0593ab153c3cf9382508908a2d8427d4e2858a7ba56fe0fea7efe7a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Orient|Flip|FixWinding|FlipNormals|RippleDirectionIsNormal|CollisionScale|WindX|SpineStyle|PivotStyle|MoreLodsMeshID|Unitized)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14103646c",
+        "references": [
+          {
+            "from": "0x140078341",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1400a3fa1",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4ac1",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1404abe66",
+            "function": "sub_1404ab520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip"
+      },
+      {
+        "address": "0x141036550",
+        "references": [
+          {
+            "from": "0x140077f98",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1400a4017",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4af5",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1404abda8",
+            "function": "sub_1404ab520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Orient"
+      },
+      {
+        "address": "0x141040230",
+        "references": [
+          {
+            "from": "0x1400a4449",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b49e8",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "MoreLodsMeshID"
+      },
+      {
+        "address": "0x141040240",
+        "references": [
+          {
+            "from": "0x1400a4358",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4b97",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Unitized"
+      },
+      {
+        "address": "0x141040280",
+        "references": [
+          {
+            "from": "0x1400a4179",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4845",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "RippleDirectionIsNormal"
+      },
+      {
+        "address": "0x141040298",
+        "references": [
+          {
+            "from": "0x1400a4103",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4b62",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "PivotStyle"
+      },
+      {
+        "address": "0x1410402a8",
+        "references": [
+          {
+            "from": "0x1400a408d",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4b2d",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpineStyle"
+      },
+      {
+        "address": "0x1410402c4",
+        "references": [
+          {
+            "from": "0x1400a3e39",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b46d8",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindX"
+      },
+      {
+        "address": "0x1410402d0",
+        "references": [
+          {
+            "from": "0x1400a3d49",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b465e",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CollisionScale"
+      },
+      {
+        "address": "0x1410402e0",
+        "references": [
+          {
+            "from": "0x1400a3c45",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4a56",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1404abf21",
+            "function": "sub_1404ab520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x1410402f0",
+        "references": [
+          {
+            "from": "0x1400a3bcb",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b4a21",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1404abf73",
+            "function": "sub_1404ab520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FixWinding"
+      },
+      {
+        "address": "0x1413f08f0",
+        "references": [
+          {
+            "from": "0x140cab0df",
+            "function": "sub_140cab0b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x1413f0eb0",
+        "references": [
+          {
+            "from": "0x140cabe64",
+            "function": "sub_140caba3d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x1413f91d8",
+        "references": [
+          {
+            "from": "0x140cc95ea",
+            "function": "sub_140cc9580"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x1413f9798",
+        "references": [
+          {
+            "from": "0x140cca388",
+            "function": "sub_140cc9f45"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x141401d40",
+        "references": [
+          {
+            "from": "0x140ce9923",
+            "function": "sub_140ce98a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x141401fc8",
+        "references": [
+          {
+            "from": "0x140cea5ce",
+            "function": "sub_140cea1d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x14140a668",
+        "references": [
+          {
+            "from": "0x140d02a2a",
+            "function": "sub_140d02980"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      },
+      {
+        "address": "0x14140a928",
+        "references": [
+          {
+            "from": "0x140d0366e",
+            "function": "sub_140d03340"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FlipNormals"
+      }
+    ],
+    "total": 19
+  },
+  "summary": "19 strings match \"^(Orient|Flip|FixWinding|FlipNormals|RippleDirectionIsNormal|CollisionScale|WindX|SpineStyle|PivotStyle|MoreLodsMeshID|Unitized)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 19,
+    "total": 19
+  },
+  "locations": [],
+  "links": []
+}

@@ -1,0 +1,540 @@
+{
+  "id": "ev_ca075b8b762370d6d69caa410a35e24925d04678157ac46d2e54f6bfd76d92b2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 30,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "gizmo|manipulator|widget size"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410419e0",
+        "references": [
+          {
+            "from": "0x1400c3559",
+            "function": "sub_1400c170d"
+          },
+          {
+            "from": "0x140111486",
+            "function": "sub_140110f30"
+          },
+          {
+            "from": "0x140112c84",
+            "function": "sub_140112b9a"
+          },
+          {
+            "from": "0x1401811a6",
+            "function": "sub_140180b50"
+          },
+          {
+            "from": "0x1401e28b3",
+            "function": "sub_1401e2620"
+          },
+          {
+            "from": "0x1402012df",
+            "function": "sub_140200ab0"
+          },
+          {
+            "from": "0x140254dd0",
+            "function": "sub_140254c90"
+          },
+          {
+            "from": "0x14026d3e2",
+            "function": "sub_14026cdb0"
+          },
+          {
+            "from": "0x14030ed3a",
+            "function": "sub_14030eb70"
+          },
+          {
+            "from": "0x14037704a",
+            "function": "sub_140376ad0"
+          },
+          {
+            "from": "0x140512e34",
+            "function": "sub_1405129f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning>[INTERNAL WARNING]Node manipulator out of bounds [%d of %d].\n"
+      },
+      {
+        "address": "0x141046f50",
+        "references": [
+          {
+            "from": "0x1401194a0",
+            "function": "sub_140119340"
+          },
+          {
+            "from": "0x1401196bf",
+            "function": "sub_140119340"
+          },
+          {
+            "from": "0x140119b5d",
+            "function": "sub_140119340"
+          },
+          {
+            "from": "0x1401742c5",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x1401744b4",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140174685",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140174856",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140174a33",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140174c10",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140174e2c",
+            "function": "sub_140174030"
+          },
+          {
+            "from": "0x140181a47",
+            "function": "sub_140180b50"
+          },
+          {
+            "from": "0x140181c95",
+            "function": "sub_140180b50"
+          },
+          {
+            "from": "0x1401e3501",
+            "function": "sub_1401e2620"
+          },
+          {
+            "from": "0x1401e3739",
+            "function": "sub_1401e2620"
+          },
+          {
+            "from": "0x14020107e",
+            "function": "sub_140200ab0"
+          },
+          {
+            "from": "0x140255ba1",
+            "function": "sub_140254c90"
+          },
+          {
+            "from": "0x140255df5",
+            "function": "sub_140254c90"
+          },
+          {
+            "from": "0x14026e148",
+            "function": "sub_14026cdb0"
+          },
+          {
+            "from": "0x14026e374",
+            "function": "sub_14026cdb0"
+          },
+          {
+            "from": "0x1402838ef",
+            "function": "sub_140283390"
+          },
+          {
+            "from": "0x140283b18",
+            "function": "sub_140283390"
+          },
+          {
+            "from": "0x14030f47f",
+            "function": "sub_14030eb70"
+          },
+          {
+            "from": "0x14030f6c9",
+            "function": "sub_14030eb70"
+          },
+          {
+            "from": "0x14030f8c9",
+            "function": "sub_14030eb70"
+          },
+          {
+            "from": "0x140377bf5",
+            "function": "sub_140376ad0"
+          },
+          {
+            "from": "0x140377e26",
+            "function": "sub_140376ad0"
+          },
+          {
+            "from": "0x1403782e6",
+            "function": "sub_140376ad0"
+          },
+          {
+            "from": "0x1403aeb78",
+            "function": "sub_1403aea90"
+          },
+          {
+            "from": "0x1403aed79",
+            "function": "sub_1403aea90"
+          },
+          {
+            "from": "0x1403aef5a",
+            "function": "sub_1403aea90"
+          },
+          {
+            "from": "0x14051357f",
+            "function": "sub_1405129f0"
+          },
+          {
+            "from": "0x14051381d",
+            "function": "sub_1405129f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning>[INTERNAL WARNING]Node manipulator out of bounds [%s, %d].\n"
+      },
+      {
+        "address": "0x14109a2d8",
+        "references": [
+          {
+            "from": "0x1403c3ae5",
+            "function": "sub_1403c3aa0"
+          },
+          {
+            "from": "0x1403c3b95",
+            "function": "sub_1403c3b50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_fGizmoOffset"
+      },
+      {
+        "address": "0x14109eec8",
+        "references": [
+          {
+            "from": "0x140404d6d",
+            "function": "sub_140404c90"
+          },
+          {
+            "from": "0x140404f9b",
+            "function": "sub_140404eb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_fGizmoOffset_z"
+      },
+      {
+        "address": "0x14109eee0",
+        "references": [
+          {
+            "from": "0x140404d21",
+            "function": "sub_140404c90"
+          },
+          {
+            "from": "0x140404f48",
+            "function": "sub_140404eb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_fGizmoOffset_y"
+      },
+      {
+        "address": "0x14109eef8",
+        "references": [
+          {
+            "from": "0x140404cd5",
+            "function": "sub_140404c90"
+          },
+          {
+            "from": "0x140404ef5",
+            "function": "sub_140404eb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_fGizmoOffset_x"
+      },
+      {
+        "address": "0x1410b5378",
+        "references": [
+          {
+            "from": "0x140523535",
+            "function": "sub_140522c60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Art director gizmo"
+      },
+      {
+        "address": "0x1410b68a8",
+        "references": [
+          {
+            "from": "0x14052e2a8",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Controls the size of the manipulator"
+      },
+      {
+        "address": "0x1410b68d0",
+        "references": [
+          {
+            "from": "0x14052e28d",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Enables anti-aliasing of manipulator lines"
+      },
+      {
+        "address": "0x1410b6900",
+        "references": [
+          {
+            "from": "0x14052e272",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Enables text displaying transformation information on the manipulator"
+      },
+      {
+        "address": "0x1410b72c4",
+        "references": [
+          {
+            "from": "0x140531e2c",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gizmo"
+      },
+      {
+        "address": "0x1410b7c10",
+        "references": [
+          {
+            "from": "0x140534334",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotGizmo()"
+      },
+      {
+        "address": "0x1410b7c20",
+        "references": [
+          {
+            "from": "0x1405342ed",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Set options for the transform gizmo.\n"
+      },
+      {
+        "address": "0x1410b7c48",
+        "references": [
+          {
+            "from": "0x14053426b",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "edit_gizmo_icon.png"
+      },
+      {
+        "address": "0x1410b8c70",
+        "references": [
+          {
+            "from": "0x1405398bb",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator"
+      },
+      {
+        "address": "0x1410b9a60",
+        "references": [
+          {
+            "from": "0x14053f901",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Size scale"
+      },
+      {
+        "address": "0x1410b9a78",
+        "references": [
+          {
+            "from": "0x14053f879",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Smooth lines"
+      },
+      {
+        "address": "0x1410b9a98",
+        "references": [
+          {
+            "from": "0x14053f7f1",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Show text"
+      },
+      {
+        "address": "0x1410b9ab0",
+        "references": [
+          {
+            "from": "0x14053f5b4",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Coordinate system"
+      },
+      {
+        "address": "0x1410b9ad0",
+        "references": [
+          {
+            "from": "0x14053f303",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Mode"
+      },
+      {
+        "address": "0x1410be420",
+        "references": [
+          {
+            "from": "0x14056868e",
+            "function": "sub_140568360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning> Cameras that orient based on position can not be transformed with manipulators in \"Local\" mode.\n"
+      },
+      {
+        "address": "0x1410be750",
+        "references": [
+          {
+            "from": "0x140570fc7",
+            "function": "sub_140570e8e"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error>Failed to compute overlay manipulator position\n"
+      },
+      {
+        "address": "0x1410be878",
+        "references": [
+          {
+            "from": "0x140574813",
+            "function": "sub_140574730"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hide gizmo"
+      },
+      {
+        "address": "0x1410be888",
+        "references": [
+          {
+            "from": "0x1405747bd",
+            "function": "sub_140574730"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flat gizmo"
+      },
+      {
+        "address": "0x1410be898",
+        "references": [
+          {
+            "from": "0x140574767",
+            "function": "sub_140574730"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gizmo in scene\tA cycles"
+      },
+      {
+        "address": "0x1410beab0",
+        "references": [
+          {
+            "from": "0x140578a42",
+            "function": "sub_140578890"
+          },
+          {
+            "from": "0x140578a93",
+            "function": "sub_140578890"
+          },
+          {
+            "from": "0x140578b9c",
+            "function": "sub_140578b60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "preferences/ad_gizmo"
+      },
+      {
+        "address": "0x1410cd6d8",
+        "references": [],
+        "section": ".rdata",
+        "text": "Manipulator Object"
+      },
+      {
+        "address": "0x1410f3141",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotGizmo()"
+      },
+      {
+        "address": "0x1413826c8",
+        "references": [
+          {
+            "from": "0x140a90671",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FbxCameraManipulator"
+      }
+    ],
+    "total": 29
+  },
+  "summary": "29 strings match \"gizmo|manipulator|widget size\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 29,
+    "total": 29
+  },
+  "locations": [],
+  "links": []
+}

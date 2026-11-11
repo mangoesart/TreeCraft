@@ -1,0 +1,59 @@
+{
+  "id": "ev_ca9bda783b7300742cae022f64b9db2a7760605f0c3b03edbc3721198f2d5bd2",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_bytes_find",
+  "params": {
+    "encoding": "both",
+    "limit": 5,
+    "offset": 0,
+    "path": null,
+    "pattern": "97 a0 89 5b 5a 0f 83 0d",
+    "text": null
+  },
+  "result": {
+    "file_size": 37325232,
+    "limit": 5,
+    "match_cap_reached": false,
+    "matches": [],
+    "native_container": "pe",
+    "offset": 0,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe",
+    "searched_for": [
+      {
+        "kind": "pattern",
+        "length": 8
+      }
+    ],
+    "total_matches": 0
+  },
+  "summary": "0 match(es) for pattern in SpeedTree_Modeler.exe.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "file_bytes_only",
+      "message": "The file's bytes are searched as stored: compressed, encrypted or packed regions and data built at run time are not seen, so no match is not proof of absence."
+    },
+    {
+      "code": "unmapped_regions",
+      "message": "Matches in headers, overlays or debug data that are not loaded into memory have no virtual address."
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 0,
+    "total": 0
+  },
+  "locations": [],
+  "links": []
+}

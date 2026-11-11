@@ -1,0 +1,45 @@
+{
+  "id": "ev_d160e8367a9615b7a02afcd160eaef45b48351727e38b9023dd5076075b87144",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402ed0a0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402ed0a0",
+    "function": "FUN_1402ed0a0",
+    "pseudo_code": "\r\nQGLWidget * FUN_1402ed0a0(QGLWidget *param_1,uint param_2)\r\n\r\n{\r\n  FUN_1405a14a0(param_1 + 0xb8);\r\n  FUN_14059fc80(param_1 + 0xa8);\r\n  FUN_14059fc80(param_1 + 0x90);\r\n  QGLWidget::~QGLWidget(param_1);\r\n  if ((param_2 & 1) != 0) {\r\n    operator_delete(param_1);\r\n  }\r\n  return param_1;\r\n}\r\n\r\n",
+    "signature": "QGLWidget * FUN_1402ed0a0(QGLWidget *param_1,uint param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1402ed0a0 from the Deep engine (14 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ed0a0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

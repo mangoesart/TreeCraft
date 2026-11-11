@@ -1,0 +1,42 @@
+{
+  "id": "ev_2020d4df54670712b7ced16e135920ba73701ae5178439aa19d27fcfd5d1b91a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_find",
+  "params": {
+    "address": "0x1402ec700"
+  },
+  "result": {
+    "address": "0x1402ec700",
+    "function": null,
+    "reason": "not inside any discovered function"
+  },
+  "summary": "0x1402ec700 isn't inside a known function.",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "not_found",
+      "message": "the address may be in code the engine didn't discover (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ec700"
+    }
+  ],
+  "links": []
+}

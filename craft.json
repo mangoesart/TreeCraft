@@ -1,0 +1,4208 @@
+{
+  "version": 4,
+  "name": "Tree Craft",
+  "request": "Re-create Speedtree modeler for games. \nWhat I want to see in this first version:\n1. The node graph to create trees. This should have options to create trunk, branches and leaves\n2. Material editor similar to the one in Speedtree modeler\n3. Mesh editor tab similar to the one in Speedtree modeler\n4. Viewport: Perspective by default with option to switch to orthographic views\n5. Properties panel on the left side. When I click a node in the node graph, its properties should show in this panel\nCreate these first, then we will go ahead and tweak it\nI don't need any tree pre-sets. I only need custom generation tools, no need to have any tree pre-sets",
+  "target": {
+    "kind": "local",
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe"
+  },
+  "stack": "Rust + macroquad",
+  "status": "building",
+  "note": "The builder stopped (Claude Code stopped: You've hit your 5-hour limit · resets 12:20pm (America/Toronto)). Picking up where it left off…",
+  "created_ms": 1794110733302,
+  "updated_ms": 1794408830470,
+  "checks": [
+    {
+      "round": 1,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794147220241
+    },
+    {
+      "round": 1,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-1\\screenshot.png"
+      ],
+      "at_ms": 1794147223236
+    },
+    {
+      "round": 1,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true).",
+      "artifacts": [
+        "checks\\round-1\\self-test.json"
+      ],
+      "at_ms": 1794147225817,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 52 values (37 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794147225821,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794147582777
+    },
+    {
+      "round": 2,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-2\\screenshot.png"
+      ],
+      "at_ms": 1794147585789
+    },
+    {
+      "round": 2,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true).",
+      "artifacts": [
+        "checks\\round-2\\self-test.json"
+      ],
+      "at_ms": 1794147588366,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 52 values (37 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794147588368,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794193637344
+    },
+    {
+      "round": 3,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-3\\screenshot.png"
+      ],
+      "at_ms": 1794193640371
+    },
+    {
+      "round": 3,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true).",
+      "artifacts": [
+        "checks\\round-3\\self-test.json"
+      ],
+      "at_ms": 1794193642947,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 64 values (48 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794193642950,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794193642950
+    },
+    {
+      "round": 4,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794195480575
+    },
+    {
+      "round": 4,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-4\\screenshot.png"
+      ],
+      "at_ms": 1794195483745
+    },
+    {
+      "round": 4,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true).",
+      "artifacts": [
+        "checks\\round-4\\self-test.json"
+      ],
+      "at_ms": 1794195486374,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 67 values (52 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794195486377,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794195486377
+    },
+    {
+      "round": 5,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794195978016
+    },
+    {
+      "round": 5,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-5\\screenshot.png"
+      ],
+      "at_ms": 1794195981021
+    },
+    {
+      "round": 5,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true).",
+      "artifacts": [
+        "checks\\round-5\\self-test.json"
+      ],
+      "at_ms": 1794195983666,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 71 values (56 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794195983669,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794195983670
+    },
+    {
+      "round": 6,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794227616974
+    },
+    {
+      "round": 6,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1600×900).",
+      "artifacts": [
+        "checks\\round-6\\screenshot.png"
+      ],
+      "at_ms": 1794227618188
+    },
+    {
+      "round": 6,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 31; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1560 leaves, 53270 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh']).",
+      "artifacts": [
+        "checks\\round-6\\self-test.json"
+      ],
+      "at_ms": 1794227620122,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 6,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 71 values (56 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794227620125,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 6,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794227620125
+    },
+    {
+      "round": 7,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794240652348
+    },
+    {
+      "round": 7,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1600×900).",
+      "artifacts": [
+        "checks\\round-7\\screenshot.png"
+      ],
+      "at_ms": 1794240653520
+    },
+    {
+      "round": 7,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 31; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1560 leaves, 53270 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh']).",
+      "artifacts": [
+        "checks\\round-7\\self-test.json"
+      ],
+      "at_ms": 1794240655447,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 7,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 75 values (60 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794240655449,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 7,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794240655450
+    },
+    {
+      "round": 8,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794251894833
+    },
+    {
+      "round": 8,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1600×900).",
+      "artifacts": [
+        "checks\\round-8\\screenshot.png"
+      ],
+      "at_ms": 1794251895965
+    },
+    {
+      "round": 8,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 31; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1560 leaves, 53270 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-8\\self-test.json"
+      ],
+      "at_ms": 1794251897862,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 8,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 82 values (67 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794251897864,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 8,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794251897864
+    },
+    {
+      "round": 9,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794280094419
+    },
+    {
+      "round": 9,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794280097736
+    },
+    {
+      "round": 9,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material thumbnails + preview: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794280101139,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 9,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 86 values (71 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794280101149,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 9,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794280101150
+    },
+    {
+      "round": 10,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794311055452
+    },
+    {
+      "round": 10,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-10\\screenshot.png"
+      ],
+      "at_ms": 1794311058555
+    },
+    {
+      "round": 10,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-10\\self-test.json"
+      ],
+      "at_ms": 1794311061892,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 90 values (75 with a source, 15 estimated).",
+      "artifacts": [],
+      "at_ms": 1794311061902,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794311061902
+    },
+    {
+      "round": 11,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794311578053
+    },
+    {
+      "round": 11,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794311581361
+    },
+    {
+      "round": 11,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794311584737,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 11,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 94 values (78 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794311584747,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 11,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794311584747
+    },
+    {
+      "round": 12,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794313106988
+    },
+    {
+      "round": 12,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794313110262
+    },
+    {
+      "round": 12,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794313113738,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 97 values (81 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794313113749,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794313113749
+    },
+    {
+      "round": 13,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794316530284
+    },
+    {
+      "round": 13,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-13\\screenshot.png"
+      ],
+      "at_ms": 1794316533373
+    },
+    {
+      "round": 13,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-13\\self-test.json"
+      ],
+      "at_ms": 1794316536721,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 99 values (83 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794316536730,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794316536730
+    },
+    {
+      "round": 14,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794317108122
+    },
+    {
+      "round": 14,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794317111260
+    },
+    {
+      "round": 14,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794317114643,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 102 values (85 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794317114652,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794317114652
+    },
+    {
+      "round": 15,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794333153359
+    },
+    {
+      "round": 15,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794333156599
+    },
+    {
+      "round": 15,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 51504 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794333160018,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 105 values (88 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794333160029,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794333160030
+    },
+    {
+      "round": 16,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794333563020
+    },
+    {
+      "round": 16,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1600×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794333564428
+    },
+    {
+      "round": 16,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 31; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1560 leaves, 15830 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794333566131,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 16,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 106 values (89 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794333566136,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 16,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794333566136
+    },
+    {
+      "round": 17,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794367806164
+    },
+    {
+      "round": 17,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-17\\screenshot.png"
+      ],
+      "at_ms": 1794367809347
+    },
+    {
+      "round": 17,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-17\\self-test.json"
+      ],
+      "at_ms": 1794367812442,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 17,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 108 values (91 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794367812452,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 17,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794367812452
+    },
+    {
+      "round": 18,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794368224132
+    },
+    {
+      "round": 18,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794368227384
+    },
+    {
+      "round": 18,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794368230685,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 18,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 109 values (92 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794368230698,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 18,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794368230698
+    },
+    {
+      "round": 19,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794369101741
+    },
+    {
+      "round": 19,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794369104949
+    },
+    {
+      "round": 19,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794369108027,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 19,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 109 values (92 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794369108038,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 19,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794369108038
+    },
+    {
+      "round": 20,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794399975434
+    },
+    {
+      "round": 20,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794399978664
+    },
+    {
+      "round": 20,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794399981826,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 20,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 109 values (92 with a source, 17 estimated).",
+      "artifacts": [],
+      "at_ms": 1794399981839,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 20,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794399981840
+    },
+    {
+      "round": 21,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794400563086
+    },
+    {
+      "round": 21,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-21\\screenshot.png"
+      ],
+      "at_ms": 1794400566211
+    },
+    {
+      "round": 21,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-21\\self-test.json"
+      ],
+      "at_ms": 1794400569341,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 21,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 110 values (94 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794400569353,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 21,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794400569353
+    },
+    {
+      "round": 22,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794407609227
+    },
+    {
+      "round": 22,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794407612472
+    },
+    {
+      "round": 22,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794407615590,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 22,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 110 values (94 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794407615602,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 22,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794407615602
+    },
+    {
+      "round": 23,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1794408254414
+    },
+    {
+      "round": 23,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-0\\screenshot.png"
+      ],
+      "at_ms": 1794408257595
+    },
+    {
+      "round": 23,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.3 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 30; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1508 leaves, 15312 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-0\\self-test.json"
+      ],
+      "at_ms": 1794408260748,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 23,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 110 values (94 with a source, 16 estimated).",
+      "artifacts": [],
+      "at_ms": 1794408260761,
+      "claims": [
+        {
+          "title": "tree shape radius (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk number (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk length (25) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk start angle (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk radius (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "trunk noise amount (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch first (0.215) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch last (0.925) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch length % of parent (0.4) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch start angle (0.35) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch radius % of parent (0.66) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "branch noise amount (0.7) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "relative frequency factor (0.025) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spacing (10) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval spiral per node (0.1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval count default (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "interval limit (1000) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "orientation sweep (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "radial segments suggested (3) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "length kill ratio (500) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "leaf template size (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "jink frequency default (0.5) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh orient (6) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh flip (0) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh collision scale and weight (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "new mesh more link (-1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "fix winding angle (90) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "degenerate face threshold (0.000000000001) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal threshold (0.9) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "weak normal face weight (0.01) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision scale default (1) is used in the code",
+          "passed": true
+        },
+        {
+          "title": "proxy collision weight default (1) is used in the code",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 23,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1794408260762
+    }
+  ],
+  "agent_session": "2b5bc499-023c-4b03-af39-666182b03b0f",
+  "agent_session_by": "claude-code",
+  "agent_session_deep": true,
+  "allowed_actions": [
+    "tool:native_window_capture",
+    "tool:build_command_run"
+  ],
+  "last_reply": "The original has a viewport manipulator with its own settings (Size scale, Show text, Smooth lines). Reading the function that sets them up.The defaults aren't set in that code, so I'm checking the install's preference files for the manipulator defaults.I read the original's own transform gizmo code. Like the original, the Edit Cutout window's gizmo now sits at the average position of the card's points, and Rotate and Scale turn around that point instead of the middle of its outer box. The gizmo's size is my own choice because the original's default size isn't stored in the program. The app builds and passes its tests and every check, and the project notes record these findings; branch bending and taper are still estimates.",
+  "asset_budget_usd": 5.0,
+  "generate_assets": false,
+  "questions": "ask"
+}

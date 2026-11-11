@@ -1,0 +1,45 @@
+{
+  "id": "ev_39ebf175df3942fd4cd1e140edc520dd7779751acefaa3dd193cfa45127b97be",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14004e3a0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14004e3a0",
+    "function": "FUN_14004e3a0",
+    "pseudo_code": "\r\nvoid FUN_14004e3a0(longlong param_1,QWidget *param_2)\r\n\r\n{\r\n  QString *pQVar1;\r\n  Data *local_res8 [2];\r\n  Data *local_res18;\r\n  Data *local_res20;\r\n  Data *local_88;\r\n  Data *local_80;\r\n  Data *local_78;\r\n  Data *local_70;\r\n  Data *local_68;\r\n  Data *local_60;\r\n  Data *local_58;\r\n  Data *local_50;\r\n  Data *local_48;\r\n  Data *local_40;\r\n  Data *local_38;\r\n  Data *local_30;\r\n  undefined8 local_28;\r\n  \r\n  local_28 = 0xfffffffffffffffe;\r\n  pQVar1 = (QString *)\r\n           QCoreApplication::translate((char *)&local_res20,\"AssetAddRemove\",\"Add/Remove Assets\",0);\r\n  QWidget::setWindowTitle(param_2,pQVar1);\r\n  LOCK();\r\n  *(int *)local_res20 = *(int *)local_res20 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res20 == 0) {\r\n    QString::free(local_res20);\r\n  }\r\n  pQVar1 = (QString *)\r\n           QCoreApplication::translate((char *)&local_80,\"AssetAddRemove\",\"Add new asset\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x18),pQVar1);\r\n  LOCK();\r\n  *(int *)local_80 = *(int *)local_80 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_80 == 0) {\r\n    QString::free(local_80);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_50,\"AssetAddRemove\",\"Add new\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x18),pQVar1);\r\n  LOCK();\r\n  *(int *)local_50 = *(int *)local_50 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_50 == 0) {\r\n    QString::free(local_50);\r\n  }\r\n  pQVar1 = (QString *)\r\n           QCoreApplication::translate((char *)&local_70,\"AssetAddRemove\",\"Duplicate selected\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x20),pQVar1);\r\n  LOCK();\r\n  *(int *)local_70 = *(int *)local_70 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_70 == 0) {\r\n    QString::free(local_70);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_30,\"AssetAddRemove\",\"Duplicate\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x20),pQVar1);\r\n  LOCK();\r\n  *(int *)local_30 = *(int *)local_30 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_30 == 0) {\r\n    QString::free(local_30);\r\n  }\r\n  pQVar1 = (QString *)\r\n           QCoreApplication::translate((char *)&local_60,\"AssetAddRemove\",\"Rename selected\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x28),pQVar1);\r\n  LOCK();\r\n  *(int *)local_60 = *(int *)local_60 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_60 == 0) {\r\n    QString::free(local_60);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_40,\"AssetAddRemove\",\"Rename\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x28),pQVar1);\r\n  LOCK();\r\n  *(int *)local_40 = *(int *)local_40 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_40 == 0) {\r\n    QString::free(local_40);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_88,\"AssetAddRemove\",\"Move up\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x38),pQVar1);\r\n  LOCK();\r\n  *(int *)local_88 = *(int *)local_88 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_88 == 0) {\r\n    QString::free(local_88);\r\n  }\r\n  local_res8[0] = (Data *)shared_null_exref;\r\n  LOCK();\r\n  *(int *)shared_null_exref = *(int *)shared_null_exref + 1;\r\n  UNLOCK();\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x38),(QString *)local_res8);\r\n  LOCK();\r\n  *(int *)local_res8[0] = *(int *)local_res8[0] + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res8[0] == 0) {\r\n    QString::free(local_res8[0]);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_78,\"AssetAddRemove\",\"Move down\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x40),pQVar1);\r\n  LOCK();\r\n  *(int *)local_78 = *(int *)local_78 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_78 == 0) {\r\n    QString::free(local_78);\r\n  }\r\n  local_res18 = (Data *)shared_null_exref;\r\n  LOCK();\r\n  *(int *)shared_null_exref = *(int *)shared_null_exref + 1;\r\n  UNLOCK();\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x40),(QString *)&local_res18);\r\n  LOCK();\r\n  *(int *)local_res18 = *(int *)local_res18 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res18 == 0) {\r\n    QString::free(local_res18);\r\n  }\r\n  pQVar1 = (QString *)\r\n           QCoreApplication::translate\r\n                     ((char *)&local_68,\"AssetAddRemove\",\"Remove selected assets\",0);\r\n  QWidget::setToolTip(*(QWidget **)(param_1 + 0x50),pQVar1);\r\n  LOCK();\r\n  *(int *)local_68 = *(int *)local_68 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_68 == 0) {\r\n    QString::free(local_68);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_58,\"AssetAddRemove\",\"Remove\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x50),pQVar1);\r\n  LOCK();\r\n  *(int *)local_58 = *(int *)local_58 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_58 == 0) {\r\n    QString::free(local_58);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_48,\"AssetAddRemove\",\"OK\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x70),pQVar1);\r\n  LOCK();\r\n  *(int *)local_48 = *(int *)local_48 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_48 == 0) {\r\n    QString::free(local_48);\r\n  }\r\n  pQVar1 = (QString *)QCoreApplication::translate((char *)&local_38,\"AssetAddRemove\",\"Cancel\",0);\r\n  QAbstractButton::setText(*(QAbstractButton **)(param_1 + 0x78),pQVar1);\r\n  LOCK();\r\n  *(int *)local_38 = *(int *)local_38 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_38 == 0) {\r\n    QString::free(local_38);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_14004e3a0(longlong param_1,QWidget *param_2);"
+  },
+  "summary": "Pseudo-C for FUN_14004e3a0 from the Deep engine (158 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14004e3a0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

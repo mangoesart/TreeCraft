@@ -1,0 +1,158 @@
+{
+  "id": "ev_29ccda3551715bc90ee60e74f3e89eea0b96c3d793309b81e60e868995168d71",
+  "subject": {
+    "kind": "pe",
+    "sha256": "29854f2bbf84fe60026ee3ab7ced33c7fba4ee69b3601fa94fc3458004a43a98",
+    "name": "SpeedTree_Modeler.exe"
+  },
+  "operation": "native_function_show",
+  "params": {
+    "function": "0x14057f900"
+  },
+  "result": {
+    "basic_blocks": 26,
+    "body_ranges": [
+      [
+        "0x14057f900",
+        "0x14057f93c"
+      ],
+      [
+        "0x14057f93c",
+        "0x14057f954"
+      ],
+      [
+        "0x14057f954",
+        "0x14057f969"
+      ],
+      [
+        "0x14057f969",
+        "0x14057f97a"
+      ],
+      [
+        "0x14057f97a",
+        "0x14057f97d"
+      ],
+      [
+        "0x14057f97d",
+        "0x14057f986"
+      ],
+      [
+        "0x14057f986",
+        "0x14057f9a4"
+      ],
+      [
+        "0x14057f9a4",
+        "0x14057f9b7"
+      ],
+      [
+        "0x14057f9b7",
+        "0x14057f9c2"
+      ],
+      [
+        "0x14057f9c2",
+        "0x14057f9fb"
+      ],
+      [
+        "0x14057f9fb",
+        "0x14057fa0f"
+      ],
+      [
+        "0x14057fa0f",
+        "0x14057fa24"
+      ],
+      [
+        "0x14057fa24",
+        "0x14057fa2a"
+      ],
+      [
+        "0x14057fa2b",
+        "0x14057fa30"
+      ],
+      [
+        "0x14057fa30",
+        "0x14057fa57"
+      ],
+      [
+        "0x14057fa57",
+        "0x14057fa5b"
+      ],
+      [
+        "0x14057fa5b",
+        "0x14057fa6c"
+      ],
+      [
+        "0x14057fa6c",
+        "0x14057fa6f"
+      ],
+      [
+        "0x14057fa6f",
+        "0x14057fa74"
+      ],
+      [
+        "0x14057fa74",
+        "0x14057fabe"
+      ],
+      [
+        "0x14057fabe",
+        "0x14057fac2"
+      ],
+      [
+        "0x14057fac2",
+        "0x14057fad1"
+      ],
+      [
+        "0x14057fad1",
+        "0x14057fad6"
+      ],
+      [
+        "0x14057fad6",
+        "0x14057fae2"
+      ],
+      [
+        "0x14057fae2",
+        "0x14057faed"
+      ],
+      [
+        "0x14057faed",
+        "0x14057fb0d"
+      ]
+    ],
+    "callers": 0,
+    "calls_out": 14,
+    "default_name": "sub_14057f900",
+    "discovered_by": "function_starts",
+    "end": "0x14057fb0d",
+    "entry": "0x14057f900",
+    "instructions": 125,
+    "jump_tables": [],
+    "name": "sub_14057f900",
+    "name_source": "generated",
+    "returns": true,
+    "signature": "int64_t sub_14057f900(int64_t rcx, int64_t rdx)",
+    "size": 524,
+    "tail_calls": 0,
+    "thunk_of": null,
+    "truncated": false,
+    "unresolved_indirect_jumps": 0
+  },
+  "summary": "sub_14057f900 at 0x14057f900: 524 bytes in 26 blocks.",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.5.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14057f900"
+    }
+  ],
+  "links": []
+}

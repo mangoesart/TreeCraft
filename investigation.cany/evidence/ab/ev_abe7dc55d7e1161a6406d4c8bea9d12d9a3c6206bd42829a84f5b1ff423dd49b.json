@@ -1,0 +1,218 @@
+{
+  "id": "ev_abe7dc55d7e1161a6406d4c8bea9d12d9a3c6206bd42829a84f5b1ff423dd49b",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Make New Set\\.\\.\\.|Max resolution|Unwrap|User data|Season|Subsurface%|No materials|Share|Atlas)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141033c4c",
+        "references": [
+          {
+            "from": "0x140064d07",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Share"
+      },
+      {
+        "address": "0x141033c64",
+        "references": [
+          {
+            "from": "0x140064c89",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Unwrap"
+      },
+      {
+        "address": "0x141033c80",
+        "references": [
+          {
+            "from": "0x140064ba2",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "User data"
+      },
+      {
+        "address": "0x141033ce8",
+        "references": [
+          {
+            "from": "0x140064888",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Max resolution"
+      },
+      {
+        "address": "0x141033d5c",
+        "references": [
+          {
+            "from": "0x140064567",
+            "function": "sub_140063f80"
+          },
+          {
+            "from": "0x14006468a",
+            "function": "sub_140063f80"
+          },
+          {
+            "from": "0x1400a24da",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b2afb",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1401bbb3d",
+            "function": "sub_1401bb610"
+          },
+          {
+            "from": "0x1401bd1e7",
+            "function": "sub_1401bb610"
+          },
+          {
+            "from": "0x1404f1dce",
+            "function": "sub_1404f1cd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Atlas"
+      },
+      {
+        "address": "0x141033d80",
+        "references": [
+          {
+            "from": "0x1400643e1",
+            "function": "sub_140063f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Make New Set..."
+      },
+      {
+        "address": "0x141033d90",
+        "references": [
+          {
+            "from": "0x140064362",
+            "function": "sub_140063f80"
+          },
+          {
+            "from": "0x140529d13",
+            "function": "sub_140529ca0"
+          },
+          {
+            "from": "0x140531d78",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season"
+      },
+      {
+        "address": "0x141034500",
+        "references": [
+          {
+            "from": "0x14006a07b",
+            "function": "sub_140068ed0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "No materials"
+      },
+      {
+        "address": "0x141035040",
+        "references": [
+          {
+            "from": "0x14006e5e6",
+            "function": "sub_14006e3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Subsurface%"
+      },
+      {
+        "address": "0x1412e0740",
+        "references": [
+          {
+            "from": "0x1408447d4",
+            "function": "sub_1408446e2"
+          }
+        ],
+        "section": ".rdata",
+        "text": "share"
+      },
+      {
+        "address": "0x141a7bf34",
+        "references": [
+          {
+            "from": "0x141a7c180",
+            "function": null
+          }
+        ],
+        "section": ".data",
+        "text": "share"
+      },
+      {
+        "address": "0x141a7c6cc",
+        "references": [
+          {
+            "from": "0x1409e7d9c",
+            "function": "sub_1409e69a0"
+          }
+        ],
+        "section": ".data",
+        "text": "share"
+      },
+      {
+        "address": "0x141a7c6f4",
+        "references": [
+          {
+            "from": "0x1409e7dd5",
+            "function": "sub_1409e69a0"
+          }
+        ],
+        "section": ".data",
+        "text": "share"
+      }
+    ],
+    "total": 13
+  },
+  "summary": "13 strings match \"^(Make New Set\\.\\.\\.|Max resolution|Unwrap|User data|Season|Subsurface%|No materials|Share|Atlas)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 13,
+    "total": 13
+  },
+  "locations": [],
+  "links": []
+}

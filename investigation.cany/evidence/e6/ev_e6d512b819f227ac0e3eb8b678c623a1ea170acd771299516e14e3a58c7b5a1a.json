@@ -1,0 +1,55 @@
+{
+  "id": "ev_e6d512b819f227ac0e3eb8b678c623a1ea170acd771299516e14e3a58c7b5a1a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_browse",
+  "params": {
+    "address": "0x14107bf58",
+    "limit": 1,
+    "offset": 0,
+    "section": ".rdata"
+  },
+  "result": {
+    "strings": [
+      {
+        "address": "0x14107bf50",
+        "encoding": "ascii",
+        "file_offset": 17278288,
+        "references": 1,
+        "section": ".rdata",
+        "text": "Double-sided"
+      }
+    ],
+    "total": 1
+  },
+  "summary": "1 strings (showing 1).",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "strings are read from data sections; text built at run time or stored compressed isn't listed"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14107bf58"
+    }
+  ],
+  "links": []
+}
