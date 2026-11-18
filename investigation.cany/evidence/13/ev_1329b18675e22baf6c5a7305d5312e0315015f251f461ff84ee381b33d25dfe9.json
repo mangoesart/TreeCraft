@@ -1,0 +1,175 @@
+{
+  "id": "ev_1329b18675e22baf6c5a7305d5312e0315015f251f461ff84ee381b33d25dfe9",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Season:Time scale|Season:Start offset|Lightmap:Weight|Season:Descendant offset)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410416a0",
+        "references": [
+          {
+            "from": "0x1400bfe47",
+            "function": "sub_1400bf800"
+          },
+          {
+            "from": "0x1400e739b",
+            "function": "sub_1400e7390"
+          },
+          {
+            "from": "0x14010f24b",
+            "function": "sub_14010f240"
+          },
+          {
+            "from": "0x1401805ab",
+            "function": "sub_1401805a0"
+          },
+          {
+            "from": "0x1401e214b",
+            "function": "sub_1401e2140"
+          },
+          {
+            "from": "0x1401fc35b",
+            "function": "sub_1401fc350"
+          },
+          {
+            "from": "0x14026c7cb",
+            "function": "sub_14026c7c0"
+          },
+          {
+            "from": "0x14028290b",
+            "function": "sub_140282900"
+          },
+          {
+            "from": "0x14037176b",
+            "function": "sub_140371760"
+          },
+          {
+            "from": "0x1403c0d4d",
+            "function": "sub_1403c0c00"
+          },
+          {
+            "from": "0x1403c399b",
+            "function": "sub_1403c3990"
+          },
+          {
+            "from": "0x1403e035b",
+            "function": "sub_1403e0350"
+          },
+          {
+            "from": "0x1405121ab",
+            "function": "sub_1405121a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lightmap:Weight"
+      },
+      {
+        "address": "0x141041948",
+        "references": [
+          {
+            "from": "0x1400c0a20",
+            "function": "sub_1400c0920"
+          },
+          {
+            "from": "0x14010f038",
+            "function": "sub_14010ef60"
+          },
+          {
+            "from": "0x1401803bd",
+            "function": "sub_1401802d0"
+          },
+          {
+            "from": "0x1401e1e55",
+            "function": "sub_1401e1d60"
+          },
+          {
+            "from": "0x1401fc238",
+            "function": "sub_1401fc160"
+          },
+          {
+            "from": "0x14026be40",
+            "function": "sub_14026bd40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:Time scale"
+      },
+      {
+        "address": "0x141041960",
+        "references": [
+          {
+            "from": "0x1400c092d",
+            "function": "sub_1400c0920"
+          },
+          {
+            "from": "0x14010ef6b",
+            "function": "sub_14010ef60"
+          },
+          {
+            "from": "0x1401802dd",
+            "function": "sub_1401802d0"
+          },
+          {
+            "from": "0x1401e1d6d",
+            "function": "sub_1401e1d60"
+          },
+          {
+            "from": "0x1401fc16b",
+            "function": "sub_1401fc160"
+          },
+          {
+            "from": "0x14026bd4d",
+            "function": "sub_14026bd40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:Start offset"
+      },
+      {
+        "address": "0x141046478",
+        "references": [
+          {
+            "from": "0x14010f12b",
+            "function": "sub_14010ef60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:Descendant offset"
+      }
+    ],
+    "total": 4
+  },
+  "summary": "4 strings match \"^(Season:Time scale|Season:Start offset|Lightmap:Weight|Season:Descendant offset)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 4,
+    "total": 4
+  },
+  "locations": [],
+  "links": []
+}

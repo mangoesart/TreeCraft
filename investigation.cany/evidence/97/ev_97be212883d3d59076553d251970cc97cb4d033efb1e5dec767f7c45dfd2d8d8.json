@@ -1,0 +1,459 @@
+{
+  "id": "ev_97be212883d3d59076553d251970cc97cb4d033efb1e5dec767f7c45dfd2d8d8",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "undo|redo"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14106c5e8",
+        "references": [
+          {
+            "from": "0x140295487",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "&Redo"
+      },
+      {
+        "address": "0x14106c5f8",
+        "references": [
+          {
+            "from": "0x1402953d1",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "&Undo"
+      },
+      {
+        "address": "0x141070df0",
+        "references": [
+          {
+            "from": "0x14029b85f",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionRedo_selection"
+      },
+      {
+        "address": "0x141070e08",
+        "references": [
+          {
+            "from": "0x14029b7ea",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionUndo_selection"
+      },
+      {
+        "address": "0x141070fc8",
+        "references": [
+          {
+            "from": "0x14029afb3",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionRedo"
+      },
+      {
+        "address": "0x141070fd8",
+        "references": [
+          {
+            "from": "0x14029af44",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionUndo"
+      },
+      {
+        "address": "0x141073a78",
+        "references": [
+          {
+            "from": "0x1402a684d",
+            "function": "sub_1402a64c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1RedoSelection( )"
+      },
+      {
+        "address": "0x141073a90",
+        "references": [
+          {
+            "from": "0x1402a682a",
+            "function": "sub_1402a64c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1UndoSelection( )"
+      },
+      {
+        "address": "0x141073aa8",
+        "references": [
+          {
+            "from": "0x1402a6807",
+            "function": "sub_1402a64c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotRedo( )"
+      },
+      {
+        "address": "0x141073ab8",
+        "references": [
+          {
+            "from": "0x1402a67e4",
+            "function": "sub_1402a64c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotUndo( )"
+      },
+      {
+        "address": "0x141073fcc",
+        "references": [
+          {
+            "from": "0x1402a9841",
+            "function": "sub_1402a93a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Redo "
+      },
+      {
+        "address": "0x141073fd8",
+        "references": [
+          {
+            "from": "0x1402a97f3",
+            "function": "sub_1402a93a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Nothing to redo"
+      },
+      {
+        "address": "0x141073fe8",
+        "references": [
+          {
+            "from": "0x1402a9705",
+            "function": "sub_1402a93a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Nothing to undo"
+      },
+      {
+        "address": "0x141073ff8",
+        "references": [
+          {
+            "from": "0x1402a9689",
+            "function": "sub_1402a93a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Undo "
+      },
+      {
+        "address": "0x141077508",
+        "references": [
+          {
+            "from": "0x1402c6890",
+            "function": "sub_1402c6320"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Asset Bars/undo_faded.png"
+      },
+      {
+        "address": "0x14107c390",
+        "references": [
+          {
+            "from": "0x1402f7cad",
+            "function": "sub_1402f7c90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the points?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14107c410",
+        "references": [
+          {
+            "from": "0x1402f7edd",
+            "function": "sub_1402f7ec0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the mask?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14107c490",
+        "references": [
+          {
+            "from": "0x1402f805d",
+            "function": "sub_1402f8040"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the color?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14107c510",
+        "references": [
+          {
+            "from": "0x1402f828d",
+            "function": "sub_1402f8270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the Anchors?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14109f300",
+        "references": [
+          {
+            "from": "0x140408c19",
+            "function": "sub_140408bb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1TextureDone()"
+      },
+      {
+        "address": "0x1410a3630",
+        "references": [
+          {
+            "from": "0x14041f757",
+            "function": "sub_14041f6b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error> Null object tried to be added to the undo buffer during a save or load.\n"
+      },
+      {
+        "address": "0x1410a3690",
+        "references": [
+          {
+            "from": "0x14041f72a",
+            "function": "sub_14041f6b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error> Object [%s] tried to be added to the undo buffer during a save or load.\n"
+      },
+      {
+        "address": "0x1410be6c4",
+        "references": [
+          {
+            "from": "0x141796760",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "undo"
+      },
+      {
+        "address": "0x1410be6cc",
+        "references": [
+          {
+            "from": "0x141796768",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "redo"
+      },
+      {
+        "address": "0x1410e5df0",
+        "references": [],
+        "section": ".rdata",
+        "text": "$LuaVersion: Lua 5.3.5  Copyright (C) 1994-2018 Lua.org, PUC-Rio $$LuaAuthors: R. Ierusalimschy, L. H. de Figueiredo, W. Celes $"
+      },
+      {
+        "address": "0x1410ea97a",
+        "references": [],
+        "section": ".rdata",
+        "text": "bSaveForUndo,bForceReload"
+      },
+      {
+        "address": "0x1410ed67c",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotUndo()"
+      },
+      {
+        "address": "0x1410ed687",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotRedo()"
+      },
+      {
+        "address": "0x1410ed692",
+        "references": [],
+        "section": ".rdata",
+        "text": "UndoSelection()"
+      },
+      {
+        "address": "0x1410ed6a2",
+        "references": [],
+        "section": ".rdata",
+        "text": "RedoSelection()"
+      },
+      {
+        "address": "0x1410edfcc",
+        "references": [],
+        "section": ".rdata",
+        "text": "bSaveForUndo,bForceReload"
+      },
+      {
+        "address": "0x1410f171e",
+        "references": [],
+        "section": ".rdata",
+        "text": "TextureDone()"
+      },
+      {
+        "address": "0x1410ff630",
+        "references": [
+          {
+            "from": "0x141107ec0",
+            "function": null
+          },
+          {
+            "from": "0x1417a42f8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaf Credo 80"
+      },
+      {
+        "address": "0x1410ff640",
+        "references": [
+          {
+            "from": "0x141107e80",
+            "function": null
+          },
+          {
+            "from": "0x1417a42f0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaf Credo 60"
+      },
+      {
+        "address": "0x1410ff650",
+        "references": [
+          {
+            "from": "0x141107e40",
+            "function": null
+          },
+          {
+            "from": "0x1417a42e8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaf Credo 50"
+      },
+      {
+        "address": "0x1410ff660",
+        "references": [
+          {
+            "from": "0x141107e00",
+            "function": null
+          },
+          {
+            "from": "0x1417a42e0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaf Credo 40"
+      },
+      {
+        "address": "0x141101e20",
+        "references": [
+          {
+            "from": "0x140653974",
+            "function": "sub_1406538b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Credo 50"
+      },
+      {
+        "address": "0x141384070",
+        "references": [
+          {
+            "from": "0x140a87611",
+            "function": "sub_140a86b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CurveFilterCstKeyRedOPrec"
+      },
+      {
+        "address": "0x14139b630",
+        "references": [
+          {
+            "from": "0x140b1001f",
+            "function": "sub_140b0fff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export|IncludeGrp|Animation|CurveFilter|CurveFilterApplyCstKeyRed|CurveFilterCstKeyRedOPrec"
+      },
+      {
+        "address": "0x14139b7b0",
+        "references": [
+          {
+            "from": "0x140b1007f",
+            "function": "sub_140b0fff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Import|IncludeGrp|Animation|CurveFilter|CurveFilterApplyCstKeyRed|CurveFilterCstKeyRedOPrec"
+      }
+    ],
+    "total": 40
+  },
+  "summary": "40 strings match \"undo|redo\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 40,
+    "total": 40
+  },
+  "locations": [],
+  "links": []
+}

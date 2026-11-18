@@ -1,0 +1,347 @@
+{
+  "id": "ev_5ee591732927564d65fc24994867d30963d4457c362ac2be2b6099a532fe8424",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Variance Settings|Uniform \\(random\\)|Cohesi|^Gaussian|Uniform \\(|Distribution"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141047458",
+        "references": [
+          {
+            "from": "0x14012fe03",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Distribution style"
+      },
+      {
+        "address": "0x141047480",
+        "references": [
+          {
+            "from": "0x14012fce7",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Distribution"
+      },
+      {
+        "address": "0x14105d6e0",
+        "references": [
+          {
+            "from": "0x140216c36",
+            "function": "sub_140216130"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error>[INTERNAL ERROR - %s] Distribution of steps invalid, no children created [steps %d [%d], distribution %d].\n"
+      },
+      {
+        "address": "0x141060368",
+        "references": [
+          {
+            "from": "0x14022e7dc",
+            "function": "sub_14022de20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotCohesiveVariances( )"
+      },
+      {
+        "address": "0x141060388",
+        "references": [
+          {
+            "from": "0x14022e7bf",
+            "function": "sub_14022de20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All cohesive"
+      },
+      {
+        "address": "0x14106c8c0",
+        "references": [
+          {
+            "from": "0x140296e58",
+            "function": "sub_140296ce0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; color:#5e5e5e;\">For more information about SpeedTree®, please visit</span><span style=\" font-size:8pt;\"> </span><a href=\"http://www.speedtree.com\"><span style=\" font-size:8pt; text-decoration: underline; color:#629047;\">www.speedtree.com</span></a><span style=\" font-size:8pt; color:#5e5e5e;\">.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; color:#5e5e5e;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; color:#5e5e5e;\">For sales and licensing information please contact </span><a href=\"mailto:sales@idvinc.com\"><span style=\" font-size:8pt; text-decoration: underline; color:#629047;\">sales@idvinc.com</span></a><span style=\" font-size:8pt; color:#5e5e5e;\">.</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; color:#5e5e5e;\"><br /></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; color:#5e5e5e;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600; color:#5e5e5e;\">Warning:</span><span style=\" font-size:8pt; color:#5e5e5e;\"> This computer program is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this program, or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law.</span></p></body></html>"
+      },
+      {
+        "address": "0x141096f50",
+        "references": [
+          {
+            "from": "0x1403a7ed8",
+            "function": "sub_1403a74f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": ".Distribution"
+      },
+      {
+        "address": "0x141097128",
+        "references": [
+          {
+            "from": "0x1403a95a2",
+            "function": "sub_1403a9360"
+          },
+          {
+            "from": "0x1403ab2b5",
+            "function": "sub_1403ab050"
+          },
+          {
+            "from": "0x1404f588d",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Distribution"
+      },
+      {
+        "address": "0x141097138",
+        "references": [
+          {
+            "from": "0x1403a9556",
+            "function": "sub_1403a9360"
+          },
+          {
+            "from": "0x1403ab267",
+            "function": "sub_1403ab050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CohesionOffset"
+      },
+      {
+        "address": "0x141097148",
+        "references": [
+          {
+            "from": "0x1403a950a",
+            "function": "sub_1403a9360"
+          },
+          {
+            "from": "0x1403ab214",
+            "function": "sub_1403ab050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CohesionScale"
+      },
+      {
+        "address": "0x141097158",
+        "references": [
+          {
+            "from": "0x1403a94be",
+            "function": "sub_1403a9360"
+          },
+          {
+            "from": "0x1403ab1c3",
+            "function": "sub_1403ab050"
+          },
+          {
+            "from": "0x1404f59d6",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cohesion"
+      },
+      {
+        "address": "0x1410b0890",
+        "references": [
+          {
+            "from": "0x1404f5a1c",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cohesive"
+      },
+      {
+        "address": "0x1410b08a0",
+        "references": [
+          {
+            "from": "0x1404f5904",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Uniform (random)"
+      },
+      {
+        "address": "0x1410b08b8",
+        "references": [
+          {
+            "from": "0x1404f58de",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gaussian (bell curve)"
+      },
+      {
+        "address": "0x1410b0af8",
+        "references": [
+          {
+            "from": "0x1404f6d84",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwCohesionOffset"
+      },
+      {
+        "address": "0x1410b0b28",
+        "references": [
+          {
+            "from": "0x1404f6a17",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwCohesionScale"
+      },
+      {
+        "address": "0x1410b0b58",
+        "references": [
+          {
+            "from": "0x1404f6628",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwCohesion"
+      },
+      {
+        "address": "0x1410b0b68",
+        "references": [
+          {
+            "from": "0x1404f62a5",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwDistribution"
+      },
+      {
+        "address": "0x1410b0bd0",
+        "references": [
+          {
+            "from": "0x1404f7065",
+            "function": "sub_1404f6e60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotDistributionChanged(int)"
+      },
+      {
+        "address": "0x1410b0c98",
+        "references": [
+          {
+            "from": "0x1404f72e5",
+            "function": "sub_1404f72c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Variance Settings"
+      },
+      {
+        "address": "0x1410ec597",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotCohesiveVariances()"
+      },
+      {
+        "address": "0x1410f20ac",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotDistributionChanged(int)"
+      },
+      {
+        "address": "0x141365be8",
+        "references": [
+          {
+            "from": "0x141a86430",
+            "function": null
+          },
+          {
+            "from": "0x141a86438",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "setct-BCIDistributionTBS"
+      },
+      {
+        "address": "0x141368b38",
+        "references": [
+          {
+            "from": "0x141a81690",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "X509v3 CRL Distribution Points"
+      },
+      {
+        "address": "0x141368b58",
+        "references": [
+          {
+            "from": "0x141a81688",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "crlDistributionPoints"
+      },
+      {
+        "address": "0x1413b3998",
+        "references": [
+          {
+            "from": "0x141a8f738",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "SpotDistributionChooser"
+      }
+    ],
+    "total": 26
+  },
+  "summary": "26 strings match \"Variance Settings|Uniform \\(random\\)|Cohesi|^Gaussian|Uniform \\(|Distribution\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 26,
+    "total": 26
+  },
+  "locations": [],
+  "links": []
+}

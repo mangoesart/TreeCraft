@@ -1,0 +1,183 @@
+{
+  "id": "ev_d5bf0b3a5f07560166e8bda046616a7d8b865dc70d2a44155bdc45ab9d8a5111",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "literal",
+    "offset": 0,
+    "pattern": "recent"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14106c678",
+        "references": [
+          {
+            "from": "0x14029512e",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "&Recent files"
+      },
+      {
+        "address": "0x141071038",
+        "references": [
+          {
+            "from": "0x14029ad34",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionRecentFiles"
+      },
+      {
+        "address": "0x1410732c8",
+        "references": [
+          {
+            "from": "0x1402a4915",
+            "function": "sub_1402a4520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotRecentFile( )"
+      },
+      {
+        "address": "0x1410732f0",
+        "references": [
+          {
+            "from": "0x1402a4598",
+            "function": "sub_1402a4520"
+          },
+          {
+            "from": "0x1402a778c",
+            "function": "sub_1402a76e0"
+          },
+          {
+            "from": "0x1402a7904",
+            "function": "sub_1402a76e0"
+          },
+          {
+            "from": "0x1402a81b9",
+            "function": "sub_1402a7f00"
+          },
+          {
+            "from": "0x1402a8248",
+            "function": "sub_1402a7f00"
+          },
+          {
+            "from": "0x1402c7e49",
+            "function": "sub_1402c7d80"
+          },
+          {
+            "from": "0x1402c7ed5",
+            "function": "sub_1402c7d80"
+          },
+          {
+            "from": "0x1402c91c7",
+            "function": "sub_1402c8c00"
+          },
+          {
+            "from": "0x1402c9421",
+            "function": "sub_1402c8c00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "recentFileList"
+      },
+      {
+        "address": "0x1410778c8",
+        "references": [
+          {
+            "from": "0x1402c6afd",
+            "function": "sub_1402c6a40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Open a recent model..."
+      },
+      {
+        "address": "0x14107a3c8",
+        "references": [
+          {
+            "from": "0x1402e5c50",
+            "function": "sub_1402e5a90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Recent"
+      },
+      {
+        "address": "0x14107a8d8",
+        "references": [
+          {
+            "from": "0x1402e6eae",
+            "function": "sub_1402e6660"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pRecent"
+      },
+      {
+        "address": "0x14107b078",
+        "references": [
+          {
+            "from": "0x1402ea952",
+            "function": "sub_1402e9c50"
+          },
+          {
+            "from": "0x1402ec0dc",
+            "function": "sub_1402ebfc0"
+          },
+          {
+            "from": "0x1402ec1f5",
+            "function": "sub_1402ebfc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "OpenDialog/Recents"
+      },
+      {
+        "address": "0x1410ed601",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotRecentFile()"
+      },
+      {
+        "address": "0x1410edde6",
+        "references": [],
+        "section": ".rdata",
+        "text": "UpdateRecentFileMenu()"
+      }
+    ],
+    "total": 10
+  },
+  "summary": "10 strings match \"recent\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 10,
+    "total": 10
+  },
+  "locations": [],
+  "links": []
+}

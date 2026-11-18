@@ -1,3 +1,3 @@
 # Handoff
 
-Materials panel now follows fn 0x140068ed0: picker hides sets; Meshes sub-tab row 0 = cutout mesh (no delete), extra rows have X; Variation Amount slider is squared (x10000). Edit... on an empty row is estimated (GenerateMesh not read; its implementation is reachable only via the CMaterialPane meta-call). Note: a TreeCraft window the person opened (pid 32968) locked target/debug/treecraft.exe; the old file was renamed to treecraft-running-old.exe and can be deleted once that window is closed. Open: spine-walk formulas unk_cb364103d504cff6.
+Picture 44 done: Node Editor settings merged into Themes > Node Editor (Preferences pages: Themes, Viewport, Wind, Global); person figure redrawn as an ordinary standing adult; shadow is one hard solid pass between ground and grid (no flicker); shadow-side "wrap" light (default 0.3) and 5 game-style shadow presets in Light > Shadows. Build and rebuild_check pass. Lighting not persisted yet.

@@ -1418,6 +1418,7 @@ dependencies = [
 name = "treecraft"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "image 0.25.10",
  "macroquad",
  "rfd",

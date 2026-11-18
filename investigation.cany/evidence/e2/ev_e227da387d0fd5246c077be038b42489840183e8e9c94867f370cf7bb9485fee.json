@@ -1,0 +1,503 @@
+{
+  "id": "ev_e227da387d0fd5246c077be038b42489840183e8e9c94867f370cf7bb9485fee",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 100,
+      "name": "referenced_strings",
+      "offset": 0
+    },
+    "source": {
+      "evidence_id": "ev_dbd4f430f2d6fd6d248455e60d9abb2ec9e1a7acb59ce5550e201807bd9f30eb",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": true,
+      "examined": 89,
+      "next_offset": null,
+      "status": "page",
+      "total": 89
+    },
+    "from_evidence": "ev_dbd4f430f2d6fd6d248455e60d9abb2ec9e1a7acb59ce5550e201807bd9f30eb",
+    "from_tool": "native_function_study",
+    "shown": {
+      "items": [
+        {
+          "address": "0x14106c730",
+          "from": "0x140294d8f",
+          "text": "SpeedTree Modeler"
+        },
+        {
+          "address": "0x14106c720",
+          "from": "0x140294d96",
+          "text": "MainWindow"
+        },
+        {
+          "address": "0x14106c714",
+          "from": "0x140294ddc",
+          "text": "&New"
+        },
+        {
+          "address": "0x14106c70c",
+          "from": "0x140294e29",
+          "text": "Ctrl+N"
+        },
+        {
+          "address": "0x14106c700",
+          "from": "0x140294e99",
+          "text": "&Open..."
+        },
+        {
+          "address": "0x14106c6e0",
+          "from": "0x140294ee1",
+          "text": "Open a new SpeedTree file"
+        },
+        {
+          "address": "0x14106c6d8",
+          "from": "0x140294f2f",
+          "text": "Ctrl+O"
+        },
+        {
+          "address": "0x14106c6d0",
+          "from": "0x140294f9a",
+          "text": "&Close"
+        },
+        {
+          "address": "0x14106c6c8",
+          "from": "0x140294fe2",
+          "text": "Ctrl+W"
+        },
+        {
+          "address": "0x14106c6c0",
+          "from": "0x14029504d",
+          "text": "E&xit"
+        },
+        {
+          "address": "0x14106c698",
+          "from": "0x14029509b",
+          "text": "Exit the SpeedTree Modeler application"
+        },
+        {
+          "address": "0x14106c688",
+          "from": "0x1402950e0",
+          "text": "&Preferences..."
+        },
+        {
+          "address": "0x14106c678",
+          "from": "0x14029512e",
+          "text": "&Recent files"
+        },
+        {
+          "address": "0x14106c66c",
+          "from": "0x140295173",
+          "text": "&Save"
+        },
+        {
+          "address": "0x14106c664",
+          "from": "0x1402951c1",
+          "text": "Ctrl+S"
+        },
+        {
+          "address": "0x14106c650",
+          "from": "0x140295229",
+          "text": "Sa&ve incremental"
+        },
+        {
+          "address": "0x14106c640",
+          "from": "0x14029526e",
+          "text": "S&ave as..."
+        },
+        {
+          "address": "0x14106c630",
+          "from": "0x1402952bc",
+          "text": "Ctrl+Shift+S"
+        },
+        {
+          "address": "0x14106c618",
+          "from": "0x140295324",
+          "text": "Save as &with assets..."
+        },
+        {
+          "address": "0x14106c600",
+          "from": "0x140295369",
+          "text": "Ctrl+Alt+Shift+S"
+        },
+        {
+          "address": "0x14106c5f8",
+          "from": "0x1402953d1",
+          "text": "&Undo"
+        },
+        {
+          "address": "0x14106c5f0",
+          "from": "0x14029541f",
+          "text": "Ctrl+Z"
+        },
+        {
+          "address": "0x14106c5e8",
+          "from": "0x140295487",
+          "text": "&Redo"
+        },
+        {
+          "address": "0x14106c5e0",
+          "from": "0x1402954cc",
+          "text": "Ctrl+Y"
+        },
+        {
+          "address": "0x14106c5d0",
+          "from": "0x140295534",
+          "text": "&User manual..."
+        },
+        {
+          "address": "0x14106c5b0",
+          "from": "0x1402955ea",
+          "text": "&About SpeedTree Modeler..."
+        },
+        {
+          "address": "0x14106c598",
+          "from": "0x14029562f",
+          "text": "&Cascade tree windows"
+        },
+        {
+          "address": "0x14106c580",
+          "from": "0x14029567d",
+          "text": "&Tile tree windows"
+        },
+        {
+          "address": "0x14106c570",
+          "from": "0x1402956c2",
+          "text": "&Properties"
+        },
+        {
+          "address": "0x14106c558",
+          "from": "0x140295713",
+          "text": "&Generation editor"
+        },
+        {
+          "address": "0x14106c548",
+          "from": "0x14029575b",
+          "text": "&Materials"
+        },
+        {
+          "address": "0x14106c540",
+          "from": "0x1402957ac",
+          "text": "M&eshes"
+        },
+        {
+          "address": "0x14106c530",
+          "from": "0x1402957f4",
+          "text": "&Displacements"
+        },
+        {
+          "address": "0x14106c528",
+          "from": "0x140295845",
+          "text": "M&asks"
+        },
+        {
+          "address": "0x14106c520",
+          "from": "0x14029588d",
+          "text": "&Output"
+        },
+        {
+          "address": "0x14106c500",
+          "from": "0x1402958de",
+          "text": "&Render ambient occlusion"
+        },
+        {
+          "address": "0x14106c4d8",
+          "from": "0x1402959a3",
+          "text": "&Generate collision primitives..."
+        },
+        {
+          "address": "0x14106c4b8",
+          "from": "0x1402959f4",
+          "text": "C&lear ambient occlusion"
+        },
+        {
+          "address": "0x14106c4a0",
+          "from": "0x140295a45",
+          "text": "&Reset layout..."
+        },
+        {
+          "address": "0x14106c480",
+          "from": "0x140295a96",
+          "text": "&Arbitrary scene scale..."
+        },
+        {
+          "address": "0x14106c460",
+          "from": "0x140295ae7",
+          "text": "&Scene unit conversion..."
+        },
+        {
+          "address": "0x14106c450",
+          "from": "0x140295b38",
+          "text": "U&ndo selection"
+        },
+        {
+          "address": "0x14106c448",
+          "from": "0x140295b89",
+          "text": "Alt+Z"
+        },
+        {
+          "address": "0x14106c438",
+          "from": "0x140295bfd",
+          "text": "R&edo selection"
+        },
+        {
+          "address": "0x14106c42c",
+          "from": "0x140295c48",
+          "text": "Alt+Y"
+        },
+        {
+          "address": "0x141035084",
+          "from": "0x140295cb0",
+          "text": "Normal"
+        },
+        {
+          "address": "0x14106c420",
+          "from": "0x140295cfb",
+          "text": "Full screen"
+        },
+        {
+          "address": "0x14106c408",
+          "from": "0x140295d46",
+          "text": "Full screen, no bars"
+        },
+        {
+          "address": "0x14106c3e8",
+          "from": "0x140295d91",
+          "text": "Ex&port selected as mesh..."
+        },
+        {
+          "address": "0x14106c3d8",
+          "from": "0x140295dd9",
+          "text": "&Export mesh..."
+        },
+        {
+          "address": "0x14106c3d0",
+          "from": "0x140295e21",
+          "text": "Ctrl+E"
+        },
+        {
+          "address": "0x14106c3b0",
+          "from": "0x140295e83",
+          "text": "Export world building data..."
+        },
+        {
+          "address": "0x14106c388",
+          "from": "0x140295ecb",
+          "text": "Switch to Substances where possible"
+        },
+        {
+          "address": "0x14106c360",
+          "from": "0x140295f13",
+          "text": "Cr&eate collection from selection"
+        },
+        {
+          "address": "0x141053a48",
+          "from": "0x140295f5b",
+          "text": "Timeline"
+        },
+        {
+          "address": "0x14106c348",
+          "from": "0x140295fa3",
+          "text": "BGD00 Cracked!"
+        },
+        {
+          "address": "0x14106c330",
+          "from": "0x140295feb",
+          "text": "&Shop for models..."
+        },
+        {
+          "address": "0x14106c318",
+          "from": "0x140296033",
+          "text": "&Purchase a license..."
+        },
+        {
+          "address": "0x14106c300",
+          "from": "0x14029607b",
+          "text": "Export material..."
+        },
+        {
+          "address": "0x14106c2e0",
+          "from": "0x140296125",
+          "text": "&Check for updates..."
+        },
+        {
+          "address": "0x14106c2c8",
+          "from": "0x14029616d",
+          "text": "Import mesh asset..."
+        },
+        {
+          "address": "0x14106c2a8",
+          "from": "0x1402961b5",
+          "text": "Import material asset..."
+        },
+        {
+          "address": "0x14106c298",
+          "from": "0x140296206",
+          "text": "Wind wizard..."
+        },
+        {
+          "address": "0x14106c280",
+          "from": "0x140296257",
+          "text": "Video tutorials..."
+        },
+        {
+          "address": "0x14106c268",
+          "from": "0x1402962a8",
+          "text": "Growth wizard..."
+        },
+        {
+          "address": "0x14106c248",
+          "from": "0x1402962f9",
+          "text": "Export image sequence..."
+        },
+        {
+          "address": "0x14106c230",
+          "from": "0x14029634a",
+          "text": "Remove unused assets"
+        },
+        {
+          "address": "0x14106c218",
+          "from": "0x14029639b",
+          "text": "Reset lightmap scalars"
+        },
+        {
+          "address": "0x14106c1f0",
+          "from": "0x1402963ec",
+          "text": "Support for UE4 integration issues..."
+        },
+        {
+          "address": "0x14106c1d0",
+          "from": "0x14029643d",
+          "text": "Support for modeling issues..."
+        },
+        {
+          "address": "0x14106c1b0",
+          "from": "0x14029648e",
+          "text": "Edit Tree Window properties..."
+        },
+        {
+          "address": "0x14106c198",
+          "from": "0x1402964df",
+          "text": "Follow us on Twitter..."
+        },
+        {
+          "address": "0x14106c180",
+          "from": "0x140296530",
+          "text": "YouTube channel..."
+        },
+        {
+          "address": "0x14106c170",
+          "from": "0x140296581",
+          "text": "Facebook..."
+        },
+        {
+          "address": "0x14106c158",
+          "from": "0x1402965d2",
+          "text": "SpeedTree.com..."
+        },
+        {
+          "address": "0x14106c148",
+          "from": "0x140296623",
+          "text": "Material sets"
+        },
+        {
+          "address": "0x14106c138",
+          "from": "0x140296674",
+          "text": "Render photo..."
+        },
+        {
+          "address": "0x14106c120",
+          "from": "0x140296739",
+          "text": "Export image..."
+        },
+        {
+          "address": "0x14106c108",
+          "from": "0x14029678a",
+          "text": "Import cameras from FBX"
+        },
+        {
+          "address": "0x14106c0e8",
+          "from": "0x1402967db",
+          "text": "Import camera from FBX..."
+        },
+        {
+          "address": "0x14106c0e0",
+          "from": "0x14029682c",
+          "text": "&File"
+        },
+        {
+          "address": "0x14106c0d8",
+          "from": "0x14029687d",
+          "text": "&Edit"
+        },
+        {
+          "address": "0x14106c0d0",
+          "from": "0x1402968ce",
+          "text": "&Tools"
+        },
+        {
+          "address": "0x14106c0c8",
+          "from": "0x14029691f",
+          "text": "&Window"
+        },
+        {
+          "address": "0x14106c0c0",
+          "from": "0x140296970",
+          "text": "&Assets"
+        },
+        {
+          "address": "0x14106c0b8",
+          "from": "0x1402969c1",
+          "text": "Layout"
+        },
+        {
+          "address": "0x14106c0b0",
+          "from": "0x140296a63",
+          "text": "&Help "
+        },
+        {
+          "address": "0x14106c0a8",
+          "from": "0x140296ab4",
+          "text": "Output"
+        },
+        {
+          "address": "0x141050dd8",
+          "from": "0x140296b05",
+          "text": "Generation"
+        }
+      ],
+      "list": "referenced_strings",
+      "offset": 0,
+      "total": 89
+    }
+  },
+  "summary": "Part of native_function_study evidence (page).",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 89,
+    "total": 89
+  },
+  "locations": [],
+  "links": [
+    "ev_dbd4f430f2d6fd6d248455e60d9abb2ec9e1a7acb59ce5550e201807bd9f30eb"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "ev_8e40781d2a4bb4156887747bc17aca44033a76c0aec9ad1a26faa533007ff3d8",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_disassemble",
+  "params": {
+    "function": "0x14010f240"
+  },
+  "result": {
+    "assembly": "sub_14010f240:\n  0x14010f240  4883ec28             sub rsp, 0x28\n  0x14010f244  488b0dcd9f9801       mov rcx, [0x141a99218]\n  0x14010f24b  488d154e24f300       lea rdx, [0x1410416a0]  ; \"Lightmap:Weight\"\n  0x14010f252  41b80f000000         mov r8d, 0xf\n  0x14010f258  4881c1f83b0000       add rcx, 0x3bf8\n  0x14010f25f  e81cb7f2ff           call 0x14003a980  ; sub_14003a980\n  0x14010f264  4c8b1dad9f9801       mov r11, [0x141a99218]\n  0x14010f26b  f30f100d81404301     movss xmm1, [0x1415432f4]\n  0x14010f273  41c783283c000004000000 mov dword ptr [r11+0x3c28], 4\n  0x14010f27e  488b05939f9801       mov rax, [0x141a99218]\n  0x14010f285  8088543c000002       or byte ptr [rax+0x3c54], 2\n  0x14010f28c  488b05859f9801       mov rax, [0x141a99218]\n  0x14010f293  8088543c000010       or byte ptr [rax+0x3c54], 0x10\n  0x14010f29a  488b05779f9801       mov rax, [0x141a99218]\n  0x14010f2a1  8088543c000001       or byte ptr [rax+0x3c54], 1\n  0x14010f2a8  488b05699f9801       mov rax, [0x141a99218]\n  0x14010f2af  8088543c000004       or byte ptr [rax+0x3c54], 4\n  0x14010f2b6  488b055b9f9801       mov rax, [0x141a99218]\n  0x14010f2bd  c7802c3c000001000000 mov dword ptr [rax+0x3c2c], 1\n  0x14010f2c7  488b054a9f9801       mov rax, [0x141a99218]\n  0x14010f2ce  c780343c000000000000 mov dword ptr [rax+0x3c34], 0\n  0x14010f2d8  488b05399f9801       mov rax, [0x141a99218]\n  0x14010f2df  c780383c0000ffff7f7f mov dword ptr [rax+0x3c38], 0x7f7fffff\n  0x14010f2e9  488b05289f9801       mov rax, [0x141a99218]\n  0x14010f2f0  8088543c000040       or byte ptr [rax+0x3c54], 0x40\n  0x14010f2f7  488b051a9f9801       mov rax, [0x141a99218]\n  0x14010f2fe  8088543c000080       or byte ptr [rax+0x3c54], 0x80\n  0x14010f305  488b0d0c9f9801       mov rcx, [0x141a99218]\n  0x14010f30c  4881c1203c0000       add rcx, 0x3c20\n  0x14010f313  e818524900           call 0x1405a4530\n  0x14010f318  488b0df99e9801       mov rcx, [0x141a99218]\n  0x14010f31f  0f57c9               xorps xmm1, xmm1\n  0x14010f322  4881c1243c0000       add rcx, 0x3c24\n  0x14010f329  e802524900           call 0x1405a4530\n  0x14010f32e  4c8b1de39e9801       mov r11, [0x141a99218]\n  0x14010f335  41c783403c000001000000 mov dword ptr [r11+0x3c40], 1\n  0x14010f340  488b05d19e9801       mov rax, [0x141a99218]\n  0x14010f347  c780443c000009000000 mov dword ptr [rax+0x3c44], 9\n  0x14010f351  4883c428             add rsp, 0x28\n  0x14010f355  c3                   ret\n",
+    "entry": "0x14010f240",
+    "function": "sub_14010f240",
+    "instructions": 40
+  },
+  "summary": "40 instructions of sub_14010f240.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 40,
+    "total": 40
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14010f240"
+    }
+  ],
+  "links": []
+}

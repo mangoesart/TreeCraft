@@ -1,0 +1,544 @@
+{
+  "id": "ev_45754543fd47185f22ae15d568ef57b5e9d7ab79a6880d4c51261a6e66f4e23e",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Warn about node edit|Use multiple processors|native file dialogs|Notify in console|Display scaling|Reset General Preferences|Property Bar|Tree Window"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102e1d0",
+        "references": [
+          {
+            "from": "0x14004878c",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Property Bar"
+      },
+      {
+        "address": "0x14102e1e0",
+        "references": [
+          {
+            "from": "0x140048744",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Reset Property Bar Preferences"
+      },
+      {
+        "address": "0x14102e278",
+        "references": [
+          {
+            "from": "0x1400483e8",
+            "function": "sub_140047920"
+          },
+          {
+            "from": "0x140526f29",
+            "function": "sub_140526f10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Tree Window"
+      },
+      {
+        "address": "0x14102e288",
+        "references": [
+          {
+            "from": "0x1400483a0",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Reset Tree Window Preferences"
+      },
+      {
+        "address": "0x14102e3b0",
+        "references": [
+          {
+            "from": "0x140047cf7",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Reset General Preferences"
+      },
+      {
+        "address": "0x14102e3e0",
+        "references": [
+          {
+            "from": "0x140047c27",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Notify in console"
+      },
+      {
+        "address": "0x14102e410",
+        "references": [
+          {
+            "from": "0x140047b1c",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Display scaling"
+      },
+      {
+        "address": "0x14102e420",
+        "references": [
+          {
+            "from": "0x140047a9a",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Always use native file dialogs"
+      },
+      {
+        "address": "0x14102e440",
+        "references": [
+          {
+            "from": "0x140047a25",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Use multiple processors"
+      },
+      {
+        "address": "0x14102e458",
+        "references": [
+          {
+            "from": "0x1400479a3",
+            "function": "sub_140047920"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Warn about node edit losses"
+      },
+      {
+        "address": "0x141044ae8",
+        "references": [
+          {
+            "from": "0x1400f1afa",
+            "function": "sub_1400f1ab0"
+          },
+          {
+            "from": "0x140136e86",
+            "function": "sub_140136e00"
+          },
+          {
+            "from": "0x140177eca",
+            "function": "sub_140177e80"
+          },
+          {
+            "from": "0x140238457",
+            "function": "sub_140238400"
+          },
+          {
+            "from": "0x14025941a",
+            "function": "sub_1402593d0"
+          },
+          {
+            "from": "0x14028b40a",
+            "function": "sub_14028b3c0"
+          },
+          {
+            "from": "0x14038eedc",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x1403d9eca",
+            "function": "sub_1403d9e80"
+          },
+          {
+            "from": "0x140406eda",
+            "function": "sub_140406e90"
+          },
+          {
+            "from": "0x14052e674",
+            "function": "sub_14052e620"
+          },
+          {
+            "from": "0x1405300fb",
+            "function": "sub_1405300a0"
+          },
+          {
+            "from": "0x140531666",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x1405328e4",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/"
+      },
+      {
+        "address": "0x14105fcb0",
+        "references": [
+          {
+            "from": "0x14022d6e5",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/Note.png"
+      },
+      {
+        "address": "0x14105fcd8",
+        "references": [
+          {
+            "from": "0x14022d679",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/warning.png"
+      },
+      {
+        "address": "0x14105fd00",
+        "references": [
+          {
+            "from": "0x14022d60d",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/error.png"
+      },
+      {
+        "address": "0x141060738",
+        "references": [
+          {
+            "from": "0x140230926",
+            "function": "sub_140230610"
+          },
+          {
+            "from": "0x140537897",
+            "function": "sub_140537430"
+          },
+          {
+            "from": "0x14053b208",
+            "function": "sub_14053ab20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/force-mesh.png"
+      },
+      {
+        "address": "0x141069eb0",
+        "references": [
+          {
+            "from": "0x1402bfe45",
+            "function": "sub_1402bf960"
+          },
+          {
+            "from": "0x140306567",
+            "function": "sub_140306360"
+          },
+          {
+            "from": "0x1403a69a2",
+            "function": "sub_1403a68e0"
+          },
+          {
+            "from": "0x1403b3ddf",
+            "function": "sub_1403b3d10"
+          },
+          {
+            "from": "0x1403b7bdf",
+            "function": "sub_1403b7b40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/"
+      },
+      {
+        "address": "0x14106c1b0",
+        "references": [
+          {
+            "from": "0x14029648e",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Edit Tree Window properties..."
+      },
+      {
+        "address": "0x14106c580",
+        "references": [
+          {
+            "from": "0x14029567d",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "&Tile tree windows"
+      },
+      {
+        "address": "0x14106c598",
+        "references": [
+          {
+            "from": "0x14029562f",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "&Cascade tree windows"
+      },
+      {
+        "address": "0x14107d8c0",
+        "references": [
+          {
+            "from": "0x140308abd",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_forum.png"
+      },
+      {
+        "address": "0x14107d918",
+        "references": [
+          {
+            "from": "0x1403088ff",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_shop.png"
+      },
+      {
+        "address": "0x14107d968",
+        "references": [
+          {
+            "from": "0x140308788",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_video_tutorials.png"
+      },
+      {
+        "address": "0x14107d9d8",
+        "references": [
+          {
+            "from": "0x1403085dc",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_documentation.png"
+      },
+      {
+        "address": "0x14107da40",
+        "references": [
+          {
+            "from": "0x14030829f",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_browse.png"
+      },
+      {
+        "address": "0x14107da88",
+        "references": [
+          {
+            "from": "0x1403080e6",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_open.png"
+      },
+      {
+        "address": "0x14107dad0",
+        "references": [
+          {
+            "from": "0x140307f20",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_new.png"
+      },
+      {
+        "address": "0x14107db08",
+        "references": [
+          {
+            "from": "0x140307bb9",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_randomize.png"
+      },
+      {
+        "address": "0x14107db60",
+        "references": [
+          {
+            "from": "0x1403079d2",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_export.png"
+      },
+      {
+        "address": "0x14107dbb0",
+        "references": [
+          {
+            "from": "0x14030783b",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_ao.png"
+      },
+      {
+        "address": "0x14107dbf8",
+        "references": [
+          {
+            "from": "0x140307659",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_wind_wizard.png"
+      },
+      {
+        "address": "0x14107dc68",
+        "references": [
+          {
+            "from": "0x1403072ca",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_tree.png"
+      },
+      {
+        "address": "0x14107dcd0",
+        "references": [
+          {
+            "from": "0x14030713d",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_window.png"
+      },
+      {
+        "address": "0x14107dd20",
+        "references": [
+          {
+            "from": "0x140306f81",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_light.png"
+      },
+      {
+        "address": "0x14107dd70",
+        "references": [
+          {
+            "from": "0x140306dca",
+            "function": "sub_140306360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/unselected_fan.png"
+      },
+      {
+        "address": "0x141099400",
+        "references": [
+          {
+            "from": "0x1403b5fb5",
+            "function": "sub_1403b5b70"
+          },
+          {
+            "from": "0x1403b9f01",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Property Bar/RandomizeButton.png"
+      },
+      {
+        "address": "0x141099990",
+        "references": [
+          {
+            "from": "0x1403bb133",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "background-image:url('../app_data/Property Bar/VarianceIcon.png'); background-position:left; background-repeat:no-repeat; padding-left:12px;"
+      },
+      {
+        "address": "0x1410b6e88",
+        "references": [],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/force-seasonlight.png"
+      },
+      {
+        "address": "0x1410b6ec0",
+        "references": [],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/force-return.png"
+      },
+      {
+        "address": "0x1410b6ef8",
+        "references": [],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/force-planar.png"
+      },
+      {
+        "address": "0x1410b6f30",
+        "references": [],
+        "section": ".rdata",
+        "text": "/../app_data/Tree Window ToolBar/force-curl.png"
+      }
+    ],
+    "total": 54
+  },
+  "summary": "54 strings match \"Warn about node edit|Use multiple processors|native file dialogs|Notify in console|Display scaling|Reset General Preferences|Property Bar|Tree Window\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 40,
+    "total": 54,
+    "next_offset": 40
+  },
+  "locations": [],
+  "links": []
+}

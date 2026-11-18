@@ -1,0 +1,45 @@
+{
+  "id": "ev_37d0369b75582f557c2ad9e6df23a91dc0bdde383475212a10a171ef46bb032a",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14010ef60"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14010ef60",
+    "function": "FUN_14010ef60",
+    "pseudo_code": "\r\nvoid FUN_14010ef60(void)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  FUN_14003a980(DAT_141a99218 + 0x4528,\"Season:Start offset\",0x13);\r\n  *(undefined4 *)(DAT_141a99218 + 0x4558) = 4;\r\n  *(byte *)(DAT_141a99218 + 0x4584) = *(byte *)(DAT_141a99218 + 0x4584) | 2;\r\n  *(byte *)(DAT_141a99218 + 0x4584) = *(byte *)(DAT_141a99218 + 0x4584) | 0x10;\r\n  *(undefined4 *)(DAT_141a99218 + 0x455c) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x4564) = 0xbe800000;\r\n  *(undefined4 *)(DAT_141a99218 + 0x4568) = 0x3e800000;\r\n  *(byte *)(DAT_141a99218 + 0x4584) = *(byte *)(DAT_141a99218 + 0x4584) & 0xbf;\r\n  *(byte *)(DAT_141a99218 + 0x4584) = *(byte *)(DAT_141a99218 + 0x4584) | 0x80;\r\n  FUN_1405a4530(DAT_141a99218 + 0x4550,0);\r\n  FUN_1405a4530(DAT_141a99218 + 0x4554,DAT_14102c9e8);\r\n  *(undefined4 *)(DAT_141a99218 + 0x4570) = 1;\r\n  FUN_14003a980(DAT_141a99218 + 0x45d0,\"Season:Time scale\",0x11);\r\n  uVar1 = DAT_1415432f4;\r\n  *(undefined4 *)(DAT_141a99218 + 0x4600) = 4;\r\n  *(byte *)(DAT_141a99218 + 0x462c) = *(byte *)(DAT_141a99218 + 0x462c) | 2;\r\n  *(byte *)(DAT_141a99218 + 0x462c) = *(byte *)(DAT_141a99218 + 0x462c) | 1;\r\n  *(byte *)(DAT_141a99218 + 0x462c) = *(byte *)(DAT_141a99218 + 0x462c) | 0x10;\r\n  *(undefined4 *)(DAT_141a99218 + 0x4604) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x460c) = 0;\r\n  *(undefined4 *)(DAT_141a99218 + 0x4610) = 0x3f800000;\r\n  *(byte *)(DAT_141a99218 + 0x462c) = *(byte *)(DAT_141a99218 + 0x462c) & 0xbf;\r\n  *(byte *)(DAT_141a99218 + 0x462c) = *(byte *)(DAT_141a99218 + 0x462c) | 0x80;\r\n  FUN_1405a4530(DAT_141a99218 + 0x45f8,uVar1);\r\n  FUN_1405a4530(DAT_141a99218 + 0x45fc,DAT_14102c9e8);\r\n  *(undefined4 *)(DAT_141a99218 + 0x4618) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x461c) = 4;\r\n  FUN_14003a980(DAT_141a99218 + 0x4678,\"Season:Descendant offset\",0x18);\r\n  *(undefined4 *)(DAT_141a99218 + 0x46a8) = 4;\r\n  *(byte *)(DAT_141a99218 + 0x46d4) = *(byte *)(DAT_141a99218 + 0x46d4) | 2;\r\n  *(byte *)(DAT_141a99218 + 0x46d4) = *(byte *)(DAT_141a99218 + 0x46d4) & 0xfe;\r\n  *(byte *)(DAT_141a99218 + 0x46d4) = *(byte *)(DAT_141a99218 + 0x46d4) | 0x10;\r\n  *(undefined4 *)(DAT_141a99218 + 0x46ac) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x46b4) = 0;\r\n  *(undefined4 *)(DAT_141a99218 + 0x46b8) = 0x40000000;\r\n  *(byte *)(DAT_141a99218 + 0x46d4) = *(byte *)(DAT_141a99218 + 0x46d4) & 0xbf;\r\n  *(byte *)(DAT_141a99218 + 0x46d4) = *(byte *)(DAT_141a99218 + 0x46d4) | 0x80;\r\n  FUN_1405a4530(DAT_141a99218 + 0x46a0,0);\r\n  FUN_1405a4530(DAT_141a99218 + 0x46a4,0);\r\n  *(undefined4 *)(DAT_141a99218 + 0x46c0) = 1;\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_14010ef60(void);"
+  },
+  "summary": "Pseudo-C for FUN_14010ef60 from the Deep engine (49 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14010ef60"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

@@ -135,12 +135,20 @@ impl App {
         let sub_h = if self.mat_subtab == 0 { self.settings_tab(ui, c, x0, y, w) } else { self.meshes_tab(ui, c, x0, y, w) };
         y += sub_h + 8.0;
 
-        // the ten texture slots
-        let cols = if w >= 560.0 { 4 } else if w >= 270.0 { 2 } else { 1 };
+        // the ten texture slots, sized so all of them fit in the panel below the settings
+        // (picture 24): the column count that gives the largest pictures wins
         let gap = 6.0;
+        let avail = (area.y + area.h) - (y + self.mat_scroll) - 4.0;
+        let fit = |cols: usize| -> f32 {
+            let bw = (w - gap * (cols as f32 - 1.0)) / cols as f32;
+            let rows = (SLOT_NAMES.len() + cols - 1) / cols;
+            let by_h = avail / rows as f32 - gap - (18.0 + 26.0 + 8.0);
+            (bw - 12.0).min(by_h).min(200.0)
+        };
+        let cols = (2..=5usize).filter(|&c| c == 2 || w / c as f32 >= 90.0).max_by(|a, b| fit(*a).total_cmp(&fit(*b))).unwrap_or(2);
         let bw = (w - gap * (cols as f32 - 1.0)) / cols as f32;
-        let thumb = (bw - 12.0).min(200.0);
-        let bh = 18.0 + 26.0 + thumb + 10.0;
+        let thumb = fit(cols).max(36.0);
+        let bh = 18.0 + 26.0 + thumb + 8.0;
         for s in 0..SLOT_NAMES.len() {
             let bx = x0 + (s % cols) as f32 * (bw + gap);
             let by = y + (s / cols) as f32 * (bh + gap);
@@ -274,7 +282,9 @@ impl App {
                 if n.kind == Kind::Leaf {
                     n.p.leaf_material = cur;
                 } else {
+                    // dropped by hand: the generator's Materials list becomes this one material
                     n.p.material = cur;
+                    n.p.mat_list = vec![(cur, 1.0)];
                 }
                 let nn = n.name.clone();
                 self.set_status(&format!("\"{}\" now uses material \"{}\"", nn, name));
@@ -285,7 +295,7 @@ impl App {
     }
 
     /// "+": pick texture files; each becomes a new material with that picture in its Color slot.
-    fn add_materials_from_textures(&mut self) {
+    pub(crate) fn add_materials_from_textures(&mut self) {
         let files = rfd::FileDialog::new().add_filter("Images", &["png", "jpg", "jpeg", "tga", "bmp"]).pick_files().unwrap_or_default();
         for f in files {
             let f = f.to_string_lossy().to_string();
@@ -482,7 +492,15 @@ impl App {
             color_field(ui, &mut self.color_edit, (0, s), vr, col)
         } else if let Some(v) = m.slot_value(s) {
             let max = if s == 2 { 2.0 } else { 1.0 };
-            ui.slider(&format!("mat.slotval{}", s), vr, v, 0.0, max, 2)
+            if s == 3 {
+                // Roughness: shown as 1 - gloss
+                let mut rough = 1.0 - *v;
+                let c = ui.slider(&format!("mat.slotval{}", s), vr, &mut rough, 0.0, 1.0, 2);
+                *v = 1.0 - rough;
+                c
+            } else {
+                ui.slider(&format!("mat.slotval{}", s), vr, v, 0.0, max, 2)
+            }
         } else {
             false
         };
@@ -537,6 +555,7 @@ impl App {
                 Ok(img) => {
                     let t = Texture2D::from_rgba8(img.w as u16, img.h as u16, &img.px);
                     t.set_filter(FilterMode::Linear);
+                    crate::textures::set_repeat(&t);
                     m.slots[s].tex = Some(t);
                     m.slots[s].image = Some(img);
                     m.slots[s].file = f.clone();
@@ -606,7 +625,7 @@ fn color_field(ui: &mut Ui, open: &mut Option<(usize, usize)>, key: (usize, usiz
 }
 
 /// A one-line text box: click to type, Enter or a click elsewhere to finish.
-fn text_field(ui: &mut Ui, key: &str, r: Rect, s: &mut String, focus: &mut bool) {
+pub(crate) fn text_field(ui: &mut Ui, key: &str, r: Rect, s: &mut String, focus: &mut bool) {
     ui.record(key, r);
     draw_rectangle(r.x, r.y, r.w, r.h, C_FIELD);
     if ui.inp.l_pressed {

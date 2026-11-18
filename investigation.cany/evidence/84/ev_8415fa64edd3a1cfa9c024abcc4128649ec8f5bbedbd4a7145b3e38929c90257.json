@@ -1,0 +1,168 @@
+{
+  "id": "ev_8415fa64edd3a1cfa9c024abcc4128649ec8f5bbedbd4a7145b3e38929c90257",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 30,
+      "name": "referenced_strings",
+      "offset": 0
+    },
+    "source": {
+      "evidence_id": "ev_16012ad895349687ab2d05c4750127ec217f57908c255950859fb09da7966ec3",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": true,
+      "examined": 22,
+      "next_offset": null,
+      "status": "page",
+      "total": 22
+    },
+    "from_evidence": "ev_16012ad895349687ab2d05c4750127ec217f57908c255950859fb09da7966ec3",
+    "from_tool": "native_function_study",
+    "shown": {
+      "items": [
+        {
+          "address": "0x141044ae8",
+          "from": "0x140531666",
+          "text": "/../app_data/Tree Window ToolBar/"
+        },
+        {
+          "address": "0x1410b72e8",
+          "from": "0x140531b7d",
+          "text": "arrow_right.png"
+        },
+        {
+          "address": "0x14102dff8",
+          "from": "0x140531bd9",
+          "text": "Render"
+        },
+        {
+          "address": "0x141036664",
+          "from": "0x140531c11",
+          "text": "Show"
+        },
+        {
+          "address": "0x1410b72dc",
+          "from": "0x140531c49",
+          "text": "Zoom"
+        },
+        {
+          "address": "0x141093104",
+          "from": "0x140531c81",
+          "text": "Target"
+        },
+        {
+          "address": "0x1410a2880",
+          "from": "0x140531cca",
+          "text": "Nodes"
+        },
+        {
+          "address": "0x1410a2838",
+          "from": "0x140531d00",
+          "text": "Generators"
+        },
+        {
+          "address": "0x141033d90",
+          "from": "0x140531d78",
+          "text": "Season"
+        },
+        {
+          "address": "0x1410b72d0",
+          "from": "0x140531df0",
+          "text": "Visibility"
+        },
+        {
+          "address": "0x1410b72c4",
+          "from": "0x140531e2c",
+          "text": "Gizmo"
+        },
+        {
+          "address": "0x141042650",
+          "from": "0x140531ea0",
+          "text": "Collision"
+        },
+        {
+          "address": "0x1410b72bc",
+          "from": "0x140531ed8",
+          "text": "Export"
+        },
+        {
+          "address": "0x14105f610",
+          "from": "0x140531f10",
+          "text": "Forces"
+        },
+        {
+          "address": "0x1410b72a8",
+          "from": "0x140531f48",
+          "text": "Collision Objects"
+        },
+        {
+          "address": "0x14104266c",
+          "from": "0x140531f80",
+          "text": "Wind"
+        },
+        {
+          "address": "0x1410b7298",
+          "from": "0x140531fb8",
+          "text": "Fast Edit"
+        },
+        {
+          "address": "0x1410b7290",
+          "from": "0x140531ff0",
+          "text": "Tool"
+        },
+        {
+          "address": "0x1410a2888",
+          "from": "0x140532028",
+          "text": "Window"
+        },
+        {
+          "address": "0x141069220",
+          "from": "0x140532060",
+          "text": "Light"
+        },
+        {
+          "address": "0x1410b7280",
+          "from": "0x140532096",
+          "text": "arrow_left.png"
+        },
+        {
+          "address": "0x1410b7258",
+          "from": "0x14053211f",
+          "text": "preferences/m_bCompressedToolbar"
+        }
+      ],
+      "list": "referenced_strings",
+      "offset": 0,
+      "total": 22
+    }
+  },
+  "summary": "Part of native_function_study evidence (page).",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 22,
+    "total": 22
+  },
+  "locations": [],
+  "links": [
+    "ev_16012ad895349687ab2d05c4750127ec217f57908c255950859fb09da7966ec3"
+  ]
+}

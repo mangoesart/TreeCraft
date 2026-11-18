@@ -1,0 +1,1008 @@
+{
+  "id": "ev_d3960b0d19c8d2fd4d74e58cb9d900e46166632e6cd1a5f883261e5a431c262e",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Environment|Directional|Horizon|Ground weight|Medium quality"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102e760",
+        "references": [
+          {
+            "from": "0x14004da4f",
+            "function": "sub_140049350"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_11"
+      },
+      {
+        "address": "0x14102e7a8",
+        "references": [
+          {
+            "from": "0x14004d70f",
+            "function": "sub_140049350"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_10"
+      },
+      {
+        "address": "0x14102e7f8",
+        "references": [
+          {
+            "from": "0x14004d2c8",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140066838",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x14007bbdd",
+            "function": "sub_1400795e0"
+          },
+          {
+            "from": "0x1402f52c4",
+            "function": "sub_1402f4120"
+          },
+          {
+            "from": "0x14033f3b6",
+            "function": "sub_14033cae0"
+          },
+          {
+            "from": "0x14040c84a",
+            "function": "sub_14040b020"
+          },
+          {
+            "from": "0x1404f2b8d",
+            "function": "sub_1404f22c0"
+          },
+          {
+            "from": "0x1404f5e19",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_4"
+      },
+      {
+        "address": "0x14102e888",
+        "references": [
+          {
+            "from": "0x14004cc77",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x1402f6276",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_9"
+      },
+      {
+        "address": "0x14102e8c8",
+        "references": [
+          {
+            "from": "0x14004c90e",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140065514",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x1400708c7",
+            "function": "sub_1400703d0"
+          },
+          {
+            "from": "0x14040bd02",
+            "function": "sub_14040b020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_6"
+      },
+      {
+        "address": "0x14102e900",
+        "references": [
+          {
+            "from": "0x14004c58b",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140052ef6",
+            "function": "sub_1400529d0"
+          },
+          {
+            "from": "0x14005a1bb",
+            "function": "sub_140059c60"
+          },
+          {
+            "from": "0x140067777",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x140079b51",
+            "function": "sub_1400795e0"
+          },
+          {
+            "from": "0x14033e445",
+            "function": "sub_14033cae0"
+          },
+          {
+            "from": "0x14040c2fc",
+            "function": "sub_14040b020"
+          },
+          {
+            "from": "0x1404f6121",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_5"
+      },
+      {
+        "address": "0x14102e958",
+        "references": [
+          {
+            "from": "0x14004c169",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140070ff9",
+            "function": "sub_1400703d0"
+          },
+          {
+            "from": "0x14007c0bc",
+            "function": "sub_1400795e0"
+          },
+          {
+            "from": "0x1401b3b21",
+            "function": "sub_1401b37a0"
+          },
+          {
+            "from": "0x1401c0a63",
+            "function": "sub_1401bd740"
+          },
+          {
+            "from": "0x1402b8e28",
+            "function": "sub_1402b81e0"
+          },
+          {
+            "from": "0x1402c7781",
+            "function": "sub_1402c6f90"
+          },
+          {
+            "from": "0x1402e6a67",
+            "function": "sub_1402e6660"
+          },
+          {
+            "from": "0x1402f4b94",
+            "function": "sub_1402f4120"
+          },
+          {
+            "from": "0x14031e048",
+            "function": "sub_14031dc40"
+          },
+          {
+            "from": "0x14040bffe",
+            "function": "sub_14040b020"
+          },
+          {
+            "from": "0x1404f6ae8",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_3"
+      },
+      {
+        "address": "0x14102ea58",
+        "references": [
+          {
+            "from": "0x14004b695",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140071405",
+            "function": "sub_1400703d0"
+          },
+          {
+            "from": "0x1402f6937",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_8"
+      },
+      {
+        "address": "0x14102f0d0",
+        "references": [
+          {
+            "from": "0x14004a48b",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x1402f6fe2",
+            "function": "sub_1402f4120"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_7"
+      },
+      {
+        "address": "0x141030a60",
+        "references": [
+          {
+            "from": "0x14004ecc2",
+            "function": "sub_14004e7b0"
+          },
+          {
+            "from": "0x140052c1e",
+            "function": "sub_1400529d0"
+          },
+          {
+            "from": "0x140059ecf",
+            "function": "sub_140059c60"
+          },
+          {
+            "from": "0x14006524d",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x14007061c",
+            "function": "sub_1400703d0"
+          },
+          {
+            "from": "0x140079850",
+            "function": "sub_1400795e0"
+          },
+          {
+            "from": "0x1401b7151",
+            "function": "sub_1401b37a0"
+          },
+          {
+            "from": "0x1401bd905",
+            "function": "sub_1401bd740"
+          },
+          {
+            "from": "0x14028cbc5",
+            "function": "sub_14028c270"
+          },
+          {
+            "from": "0x14029e0a2",
+            "function": "sub_14029dc70"
+          },
+          {
+            "from": "0x1402bce0f",
+            "function": "sub_1402bca60"
+          },
+          {
+            "from": "0x1402be235",
+            "function": "sub_1402be120"
+          },
+          {
+            "from": "0x1402c7a16",
+            "function": "sub_1402c6f90"
+          },
+          {
+            "from": "0x1402e7502",
+            "function": "sub_1402e6660"
+          },
+          {
+            "from": "0x1402f4f31",
+            "function": "sub_1402f4120"
+          },
+          {
+            "from": "0x1403127e7",
+            "function": "sub_140312630"
+          },
+          {
+            "from": "0x140314517",
+            "function": "sub_140314410"
+          },
+          {
+            "from": "0x140320464",
+            "function": "sub_14031dc40"
+          },
+          {
+            "from": "0x14032e4a9",
+            "function": "sub_14032e1b0"
+          },
+          {
+            "from": "0x14033140f",
+            "function": "sub_140331200"
+          },
+          {
+            "from": "0x14033ccab",
+            "function": "sub_14033cae0"
+          },
+          {
+            "from": "0x14034cc7b",
+            "function": "sub_14034ca90"
+          },
+          {
+            "from": "0x1403fdb23",
+            "function": "sub_1403fd670"
+          },
+          {
+            "from": "0x14040b288",
+            "function": "sub_14040b020"
+          },
+          {
+            "from": "0x1404f53b3",
+            "function": "sub_1404f47e0"
+          },
+          {
+            "from": "0x1404f64bc",
+            "function": "sub_1404f5c80"
+          },
+          {
+            "from": "0x14050a9f0",
+            "function": "sub_14050a0d0"
+          },
+          {
+            "from": "0x14051ebe8",
+            "function": "sub_14051ea30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout"
+      },
+      {
+        "address": "0x141030aa0",
+        "references": [
+          {
+            "from": "0x14004e987",
+            "function": "sub_14004e7b0"
+          },
+          {
+            "from": "0x140054290",
+            "function": "sub_1400529d0"
+          },
+          {
+            "from": "0x14005b925",
+            "function": "sub_140059c60"
+          },
+          {
+            "from": "0x140065f8a",
+            "function": "sub_140064ff0"
+          },
+          {
+            "from": "0x14007b91c",
+            "function": "sub_1400795e0"
+          },
+          {
+            "from": "0x1401b52de",
+            "function": "sub_1401b37a0"
+          },
+          {
+            "from": "0x1401beb64",
+            "function": "sub_1401bd740"
+          },
+          {
+            "from": "0x14028c43e",
+            "function": "sub_14028c270"
+          },
+          {
+            "from": "0x1402bd836",
+            "function": "sub_1402bca60"
+          },
+          {
+            "from": "0x1402c739f",
+            "function": "sub_1402c6f90"
+          },
+          {
+            "from": "0x1402e8463",
+            "function": "sub_1402e6660"
+          },
+          {
+            "from": "0x1402f440c",
+            "function": "sub_1402f4120"
+          },
+          {
+            "from": "0x14031e562",
+            "function": "sub_14031dc40"
+          },
+          {
+            "from": "0x140331644",
+            "function": "sub_140331200"
+          },
+          {
+            "from": "0x14033d037",
+            "function": "sub_14033cae0"
+          },
+          {
+            "from": "0x1403a4670",
+            "function": "sub_1403a44a0"
+          },
+          {
+            "from": "0x14040bb9e",
+            "function": "sub_14040b020"
+          },
+          {
+            "from": "0x1404f67ac",
+            "function": "sub_1404f5c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontalLayout_2"
+      },
+      {
+        "address": "0x141043fc8",
+        "references": [
+          {
+            "from": "0x1400dcc80",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip curve horizontally"
+      },
+      {
+        "address": "0x141057040",
+        "references": [
+          {
+            "from": "0x1401d78be",
+            "function": "sub_1401d70e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Directional (palm frond style)"
+      },
+      {
+        "address": "0x141057060",
+        "references": [
+          {
+            "from": "0x1401d7878",
+            "function": "sub_1401d70e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Directional"
+      },
+      {
+        "address": "0x141069168",
+        "references": [
+          {
+            "from": "0x14051e5cd",
+            "function": "sub_14051e4e0"
+          },
+          {
+            "from": "0x14178e060",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Medium quality"
+      },
+      {
+        "address": "0x1410695d0",
+        "references": [
+          {
+            "from": "0x1402910e1",
+            "function": "sub_140291070"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Type of light: point, directional, or spot"
+      },
+      {
+        "address": "0x1410696d0",
+        "references": [
+          {
+            "from": "0x14029297c",
+            "function": "sub_1402922b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Horizon"
+      },
+      {
+        "address": "0x1410697c0",
+        "references": [
+          {
+            "from": "0x140293d2a",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shadows:Ground weight"
+      },
+      {
+        "address": "0x141069930",
+        "references": [
+          {
+            "from": "0x14029379b",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Ambient:Intensity"
+      },
+      {
+        "address": "0x141069950",
+        "references": [
+          {
+            "from": "0x140293748",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Ambient:Ground"
+      },
+      {
+        "address": "0x141069980",
+        "references": [
+          {
+            "from": "0x1402936a2",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Ambient:Horizon"
+      },
+      {
+        "address": "0x1410699a0",
+        "references": [
+          {
+            "from": "0x14029364f",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Ambient:Sky"
+      },
+      {
+        "address": "0x1410699b8",
+        "references": [
+          {
+            "from": "0x1402935fc",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Directional:Intensity"
+      },
+      {
+        "address": "0x1410699e0",
+        "references": [
+          {
+            "from": "0x1402935a9",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Directional:Color"
+      },
+      {
+        "address": "0x141069a00",
+        "references": [
+          {
+            "from": "0x140293556",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment:Preset"
+      },
+      {
+        "address": "0x141069a80",
+        "references": [
+          {
+            "from": "0x140293210",
+            "function": "sub_140292fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Directional light"
+      },
+      {
+        "address": "0x141074af8",
+        "references": [
+          {
+            "from": "0x1402af4d1",
+            "function": "sub_1402aeed0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<Property Name=\"Billboards:Horizontal:Height\" Value=\"0.5\"/>"
+      },
+      {
+        "address": "0x141074b38",
+        "references": [
+          {
+            "from": "0x1402af4c1",
+            "function": "sub_1402aeed0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<Property Name=\"Billboards:Horizontal:Include\" Value=\"true\"/>"
+      },
+      {
+        "address": "0x1410984f8",
+        "references": [
+          {
+            "from": "0x1403afd5e",
+            "function": "sub_1403af700"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Compile:Horizontal billboard"
+      },
+      {
+        "address": "0x1410acd00",
+        "references": [
+          {
+            "from": "0x1404a25b1",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404d46a7",
+            "function": "sub_1404d4550"
+          }
+        ],
+        "section": ".rdata",
+        "text": "BRANCH_2_DIRECTIONAL_FROND"
+      },
+      {
+        "address": "0x1410acd20",
+        "references": [
+          {
+            "from": "0x1404a2579",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404d469b",
+            "function": "sub_1404d4550"
+          }
+        ],
+        "section": ".rdata",
+        "text": "BRANCH_2_DIRECTIONAL"
+      },
+      {
+        "address": "0x1410acd88",
+        "references": [
+          {
+            "from": "0x1404a2359",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404d465f",
+            "function": "sub_1404d4550"
+          }
+        ],
+        "section": ".rdata",
+        "text": "BRANCH_1_DIRECTIONAL_FROND"
+      },
+      {
+        "address": "0x1410acda8",
+        "references": [
+          {
+            "from": "0x1404a22df",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404d4653",
+            "function": "sub_1404d4550"
+          }
+        ],
+        "section": ".rdata",
+        "text": "BRANCH_1_DIRECTIONAL"
+      },
+      {
+        "address": "0x1410ae4e8",
+        "references": [
+          {
+            "from": "0x1404d5eaa",
+            "function": "sub_1404d4840"
+          }
+        ],
+        "section": ".rdata",
+        "text": "#define SHADER_ENVIRONMENT\n"
+      },
+      {
+        "address": "0x1410bbc30",
+        "references": [
+          {
+            "from": "0x140554bf3",
+            "function": "sub_140554b00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Default reached in ConvertMouseToProjectionCoordinates( ) (LO_TWO_HORIZONTAL)\n"
+      },
+      {
+        "address": "0x14120b110",
+        "references": [
+          {
+            "from": "0x1407a2005",
+            "function": "sub_1407a1fb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Horizontal differencing \"Predictor\" not supported with %d-bit samples"
+      },
+      {
+        "address": "0x14120b208",
+        "references": [
+          {
+            "from": "0x1407a2d81",
+            "function": "sub_1407a2d30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "horizontal differencing "
+      },
+      {
+        "address": "0x1412d0720",
+        "references": [
+          {
+            "from": "0x140813e3c",
+            "function": "sub_140813b70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Warning!  Library version information error.\nThe HDF5 library version information are not consistent in its source code.\nThis is NOT a fatal error but should be corrected.  Setting the environment\nvariable 'HDF5_DISABLE_VERSION_CHECK' to a value of 1 will suppress\nthis warning.\n"
+      },
+      {
+        "address": "0x1412d0860",
+        "references": [
+          {
+            "from": "0x140813d26",
+            "function": "sub_140813b70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "%s'HDF5_DISABLE_VERSION_CHECK' environment variable is set to %d, application will\ncontinue at your own risk.\n"
+      },
+      {
+        "address": "0x1412d0910",
+        "references": [
+          {
+            "from": "0x140813c84",
+            "function": "sub_140813b70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "You can, at your own risk, disable this warning by setting the environment\nvariable 'HDF5_DISABLE_VERSION_CHECK' to a value of '1'.\nSetting it to 2 or higher will suppress the warning messages totally.\n"
+      },
+      {
+        "address": "0x14136eba0",
+        "references": [
+          {
+            "from": "0x140a3eca0",
+            "function": "sub_140a3e950"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment"
+      },
+      {
+        "address": "0x141381838",
+        "references": [
+          {
+            "from": "0x140a8dc79",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x141381848",
+        "references": [
+          {
+            "from": "0x140a8dc8c",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "FbxEnvironment"
+      },
+      {
+        "address": "0x141381858",
+        "references": [
+          {
+            "from": "0x140a8dcef",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment::"
+      },
+      {
+        "address": "0x14138daa0",
+        "references": [
+          {
+            "from": "0x140ad1527",
+            "function": "sub_140acfaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Horizontal And Vertical"
+      },
+      {
+        "address": "0x14138dab8",
+        "references": [
+          {
+            "from": "0x140ad153a",
+            "function": "sub_140acfaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Horizontal"
+      },
+      {
+        "address": "0x14138db00",
+        "references": [
+          {
+            "from": "0x140ad165a",
+            "function": "sub_140acfaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Horizontal Fit"
+      },
+      {
+        "address": "0x1413ab738",
+        "references": [],
+        "section": ".rdata",
+        "text": "Environment"
+      },
+      {
+        "address": "0x1413c4fd0",
+        "references": [
+          {
+            "from": "0x140bcc39f",
+            "function": "sub_140bcbea0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Environment"
+      },
+      {
+        "address": "0x1413f19d0",
+        "references": [
+          {
+            "from": "0x140cb5586",
+            "function": "sub_140cb5520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x1413f19e0",
+        "references": [
+          {
+            "from": "0x140cb5596",
+            "function": "sub_140cb5520"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ADSKEnvironmentDefinition"
+      },
+      {
+        "address": "0x1413f1a70",
+        "references": [
+          {
+            "from": "0x140cb5796",
+            "function": "sub_140cb5730"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x1413f1a80",
+        "references": [
+          {
+            "from": "0x140cb57a6",
+            "function": "sub_140cb5730"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ADSKEnvironmentDefinition"
+      },
+      {
+        "address": "0x1413f1b10",
+        "references": [
+          {
+            "from": "0x140cb59e6",
+            "function": "sub_140cb5980"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x1413f1b20",
+        "references": [
+          {
+            "from": "0x140cb59f6",
+            "function": "sub_140cb5980"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ADSKEnvironmentDefinition"
+      },
+      {
+        "address": "0x1413f1bb0",
+        "references": [
+          {
+            "from": "0x140cb5bf6",
+            "function": "sub_140cb5b90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x1413f1bc0",
+        "references": [
+          {
+            "from": "0x140cb5c06",
+            "function": "sub_140cb5b90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ADSKEnvironmentDefinition"
+      },
+      {
+        "address": "0x1413fa2a8",
+        "references": [],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      },
+      {
+        "address": "0x1413fa2b8",
+        "references": [],
+        "section": ".rdata",
+        "text": "ADSKEnvironmentDefinition"
+      },
+      {
+        "address": "0x1413fa348",
+        "references": [],
+        "section": ".rdata",
+        "text": "KFbxEnvironment"
+      }
+    ],
+    "total": 83
+  },
+  "summary": "83 strings match \"Environment|Directional|Horizon|Ground weight|Medium quality\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 60,
+    "total": 83,
+    "next_offset": 60
+  },
+  "locations": [],
+  "links": []
+}

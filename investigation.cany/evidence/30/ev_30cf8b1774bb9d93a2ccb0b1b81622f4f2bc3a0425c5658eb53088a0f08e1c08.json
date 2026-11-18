@@ -1,0 +1,1551 @@
+{
+  "id": "ev_30cf8b1774bb9d93a2ccb0b1b81622f4f2bc3a0425c5658eb53088a0f08e1c08",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": true,
+    "limit": 120,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "(point|curve|Curve)"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141034ea8",
+        "references": [
+          {
+            "from": "0x14006edb6",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x14007220a",
+            "function": "sub_140072130"
+          },
+          {
+            "from": "0x140075651",
+            "function": "sub_140075100"
+          },
+          {
+            "from": "0x1400a1835",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b1f41",
+            "function": "sub_1400b19b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SeasonCurve"
+      },
+      {
+        "address": "0x141034ec8",
+        "references": [
+          {
+            "from": "0x14006ed26",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x140075709",
+            "function": "sub_140075100"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotSeasonCurve()"
+      },
+      {
+        "address": "0x141034ee0",
+        "references": [
+          {
+            "from": "0x14006ecdf",
+            "function": "sub_14006e3c0"
+          },
+          {
+            "from": "0x1400721a3",
+            "function": "sub_140072130"
+          },
+          {
+            "from": "0x1400756bf",
+            "function": "sub_140075100"
+          },
+          {
+            "from": "0x1403ba100",
+            "function": "sub_1403b99d0"
+          },
+          {
+            "from": "0x1403ba192",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "CurveButton"
+      },
+      {
+        "address": "0x1410356a0",
+        "references": [
+          {
+            "from": "0x140072c2f",
+            "function": "sub_140072890"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ChildMaterialSeasonCurve()"
+      },
+      {
+        "address": "0x141036348",
+        "references": [
+          {
+            "from": "0x1400786ee",
+            "function": "sub_140076fd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Make the models normals point in the opposite direction."
+      },
+      {
+        "address": "0x1410439f8",
+        "references": [
+          {
+            "from": "0x1400d8b62",
+            "function": "sub_1400d8154"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Curve is clamped"
+      },
+      {
+        "address": "0x141043cd8",
+        "references": [
+          {
+            "from": "0x1400d9f22",
+            "function": "sub_1400d9c30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Invalid curve created"
+      },
+      {
+        "address": "0x141043da8",
+        "references": [],
+        "section": ".rdata",
+        "text": "Could not make curve cyclical"
+      },
+      {
+        "address": "0x141043dc8",
+        "references": [
+          {
+            "from": "0x1400dd4f7",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cannot insert collapsed point here"
+      },
+      {
+        "address": "0x141043df0",
+        "references": [
+          {
+            "from": "0x1400dd4ac",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Insert collapsed point here"
+      },
+      {
+        "address": "0x141043e10",
+        "references": [
+          {
+            "from": "0x1400dd41b",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cannot insert point here"
+      },
+      {
+        "address": "0x141043e30",
+        "references": [
+          {
+            "from": "0x1400dd3d0",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Insert point here"
+      },
+      {
+        "address": "0x141043e48",
+        "references": [
+          {
+            "from": "0x1400dd335",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cannot insert step point here"
+      },
+      {
+        "address": "0x141043eb8",
+        "references": [
+          {
+            "from": "0x1400dd133",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Delete selected control points\tDEL"
+      },
+      {
+        "address": "0x141043ef0",
+        "references": [
+          {
+            "from": "0x1400dd086",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "From curve max"
+      },
+      {
+        "address": "0x141043f00",
+        "references": [
+          {
+            "from": "0x1400dd02b",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "From curve average"
+      },
+      {
+        "address": "0x141043f18",
+        "references": [
+          {
+            "from": "0x1400dcfd0",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "From curve middle"
+      },
+      {
+        "address": "0x141043f30",
+        "references": [
+          {
+            "from": "0x1400dcf75",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "From curve min"
+      },
+      {
+        "address": "0x141043fa0",
+        "references": [
+          {
+            "from": "0x1400dcd28",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Scale curve"
+      },
+      {
+        "address": "0x141043fb0",
+        "references": [
+          {
+            "from": "0x1400dccdf",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip curve vertically"
+      },
+      {
+        "address": "0x141043fc8",
+        "references": [
+          {
+            "from": "0x1400dcc80",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Flip curve horizontally"
+      },
+      {
+        "address": "0x141044038",
+        "references": [
+          {
+            "from": "0x1400dc93d",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Select all control points\tCtrl-A"
+      },
+      {
+        "address": "0x141044088",
+        "references": [
+          {
+            "from": "0x1400dbbcc",
+            "function": "sub_1400dba00"
+          },
+          {
+            "from": "0x1400dc9e3",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Paste curve\tCtrl-V"
+      },
+      {
+        "address": "0x1410440a0",
+        "references": [
+          {
+            "from": "0x1400dbb6a",
+            "function": "sub_1400dba00"
+          },
+          {
+            "from": "0x1400dc997",
+            "function": "sub_1400dba00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Copy curve\tCtrl-C"
+      },
+      {
+        "address": "0x141047aa0",
+        "references": [
+          {
+            "from": "0x140133008",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038e013",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f59c3",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Resample:Curve fit scalar"
+      },
+      {
+        "address": "0x141047ac8",
+        "references": [
+          {
+            "from": "0x140132e40",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038de4b",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f57fb",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Resample:Control point style"
+      },
+      {
+        "address": "0x141047af0",
+        "references": [
+          {
+            "from": "0x140132d5b",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038dd66",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f5716",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:New:Curve fit"
+      },
+      {
+        "address": "0x141047b20",
+        "references": [
+          {
+            "from": "0x140132ba3",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038dbae",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f555e",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:New:Control point style"
+      },
+      {
+        "address": "0x14104cec0",
+        "references": [
+          {
+            "from": "0x140175941",
+            "function": "sub_140175753"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0The last point of the 'Lip:Height' profile curve must be 1.0."
+      },
+      {
+        "address": "0x14104cf00",
+        "references": [
+          {
+            "from": "0x140175919",
+            "function": "sub_140175753"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0The first point of the 'Lip:Height' profile curve must be 0.0."
+      },
+      {
+        "address": "0x141050b10",
+        "references": [
+          {
+            "from": "0x14018b161",
+            "function": "sub_14018b140"
+          },
+          {
+            "from": "0x14018ca1f",
+            "function": "sub_14018c8e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<error>INTERNAL ERROR: Invalid control point style.\n"
+      },
+      {
+        "address": "0x141053820",
+        "references": [
+          {
+            "from": "0x1401b2a2f",
+            "function": "sub_1401b1570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Save an older version of the point cache that may be more compatible with certain applications"
+      },
+      {
+        "address": "0x141053900",
+        "references": [
+          {
+            "from": "0x1401b27fa",
+            "function": "sub_1401b1570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Format of the point cache saved. MCX is recommended, as it can handle very large files native to FBX."
+      },
+      {
+        "address": "0x141055c10",
+        "references": [
+          {
+            "from": "0x1401d3eb7",
+            "function": "sub_1401d3e50"
+          }
+        ],
+        "section": ".rdata",
+        "text": "For Lumberyard wind, simply check the \"Wind:Apply\" property on the branch levels where branch bending should apply. Use the windcurves to adjust how wind motion is distributed across the geometry.\n\nCustom vertex colors can be computed by enabling \"Compute Flags:Vertex color\" on the 'Tree' generator and using each generator's vertex color properties."
+      },
+      {
+        "address": "0x14105fc08",
+        "references": [
+          {
+            "from": "0x14022d8b0",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Generation ToolBar/hand_point.bmp"
+      },
+      {
+        "address": "0x14105fc38",
+        "references": [
+          {
+            "from": "0x14022d856",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/Generation ToolBar/hand_point_mask.bmp"
+      },
+      {
+        "address": "0x141064c00",
+        "references": [
+          {
+            "from": "0x14025b7dd",
+            "function": "sub_14025a2f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1No geometry created (could not match all weld points, parent too deformed?)"
+      },
+      {
+        "address": "0x141066a00",
+        "references": [
+          {
+            "from": "0x14028928f",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Parent curve reference"
+      },
+      {
+        "address": "0x1410695d0",
+        "references": [
+          {
+            "from": "0x1402910e1",
+            "function": "sub_140291070"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Type of light: point, directional, or spot"
+      },
+      {
+        "address": "0x1410792e0",
+        "references": [
+          {
+            "from": "0x1402d3dce",
+            "function": "sub_1402d3d96"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<warning> The last two control points cannot be deleted (delete the node instead).\n"
+      },
+      {
+        "address": "0x14107bfd8",
+        "references": [
+          {
+            "from": "0x1402f345a",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Reset points"
+      },
+      {
+        "address": "0x14107bfe8",
+        "references": [
+          {
+            "from": "0x1402f33d9",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Remove points"
+      },
+      {
+        "address": "0x14107bff8",
+        "references": [
+          {
+            "from": "0x1402f3358",
+            "function": "sub_1402f32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Add/Move points"
+      },
+      {
+        "address": "0x14107c390",
+        "references": [
+          {
+            "from": "0x1402f7cad",
+            "function": "sub_1402f7c90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Are you sure you wish to reset the points?\nThis cannot be undone"
+      },
+      {
+        "address": "0x14108e1f0",
+        "references": [
+          {
+            "from": "0x14033c84c",
+            "function": "sub_14033b570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Use this option to add a center point to the mesh.  Doing so adds triangles but may help when manipulating the mesh (e.g., folding or addiing displacement) after the 'Simplify' operation is complete.</span></p></body></html>"
+      },
+      {
+        "address": "0x141096778",
+        "references": [
+          {
+            "from": "0x1403a35fa",
+            "function": "sub_1403a3410"
+          },
+          {
+            "from": "0x1403a62d9",
+            "function": "sub_1403a6270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "curve edit"
+      },
+      {
+        "address": "0x1410967c8",
+        "references": [
+          {
+            "from": "0x1403a41cb",
+            "function": "sub_1403a3870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pin this curve editor so it doesn't go away."
+      },
+      {
+        "address": "0x141096800",
+        "references": [
+          {
+            "from": "0x1403a40fc",
+            "function": "sub_1403a3870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Set curve to preset"
+      },
+      {
+        "address": "0x1410968f8",
+        "references": [
+          {
+            "from": "0x1403a3d72",
+            "function": "sub_1403a3870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "S-Curve"
+      },
+      {
+        "address": "0x141096bb8",
+        "references": [
+          {
+            "from": "0x1403a66a7",
+            "function": "sub_1403a65a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Curve Editor"
+      },
+      {
+        "address": "0x141096e98",
+        "references": [
+          {
+            "from": "0x1403a6a50",
+            "function": "sub_1403a68e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ParentCurve.png"
+      },
+      {
+        "address": "0x141096f74",
+        "references": [
+          {
+            "from": "0x1403a7d0b",
+            "function": "sub_1403a74f0"
+          },
+          {
+            "from": "0x1404a01fe",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a035f",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a04c0",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a0621",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a0876",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a09d7",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a0b38",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a0c99",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a0ef1",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a1055",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a11b9",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a2b48",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a2c8f",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a2dd4",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a3015",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a357d",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a36e1",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a3845",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a3e5c",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a3fc0",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a4105",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a424a",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a438f",
+            "function": "sub_14049ef30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Curve"
+      },
+      {
+        "address": "0x141096ff0",
+        "references": [
+          {
+            "from": "0x1403a90dc",
+            "function": "sub_1403a8c10"
+          },
+          {
+            "from": "0x1403a9ba9",
+            "function": "sub_1403a9830"
+          }
+        ],
+        "section": ".rdata",
+        "text": "DrawnCurve"
+      },
+      {
+        "address": "0x141099a78",
+        "references": [
+          {
+            "from": "0x1403ba1f4",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ProfileCurve()"
+      },
+      {
+        "address": "0x141099a88",
+        "references": [
+          {
+            "from": "0x1403ba162",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ParentCurve()"
+      },
+      {
+        "address": "0x14109f1c0",
+        "references": [
+          {
+            "from": "0x140405ed8",
+            "function": "sub_140405d90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Closest point"
+      },
+      {
+        "address": "0x1410a15a0",
+        "references": [
+          {
+            "from": "0x14040ac69",
+            "function": "sub_14040a1f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<html><head/><body><p>Use this curve to control the overall timing of the growth animation</p></body></html>"
+      },
+      {
+        "address": "0x1410a19c0",
+        "references": [
+          {
+            "from": "0x14040c5a4",
+            "function": "sub_14040b020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwGrowthCurve"
+      },
+      {
+        "address": "0x1410a1a08",
+        "references": [
+          {
+            "from": "0x14040c137",
+            "function": "sub_14040b020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwWindCurve"
+      },
+      {
+        "address": "0x1410a1b30",
+        "references": [
+          {
+            "from": "0x14040cf27",
+            "function": "sub_14040cb20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotWindCurve()"
+      },
+      {
+        "address": "0x1410a1c00",
+        "references": [
+          {
+            "from": "0x14040cd91",
+            "function": "sub_14040cb20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotGrowthCurve()"
+      },
+      {
+        "address": "0x1410a5310",
+        "references": [
+          {
+            "from": "0x14044eb35",
+            "function": "sub_14044eaf0"
+          },
+          {
+            "from": "0x1404613c7",
+            "function": "sub_140460ba0"
+          },
+          {
+            "from": "0x14046149e",
+            "function": "sub_140460ba0"
+          },
+          {
+            "from": "0x14046b5e0",
+            "function": "sub_14046af00"
+          },
+          {
+            "from": "0x140b19105",
+            "function": "sub_140b190c0"
+          },
+          {
+            "from": "0x140c2970b",
+            "function": "sub_140c28d00"
+          },
+          {
+            "from": "0x140c2d90e",
+            "function": "sub_140c2d440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "AbcGeom_Curve_v2"
+      },
+      {
+        "address": "0x1410addb0",
+        "references": [
+          {
+            "from": "0x1404cc094",
+            "function": "sub_1404cba00"
+          },
+          {
+            "from": "0x1404e5ef7",
+            "function": "sub_1404e5540"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindCurve"
+      },
+      {
+        "address": "0x1410addc0",
+        "references": [
+          {
+            "from": "0x1404cc039",
+            "function": "sub_1404cba00"
+          },
+          {
+            "from": "0x1404e5e82",
+            "function": "sub_1404e5540"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GrowthCurve"
+      },
+      {
+        "address": "0x1410b08b8",
+        "references": [
+          {
+            "from": "0x1404f58de",
+            "function": "sub_1404f57d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Gaussian (bell curve)"
+      },
+      {
+        "address": "0x1410b62d0",
+        "references": [
+          {
+            "from": "0x14052e560",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The Y coordinate of the pointer relative to the window (a percentage in the range [0.0, 1.0])"
+      },
+      {
+        "address": "0x1410b6330",
+        "references": [
+          {
+            "from": "0x14052e548",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The X coordinate of the pointer relative to the window (a percentage in the range [0.0, 1.0])"
+      },
+      {
+        "address": "0x1410b6390",
+        "references": [
+          {
+            "from": "0x14052e530",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The Y coordinate of the pointer relative to the window (measured in )"
+      },
+      {
+        "address": "0x1410b63e0",
+        "references": [
+          {
+            "from": "0x14052e515",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The X coordinate of the pointer relative to the window (measured in pixels)"
+      },
+      {
+        "address": "0x1410b6430",
+        "references": [
+          {
+            "from": "0x14052e4fa",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The object under the pointer"
+      },
+      {
+        "address": "0x1410b6a20",
+        "references": [
+          {
+            "from": "0x14052e1eb",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Enables anti-aliasing for points"
+      },
+      {
+        "address": "0x1410b6a48",
+        "references": [
+          {
+            "from": "0x14052e1d0",
+            "function": "sub_14052e030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Controls the size of points"
+      },
+      {
+        "address": "0x1410b7c70",
+        "references": [
+          {
+            "from": "0x14053417e",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Set the season of the current model.  This is applicable to any models that makes use of the season\nproperties on generators and the season curves on materials.\n\nHot key: Alt+S"
+      },
+      {
+        "address": "0x1410b7e40",
+        "references": [
+          {
+            "from": "0x140533d49",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All property edits apply to the selected generator(s).  This mode affects all of the individuals nodes\ncreated by the generator(s) and allows parent curve editing.\n\nHot key: Tab"
+      },
+      {
+        "address": "0x1410b8190",
+        "references": [
+          {
+            "from": "0x1405337cb",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Click this button and then click any spot on the model to set the view's\npivot point on that part of the model.  The camera will zoom to and pivot around\nthe selected point.\n\nHot key: N\n('double-clicking' anywhere on the model is a shortcut for this action)"
+      },
+      {
+        "address": "0x1410ba4f0",
+        "references": [
+          {
+            "from": "0x1405456df",
+            "function": "sub_140543dd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Ctrl = parent curve, Shift = variance"
+      },
+      {
+        "address": "0x1410bafc8",
+        "references": [
+          {
+            "from": "0x14054a640",
+            "function": "sub_140549430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Look at focal point"
+      },
+      {
+        "address": "0x1410bec28",
+        "references": [],
+        "section": ".rdata",
+        "text": " (parent curve)"
+      },
+      {
+        "address": "0x1410cddc8",
+        "references": [
+          {
+            "from": "0x14059ccee",
+            "function": "sub_14059cc20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Object pointer to this object"
+      },
+      {
+        "address": "0x1410dbfb0",
+        "references": [
+          {
+            "from": "0x1405be3bc",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_SGIS_point_line_texgen"
+      },
+      {
+        "address": "0x1410dc4a8",
+        "references": [
+          {
+            "from": "0x1405bdb49",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_NV_point_sprite"
+      },
+      {
+        "address": "0x1410dcf48",
+        "references": [
+          {
+            "from": "0x1405bc740",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_EXT_point_parameters"
+      },
+      {
+        "address": "0x1410dd638",
+        "references": [
+          {
+            "from": "0x1405bb734",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ATIX_vertex_shader_output_point_size"
+      },
+      {
+        "address": "0x1410dd6a0",
+        "references": [
+          {
+            "from": "0x1405bb6f2",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ATIX_point_sprites"
+      },
+      {
+        "address": "0x1410ddce0",
+        "references": [
+          {
+            "from": "0x1405bad7e",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ARB_point_sprite"
+      },
+      {
+        "address": "0x1410ddcf8",
+        "references": [
+          {
+            "from": "0x1405bad0b",
+            "function": "sub_1405b9c6d"
+          }
+        ],
+        "section": ".rdata",
+        "text": "GL_ARB_point_parameters"
+      },
+      {
+        "address": "0x1410df968",
+        "references": [
+          {
+            "from": "0x1405c86eb",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "point_line_texgen"
+      },
+      {
+        "address": "0x1410e0778",
+        "references": [
+          {
+            "from": "0x1405c50ca",
+            "function": "sub_1405c0530"
+          },
+          {
+            "from": "0x1405c50eb",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "vertex_shader_output_point_size"
+      },
+      {
+        "address": "0x1410e07c8",
+        "references": [
+          {
+            "from": "0x1405c4f3d",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "point_sprites"
+      },
+      {
+        "address": "0x1410e0c68",
+        "references": [
+          {
+            "from": "0x1405c321c",
+            "function": "sub_1405c0530"
+          },
+          {
+            "from": "0x1405c7a39",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "point_sprite"
+      },
+      {
+        "address": "0x1410e0c78",
+        "references": [
+          {
+            "from": "0x1405c31a1",
+            "function": "sub_1405c0530"
+          },
+          {
+            "from": "0x1405c6051",
+            "function": "sub_1405c0530"
+          }
+        ],
+        "section": ".rdata",
+        "text": "point_parameters"
+      },
+      {
+        "address": "0x1410e9580",
+        "references": [
+          {
+            "from": "0x1410e95b0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "codepoint"
+      },
+      {
+        "address": "0x1410ea9a9",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotSeasonCurve()"
+      },
+      {
+        "address": "0x1410ead2e",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotSeasonCurve()"
+      },
+      {
+        "address": "0x1410ead70",
+        "references": [],
+        "section": ".rdata",
+        "text": "ChildMaterialSeasonCurve()"
+      },
+      {
+        "address": "0x1410f1280",
+        "references": [],
+        "section": ".rdata",
+        "text": "ParentCurve()"
+      },
+      {
+        "address": "0x1410f128e",
+        "references": [],
+        "section": ".rdata",
+        "text": "ProfileCurve()"
+      },
+      {
+        "address": "0x1410f1cd4",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotGrowthCurve()"
+      },
+      {
+        "address": "0x1410f1ce6",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotWindCurve()"
+      },
+      {
+        "address": "0x1410f45d8",
+        "references": [
+          {
+            "from": "0x1417a03c0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ToneCurves"
+      },
+      {
+        "address": "0x1410f45e8",
+        "references": [
+          {
+            "from": "0x1417a03a8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ToneCurve"
+      },
+      {
+        "address": "0x1410f53a8",
+        "references": [
+          {
+            "from": "0x14179ec10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ContrastCurve"
+      },
+      {
+        "address": "0x1410f6580",
+        "references": [
+          {
+            "from": "0x14179caf8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ProcessingInfo:ToneCurve"
+      },
+      {
+        "address": "0x1410f72a0",
+        "references": [
+          {
+            "from": "0x14179be98",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ToneCurveMatching"
+      },
+      {
+        "address": "0x1410f7350",
+        "references": [
+          {
+            "from": "0x14179bdc0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ToneCurveTable"
+      },
+      {
+        "address": "0x1410f8b58",
+        "references": [
+          {
+            "from": "0x14179ae20",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "White point chromaticity"
+      },
+      {
+        "address": "0x1410fa7b8",
+        "references": [
+          {
+            "from": "0x1417a2140",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "txLoc (point), count (0..255), text"
+      },
+      {
+        "address": "0x1410fa818",
+        "references": [
+          {
+            "from": "0x1417a20b0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "pnLoc (point, dh, dv (-128 .. 127))"
+      },
+      {
+        "address": "0x1410fa850",
+        "references": [
+          {
+            "from": "0x1417a2098",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "newPt (point)"
+      },
+      {
+        "address": "0x1410fa870",
+        "references": [
+          {
+            "from": "0x1417a2080",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "pnLoc (point), newPt (point)"
+      },
+      {
+        "address": "0x1410faa88",
+        "references": [
+          {
+            "from": "0x1417a1f00",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "numerator (point), denominator (point)"
+      },
+      {
+        "address": "0x1410fab38",
+        "references": [
+          {
+            "from": "0x1417a1e88",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "oval size (point)"
+      },
+      {
+        "address": "0x1410faba0",
+        "references": [
+          {
+            "from": "0x1417a1e28",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "pen size (point)"
+      },
+      {
+        "address": "0x1410fabc0",
+        "references": [
+          {
+            "from": "0x1417a1e10",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "space extra (fixed point)"
+      },
+      {
+        "address": "0x1411540c0",
+        "references": [
+          {
+            "from": "0x14069ff53",
+            "function": "sub_14069ff30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cannot get a TiledInputFile pointer from an InputFile that is not tiled."
+      },
+      {
+        "address": "0x141154698",
+        "references": [
+          {
+            "from": "0x1406a4a26",
+            "function": "sub_1406a4380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "One of the client procedures is NULL pointer."
+      },
+      {
+        "address": "0x14115a690",
+        "references": [
+          {
+            "from": "0x1406c9ca9",
+            "function": "sub_1406c9ca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "fixed point over"
+      },
+      {
+        "address": "0x1411c0fd8",
+        "references": [
+          {
+            "from": "0x1407052fe",
+            "function": "sub_1407051a0"
+          },
+          {
+            "from": "0x1407e16ee",
+            "function": "sub_1407e1590"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Row pointers and types mismatch in count"
+      },
+      {
+        "address": "0x1411c3980",
+        "references": [
+          {
+            "from": "0x1407305ff",
+            "function": "sub_140730380"
+          },
+          {
+            "from": "0x14075d0ef",
+            "function": "sub_14075ce70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Invalid base pointer, please set a proper sample count slice."
+      },
+      {
+        "address": "0x1411c4638",
+        "references": [
+          {
+            "from": "0x14192c0d0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "GrayResponseCurve"
+      }
+    ],
+    "total": 353
+  },
+  "summary": "353 strings match \"(point|curve|Curve)\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 120,
+    "total": 353,
+    "next_offset": 120
+  },
+  "locations": [],
+  "links": []
+}

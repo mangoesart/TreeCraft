@@ -1,0 +1,167 @@
+{
+  "id": "ev_c9939cb893ab4861e63c3927421aa8e17aa45ceee464214a16c68cca072eb36b",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Disabled|Low quality|Medium quality|High quality|Very high quality)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102e1a0",
+        "references": [
+          {
+            "from": "0x1400488f5",
+            "function": "sub_140047920"
+          },
+          {
+            "from": "0x1401d77ec",
+            "function": "sub_1401d70e0"
+          },
+          {
+            "from": "0x14038c80f",
+            "function": "sub_14038bca0"
+          },
+          {
+            "from": "0x1403d92db",
+            "function": "sub_1403d9100"
+          },
+          {
+            "from": "0x140405fc5",
+            "function": "sub_140405d90"
+          },
+          {
+            "from": "0x140540e99",
+            "function": "sub_14053c190"
+          },
+          {
+            "from": "0x14178e050",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Disabled"
+      },
+      {
+        "address": "0x141069140",
+        "references": [
+          {
+            "from": "0x14178e070",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Very high quality"
+      },
+      {
+        "address": "0x141069158",
+        "references": [
+          {
+            "from": "0x14051e622",
+            "function": "sub_14051e4e0"
+          },
+          {
+            "from": "0x14178e068",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "High quality"
+      },
+      {
+        "address": "0x141069168",
+        "references": [
+          {
+            "from": "0x14051e5cd",
+            "function": "sub_14051e4e0"
+          },
+          {
+            "from": "0x14178e060",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Medium quality"
+      },
+      {
+        "address": "0x141069178",
+        "references": [
+          {
+            "from": "0x14051e578",
+            "function": "sub_14051e4e0"
+          },
+          {
+            "from": "0x14178e058",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Low quality"
+      },
+      {
+        "address": "0x14138dd38",
+        "references": [
+          {
+            "from": "0x140ad289d",
+            "function": "sub_140acfaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Disabled"
+      },
+      {
+        "address": "0x14138ddd8",
+        "references": [
+          {
+            "from": "0x140ad2b5d",
+            "function": "sub_140acfaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Disabled"
+      },
+      {
+        "address": "0x1413e9908",
+        "references": [
+          {
+            "from": "0x140c9798f",
+            "function": "sub_140c978e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "disabled"
+      }
+    ],
+    "total": 8
+  },
+  "summary": "8 strings match \"^(Disabled|Low quality|Medium quality|High quality|Very high quality)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 8,
+    "total": 8
+  },
+  "locations": [],
+  "links": []
+}

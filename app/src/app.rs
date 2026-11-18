@@ -16,9 +16,29 @@ pub enum Sel {
     Material(usize),
     Mesh(usize),
     Window,
+    /// The light's settings in the Properties panel (picture 43).
+    Light,
 }
 
 pub const TABS: [&str; 3] = ["Generation", "Materials", "Meshes"];
+
+/// Render > WireShaded and Render > Wireframe (picture 24): drawn here, not in the shader.
+pub const MODE_WIRESHADED: f32 = 6.0;
+pub const MODE_WIREFRAME: f32 = 7.0;
+
+/// Render modes in the original's render_modes folder subfolders (ordered by its naming rule).
+const RENDER_LIGHTING: [&str; 6] = ["Untextured", "Diffuse", "Specular", "Ambient", "Subsurface", "Shadow"];
+const RENDER_MATERIAL: [&str; 9] = ["Color", "Opacity", "Roughness", "Normal", "Specular", "Metallic", "Subsurface", "Subsurface Amount", "Custom"];
+const RENDER_VCOL: [&str; 4] = ["Color", "Red", "Green", "Blue"];
+const RENDER_OTHER: [&str; 10] = ["Phong", "Blinn-Phong", "Oren-Nayar", "Lambert", "Flat", "Billboard Subsurface Amount", "Depth", "Overdraw", "Texcoord", "Texcoord Seams"];
+/// Wind strengths offered by the Wind menu, and the seasons by the Season menu (0 spring .. 1 winter).
+const WIND_LEVELS: [(&str, f32); 4] = [("Calm", 0.25), ("Breeze", 0.5), ("Strong", 1.0), ("Gale", 2.0)];
+/// "None" (no tint, the texture as it is: picture 25) first; a season tints leaves.
+const SEASONS: [(&str, f32); 7] = [("None", -1.0), ("Spring", 0.0), ("Early summer", 0.2), ("Summer", 0.4), ("Early autumn", 0.6), ("Autumn", 0.8), ("Winter", 1.0)];
+
+/// The generator templates at the top of the original's Add menu (its templates folder, in order).
+const GEN_TEMPLATES: [&str; 11] =
+    ["Trunk", "Trunk Tube", "Bifurcating Branches", "Big Branches", "Branch Tubes", "Little Branches", "Single Branch", "Twigs", "Cap", "Fronds", "Leaf Mesh"];
 
 pub struct Icons {
     pub tree: Texture2D,
@@ -55,6 +75,10 @@ enum GraphDrag {
     None,
     Node { id: u32, start: Vec2, moved: bool },
     Link { from: u32 },
+    /// From a node's top (output) socket: the node dropped on becomes its child.
+    LinkDown { parent: u32 },
+    /// A force / collision object's node.
+    Scene { idx: usize },
     Pan,
 }
 
@@ -109,6 +133,8 @@ pub struct App {
     pub status: String,
     pub status_t: f64,
     pub gm: Option<macroquad::material::Material>,
+    /// The same shader drawn additively (Render > Other > Overdraw).
+    pub gm_over: Option<macroquad::material::Material>,
     pub icons: Icons,
     pub viewport: Rect,
     pub regen_count: usize,
@@ -132,6 +158,173 @@ pub struct App {
     pub cutout_rect: Option<Rect>,
     /// widths the person dragged the Properties panel and the Generation/Materials/Meshes panel to
     /// (None = automatic), and which splitter is being dragged (1 = left, 2 = right)
+    /// Viewport toolbar (picture-18): Show menu flags, the render mode chosen, a copied camera,
+    /// the collapsed toolbar, and the nodes hidden by Visibility > Toggle isolation.
+    pub show_leaves: bool,
+    pub show_branches: bool,
+    pub render_mode: String,
+    pub cam_copy: Option<render::Cam>,
+    pub toolbar_collapsed: bool,
+    pub isolation: Option<Vec<u32>>,
+    /// Scene objects (forces and collision objects), the one picked, and their Show toggles.
+    pub scene: Vec<SceneObj>,
+    pub scene_sel: Option<usize>,
+    pub show_forces: bool,
+    pub show_coll: bool,
+    /// Show menu extras: bones (spines), normals, no back faces, and toggles for kinds of
+    /// geometry TreeCraft doesn't make yet (fronds, zones, targets, proxies).
+    pub show_bones: bool,
+    pub show_normals: bool,
+    pub one_sided: bool,
+    pub show_other: [bool; 4],
+    /// Wind sway (on, strength), season (0 spring .. 1 winter), ambient occlusion on, leaf
+    /// collision quality (0 None .. 3 High), gizmo mode (0 Translate, 1 Rotate, 2 Scale).
+    pub wind_on: bool,
+    pub wind_strength: f32,
+    pub season: f32,
+    pub ao_on: bool,
+    pub leaf_collision: u8,
+    pub gizmo_mode: u8,
+    gizmo_drag: Option<(u8, Vec2, SceneObj)>,
+    /// The last generated tree (for bones, normals and export).
+    pub geo: Option<gen::TreeGeo>,
+    /// Undo / Redo history (no limit) and the state last kept.
+    pub(crate) undo_stack: Vec<crate::undo::Snapshot>,
+    pub(crate) redo_stack: Vec<crate::undo::Snapshot>,
+    pub(crate) undo_cur: Option<crate::undo::Snapshot>,
+    /// The tree's state when last saved, opened or started (closing asks to save when it differs).
+    pub(crate) saved_sig: String,
+    /// Edit > Undo selection / Redo selection history.
+    pub(crate) sel_back: Vec<Sel>,
+    pub(crate) sel_fwd: Vec<Sel>,
+    /// Window > Layout: 0 normal, 1 full screen, 2 full screen with no bars.
+    pub layout_mode: u8,
+    /// Edit mode (picture 24): 0 Generator, 1 Node (Tab), 2 Freehand.
+    pub edit_mode: u8,
+    /// Node mode: the picked node (generator id, its number in the generator).
+    pub node_pick: Option<(u32, usize)>,
+    /// The curve being edited (generator id, property name, kind 0 Parent 1 Distribution 2 Profile).
+    pub curve_edit: Option<(u32, String, u8)>,
+    pub(crate) curve_drag: Option<usize>,
+    /// The curve editor window (picture 34): where it is, what is being dragged (edges as bits,
+    /// 16 = moving), the mouse last frame, picked points, Pin, Draw, the copied curve, where the
+    /// right-click menu opened, the last freehand point, and whether it opened this frame.
+    pub curve_win: Rect,
+    pub(crate) curve_win_drag: u8,
+    pub(crate) curve_last_mouse: Vec2,
+    pub(crate) curve_sel: Vec<usize>,
+    pub curve_pin: bool,
+    pub curve_draw: bool,
+    pub(crate) curve_clip: Option<Curve>,
+    pub(crate) curve_ctx_at: Vec2,
+    pub(crate) curve_draw_last: Option<Vec2>,
+    pub(crate) curve_just_opened: bool,
+    /// One of the curve editor's own lists was open last frame.
+    pub(crate) curve_popup_open: bool,
+    /// Variance Settings (picture 35): the property (generator id, name, its +/- button), the
+    /// window's place, whether it opened this frame, and the Cohesion slider being dragged.
+    pub var_edit: Option<(u32, String, Rect)>,
+    pub(crate) var_rect: Rect,
+    pub(crate) var_just_opened: bool,
+    pub(crate) var_cohesion_drag: bool,
+    /// The welcome window (picture 37): when it opened (seconds), None once closed.
+    pub welcome: Option<f64>,
+    /// The Preferences window's place and size once moved (picture 40), what's being dragged
+    /// (1 the title bar, 2..5 a corner) and where the drag began.
+    pub prefs_win: Option<Rect>,
+    pub(crate) prefs_win_drag: u8,
+    pub(crate) prefs_win_grab: (Vec2, Rect),
+    pub(crate) prefs_corners: Vec<Rect>,
+    /// Freehand: the stroke being drawn (screen points) and where it attaches.
+    pub(crate) free_stroke: Vec<Vec2>,
+    pub(crate) free_anchor: Option<Vec3>,
+    /// Where a left click started in the viewport (a click without dragging picks a mesh).
+    pub(crate) click_start: Option<Vec2>,
+    /// UV tab preview: show the picture, and which (0 Diffuse, 1 Normal, 2 Opacity).
+    pub uv_show_tex: bool,
+    pub uv_slot: usize,
+    /// UV preview: repeat the picture (default off, picture 28).
+    pub uv_tile: bool,
+    /// UV preview zoom, pan, height, drag state and last mouse, and where it was drawn last frame.
+    pub uv_zoom: f32,
+    pub uv_pan: Vec2,
+    pub uv_height: f32,
+    pub uv_drag: u8,
+    pub uv_last_mouse: Vec2,
+    pub uv_rect: Option<Rect>,
+    /// Viewport shading menu (picture 27): 0 Studio, 1 MatCap, 2 Flat; its drop-down; the MatCap
+    /// chosen and the pictures; the drop-down's ball preview and what it was drawn for.
+    pub shading: u8,
+    pub shading_open: bool,
+    pub matcap_idx: usize,
+    /// MatCap shows the textures' colours too (picture 29).
+    pub matcap_texture: bool,
+    pub(crate) matcap_tex: Vec<Texture2D>,
+    pub(crate) ball_tex: Option<Texture2D>,
+    pub(crate) ball_key: (i32, i32, i32),
+    /// Dragging the navigation gizmo's background turns the view.
+    pub(crate) gizmo_orbit: bool,
+    /// Selection menu (picture 30): its drop-down; the outline's mask picture and shaders, and
+    /// whether the mask was drawn this frame.
+    pub sel_open: bool,
+    /// The colour wheel opened from a swatch (picture 31).
+    pub wheel: Option<crate::colorwheel::Wheel>,
+    pub(crate) mask_mat: Option<macroquad::material::Material>,
+    /// The tree's shadow on the ground (picture 42).
+    pub(crate) shadow_mat: Option<macroquad::material::Material>,
+    /// The shadow's shape, drawn before it's laid on the ground (picture 45).
+    pub(crate) shadow_rt: Option<RenderTarget>,
+    /// The viewport's light controller (picture 42): dragging in the viewport moves the sun.
+    pub light_drag_mode: bool,
+    /// Show > Height indicator (picture 42).
+    pub show_height: bool,
+    /// The viewport's "?" tips card is open (picture 43).
+    pub help_open: bool,
+    /// When the last autosave (or its clock's start) was (picture 45).
+    pub last_autosave: f64,
+    /// When a value in the Properties panel last changed, and whether the selection indicator
+    /// was hidden for it (Preferences > Tree Window > Hide selection indicator on edit).
+    pub prop_edit_t: f64,
+    pub sel_hidden: bool,
+    /// The mouse button a viewport drag started with (0 left, 1 middle, 2 right).
+    pub(crate) vp_btn: u8,
+    /// The Properties panel scrolls toward this (Animate scrolling) and a group to bring into
+    /// view after a click opened it (Group click).
+    pub prop_scroll_target: f32,
+    pub prop_focus: Option<String>,
+    pub(crate) outline_mat: Option<macroquad::material::Material>,
+    pub(crate) sel_rt: Option<RenderTarget>,
+    pub(crate) sel_drawn: bool,
+    pub(crate) sel_dirty: bool,
+    /// Ball pictures for the shading buttons (Studio, Flat) and what the Studio one was drawn for.
+    pub(crate) shade_balls: Vec<Texture2D>,
+    pub(crate) shade_balls_key: (i32, i32),
+    pub(crate) last_mouse_nav: Vec2,
+    /// Preferences > Themes: 0 the 3D viewport's colours, 1 the Node Editor's.
+    pub prefs_theme_tab: usize,
+    /// Where each force / collision object sits in the node graph (None = laid out automatically).
+    pub scene_gpos: Vec<Option<Vec2>>,
+    /// Viewport pictures to save after the next frames (File > Export image / sequence / Render
+    /// photo): path, camera turn for that picture, and whether the viewport's own controls hide.
+    pub shot_queue: Vec<(std::path::PathBuf, Option<f32>, bool)>,
+    /// Edit > Preferences: the window is open, the page shown, and the settings.
+    pub prefs_open: bool,
+    /// The file the tree was opened from or last saved to (File > Save writes there).
+    pub tree_path: Option<std::path::PathBuf>,
+    /// The Properties panel's tab for branch and for leaf generators (0 = All).
+    pub prop_tab: usize,
+    pub prop_tab_leaf: usize,
+    pub prefs_page: usize,
+    pub prefs: crate::prefs::Prefs,
+    pub(crate) prefs_pick: Option<usize>,
+    pub(crate) prefs_drag: u8,
+    pub(crate) prefs_name: String,
+    pub(crate) prefs_name_focus: bool,
+    /// Wind direction (degrees around the vertical).
+    pub wind_dir: f32,
+    /// The viewport's own controls this frame (the toolbar, the view menu button): clicks there
+    /// don't turn the camera.
+    pub vp_ui: Vec<Rect>,
     pub left_w: Option<f32>,
     pub dock_w: Option<f32>,
     pub split_drag: u8,
@@ -168,7 +361,39 @@ impl App {
             sel: Sel::None,
             tab: 0,
             cam: Cam::new(),
-            light: Lighting { azimuth: 35.0, elevation: 50.0, unlit: false },
+            // a 10 am / 2 pm sun (45 degrees up, from the front right) and the original's Daylight
+            // preset and Ambient Occlusion / Shadows defaults (fn 0x140292fb0; picture 42)
+            light: Lighting {
+                azimuth: 35.0,
+                elevation: 45.0,
+                unlit: false,
+                mode: 0.0,
+                wind: 0.0,
+                time: 0.0,
+                season: -1.0,
+                one_sided: false,
+                ao_on: false,
+                overdraw: false,
+                no_alpha_test: false,
+                wind_dir: 0.0,
+                shading: 0.0,
+                sel_fill: [1.0, 0.62, 0.22, 0.38],
+                sun_color: [1.0, 1.0, 1.0],
+                sun_intensity: 2.0,
+                amb_sky: crate::render::hex_rgb(0x5391d3),
+                amb_horizon: crate::render::hex_rgb(0xb2e3ff),
+                amb_ground: crate::render::hex_rgb(0x8a8570),
+                amb_intensity: 0.4,
+                ao_brightness: 0.0,
+                ao_contrast: 0.0,
+                ao_min: 0.25,
+                ao_max: 1.0,
+                shadow_quality: 2,
+                ground_weight: 0.3,
+                // a little light round onto the shadow side, so it isn't too dark (picture 44)
+                wrap: 0.3,
+                flip_back: true,
+            },
             show_grid: true,
             highlight: true,
             dirty: true,
@@ -199,6 +424,7 @@ impl App {
             status: String::new(),
             status_t: 0.0,
             gm,
+            gm_over: render::make_overdraw_material().map_err(|e| eprintln!("overdraw shader error: {}", e)).ok(),
             icons: Icons::load(),
             viewport: Rect::new(0.0, 0.0, 1.0, 1.0),
             regen_count: 0,
@@ -218,6 +444,115 @@ impl App {
             mesh_editing: false,
             cutout: None,
             cutout_rect: None,
+            show_leaves: true,
+            show_branches: true,
+            render_mode: "Standard".into(),
+            cam_copy: None,
+            toolbar_collapsed: false,
+            isolation: None,
+            scene: vec![],
+            scene_sel: None,
+            show_forces: true,
+            show_coll: true,
+            show_bones: false,
+            show_normals: false,
+            one_sided: false,
+            show_other: [true; 4],
+            wind_on: false,
+            wind_strength: 0.5,
+            season: -1.0,
+            ao_on: false,
+            leaf_collision: 0,
+            gizmo_mode: 0,
+            gizmo_drag: None,
+            geo: None,
+            undo_stack: vec![],
+            redo_stack: vec![],
+            undo_cur: None,
+            saved_sig: String::new(),
+            sel_back: vec![],
+            sel_fwd: vec![],
+            layout_mode: 0,
+            prefs_theme_tab: 0,
+            edit_mode: 0,
+            node_pick: None,
+            curve_edit: None,
+            curve_drag: None,
+            curve_win: Rect::new(0.0, 0.0, 0.0, 0.0),
+            curve_win_drag: 0,
+            curve_last_mouse: Vec2::ZERO,
+            curve_sel: vec![],
+            curve_pin: false,
+            curve_draw: false,
+            curve_clip: None,
+            curve_ctx_at: Vec2::ZERO,
+            curve_draw_last: None,
+            curve_just_opened: false,
+            curve_popup_open: false,
+            var_edit: None,
+            var_rect: Rect::new(0.0, 0.0, 0.0, 0.0),
+            var_just_opened: false,
+            welcome: None,
+            prefs_win: None,
+            prefs_win_drag: 0,
+            prefs_win_grab: (Vec2::ZERO, Rect::new(0.0, 0.0, 0.0, 0.0)),
+            prefs_corners: vec![],
+            var_cohesion_drag: false,
+            free_stroke: vec![],
+            free_anchor: None,
+            click_start: None,
+            uv_show_tex: true,
+            uv_slot: 0,
+            uv_tile: false,
+            uv_zoom: 1.0,
+            uv_pan: Vec2::ZERO,
+            uv_height: 0.0,
+            uv_drag: 0,
+            uv_last_mouse: Vec2::ZERO,
+            uv_rect: None,
+            shading: 0,
+            shading_open: false,
+            matcap_idx: 0,
+            matcap_texture: false,
+            matcap_tex: vec![],
+            ball_tex: None,
+            ball_key: (0, 0, 0),
+            gizmo_orbit: false,
+            sel_open: false,
+            wheel: None,
+            mask_mat: render::make_mask_material().map_err(|e| eprintln!("selection mask shader error: {}", e)).ok(),
+            shadow_mat: render::make_shadow_material().map_err(|e| eprintln!("shadow shader error: {}", e)).ok(),
+            shadow_rt: None,
+            light_drag_mode: false,
+            show_height: true,
+            help_open: false,
+            last_autosave: 0.0,
+            prop_edit_t: -10.0,
+            sel_hidden: false,
+            vp_btn: 0,
+            prop_scroll_target: 0.0,
+            prop_focus: None,
+            outline_mat: render::make_outline_material().map_err(|e| eprintln!("outline shader error: {}", e)).ok(),
+            sel_rt: None,
+            sel_drawn: false,
+            sel_dirty: false,
+            shade_balls: vec![],
+            shade_balls_key: (i32::MIN, 0),
+            last_mouse_nav: Vec2::ZERO,
+            scene_gpos: vec![],
+            shot_queue: vec![],
+            prefs_open: false,
+            tree_path: None,
+            prop_tab: 0,
+            prop_tab_leaf: 0,
+            prefs_page: 0,
+            prefs: crate::prefs::Prefs::load(),
+            prefs_pick: None,
+            prefs_drag: 0,
+            prefs_name: String::new(),
+            prefs_name_focus: false,
+            wind_dir: 0.0,
+            vp_ui: vec![],
             left_w: None,
             dock_w: None,
             split_drag: 0,
@@ -236,18 +571,27 @@ impl App {
             custom_preview_name: String::new(),
         };
         app.new_tree();
-        // the starting tree comes with a bark and a leaf material and a leaf mesh; File > New tree
-        // starts from a clean slate
-        app.reset_library();
-        // starting graph: one of each building block, all on their default settings
-        let root = app.root_id();
-        let trunk = app.add_node(Kind::Trunk, root);
-        let br = app.add_node(Kind::Branch, trunk);
-        app.add_node(Kind::Leaf, br);
+        // the program starts empty (picture-20): only the Tree generator, nothing in the viewport,
+        // and no materials or meshes either (picture-24 removed the default Bark and Leaf)
         app.select(Sel::None);
         app.regenerate();
         app.frame_tree();
+        app.undo_reset();
         app
+    }
+
+    /// A small tree (trunk, branches, leaves) on default settings, for the self-test.
+    pub fn load_demo(&mut self) {
+        // the demo has a bark and a leaf material and a leaf cutout
+        self.reset_library();
+        let root = self.root_id();
+        let trunk = self.add_node(Kind::Trunk, root);
+        let br = self.add_node(Kind::Branch, trunk);
+        self.add_node(Kind::Leaf, br);
+        self.select(Sel::None);
+        self.regenerate();
+        self.frame_tree();
+        self.undo_reset();
     }
 
     fn reset_library(&mut self) {
@@ -279,6 +623,26 @@ impl App {
         *self.per_node.get(&id).unwrap_or(&0)
     }
 
+    /// The material a generator's bark shows (for the UV preview): its Materials list's heaviest
+    /// entry, or its own material; an Inherited entry (or none at all) takes the parent
+    /// generator's, as the bark does (picture 39).
+    pub fn shown_material(&self, id: u32) -> Option<usize> {
+        let mut cur = Some(id);
+        for _ in 0..32 {
+            let n = self.node(cur?)?;
+            let pick = if n.p.mat_list.is_empty() {
+                n.p.material
+            } else {
+                n.p.mat_list.iter().cloned().fold((INHERITED, f32::MIN), |a, e| if e.1 > a.1 { e } else { a }).0
+            };
+            if pick != INHERITED {
+                return (pick < self.materials.len()).then_some(pick);
+            }
+            cur = n.parent;
+        }
+        None
+    }
+
     pub fn new_tree(&mut self) {
         self.nodes.clear();
         self.next_id = 1;
@@ -305,6 +669,11 @@ impl App {
 
     pub fn select(&mut self, s: Sel) {
         if self.sel != s {
+            self.sel_back.push(self.sel);
+            if self.sel_back.len() > 200 {
+                self.sel_back.remove(0);
+            }
+            self.sel_fwd.clear();
             self.sel = s;
             self.prop_scroll = 0.0;
             self.dirty = true;
@@ -339,7 +708,7 @@ impl App {
             p.first = 0.0; // First/Last pick anchors by height (fn 0x14026f500): keep them all
             p.last = 1.0;
         }
-        let x = pp.x + if siblings == 0 { 0.0 } else { (siblings as f32 + 1.0) / 2.0 * 90.0 * if siblings % 2 == 1 { 1.0 } else { -1.0 } };
+        let x = pp.x + if siblings == 0 { 0.0 } else { (siblings as f32 + 1.0) / 2.0 * 150.0 * if siblings % 2 == 1 { 1.0 } else { -1.0 } };
         self.nodes.push(Node { id, kind, name, parent: Some(parent), pos: vec2(x, pp.y - 100.0), p, hidden: false });
         self.select(Sel::Node(id));
         self.dirty = true;
@@ -405,7 +774,7 @@ impl App {
             let kids: Vec<u32> = app.nodes.iter().filter(|n| n.parent == Some(id)).map(|n| n.id).collect();
             let px = if kids.is_empty() {
                 let v = *x;
-                *x += 90.0;
+                *x += 150.0;
                 v
             } else {
                 let xs: Vec<f32> = kids.iter().map(|k| place(app, *k, depth + 1, x)).collect();
@@ -444,10 +813,13 @@ impl App {
         for m in &mut self.materials {
             textures::refresh_material(m);
         }
-        let selected = if let Sel::Node(id) = self.sel { Some(id) } else { None };
-        let ctx = GenCtx { nodes: &self.nodes, materials: &self.materials, meshes: &self.meshes, selected, highlight: self.highlight };
-        let geo = gen::generate(&ctx);
-        self.geo_stats = (geo.tris, geo.verts, geo.spines, geo.leaves);
+        // the toolbar's Show menu: leaves off skips leaf generators; branches off keeps their
+        // spines (leaves stay where they grow) but draws no bark
+        let mut geo = self.generate_with(None);
+        self.geo_stats = (geo.tris, geo.verts, geo.spines, geo.leaves.saturating_sub(geo.leaves_removed));
+        if geo.leaves_removed > 0 && geo.warnings.is_empty() {
+            geo.warnings.push(format!("Leaf collision removed {} leaves", geo.leaves_removed));
+        }
         if let Some(w) = geo.warnings.first() {
             let w = w.clone();
             self.set_status(&w);
@@ -460,7 +832,10 @@ impl App {
         // collection meshes are rebuilt from the generators that contribute to them; when one
         // changes, compute once more so leaves using it see the new geometry
         let mut changed = false;
-        for (mi, g) in geo.collections {
+        let collections = std::mem::take(&mut geo.collections);
+        geo.leaf_grid.clear();
+        self.geo = Some(geo);
+        for (mi, g) in collections {
             if let Some(m) = self.meshes.get_mut(mi) {
                 let same = m
                     .collected
@@ -482,48 +857,178 @@ impl App {
         let (a, b) = self.bounds;
         let b2 = vec3(b.x, b.y.max(a.y + 1.0), b.z);
         self.cam.frame(vec3(a.x, a.y.min(0.0), a.z), b2);
+        // Preferences > Viewport > Zoom distance scale (the original's "Scales how far away cameras
+        // are placed from target objects during zoom operations")
+        self.cam.dist *= self.prefs.zoom_scale.max(0.05);
     }
 
     // ------------------------------------------------------------------ viewport
     pub fn viewport_input(&mut self, ui: &mut Ui, r: Rect) {
         let m = ui.mouse();
-        let over = r.contains(m) && !ui.blocked && ui.popup.is_none();
+        let over = r.contains(m) && !ui.blocked && ui.popup.is_none() && !self.vp_ui.iter().any(|b| b.contains(m));
         let inp = ui.inp.clone();
+        // Preferences > Tree Window > Navigation (picture 45): reversed directions
+        let (zs, rs, ps) = (if self.prefs.rev_zoom { -1.0 } else { 1.0 }, if self.prefs.rev_rotate { -1.0 } else { 1.0 }, if self.prefs.rev_pan { -1.0 } else { 1.0 });
         if over && inp.wheel != 0.0 {
-            self.cam.zoom(inp.wheel);
+            self.cam.zoom(inp.wheel * zs);
         }
-        if over && ui.active == 0 && self.vp_drag == VpDrag::None {
-            if inp.l_pressed {
-                self.vp_drag = if inp.shift || inp.alt && inp.ctrl { VpDrag::Pan } else { VpDrag::Orbit };
-                self.last_mouse = m;
-                ui.active = hid("viewport");
-            } else if inp.m_pressed {
-                self.vp_drag = VpDrag::Pan;
-                self.last_mouse = m;
-            } else if inp.r_pressed {
-                self.vp_drag = VpDrag::Zoom;
-                self.last_mouse = m;
+        // the Gizmo: pressing a force or collision object picks it and drags it (Translate moves
+        // it in the view plane, Rotate turns its direction, Scale changes its strength or size)
+        let vp = self.cam.camera3d(None, r.w / r.h.max(1.0), None).matrix();
+        let to_screen = |p: Vec3| -> Option<Vec2> {
+            let c = vp * p.extend(1.0);
+            if c.w <= 0.0 {
+                return None;
+            }
+            Some(vec2(r.x + (c.x / c.w * 0.5 + 0.5) * r.w, r.y + (0.5 - c.y / c.w * 0.5) * r.h))
+        };
+        if over && ui.active == 0 && self.vp_drag == VpDrag::None && inp.l_pressed && self.gizmo_drag.is_none() {
+            let hit = self.scene.iter().enumerate().filter(|(_, o)| if o.kind.is_force() { self.show_forces } else { self.show_coll }).find_map(|(k, o)| {
+                let s = to_screen(o.pos)?;
+                (s.distance(m) < 16.0 * self.prefs.manip_size).then_some(k)
+            });
+            if let Some(k) = hit {
+                self.scene_sel = Some(k);
+                self.gizmo_drag = Some((self.gizmo_mode, m, self.scene[k].clone()));
+                ui.active = hid("viewport.gizmo");
+                ui.inp.l_pressed = false;
+                return;
             }
         }
+        if let Some((mode, start, o0)) = self.gizmo_drag.clone() {
+            if inp.l_down {
+                if let Some(k) = self.scene_sel.filter(|&k| k < self.scene.len()) {
+                    let d = m - start;
+                    let fwd = self.cam.dir();
+                    let right = Vec3::Y.cross(fwd).normalize_or_zero();
+                    let up = fwd.cross(right).normalize_or_zero();
+                    let p = &self.prefs;
+                    let snap = (p.snap_move, p.snap_move_unit, p.snap_rotate, p.snap_rotate_deg, p.snap_scale, p.snap_scale_amount);
+                    let o = &mut self.scene[k];
+                    match mode {
+                        0 => {
+                            // world units per pixel at the object's distance
+                            let dist = (o0.pos - self.cam.position()).length().max(1.0);
+                            let k_px = 2.0 * dist * (self.cam.fov.to_radians() * 0.5).tan() / r.h.max(1.0);
+                            // cam.dir() points back toward the camera, so `right` is screen-right
+                            o.pos = o0.pos + right * d.x * k_px - up * d.y * k_px;
+                            // Preferences > Viewport: translation snapping to the snap unit
+                            if snap.0 {
+                                let u = snap.1.max(0.001);
+                                o.pos = (o.pos / u).round() * u;
+                            }
+                        }
+                        1 => {
+                            // rotation snapping: whole steps of the snap angle
+                            let (mut ay, mut ax) = (d.x * 0.01, d.y * 0.01);
+                            if snap.2 {
+                                let s = snap.3.to_radians().max(0.001);
+                                ay = (ay / s).round() * s;
+                                ax = (ax / s).round() * s;
+                            }
+                            let q = Quat::from_axis_angle(Vec3::Y, ay) * Quat::from_axis_angle(right, ax);
+                            o.dir = (q * o0.dir).normalize_or_zero();
+                        }
+                        _ => {
+                            let mut f = (-d.y * 0.01).exp();
+                            // scale snapping: whole steps of the snap amount
+                            if snap.4 {
+                                let s = snap.5.max(0.001);
+                                f = ((f / s).round() * s).max(s);
+                            }
+                            o.size = o0.size * f;
+                            o.length = o0.length * f;
+                        }
+                    }
+                    if o.kind.is_force() {
+                        self.dirty = true;
+                    }
+                }
+            } else {
+                self.gizmo_drag = None;
+                ui.active = 0;
+            }
+            return;
+        }
+        if over && ui.active == 0 && self.vp_drag == VpDrag::None {
+            // Front, Back, Left, Right, Top and Bottom only zoom and pan unless Preferences >
+            // Viewport > Rotate fixed views is on (picture 27)
+            let fixed = self.cam.view != 0 && !self.prefs.rotate_fixed_views;
+            let orbit = if fixed { VpDrag::Pan } else { VpDrag::Orbit };
+            // Preferences > Tree Window > Control scheme (picture 45)
+            let start = match self.prefs.nav_scheme {
+                // Autodesk Maya: Alt + left orbits, Alt + middle pans, Alt + right zooms
+                1 => {
+                    if !inp.alt {
+                        None
+                    } else if inp.l_pressed {
+                        Some((orbit, 0))
+                    } else if inp.m_pressed {
+                        Some((VpDrag::Pan, 1))
+                    } else if inp.r_pressed {
+                        Some((VpDrag::Zoom, 2))
+                    } else {
+                        None
+                    }
+                }
+                // Autodesk 3ds Max: middle pans, Alt + middle orbits, Ctrl + Alt + middle zooms
+                2 => {
+                    if inp.m_pressed {
+                        Some((if inp.alt && inp.ctrl { VpDrag::Zoom } else if inp.alt { orbit } else { VpDrag::Pan }, 1))
+                    } else {
+                        None
+                    }
+                }
+                _ => {
+                    if inp.l_pressed {
+                        Some((if inp.shift || inp.alt && inp.ctrl { VpDrag::Pan } else { orbit }, 0))
+                    } else if inp.m_pressed {
+                        Some((VpDrag::Pan, 1))
+                    } else if inp.r_pressed {
+                        Some((VpDrag::Zoom, 2))
+                    } else {
+                        None
+                    }
+                }
+            };
+            if let Some((drag, btn)) = start {
+                self.vp_drag = drag;
+                self.vp_btn = btn;
+                self.last_mouse = m;
+                if btn == 0 {
+                    ui.active = hid("viewport");
+                }
+            }
+        }
+        // the button the drag started with is still held
+        let held = match self.vp_btn {
+            0 => inp.l_down,
+            1 => inp.m_down,
+            _ => inp.r_down,
+        };
         let d = m - self.last_mouse;
         match self.vp_drag {
             VpDrag::Orbit => {
-                if inp.l_down {
-                    self.cam.orbit(d.x, d.y);
+                if inp.l_down && self.light_drag_mode {
+                    // the light controller is on (picture 42): a drag moves the sun instead
+                    self.light.azimuth = (self.light.azimuth - d.x * 0.4 + 540.0).rem_euclid(360.0) - 180.0;
+                    self.light.elevation = (self.light.elevation + d.y * 0.3).clamp(5.0, 90.0);
+                } else if held {
+                    self.cam.orbit(d.x * rs, d.y * rs);
                 } else {
                     self.vp_drag = VpDrag::None;
                 }
             }
             VpDrag::Pan => {
-                if inp.l_down || inp.m_down {
-                    self.cam.pan(-d.x, d.y, r.h);
+                if held {
+                    self.cam.pan(-d.x * ps, d.y * ps, r.h);
                 } else {
                     self.vp_drag = VpDrag::None;
                 }
             }
             VpDrag::Zoom => {
-                if inp.r_down {
-                    self.cam.zoom(-d.y * 0.03);
+                if held {
+                    self.cam.zoom(-d.y * 0.03 * zs);
                 } else {
                     self.vp_drag = VpDrag::None;
                 }
@@ -534,8 +1039,36 @@ impl App {
     }
 
     pub fn draw_viewport_bg(&self, r: Rect) {
-        let top = Color::new(0.26, 0.27, 0.29, 1.0);
-        let bot = Color::new(0.14, 0.14, 0.15, 1.0);
+        // the original's viewport (picture 42): sky above the horizon, ground colour below it
+        if self.prefs.bg_style == 1 {
+            let (sky, hor, gnd) = (self.prefs.color("sky_top"), self.prefs.color("sky_horizon"), self.prefs.color("sky_ground"));
+            let p = self.cam.pitch;
+            let hy = if self.cam.ortho {
+                if p.abs() < 0.02 { r.y + r.h * 0.5 } else if p > 0.0 { r.y - 1.0 } else { r.y + r.h + 1.0 }
+            } else {
+                r.y + r.h * 0.5 - r.h * 0.5 * p.tan() / (self.cam.fov.to_radians() * 0.5).tan()
+            };
+            let steps = 48;
+            for i in 0..steps {
+                let y0 = r.y + r.h * i as f32 / steps as f32;
+                let ym = y0 + r.h / steps as f32 * 0.5;
+                let c = if ym < hy {
+                    let t = ((hy - ym) / (r.h * 0.7)).clamp(0.0, 1.0).sqrt();
+                    Color::new(hor.r + (sky.r - hor.r) * t, hor.g + (sky.g - hor.g) * t, hor.b + (sky.b - hor.b) * t, 1.0)
+                } else {
+                    let t = ((ym - hy) / (r.h * 0.8)).clamp(0.0, 1.0);
+                    Color::new(gnd.r * (1.0 - 0.12 * t), gnd.g * (1.0 - 0.12 * t), gnd.b * (1.0 - 0.12 * t), 1.0)
+                };
+                draw_rectangle(r.x, y0, r.w, r.h / steps as f32 + 1.0, c);
+            }
+            // a crisp horizon line
+            if hy > r.y && hy < r.y + r.h {
+                draw_rectangle(r.x, hy - 1.0, r.w, 2.0, Color::new(hor.r, hor.g, hor.b, 1.0));
+            }
+            return;
+        }
+        let top = self.prefs.color("bg_top");
+        let bot = self.prefs.color("bg_bottom");
         let steps = 24;
         for i in 0..steps {
             let t = i as f32 / steps as f32;
@@ -549,49 +1082,293 @@ impl App {
         let vp = ((r.x * scale) as i32, (sh - (r.y + r.h) * scale) as i32, (r.w * scale) as i32, (r.h * scale) as i32);
         let cam3 = self.cam.camera3d(Some(vp), r.w / r.h.max(1.0), None);
         set_camera(&cam3);
-        if self.show_grid {
-            render::draw_grid(50.0, 2.5);
+        // the ground under the tree (Preferences > Viewport > Ground; picture 42)
+        if self.prefs.show_ground {
+            let ext = (self.bounds.1 - self.bounds.0).length();
+            // below the grid by a share of the camera distance, so they never fight (picture 43)
+            render::draw_ground((ext * 0.9).clamp(12.0, 400.0), -(self.cam.dist * 0.004).max(0.02), self.prefs.color("ground"));
         }
-        if let (Some(gpu), Some(gm)) = (&mut self.gpu, &self.gm) {
+        if self.show_grid {
+            let p = &self.prefs;
+            render::draw_grid(50.0, 2.5, p.color("grid"), p.color("grid_major"), p.color("grid_x"), p.color("grid_z"));
+        }
+        // the toolbar's settings reach the shader through the lighting block
+        self.light.wind = if self.wind_on { self.wind_strength } else { 0.0 };
+        self.light.time = get_time() as f32;
+        self.light.season = self.season;
+        self.light.one_sided = self.one_sided;
+        self.light.ao_on = self.ao_on;
+        self.light.overdraw = self.light.mode == 47.0;
+        self.light.no_alpha_test = !self.prefs.alpha_test;
+        self.light.wind_dir = self.wind_dir;
+        self.light.shading = if self.shading == 1 && self.matcap_texture { 3.0 } else { self.shading as f32 };
+        // Selection > Solid fill (or Both): its colour; Outline only: no fill
+        let mut fill = self.prefs.sel_fill;
+        if self.prefs.sel_mode == 1 {
+            fill[3] = 0.0;
+        }
+        self.light.sel_fill = fill;
+        self.light.flip_back = self.prefs.flip_back;
+        let gm = if self.light.overdraw { self.gm_over.as_ref().or(self.gm.as_ref()) } else { self.gm.as_ref() };
+        if let (Some(gpu), Some(gm)) = (&mut self.gpu, gm) {
             for (mi, meshes) in &mut gpu.parts {
-                if let Some(m) = self.materials.get(*mi) {
-                    for mesh in meshes.iter_mut() {
-                        mesh.texture = m.tex.clone();
+                let tex = self.materials.get(*mi).and_then(|m| if self.prefs.textures { m.tex.clone() } else { None });
+                for mesh in meshes.iter_mut() {
+                    // Preferences > Viewport > Texture mapping off, or no material: plain colour
+                    mesh.texture = tex.clone();
+                }
+            }
+            // Preferences > Viewport > Wireframe and Render > Wireframe: see-through lines only
+            // (the original's "Enables wireframe (lines only) rendering"); WireShaded: the
+            // standard shading with every edge on top (picture 24)
+            let mode = self.light.mode;
+            let wire_only = self.prefs.wireframe || mode == MODE_WIREFRAME;
+            // the tree's shadow on the ground (pictures 42-45): its shape drawn white into a picture
+            // (larger than the viewport by Preferences > Render > Shadow anti-aliasing samples, so
+            // its edges come out smooth), then laid over the ground once as a dark see-through
+            // layer before the tree is drawn - one hard shadow that can't flicker against the
+            // grid or itself; the tree covers it where it stands in front
+            if self.prefs.show_ground && self.light.shadow_quality > 0 && self.light.elevation > 3.0 && !wire_only {
+                if let Some(sm) = &self.shadow_mat {
+                    let ss = [1.0f32, 1.5, 2.0, 2.5, 3.0][self.prefs.shadow_aa.min(4)];
+                    let (w, h) = (((vp.2.max(1) as f32 * ss) as u32).min(4096), ((vp.3.max(1) as f32 * ss) as u32).min(4096));
+                    if self.shadow_rt.as_ref().map_or(true, |t| t.texture.width() as u32 != w || t.texture.height() as u32 != h) {
+                        let t = render_target(w, h);
+                        t.texture.set_filter(FilterMode::Linear);
+                        self.shadow_rt = Some(t);
+                    }
+                    if let Some(rt) = self.shadow_rt.clone() {
+                        set_camera(&self.cam.camera3d(None, r.w / r.h.max(1.0), Some(rt.clone())));
+                        clear_background(Color::new(0.0, 0.0, 0.0, 0.0));
+                        gl_use_material(sm);
+                        sm.set_uniform("LightDir", self.light.dir());
+                        sm.set_uniform("Shift", Vec2::ZERO);
+                        sm.set_uniform("Lift", 0.0f32);
+                        sm.set_uniform("ShadowColor", vec4(1.0, 1.0, 1.0, 1.0));
+                        sm.set_uniform("GroundCol", vec4(1.0, 1.0, 1.0, 0.0));
+                        sm.set_uniform("Radius", 1.0e6f32);
+                        for (mi, meshes) in &gpu.parts {
+                            let m = self.materials.get(*mi);
+                            sm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha).map_or(0.0, |m| m.cutoff.max(0.01)));
+                            for mesh in meshes.iter() {
+                                draw_mesh(mesh);
+                            }
+                        }
+                        unsafe { get_internal_gl() }.flush();
+                        gl_use_default_material();
+                        // laid over the viewport (screen units), then back to the 3D camera
+                        set_default_camera();
+                        let f = scale / screen_dpi_scale().max(0.5);
+                        let dark = (self.light.ground_weight * 1.6).clamp(0.0, 0.9);
+                        draw_texture_ex(&rt.texture, r.x * f, r.y * f, Color::new(0.02, 0.02, 0.03, dark), DrawTextureParams { dest_size: Some(vec2(r.w * f, r.h * f)), flip_y: true, ..Default::default() });
+                        unsafe { get_internal_gl() }.flush();
+                        set_camera(&cam3);
                     }
                 }
             }
-            draw_gpu(gpu, &self.materials, gm, &self.light, self.cam.position());
+            if !wire_only {
+                let mut light = self.light.clone();
+                if mode == MODE_WIRESHADED {
+                    light.mode = 0.0;
+                }
+                draw_gpu(gpu, &self.materials, gm, &light, self.cam.position());
+            }
+            // Selection > Outline (picture 30): the selected generator's shape into a picture the
+            // size of the viewport; draw_selection_outline rings it afterwards
+            self.sel_drawn = false;
+            if self.prefs.sel_mode != 0 && self.highlight && !self.sel_hidden && matches!(self.sel, Sel::Node(_)) {
+                if let Some(mm) = &self.mask_mat {
+                    let (w, h) = (vp.2.max(1) as u32, vp.3.max(1) as u32);
+                    if self.sel_rt.as_ref().map_or(true, |t| t.texture.width() as u32 != w || t.texture.height() as u32 != h) {
+                        let t = render_target(w, h);
+                        t.texture.set_filter(FilterMode::Nearest);
+                        self.sel_rt = Some(t);
+                    }
+                    if let Some(rt) = self.sel_rt.clone() {
+                        set_camera(&self.cam.camera3d(None, r.w / r.h.max(1.0), Some(rt)));
+                        clear_background(Color::new(0.0, 0.0, 0.0, 0.0));
+                        gl_use_material(mm);
+                        mm.set_uniform("Time", self.light.time);
+                        mm.set_uniform("Wind", self.light.wind);
+                        let wa = self.light.wind_dir.to_radians();
+                        mm.set_uniform("WindDir", vec2(wa.cos(), wa.sin()));
+                        for (mi, meshes) in &gpu.parts {
+                            let m = self.materials.get(*mi);
+                            let leaf = m.map_or(false, |m| m.opacity_from_alpha);
+                            mm.set_uniform("IsLeaf", if leaf { 1.0f32 } else { 0.0 });
+                            mm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha).map_or(0.0, |m| m.cutoff.max(0.01)));
+                            for mesh in meshes.iter() {
+                                draw_mesh(mesh);
+                            }
+                            unsafe { get_internal_gl() }.flush();
+                        }
+                        gl_use_default_material();
+                        set_camera(&cam3);
+                        self.sel_drawn = true;
+                    }
+                }
+            }
+            // Scribed: the triangles' edges over the shaded tree
+            if mode == 1.0 || mode == MODE_WIRESHADED || wire_only {
+                let c = if wire_only {
+                    self.prefs.color("wire_only")
+                } else if mode == MODE_WIRESHADED {
+                    self.prefs.color("wire_shaded")
+                } else {
+                    self.prefs.color("scribed")
+                };
+                if mode == 1.0 && !wire_only {
+                    // Scribed: thin lines as before
+                    let mut n = 0;
+                    'all: for (_, meshes) in &gpu.parts {
+                        for mesh in meshes {
+                            for t in mesh.indices.chunks(3) {
+                                if t.len() < 3 {
+                                    continue;
+                                }
+                                let p = |i: u16| mesh.vertices[i as usize].position;
+                                draw_line_3d(p(t[0]), p(t[1]), c);
+                                draw_line_3d(p(t[1]), p(t[2]), c);
+                                draw_line_3d(p(t[2]), p(t[0]), c);
+                                n += 1;
+                                if n > 60000 {
+                                    break 'all;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // WireShaded / Wireframe (picture 38): lines of Preferences > Viewport > Wire
+                    // thickness, each a thin strip facing the camera; the selected generator's
+                    // (its vertices marked by alpha, gen.rs) brighter by Selected wire brightness
+                    let k = self.prefs.wire_sel_boost;
+                    let csel = Color::new(c.r + (1.0 - c.r) * k, c.g + (1.0 - c.g) * k, c.b + (1.0 - c.b) * k, (c.a + (1.0 - c.a) * k).min(1.0));
+                    let px = if self.cam.ortho { self.cam.view_height() / vp.3.max(1) as f32 } else { 2.0 * (self.cam.fov.to_radians() * 0.5).tan() / vp.3.max(1) as f32 };
+                    draw_thick_wires(&gpu.parts, self.cam.position(), self.cam.ortho, px * self.prefs.wire_px.max(0.5), c, csel);
+                }
+            }
+            // Show > Normals: a short line along each vertex normal
+            if self.show_normals {
+                let c = self.prefs.color("normals");
+                let len = ((self.bounds.1 - self.bounds.0).length() * 0.01).max(0.05);
+                let mut n = 0;
+                'nrm: for (_, meshes) in &gpu.parts {
+                    for mesh in meshes {
+                        for v in &mesh.vertices {
+                            let nn = vec3(v.normal.x, v.normal.y, v.normal.z);
+                            draw_line_3d(v.position, v.position + nn * len, c);
+                            n += 1;
+                            if n > 40000 {
+                                break 'nrm;
+                            }
+                        }
+                    }
+                }
+            }
         }
+        // Skin:Type "Spine only" (picture 39): each spine a yellow line with a mark at every
+        // segment, brighter when its generator is selected
+        if let Some(geo) = self.geo.as_ref().filter(|g| !g.spine_lines.is_empty()) {
+            let px = if self.cam.ortho { self.cam.view_height() / vp.3.max(1) as f32 } else { 2.0 * (self.cam.fov.to_radians() * 0.5).tan() / vp.3.max(1) as f32 };
+            let sel = if let Sel::Node(id) = self.sel { Some(id) } else { None };
+            draw_spine_lines(&geo.spine_lines, self.cam.position(), self.cam.ortho, px, sel);
+        }
+        // Show > Bones: every branch's spine
+        if self.show_bones {
+            if let Some(geo) = &self.geo {
+                // drawn over the bark: what's drawn so far goes out, then the depth is cleared
+                unsafe {
+                    let mut gl = get_internal_gl();
+                    gl.flush();
+                    gl.quad_context.clear(None, Some(1.0), None);
+                }
+                let c = self.prefs.color("bones");
+                for b in &geo.bones {
+                    for w in b.windows(2) {
+                        draw_line_3d(w[0], w[1], c);
+                    }
+                }
+            }
+        }
+        self.draw_scene_objects();
+        self.draw_edit_3d();
         set_default_camera();
     }
 
+    /// Forces and collision objects in the viewport (when shown), the picked one highlighted.
+    fn draw_scene_objects(&self) {
+        for (k, o) in self.scene.iter().enumerate() {
+            if (o.kind.is_force() && !self.show_forces) || (!o.kind.is_force() && !self.show_coll) {
+                continue;
+            }
+            let picked = self.scene_sel == Some(k);
+            let c = if picked { self.prefs.color("picked") } else if o.kind.is_force() { self.prefs.color("forces") } else { self.prefs.color("collision") };
+            match o.kind {
+                SceneKind::Direction => {
+                    // an arrow along the force, longer with strength
+                    let d = o.dir.normalize_or_zero();
+                    let end = o.pos + d * (4.0 + o.size * 4.0);
+                    draw_line_3d(o.pos, end, c);
+                    let side = any_perp3(d);
+                    let up = d.cross(side);
+                    for s in [side, -side, up, -up] {
+                        draw_line_3d(end, end - d * 1.2 + s * 0.6, c);
+                    }
+                    draw_sphere_wires(o.pos, 0.4, None, c);
+                }
+                SceneKind::Magnet => {
+                    draw_sphere_wires(o.pos, 0.6 + o.size.abs() * 0.4, None, c);
+                    for a in [Vec3::X, Vec3::Y, Vec3::Z] {
+                        draw_line_3d(o.pos - a * 1.5, o.pos + a * 1.5, c);
+                    }
+                }
+                SceneKind::Sphere => draw_sphere_wires(o.pos, o.size, None, c),
+                SceneKind::Capsule => {
+                    let d = o.dir.normalize_or_zero();
+                    let (a, b) = (o.pos - d * o.length * 0.5, o.pos + d * o.length * 0.5);
+                    draw_sphere_wires(a, o.size, None, c);
+                    draw_sphere_wires(b, o.size, None, c);
+                    let side = any_perp3(d);
+                    let up = d.cross(side);
+                    for s in [side, -side, up, -up] {
+                        draw_line_3d(a + s * o.size, b + s * o.size, c);
+                    }
+                }
+            }
+        }
+    }
+
     pub fn draw_viewport_overlay(&mut self, ui: &mut Ui, r: Rect) {
-        let views: Vec<String> = VIEWS.iter().map(|s| s.to_string()).collect();
-        let mut v = self.cam.view;
-        if ui.combo("vp.view", Rect::new(r.x + 8.0, r.y + 8.0, 120.0, 22.0), &views, &mut v) {
-            self.cam.set_view(v);
+        // the toolbar across the top (picture-18), then the view menu below it
+        let th = self.viewport_toolbar(ui, r);
+        let vb = Rect::new(r.x + 8.0, r.y + th + 6.0, 160.0, 22.0);
+        self.vp_ui = vec![Rect::new(r.x, r.y, r.w, th), vb];
+        let label = if self.cam.ortho { format!("{} (ortho)", VIEWS[self.cam.view.min(VIEWS.len() - 1)]) } else { VIEWS[self.cam.view.min(VIEWS.len() - 1)].to_string() };
+        let clicked = ui.button_ex("vp.view", Rect::new(vb.x, vb.y, vb.w, vb.h), &label, ui.popup_open_for("vp.view"), true);
+        draw_triangle(vec2(vb.x + vb.w - 14.0, vb.y + 9.0), vec2(vb.x + vb.w - 6.0, vb.y + 9.0), vec2(vb.x + vb.w - 10.0, vb.y + 14.0), C_TEXT_DIM);
+        if clicked {
+            let mut items: Vec<MenuItem> = VIEWS.iter().enumerate().map(|(i, v)| MenuItem::check(v, i == self.cam.view)).collect();
+            items.push(MenuItem::sep());
+            items.push(MenuItem::check("Orthographic", self.cam.ortho));
+            ui.open_menu(hid("vp.view"), vb, items);
         }
-        let ob = Rect::new(r.x + 132.0, r.y + 8.0, 92.0, 22.0);
-        if ui.button_ex("vp.ortho", ob, "Orthographic", self.cam.ortho, true) {
-            self.cam.ortho = !self.cam.ortho;
+        if let Some(p) = ui.take_menu_result("vp.view") {
+            match p.first().copied() {
+                Some(i) if i < VIEWS.len() => self.cam.set_view(i),
+                Some(_) => self.cam.ortho = !self.cam.ortho,
+                None => {}
+            }
         }
-        if ui.button("vp.frame", Rect::new(r.x + 228.0, r.y + 8.0, 54.0, 22.0), "Frame") {
-            self.frame_tree();
-        }
-        if ui.button_ex("vp.grid", Rect::new(r.x + 286.0, r.y + 8.0, 44.0, 22.0), "Grid", self.show_grid, true) {
-            self.show_grid = !self.show_grid;
-        }
-        if ui.button("vp.light", Rect::new(r.x + 334.0, r.y + 8.0, 70.0, 22.0), "Lighting...") {
-            self.select(Sel::Window);
-        }
-        let name = self.cam.view_name();
-        ui.text(&name, r.x + 10.0, r.y + 36.0, 12.0, C_TEXT_DIM);
         let s = format!(
             "Triangles: {}   Vertices: {}   Branches: {}   Leaves: {}",
             self.geo_stats.0, self.geo_stats.1, self.geo_stats.2, self.geo_stats.3
         );
         ui.record("stat", Rect::new(r.x + 10.0, r.y + r.h - 22.0, 300.0, 16.0));
-        ui.text(&s, r.x + 10.0, r.y + r.h - 22.0, 12.0, C_TEXT_DIM);
+        if self.prefs.labels {
+            // dark on the light sky background (picture 42)
+            let lc = if self.prefs.bg_style == 1 { Color::new(0.12, 0.13, 0.15, 0.85) } else { self.prefs.color("labels") };
+            ui.text(&s, r.x + 10.0, r.y + r.h - 22.0, 12.0, lc);
+        }
         if !self.status.is_empty() && get_time() - self.status_t < 4.0 {
             let w = ui.text_w(&self.status, 12.5) + 20.0;
             let br = Rect::new(r.x + (r.w - w) * 0.5, r.y + r.h - 46.0, w, 24.0);
@@ -599,16 +1376,566 @@ impl App {
             let st = self.status.clone();
             ui.text_center(&st, br, 12.5, WHITE);
         }
-        // axis gizmo
-        let c = vec2(r.x + r.w - 40.0, r.y + r.h - 40.0);
-        let d = self.cam.dir();
-        let right = Vec3::Y.cross(d).normalize_or_zero();
-        let up = d.cross(right).normalize_or_zero();
-        for (ax, col, l) in [(Vec3::X, Color::new(0.9, 0.35, 0.35, 1.0), "X"), (Vec3::Y, Color::new(0.4, 0.85, 0.4, 1.0), "Y"), (Vec3::Z, Color::new(0.4, 0.55, 1.0, 1.0), "Z")] {
-            let p = vec2(-ax.dot(right), -ax.dot(up)) * 22.0;
-            let p = vec2(-p.x, p.y);
-            draw_line(c.x, c.y, c.x + p.x, c.y + p.y, 2.0, col);
-            ui.text(l, c.x + p.x * 1.25 - 3.0, c.y + p.y * 1.25 - 6.0, 11.0, col);
+        // top right (picture 27): the navigation gizmo, then the shading button and its drop-down
+        // over it (the gizmo hides while the drop-down is open)
+        let gk = self.prefs.gizmo_size.clamp(0.6, 2.0);
+        // Show > Height indicator (picture 42), under the corner's controls
+        self.draw_height_indicator(ui, r, Rect::new(r.x, vb.y + vb.h + 4.0, r.w, (r.y + r.h - vb.y - vb.h - 4.0).max(10.0)));
+        if !self.shading_open && !self.sel_open {
+            let gc = vec2(r.x + r.w - 62.0 * gk, vb.y + 34.0 + 54.0 * gk);
+            if let Some(a) = self.draw_nav_gizmo(ui, gc) {
+                self.vp_ui.push(a);
+            }
+        }
+        // the light controller and the fan at the upper left, under the view menu (picture 43)
+        let lc = self.draw_light_controls(ui, vb.x + 17.0, vb.y + vb.h + 8.0);
+        self.vp_ui.push(lc);
+        // the "?" tips card at the bottom left (picture 43)
+        let hc = self.draw_help_card(ui, r);
+        self.vp_ui.extend(hc);
+        let (covered, sx) = self.draw_shading_menu(ui, r, vb.y);
+        self.vp_ui.extend(covered);
+        // the wire modes left of it, then the Selection bar (pictures 30, 40)
+        let (wc, wx) = self.draw_wire_balls(ui, r, vb.y, sx);
+        self.vp_ui.extend(wc);
+        let sc = self.draw_selection_menu(ui, r, vb.y, wx);
+        self.vp_ui.extend(sc);
+    }
+
+    /// The original's viewport toolbar (fn 0x1405325b0; its menus fn 0x140537430): groups View
+    /// (Render, Show, Zoom), Scene (Forces, Collision Objects, Wind, Light), Edit (Generators /
+    /// Nodes, Season, Add, Visibility, Gizmo) and Post (AO, Collision, Export, collapse), each
+    /// button a menu or a command with the original's help as its tooltip. Groups wrap onto
+    /// another row when the viewport is narrow. Returns the height used.
+    fn viewport_toolbar(&mut self, ui: &mut Ui, r: Rect) -> f32 {
+        // (button label, key, tooltip)
+        type B = (&'static str, &'static str, &'static str);
+        let groups: [(&str, &[B]); 4] = [
+            ("View", &[
+                ("Render", "vt.render", "Specify the style in which the scene is rendered."),
+                ("Show", "vt.show", "Control which geometry types are shown in the viewport."),
+                ("Zoom", "vt.zoom", "Zoom the camera view to show the selection. If nothing is selected, zoom out far enough to show the whole model. (Z)"),
+            ]),
+            ("Scene", &[
+                ("Forces", "vt.forces", "Access force functions: modeling tools that manipulate growth in world space. (6 toggles forces)"),
+                ("Collision Objects", "vt.coll", "Access collision object functions: simple primitives for collision at run time. (7 toggles them)"),
+                ("Wind", "vt.wind", "Access high level wind functions. (8 toggles wind)"),
+                ("Light", "vt.light", "Access light properties."),
+            ]),
+            ("Edit", &[
+                ("Generators", "vt.gens", "All property edits apply to the selected generator(s). (Tab)"),
+                ("Nodes", "vt.nodes", "All property edits apply to the selected node(s), as offsets for fine tuning. (Tab)"),
+                ("Season", "vt.season", "Set the season of the current model. (Alt+S)"),
+                ("Add", "vt.add", "Add geometry to the model based on a set of predefined templates."),
+                ("Visibility", "vt.vis", "Control how much of the model is visible, to reduce computing and rendering temporarily."),
+                ("Gizmo", "vt.gizmo", "Set options for the transform gizmo."),
+            ]),
+            ("Post", &[
+                ("AO", "vt.ao", "Compute ambient occlusion on the model. (O)"),
+                ("Collision", "vt.lcoll", "Eliminate colliding leaf meshes (High, Medium, Low or None)."),
+                ("Export", "vt.export", "Export the model as a mesh."),
+                ("<", "vt.collapse", "Collapse or expand the toolbar."),
+            ]),
+        ];
+        let row_h = 46.0;
+        let m = ui.mouse();
+        let mut x = r.x + 6.0;
+        let mut y = r.y + 4.0;
+        let mut rows = 1.0;
+        // collapsed: only the expand arrow
+        if self.toolbar_collapsed {
+            let b = Rect::new(r.x + 6.0, r.y + 4.0, 26.0, 22.0);
+            draw_rectangle(r.x, r.y, r.w, 30.0, Color::new(0.16, 0.16, 0.17, 0.92));
+            if ui.tool_button("vt.expand", b, ">", false) {
+                self.toolbar_collapsed = false;
+            }
+            if b.contains(m) {
+                ui.tooltip = Some("Expand the toolbar".into());
+            }
+            return 30.0;
+        }
+        // lay the groups out first (wrapping), then draw the strip and the buttons
+        let mut placed: Vec<(&str, Rect, Vec<(B, Rect)>)> = vec![];
+        for (title, buttons) in groups.iter() {
+            let ws: Vec<f32> = buttons.iter().map(|b| ui.text_w(b.0, 12.5) + if b.0 == "<" { 22.0 } else { 40.0 }).collect();
+            let gw = ws.iter().sum::<f32>() + 2.0 * (ws.len() as f32 - 1.0) + 8.0;
+            if x + gw > r.x + r.w - 4.0 && x > r.x + 6.0 {
+                x = r.x + 6.0;
+                y += row_h;
+                rows += 1.0;
+            }
+            let g = Rect::new(x, y, gw, row_h - 6.0);
+            let mut bx = x + 4.0;
+            let mut bs = vec![];
+            for (b, w) in buttons.iter().zip(ws) {
+                bs.push((*b, Rect::new(bx, y + 15.0, w, 24.0)));
+                bx += w + 3.0;
+            }
+            placed.push((title, g, bs));
+            x += gw + 8.0;
+        }
+        let h = rows * row_h + 2.0;
+        draw_rectangle(r.x, r.y, r.w, h, Color::new(0.16, 0.16, 0.17, 0.92));
+        draw_line(r.x, r.y + h, r.x + r.w, r.y + h, 2.0, Color::new(0.35, 0.55, 0.85, 0.8));
+        let mut clicked: Option<(&str, Rect)> = None;
+        for (title, g, bs) in &placed {
+            draw_round_rect(*g, 6.0, Color::new(0.195, 0.2, 0.21, 1.0));
+            ui.text(title, g.x + 6.0, g.y + 1.0, 11.0, C_TEXT_DIM);
+            for ((label, key, tip), br) in bs {
+                let on = match *key {
+                    "vt.gens" => true,
+                    "vt.ao" => self.ao_on,
+                    k => ui.popup_open_for(k),
+                };
+                // rounded button: a soft fill, brighter when hovered, accent when on
+                ui.record(&format!("btn:{}", key), *br);
+                let hot = br.contains(m) && !ui.blocked;
+                let fill = if on {
+                    Color::new(0.30, 0.47, 0.78, 1.0)
+                } else if hot {
+                    Color::new(0.33, 0.34, 0.37, 1.0)
+                } else {
+                    Color::new(0.24, 0.25, 0.27, 1.0)
+                };
+                draw_round_rect(*br, 6.0, fill);
+                draw_round_rect_lines(*br, 6.0, 1.0, Color::new(1.0, 1.0, 1.0, if hot { 0.22 } else { 0.08 }));
+                if *label == "<" {
+                    ui.text_center("<", *br, 13.0, C_TEXT);
+                } else {
+                    toolbar_icon(key, vec2(br.x + 13.0, br.y + br.h * 0.5));
+                    ui.text(label, br.x + 26.0, br.y + 5.0, 12.5, if on { WHITE } else { C_TEXT });
+                }
+                if hot && ui.inp.l_pressed && ui.popup.is_none() {
+                    clicked = Some((key, *br));
+                }
+                if br.contains(m) && ui.popup.is_none() {
+                    ui.tooltip = Some(tip.to_string());
+                }
+            }
+        }
+        if let Some((key, br)) = clicked {
+            let tree = self.toolbar_menu(key);
+            if tree.is_empty() {
+                match key {
+                    "vt.gens" => {}
+                    "vt.nodes" => self.set_status("Node editing (offsets on single branches and leaves) isn't built yet; edits apply to generators"),
+                    "vt.ao" => {
+                        // AO (O): ambient occlusion from how deep each point sits in the crown
+                        self.ao_on = !self.ao_on;
+                        self.set_status(if self.ao_on { "Ambient occlusion on" } else { "Ambient occlusion off" });
+                    }
+                    "vt.export" => self.export_obj(),
+                    "vt.collapse" => self.toolbar_collapsed = true,
+                    _ => {}
+                }
+            } else {
+                ui.open_menu(hid(key), br, tree);
+            }
+        }
+        // what was chosen in an open menu
+        for key in ["vt.render", "vt.show", "vt.zoom", "vt.forces", "vt.coll", "vt.wind", "vt.light", "vt.add", "vt.vis", "vt.gizmo", "vt.lcoll", "vt.season"] {
+            let Some(path) = ui.take_menu_result(key) else { continue };
+            self.toolbar_command(key, &path);
+        }
+        h
+    }
+
+    /// The Render menu: the original's render_modes folder, ordered and named like its templates
+    /// (leading underscores first, then removed).
+    fn render_menu(cur: &str) -> Vec<MenuItem> {
+        // each mode's number in the shader (render.rs) follows its place: top 0-5, Lighting
+        // 10-15, Material 20-28, Vertex Colors 30-33, Other 40-49
+        let list = |group: &str, v: &[&str]| {
+            v.iter()
+                .map(|s| {
+                    let full = if group.is_empty() { s.to_string() } else { format!("{} > {}", group, s) };
+                    MenuItem::check(s, full == cur)
+                })
+                .collect::<Vec<_>>()
+        };
+        // WireShaded and Wireframe are the person's additions (picture 24), Blender-like
+        let mut top = list("", &["Standard", "Scribed", "WireShaded", "Wireframe", "AO", "Albedo Check", "Subsurface Check"]);
+        top.push(MenuItem::sub("Lighting", list("Lighting", &RENDER_LIGHTING)));
+        top.extend(list("", &["Lightmap"]));
+        top.push(MenuItem::sub("Material", list("Material", &RENDER_MATERIAL)));
+        top.push(MenuItem::sub("Vertex Colors", list("Vertex Colors", &RENDER_VCOL)));
+        top.push(MenuItem::sub("Other", list("Other", &RENDER_OTHER)));
+        top
+    }
+
+    /// The shader's number for a render mode chosen from render_menu (by its path).
+    fn render_mode_number(path: &[usize]) -> Option<f32> {
+        let a = *path.first()?;
+        let b = path.get(1).copied().unwrap_or(0) as f32;
+        Some(match a {
+            0 | 1 => a as f32,
+            2 => MODE_WIRESHADED,
+            3 => MODE_WIREFRAME,
+            4..=6 => a as f32 - 2.0,
+            7 => 10.0 + b,
+            8 => 5.0,
+            9 => 20.0 + b,
+            10 => 30.0 + b,
+            11 => 40.0 + b,
+            _ => return None,
+        })
+    }
+
+    /// The menu a toolbar button opens (empty for buttons that act straight away).
+    fn toolbar_menu(&self, key: &str) -> Vec<MenuItem> {
+        let leaf = MenuItem::leaf;
+        let chk = MenuItem::check;
+        let objects = |forces: bool| -> Vec<MenuItem> {
+            self.scene
+                .iter()
+                .enumerate()
+                .filter(|(_, o)| o.kind.is_force() == forces)
+                .map(|(k, o)| chk(&o.name, self.scene_sel == Some(k)))
+                .collect()
+        };
+        match key {
+            "vt.render" => Self::render_menu(&self.render_mode),
+            "vt.show" => vec![
+                chk("Leaves", self.show_leaves).hot("1"),
+                chk("Fronds", self.show_other[0]).hot("2"),
+                chk("Branches", self.show_branches).hot("3"),
+                chk("Zones", self.show_other[1]).hot("4"),
+                chk("Targets", self.show_other[2]).hot("5"),
+                chk("Proxies", self.show_other[3]).hot("9"),
+                MenuItem::sep(),
+                chk("Bones", self.show_bones),
+                chk("Normals", self.show_normals),
+                chk("Disable two sided rendering", self.one_sided),
+                MenuItem::sep(),
+                chk("Grid", self.show_grid),
+                // picture 42
+                chk("Ground", self.prefs.show_ground),
+                chk("Height indicator", self.show_height),
+            ],
+            "vt.zoom" => vec![
+                leaf("Selected").hot("Z"),
+                leaf("Selected (all views)"),
+                leaf("All"),
+                leaf("All (all views)"),
+                MenuItem::sep(),
+                leaf("Copy camera"),
+                leaf("Paste camera"),
+                leaf("Reset camera"),
+            ],
+            "vt.forces" => {
+                let mut v = vec![MenuItem::sub("Add force", vec![leaf("Direction"), leaf("Magnet"), leaf("Mesh")]), leaf("Delete selected"), chk("Show forces", self.show_forces).hot("6")];
+                let list = objects(true);
+                if !list.is_empty() {
+                    v.push(MenuItem::sep());
+                    v.extend(list);
+                }
+                v
+            }
+            "vt.coll" => {
+                let mut v = vec![MenuItem::sub("Add collision object", vec![leaf("Sphere"), leaf("Capsule")]), leaf("Delete selected"), chk("Show collision objects", self.show_coll).hot("7")];
+                let list = objects(false);
+                if !list.is_empty() {
+                    v.push(MenuItem::sep());
+                    v.extend(list);
+                }
+                v
+            }
+            "vt.wind" => vec![
+                chk("Wind", self.wind_on).hot("8"),
+                MenuItem::sub("Strength", WIND_LEVELS.iter().map(|(n, s)| chk(n, (self.wind_strength - s).abs() < 1e-3)).collect()),
+            ],
+            "vt.light" => vec![chk("Lit", !self.light.unlit), MenuItem::sep(), leaf("Properties...")],
+            "vt.add" => Self::gen_add_menu(),
+            "vt.vis" => vec![leaf("Toggle selected").hot("H"), chk("Toggle isolation", self.isolation.is_some()).hot("I"), leaf("Show all")],
+            "vt.gizmo" => vec![chk("Translate", self.gizmo_mode == 0), chk("Rotate", self.gizmo_mode == 1), chk("Scale", self.gizmo_mode == 2)],
+            "vt.lcoll" => ["None", "Low", "Medium", "High"].iter().enumerate().map(|(i, n)| chk(n, self.leaf_collision as usize == i)).rev().collect(),
+            "vt.season" => SEASONS.iter().map(|(n, s)| chk(n, (self.season - s).abs() < 1e-3)).collect::<Vec<_>>(),
+            _ => vec![],
+        }
+    }
+
+    /// Write the current tree as a Wavefront OBJ (positions, texture coordinates, normals; one
+    /// group per material) to a file the person picks.
+    pub(crate) fn export_obj(&mut self) {
+        let Some(gpu) = &self.gpu else { return };
+        let Some(path) = rfd::FileDialog::new().set_title("Export tree").add_filter("Wavefront OBJ", &["obj"]).set_file_name("tree.obj").save_file() else { return };
+        let s = self.obj_text(gpu);
+        match std::fs::write(&path, s) {
+            Ok(()) => self.set_status(&format!("Exported {}", path.display())),
+            Err(e) => self.set_status(&format!("Export failed: {}", e)),
+        }
+    }
+
+    /// Geometry as Wavefront OBJ text (one group per material).
+    pub(crate) fn obj_text(&self, gpu: &GpuTree) -> String {
+        use std::fmt::Write as _;
+        let mut s = String::from("# TreeCraft export\n");
+        let mut base = 1usize;
+        for (mi, meshes) in &gpu.parts {
+            let name = self.materials.get(*mi).map(|m| m.name.replace(' ', "_")).unwrap_or_else(|| format!("material_{}", mi));
+            let _ = writeln!(s, "g {}\nusemtl {}", name, name);
+            for mesh in meshes {
+                for v in &mesh.vertices {
+                    let _ = writeln!(s, "v {} {} {}", v.position.x, v.position.y, v.position.z);
+                }
+                for v in &mesh.vertices {
+                    let _ = writeln!(s, "vt {} {}", v.uv.x, 1.0 - v.uv.y);
+                }
+                for v in &mesh.vertices {
+                    let _ = writeln!(s, "vn {} {} {}", v.normal.x, v.normal.y, v.normal.z);
+                }
+                for t in mesh.indices.chunks(3) {
+                    if t.len() == 3 {
+                        let (a, b, c) = (base + t[0] as usize, base + t[1] as usize, base + t[2] as usize);
+                        let _ = writeln!(s, "f {a}/{a}/{a} {b}/{b}/{b} {c}/{c}/{c}");
+                    }
+                }
+                base += mesh.vertices.len();
+            }
+        }
+        s
+    }
+
+    /// The generation inputs for this tree (Show settings, forces, leaf collision); `only` limits
+    /// the drawn geometry to those generators.
+    pub(crate) fn generate_with(&self, only: Option<std::collections::HashSet<u32>>) -> gen::TreeGeo {
+        let selected = if let Sel::Node(id) = self.sel { Some(id) } else { None };
+        let mut shown = self.nodes.clone();
+        for n in &mut shown {
+            if !self.show_leaves && n.kind == Kind::Leaf {
+                n.hidden = true;
+            }
+        }
+        let forces: Vec<SceneObj> = self.scene.iter().filter(|o| o.kind.is_force()).cloned().collect();
+        let ctx = GenCtx {
+            nodes: &shown,
+            materials: &self.materials,
+            meshes: &self.meshes,
+            selected,
+            highlight: self.highlight && only.is_none() && !self.sel_hidden,
+            show_branches: self.show_branches,
+            forces: &forces,
+            leaf_collision: self.leaf_collision,
+            only,
+        };
+        gen::generate(&ctx)
+    }
+
+    /// Add a force or collision object in front of the tree and pick it.
+    fn add_scene_object(&mut self, kind: SceneKind) {
+        let (a, b) = self.bounds;
+        let h = (b.y - a.y).max(4.0);
+        let n = self.scene.iter().filter(|o| o.kind == kind).count() + 1;
+        let o = match kind {
+            SceneKind::Direction => SceneObj { kind, name: format!("Direction {}", n), pos: vec3(b.x + 4.0, h * 0.6, 0.0), dir: vec3(-1.0, 0.0, 0.0), size: 0.5, length: 0.0 },
+            SceneKind::Magnet => SceneObj { kind, name: format!("Magnet {}", n), pos: vec3(b.x + 6.0, h * 0.8, 0.0), dir: Vec3::Y, size: 0.5, length: 0.0 },
+            SceneKind::Sphere => SceneObj { kind, name: format!("Sphere {}", n), pos: vec3(0.0, h * 0.5, 0.0), dir: Vec3::Y, size: h * 0.12, length: 0.0 },
+            SceneKind::Capsule => SceneObj { kind, name: format!("Capsule {}", n), pos: vec3(0.0, h * 0.35, 0.0), dir: Vec3::Y, size: h * 0.05, length: h * 0.5 },
+        };
+        self.scene.push(o);
+        self.scene_sel = Some(self.scene.len() - 1);
+        if kind.is_force() {
+            self.show_forces = true;
+            self.dirty = true;
+        } else {
+            self.show_coll = true;
+        }
+        self.set_status("Added; drag it in the viewport with the Gizmo (Translate, Rotate or Scale)");
+    }
+
+    /// Carry out a toolbar menu choice (`path` into the menu opened for `key`).
+    pub fn toolbar_command(&mut self, key: &str, path: &[usize]) {
+        let pick = |tree: &[MenuItem]| -> Vec<String> {
+            let mut items = tree;
+            let mut trail = vec![];
+            for &k in path {
+                if let Some(it) = items.get(k) {
+                    trail.push(it.label.clone());
+                    items = &it.children;
+                }
+            }
+            trail
+        };
+        let not_built = |s: &mut Self, what: &str| s.set_status(&format!("{} isn't built yet", what));
+        match key {
+            "vt.render" => {
+                let t = pick(&Self::render_menu(""));
+                if let Some(n) = Self::render_mode_number(path) {
+                    self.render_mode = t.join(" > ");
+                    self.light.mode = n;
+                }
+            }
+            "vt.show" => match path.first().copied() {
+                Some(0) => {
+                    self.show_leaves = !self.show_leaves;
+                    self.dirty = true;
+                }
+                Some(2) => {
+                    self.show_branches = !self.show_branches;
+                    self.dirty = true;
+                }
+                Some(i @ (1 | 3 | 4 | 5)) => {
+                    // fronds, zones, targets and proxies: TreeCraft doesn't grow these kinds yet,
+                    // so there's nothing of them to show or hide
+                    let k = [0, 0, 0, 1, 2, 3][i];
+                    self.show_other[k] = !self.show_other[k];
+                    let name = ["Fronds", "Zones", "Targets", "Proxies"][k];
+                    self.set_status(&format!("{} {} (this tree has none: TreeCraft doesn't grow them yet)", name, if self.show_other[k] { "shown" } else { "hidden" }));
+                }
+                Some(7) => self.show_bones = !self.show_bones,
+                Some(8) => self.show_normals = !self.show_normals,
+                Some(9) => self.one_sided = !self.one_sided,
+                Some(11) => self.show_grid = !self.show_grid,
+                Some(12) => {
+                    self.prefs.show_ground = !self.prefs.show_ground;
+                    self.prefs.save();
+                }
+                Some(13) => self.show_height = !self.show_height,
+                _ => {}
+            },
+            "vt.zoom" => match path.first().copied() {
+                Some(0) | Some(1) => {
+                    if matches!(self.sel, Sel::Node(_)) {
+                        self.set_status("Zooming to a selected generator isn't built yet: showing the whole tree");
+                    }
+                    self.frame_tree();
+                }
+                Some(2) | Some(3) => self.frame_tree(),
+                Some(5) => {
+                    self.cam_copy = Some(self.cam);
+                    self.set_status("Camera copied");
+                }
+                Some(6) => match self.cam_copy {
+                    Some(c) => self.cam = c,
+                    None => self.set_status("Copy a camera first"),
+                },
+                Some(7) => {
+                    self.cam = render::Cam::new();
+                    self.frame_tree();
+                }
+                _ => {}
+            },
+            "vt.light" => match path.first().copied() {
+                Some(0) => self.light.unlit = !self.light.unlit,
+                Some(2) => {
+                    // Light > Properties...: the light's settings in the Properties panel (picture 43)
+                    self.select(Sel::Light);
+                }
+                _ => {}
+            },
+            "vt.add" => {
+                let menu = Self::gen_add_menu();
+                self.gen_add(&menu, path);
+            }
+            "vt.vis" => {
+                let sel = if let Sel::Node(id) = self.sel { Some(id) } else { None };
+                match path.first().copied() {
+                    Some(0) => match sel {
+                        Some(id) => {
+                            if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                                n.hidden = !n.hidden;
+                            }
+                            self.dirty = true;
+                        }
+                        None => self.set_status("Select a generator first"),
+                    },
+                    Some(1) => {
+                        if let Some(hidden) = self.isolation.take() {
+                            // back to how it was
+                            for n in &mut self.nodes {
+                                n.hidden = hidden.contains(&n.id);
+                            }
+                            self.dirty = true;
+                        } else if let Some(id) = sel {
+                            // only the selected generator, the ones it grows on and those under it
+                            let mut keep = self.descendants(id);
+                            keep.push(id);
+                            let mut p = self.node(id).and_then(|n| n.parent);
+                            while let Some(pid) = p {
+                                keep.push(pid);
+                                p = self.node(pid).and_then(|n| n.parent);
+                            }
+                            self.isolation = Some(self.nodes.iter().filter(|n| n.hidden).map(|n| n.id).collect());
+                            for n in &mut self.nodes {
+                                if !keep.contains(&n.id) {
+                                    n.hidden = true;
+                                }
+                            }
+                            self.dirty = true;
+                        } else {
+                            self.set_status("Select a generator first");
+                        }
+                    }
+                    Some(2) => {
+                        for n in &mut self.nodes {
+                            n.hidden = false;
+                        }
+                        self.isolation = None;
+                        self.dirty = true;
+                    }
+                    _ => {}
+                }
+            }
+            "vt.forces" | "vt.coll" => {
+                let forces = key == "vt.forces";
+                let t = pick(&self.toolbar_menu(key));
+                match (path.first().copied(), t.last().map(|s| s.as_str())) {
+                    (Some(0), Some("Direction")) => self.add_scene_object(SceneKind::Direction),
+                    (Some(0), Some("Magnet")) => self.add_scene_object(SceneKind::Magnet),
+                    (Some(0), Some("Mesh")) => not_built(self, "A mesh force (growth around a 3D mesh)"),
+                    (Some(0), Some("Sphere")) => self.add_scene_object(SceneKind::Sphere),
+                    (Some(0), Some("Capsule")) => self.add_scene_object(SceneKind::Capsule),
+                    (Some(1), _) => match self.scene_sel.filter(|&k| self.scene.get(k).map(|o| o.kind.is_force() == forces).unwrap_or(false)) {
+                        Some(k) => {
+                            self.scene.remove(k);
+                            self.scene_sel = None;
+                            self.dirty |= forces;
+                        }
+                        None => self.set_status(if forces { "Pick a force first (from this menu)" } else { "Pick a collision object first (from this menu)" }),
+                    },
+                    (Some(2), _) => {
+                        if forces {
+                            self.show_forces = !self.show_forces;
+                        } else {
+                            self.show_coll = !self.show_coll;
+                        }
+                    }
+                    (Some(_), Some(name)) => {
+                        // pick an object by its name
+                        let name = name.to_string();
+                        self.scene_sel = self.scene.iter().position(|o| o.name == name);
+                    }
+                    _ => {}
+                }
+            }
+            "vt.wind" => match path.first().copied() {
+                Some(0) => self.wind_on = !self.wind_on,
+                Some(1) => {
+                    if let Some((_, s)) = path.get(1).and_then(|&i| WIND_LEVELS.get(i)) {
+                        self.wind_strength = *s;
+                        self.wind_on = true;
+                    }
+                }
+                _ => {}
+            },
+            "vt.gizmo" => {
+                if let Some(&i) = path.first() {
+                    self.gizmo_mode = i as u8;
+                    self.set_status("Drag a force or collision object in the viewport to change it");
+                }
+            }
+            "vt.lcoll" => {
+                if let Some(&i) = path.first() {
+                    self.leaf_collision = (3 - i.min(3)) as u8;
+                    self.dirty = true;
+                }
+            }
+            "vt.season" => {
+                if let Some((_, s)) = path.first().and_then(|&i| SEASONS.get(i)) {
+                    self.season = *s;
+                }
+            }
+            _ => {}
         }
     }
 
@@ -640,12 +1967,12 @@ impl App {
         }
     }
 
-    fn toolbar(&mut self, ui: &mut Ui, tb: Rect, key: &str, add_items: &[&str], act_items: &[&str], randomize: bool) -> (Option<usize>, Option<usize>, bool) {
+    fn toolbar(&mut self, ui: &mut Ui, tb: Rect, key: &str, add_tree: Vec<MenuItem>, act_items: &[&str], randomize: bool) -> (Option<Vec<usize>>, Option<usize>, bool) {
         let addk = format!("{}.add", key);
         let actk = format!("{}.actions", key);
         let ar = Rect::new(tb.x + 6.0, tb.y + 4.0, 52.0, 22.0);
         if ui.tool_button(&addk, ar, "+ Add", ui.popup_open_for(&addk)) {
-            ui.open_popup(hid(&addk), ar, add_items.iter().map(|s| s.to_string()).collect(), None);
+            ui.open_menu(hid(&addk), ar, add_tree);
         }
         let cr = Rect::new(tb.x + 62.0, tb.y + 4.0, 68.0, 22.0);
         if ui.tool_button(&actk, cr, "Actions", ui.popup_open_for(&actk)) {
@@ -656,7 +1983,174 @@ impl App {
             rnd = ui.tool_button(&format!("{}.rand", key), Rect::new(tb.x + 134.0, tb.y + 4.0, 80.0, 22.0), "Randomize", false);
         }
         draw_line(tb.x, tb.y + tb.h, tb.x + tb.w, tb.y + tb.h, 1.0, C_LINE);
-        (ui.take_popup_result(&addk), ui.take_popup_result(&actk), rnd)
+        (ui.take_menu_result(&addk), ui.take_popup_result(&actk), rnd)
+    }
+
+    /// The Generation tab's Add menu, laid out like the original's (fn 0x140228270): the
+    /// templates folder's files and folders sorted by name (leading underscores first), names with
+    /// leading underscores removed and the rest turned into spaces, folders as submenus, then
+    /// "From file...", a line and "Default generator".
+    fn gen_add_menu() -> Vec<MenuItem> {
+        let l = MenuItem::leaf;
+        let s = MenuItem::sub;
+        let mut top: Vec<MenuItem> = GEN_TEMPLATES.iter().map(|t| l(t)).collect();
+        top.push(s("Decorations", ["Cavity", "Gash", "Knot", "Lump", "Peeling Bark", "Roots", "Shell"].iter().map(|t| l(t)).collect()));
+        top.push(s(
+            "Hand Drawn",
+            vec![
+                l("Trunk"),
+                l("Branches"),
+                s("Legacy", ["SubD Setup", "SubD Trunk", "SubD Branch", "Branch", "Palm Frond", "Trunk"].iter().map(|t| l(t)).collect()),
+            ],
+        ));
+        top.push(s(
+            "Photogrammetry",
+            [
+                "Texture Blended Extension",
+                "Vertex Blended Extension",
+                "Click Placed Branches",
+                "Click Placed Custom Mesh",
+                "Mesh",
+                "Cutting Stitch",
+                "Place a spine in a mesh",
+                "Place 3D Anchors",
+                "Procedural Branch Off Mesh",
+                "Single Target",
+            ]
+            .iter()
+            .map(|t| l(t))
+            .collect(),
+        ));
+        top.push(s("Zones", vec![l("Terrain"), l("Zone")]));
+        top.push(l("From file..."));
+        top.push(MenuItem::sep());
+        top.push(s("Default generator", vec![l("Trunk"), l("Branch"), l("Leaf Mesh")]));
+        top
+    }
+
+    /// Act on an entry chosen from the Add menu (Generation tab or viewport toolbar).
+    fn gen_add(&mut self, menu: &[MenuItem], path: &[usize]) {
+        let sel_node = if let Sel::Node(id) = self.sel { Some(id) } else { None };
+        // the chosen entry and the submenus it's in
+        let mut items = menu;
+        let mut trail: Vec<String> = vec![];
+        for &k in path {
+            if let Some(it) = items.get(k) {
+                trail.push(it.label.clone());
+                items = &it.children;
+            }
+        }
+        let label = trail.last().cloned().unwrap_or_default();
+        // a template: the generators (and scene objects) the original's template file holds
+        if label == "From file..." {
+            let Some(path) = rfd::FileDialog::new().set_title("Add from template").add_filter("Templates", &["stt"]).add_filter("All files", &["*"]).pick_file() else { return };
+            match crate::templates::load_stt(&path) {
+                Ok(list) => self.build_template(list),
+                Err(e) => self.set_status(&format!("Couldn't read that template: {}", e)),
+            }
+            return;
+        }
+        if trail.first().map(|s| s != "Default generator").unwrap_or(false) {
+            if let Some(list) = crate::templates::make(&trail) {
+                self.build_template(list);
+                return;
+            }
+        }
+        match Self::template_kind(&label) {
+            Some(kind) => {
+                let parent = sel_node.unwrap_or_else(|| {
+                    // default parent: Tree for trunks, newest branch-type node otherwise
+                    if kind == Kind::Trunk {
+                        self.root_id()
+                    } else {
+                        self.nodes.iter().rev().find(|n| n.kind.makes_spines()).map(|n| n.id).unwrap_or(self.root_id())
+                    }
+                });
+                let id = self.add_node(kind, parent);
+                if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                    // named after the menu entry (default generators keep their usual names)
+                    if trail.first().map(|s| s != "Default generator").unwrap_or(false) {
+                        n.name = label.clone();
+                    }
+                    // new generators start neutral and without a material (picture-22)
+                    n.p.neutralize();
+                }
+            }
+            None => self.set_status(&format!("The {} generator isn't built in TreeCraft yet", trail.join(" > "))),
+        }
+    }
+
+    /// Make what a template holds: its generators (the first on the picked generator, or the Tree
+    /// for trunks / the newest branch generator otherwise; "child" ones on the template's previous
+    /// generator) with the template's values, and its scene objects.
+    fn build_template(&mut self, list: Vec<crate::templates::Make>) {
+        use crate::templates::Make;
+        let sel_node = if let Sel::Node(id) = self.sel { Some(id) } else { None };
+        let mut prev: Option<u32> = None;
+        let mut made = 0;
+        let mut last_name = String::new();
+        for m in list {
+            match m {
+                Make::Gen(t) => {
+                    let parent = match (t.child, prev) {
+                        (true, Some(p)) => p,
+                        _ => sel_node.filter(|&id| self.node(id).map(|n| n.kind != Kind::Leaf || t.kind == Kind::Leaf).unwrap_or(false)).unwrap_or_else(|| {
+                            if t.kind == Kind::Trunk {
+                                self.root_id()
+                            } else {
+                                self.nodes.iter().rev().find(|n| n.kind.makes_spines()).map(|n| n.id).unwrap_or(self.root_id())
+                            }
+                        }),
+                    };
+                    let id = self.add_node(t.kind, parent);
+                    if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                        n.name = t.name.clone();
+                        crate::templates::apply(&mut n.p, &t);
+                        // the template's layout (mode, length, angle, radius) with neutral
+                        // shape and no material (picture-22)
+                        n.p.neutralize();
+                    }
+                    if t.kind != Kind::Leaf {
+                        prev = Some(id);
+                    }
+                    last_name = t.name.clone();
+                    made += 1;
+                    self.dirty = true;
+                }
+                Make::Scene(kind, name) => {
+                    self.add_scene_object(kind);
+                    if let Some(o) = self.scene.last_mut() {
+                        o.name = name.clone();
+                    }
+                    last_name = name;
+                    made += 1;
+                }
+                Make::Grid => {
+                    self.show_grid = true;
+                    self.set_status("Terrain: the ground grid is shown");
+                }
+            }
+        }
+        if made > 0 {
+            self.set_status(&format!("Added {}", last_name));
+        }
+    }
+
+    #[cfg(test)]
+    pub(crate) fn gen_add_menu_for_tests() -> Vec<MenuItem> {
+        Self::gen_add_menu()
+    }
+
+    /// The generator this app makes for an Add menu entry (by its name), or None when that
+    /// kind of generator isn't built yet.
+    fn template_kind(label: &str) -> Option<Kind> {
+        match label {
+            "Trunk" | "Trunk Tube" | "SubD Trunk" => Some(Kind::Trunk),
+            "Bifurcating Branches" | "Big Branches" | "Branch Tubes" | "Little Branches" | "Single Branch" | "Twigs" | "Roots" | "Branches"
+            | "Branch" | "SubD Branch" | "Click Placed Branches" | "Procedural Branch Off Mesh" => Some(Kind::Branch),
+            "Leaf Mesh" | "Fronds" | "Palm Frond" | "Click Placed Custom Mesh" | "Mesh" => Some(Kind::Leaf),
+            _ => None,
+        }
     }
 
     fn graph_to_screen(&self, body: Rect, p: Vec2) -> Vec2 {
@@ -666,18 +2160,10 @@ impl App {
 
     fn draw_generation(&mut self, ui: &mut Ui, tb: Rect, body: Rect) {
         let sel_node = if let Sel::Node(id) = self.sel { Some(id) } else { None };
-        let (add, act, rnd) = self.toolbar(ui, tb, "gen", &["Trunk", "Branch", "Leaf"], &["Duplicate", "Delete", "Hide / show", "Arrange nodes", "Frame graph"], true);
-        if let Some(i) = add {
-            let kind = [Kind::Trunk, Kind::Branch, Kind::Leaf][i];
-            let parent = sel_node.unwrap_or_else(|| {
-                // default parent: Tree for trunks, newest branch-type node otherwise
-                if kind == Kind::Trunk {
-                    self.root_id()
-                } else {
-                    self.nodes.iter().rev().find(|n| n.kind.makes_spines()).map(|n| n.id).unwrap_or(self.root_id())
-                }
-            });
-            self.add_node(kind, parent);
+        let menu = Self::gen_add_menu();
+        let (add, act, rnd) = self.toolbar(ui, tb, "gen", menu.clone(), &["Duplicate", "Delete", "Hide / show", "Arrange nodes", "Frame graph"], true);
+        if let Some(path) = add {
+            self.gen_add(&menu, &path);
         }
         if let Some(i) = act {
             match (i, sel_node) {
@@ -700,87 +2186,213 @@ impl App {
         if rnd {
             self.randomize(sel_node);
         }
-        // context menu result
-        if let Some(i) = ui.take_popup_result("gen.ctx") {
-            if let Some(id) = sel_node {
-                match i {
-                    0 => {
-                        self.add_node(Kind::Branch, id);
+        // context menus: on a generator (Add > the whole Add menu, Duplicate, Hide / show, Delete),
+        // on empty space (the whole Add menu), on a force or collision object (Delete)
+        if let Some(path) = ui.take_menu_result("gen.ctx") {
+            match (path.first().copied(), sel_node) {
+                (Some(0), _) if path.len() > 1 => self.gen_add(&menu, &path[1..]),
+                (Some(2), Some(id)) => self.duplicate_node(id),
+                (Some(3), Some(id)) => {
+                    if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                        n.hidden = !n.hidden;
                     }
-                    1 => {
-                        self.add_node(Kind::Leaf, id);
+                    self.dirty = true;
+                }
+                (Some(4), Some(id)) => self.delete_node(id),
+                _ => {}
+            }
+        }
+        if let Some(path) = ui.take_menu_result("gen.ctx.add") {
+            self.gen_add(&menu, &path);
+        }
+        if let Some(path) = ui.take_menu_result("gen.ctx.scene") {
+            if let (Some(0), Some(i)) = (path.first().copied(), self.scene_sel) {
+                if i < self.scene.len() {
+                    self.scene.remove(i);
+                    if i < self.scene_gpos.len() {
+                        self.scene_gpos.remove(i);
                     }
-                    2 => self.duplicate_node(id),
-                    3 => {
-                        if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
-                            n.hidden = !n.hidden;
-                        }
-                        self.dirty = true;
-                    }
-                    _ => self.delete_node(id),
+                    self.scene_sel = None;
+                    self.dirty = true;
                 }
             }
         }
 
+        // the Node Editor's colours (Preferences > Themes > Node Editor)
+        let pc = |k: &str| self.prefs.color(k);
+        let (c_bg, c_grid, c_body, c_text, c_wire, c_sel, c_scene) = (pc("node_bg"), pc("node_grid"), pc("node_body"), pc("node_text"), pc("node_wire"), pc("node_selected"), pc("node_scene"));
+        let head = |k: Kind| match k {
+            Kind::Tree => pc("node_tree"),
+            Kind::Trunk => pc("node_trunk"),
+            Kind::Branch => pc("node_branch"),
+            Kind::Leaf => pc("node_leaf"),
+        };
+        let fade = |c: Color, a: f32| Color::new(c.r, c.g, c.b, c.a * a);
+
         ui.set_clip(Some(body));
-        // background grid dots
-        let step = 40.0 * self.graph_zoom;
+        draw_rectangle(body.x, body.y, body.w, body.h, c_bg);
+        // the background grid: dots, lines, crosses or none, at Preferences > Node Editor's
+        // spacing (picture 41)
+        let z = self.graph_zoom * self.prefs.node_scale;
+        let step = (self.prefs.node_grid_step * self.graph_zoom).max(4.0);
         let o = self.graph_to_screen(body, Vec2::ZERO);
-        let mut gx = body.x + (o.x - body.x).rem_euclid(step);
-        while gx < body.x + body.w {
-            let mut gy = body.y + (o.y - body.y).rem_euclid(step);
+        let grid = self.prefs.node_grid;
+        let (gx0, gy0) = (body.x + (o.x - body.x).rem_euclid(step), body.y + (o.y - body.y).rem_euclid(step));
+        if grid == 1 {
+            let mut gx = gx0;
+            while gx < body.x + body.w {
+                draw_line(gx, body.y, gx, body.y + body.h, 1.0, c_grid);
+                gx += step;
+            }
+            let mut gy = gy0;
             while gy < body.y + body.h {
-                draw_rectangle(gx, gy, 1.5, 1.5, Color::new(1.0, 1.0, 1.0, 0.07));
+                draw_line(body.x, gy, body.x + body.w, gy, 1.0, c_grid);
                 gy += step;
             }
-            gx += step;
+        } else if grid != 3 {
+            let mut gx = gx0;
+            while gx < body.x + body.w {
+                let mut gy = gy0;
+                while gy < body.y + body.h {
+                    if grid == 2 {
+                        draw_line(gx - 3.0, gy, gx + 3.0, gy, 1.0, c_grid);
+                        draw_line(gx, gy - 3.0, gx, gy + 3.0, 1.0, c_grid);
+                    } else {
+                        draw_rectangle(gx, gy, 1.5, 1.5, c_grid);
+                    }
+                    gy += step;
+                }
+                gx += step;
+            }
         }
-        let rad = 26.0 * self.graph_zoom;
-        // links
+        // node boxes: a coloured header with the name, a body with the kind and count, a socket
+        // below (from the parent) and above (to the children)
+        let style = self.prefs.node_style.min(NODE_STYLES.len() - 1);
+        let nsz = node_size(style);
+        let (nw, nh, hh) = (nsz.x * z, nsz.y * z, 20.0 * z);
+        let pr = 4.5 * z.sqrt();
+        let boxr = |c: Vec2| Rect::new(c.x - nw * 0.5, c.y - nh * 0.5, nw, nh);
+        let top = |c: Vec2| c - vec2(0.0, nh * 0.5);
+        let bottom = |c: Vec2| c + vec2(0.0, nh * 0.5);
+        let ww = (self.prefs.node_wire_px * z.sqrt()).max(0.8);
+        let wire_style = self.prefs.node_wire_style;
+        // wires (blue), brighter on the picked generator's
         for n in &self.nodes {
-            if let Some(pid) = n.parent {
-                if let Some(p) = self.node(pid) {
-                    let a = self.graph_to_screen(body, p.pos) - vec2(0.0, rad);
-                    let b = self.graph_to_screen(body, n.pos) + vec2(0.0, rad);
-                    let c = if sel_node == Some(n.id) { C_ORANGE } else { Color::new(1.0, 1.0, 1.0, 0.35) };
-                    draw_line(a.x, a.y, b.x, b.y, 2.0, c);
-                    draw_circle(a.x, a.y, 3.0, c);
+            if let Some(p) = n.parent.and_then(|pid| self.node(pid)) {
+                let a = top(self.graph_to_screen(body, p.pos));
+                let b = bottom(self.graph_to_screen(body, n.pos));
+                let on = sel_node == Some(n.id) || sel_node == Some(p.id);
+                let col = if on { Color::new((c_wire.r + 0.35).min(1.0), (c_wire.g + 0.3).min(1.0), (c_wire.b + 0.1).min(1.0), 1.0) } else { fade(c_wire, if n.hidden { 0.4 } else { 0.9 }) };
+                draw_wire(a, b, if on { ww * 1.3 } else { ww }, col, wire_style);
+            }
+        }
+        // forces and collision objects: their own nodes, beside the tree's
+        self.scene_gpos.resize(self.scene.len(), None);
+        let right = self.nodes.iter().map(|n| n.pos.x).fold(0.0f32, f32::max) + 200.0;
+        let spos: Vec<Vec2> = (0..self.scene.len()).map(|k| self.scene_gpos[k].unwrap_or(vec2(right, -(k as f32) * 80.0))).collect();
+
+        let m = ui.mouse();
+        let can_hover = body.contains(m) && !ui.blocked;
+        let mut hover_node = None;
+        let mut hover_port: Option<(u32, bool)> = None;
+        let mut hover_scene = None;
+        if can_hover {
+            for n in self.nodes.iter() {
+                let c = self.graph_to_screen(body, n.pos);
+                if top(c).distance(m) <= pr * 2.2 {
+                    hover_port = Some((n.id, true));
+                } else if n.kind != Kind::Tree && bottom(c).distance(m) <= pr * 2.2 {
+                    hover_port = Some((n.id, false));
+                }
+                if boxr(c).contains(m) {
+                    hover_node = Some(n.id);
+                }
+            }
+            for (k, p) in spos.iter().enumerate() {
+                if boxr(self.graph_to_screen(body, *p)).contains(m) {
+                    hover_scene = Some(k);
                 }
             }
         }
-        let m = ui.mouse();
-        let mut hover_node = None;
-        for n in self.nodes.iter() {
-            let c = self.graph_to_screen(body, n.pos);
-            if c.distance(m) <= rad && body.contains(m) && !ui.blocked {
-                hover_node = Some(n.id);
+        let fs = (12.0 * z.sqrt()).clamp(9.0, 15.0);
+        let fs2 = (10.5 * z.sqrt()).clamp(8.0, 13.0);
+        let counts = self.prefs.node_counts;
+        let draw_box = |ui: &mut Ui, r: Rect, header: Color, alpha: f32, outline: Option<(Color, f32)>, title: &str, sub: &str| {
+            let _ = (fs, fs2, hh);
+            draw_node_shape(ui, style, r, header, c_body, c_text, alpha, outline, title, if counts { sub } else { "" }, z);
+        };
+        let socket = |c: Vec2, linked: bool, hot: bool, alpha: f32| {
+            draw_circle(c.x, c.y, pr + 1.5, fade(Color::new(0.05, 0.05, 0.06, 1.0), alpha));
+            draw_circle(c.x, c.y, pr, if linked || hot { fade(c_wire, alpha) } else { fade(c_body, alpha) });
+            if hot {
+                draw_circle_lines(c.x, c.y, pr + 2.5, 1.5, WHITE);
             }
-        }
-        // nodes
+        };
+        // generators
         let nodes = self.nodes.clone();
         for n in &nodes {
             let c = self.graph_to_screen(body, n.pos);
-            let alpha = if n.hidden { 0.35 } else { 1.0 };
-            let tex = self.icons.for_kind(n.kind);
-            let tint = if n.kind == Kind::Trunk { Color::new(0.85, 0.75, 0.7, alpha) } else { Color::new(1.0, 1.0, 1.0, alpha) };
-            draw_circle(c.x + 2.0, c.y + 3.0, rad, Color::new(0.0, 0.0, 0.0, 0.3));
-            draw_texture_ex(tex, c.x - rad, c.y - rad, tint, DrawTextureParams { dest_size: Some(vec2(rad * 2.0, rad * 2.0)), ..Default::default() });
+            let r = boxr(c);
+            let alpha = if n.hidden { 0.45 } else { 1.0 };
             let selected = sel_node == Some(n.id);
-            if selected || hover_node == Some(n.id) {
-                let rr = rad * 1.18;
-                let col = if selected { C_ORANGE } else { Color::new(1.0, 1.0, 1.0, 0.45) };
-                draw_texture_ex(&self.icons.ring, c.x - rr, c.y - rr, col, DrawTextureParams { dest_size: Some(vec2(rr * 2.0, rr * 2.0)), ..Default::default() });
+            let outline = if selected { Some((c_sel, 2.0)) } else if hover_node == Some(n.id) { Some((Color::new(1.0, 1.0, 1.0, 0.45), 1.0)) } else { None };
+            let sub = if n.kind == Kind::Tree {
+                format!("Tree  •  {} generators", nodes.len() - 1)
+            } else {
+{
+                let c = self.instance_count(n.id);
+                let what = match (n.kind, c == 1) {
+                    (Kind::Trunk, true) => "trunk",
+                    (Kind::Trunk, false) => "trunks",
+                    (Kind::Branch, true) => "branch",
+                    (Kind::Branch, false) => "branches",
+                    (_, true) => "leaf",
+                    _ => "leaves",
+                };
+                format!("{} {}{}", c, what, if n.hidden { "  (hidden)" } else { "" })
             }
-            let fs = (12.0 * self.graph_zoom.sqrt()).clamp(9.0, 15.0);
-            ui.text(&n.name, c.x + rad + 8.0, c.y - fs * 0.5 - 1.0, fs, if selected { WHITE } else { C_TEXT });
+            };
+            // a Spine only generator (picture 39): a black header, "spines", and a black badge
+            // with a yellow chain of segments, like the original's spine-only node
+            let spine_only = n.kind.makes_spines() && crate::gen::pex(&n.p, "Skin:Type", 0.0) as i32 == 3;
+            let sub = if spine_only { format!("{} spine only", self.instance_count(n.id)) } else { sub };
+            let header = if spine_only { Color::new(0.07, 0.07, 0.07, 1.0) } else { head(n.kind) };
+            draw_box(ui, r, header, alpha, outline, &n.name, &sub);
+            if spine_only {
+                let rb = (nh - hh) * 0.36;
+                let bc = vec2(r.x + r.w - rb - 7.0 * z, r.y + hh + (nh - hh) * 0.5);
+                draw_circle(bc.x, bc.y, rb + 1.5 * z, fade(Color::new(0.95, 0.78, 0.15, 1.0), alpha));
+                draw_circle(bc.x, bc.y, rb, fade(Color::new(0.02, 0.02, 0.02, 1.0), alpha));
+                // the chain: links along a gentle diagonal arc
+                let links = 5;
+                let mut prev: Option<Vec2> = None;
+                for i in 0..links {
+                    let t = i as f32 / (links - 1) as f32;
+                    let p = bc + vec2((t - 0.5) * rb * 1.2, (t - 0.5) * rb * 1.2) + vec2(-(t * (1.0 - t)) * rb * 0.7, (t * (1.0 - t)) * rb * 0.7);
+                    if let Some(q) = prev {
+                        draw_line(q.x, q.y, p.x, p.y, (1.6 * z).max(1.0), fade(Color::new(0.95, 0.78, 0.15, 1.0), alpha));
+                    }
+                    draw_circle(p.x, p.y, rb * 0.17, fade(Color::new(1.0, 0.85, 0.2, 1.0), alpha));
+                    prev = Some(p);
+                }
+            }
+            let has_kids = nodes.iter().any(|k| k.parent == Some(n.id));
+            if n.kind.can_parent() {
+                socket(top(c), has_kids, hover_port == Some((n.id, true)), alpha);
+            }
             if n.kind != Kind::Tree {
-                let cnt = self.instance_count(n.id).to_string();
-                let cw = ui.text_w(&cnt, 10.5) + 8.0;
-                let br = Rect::new(c.x + rad * 0.55, c.y - rad * 1.05, cw, 15.0);
-                draw_rectangle(br.x, br.y, br.w, br.h, Color::new(0.1, 0.1, 0.1, 0.85));
-                ui.text_center(&cnt, br, 10.5, C_TEXT_DIM);
+                socket(bottom(c), n.parent.is_some(), hover_port == Some((n.id, false)), alpha);
             }
-            ui.record(&format!("node:{}", n.name), Rect::new(c.x - rad, c.y - rad, rad * 2.0, rad * 2.0));
+            ui.record(&format!("node:{}", n.name), r);
+        }
+        // forces and collision objects
+        for (k, o) in self.scene.clone().iter().enumerate() {
+            let r = boxr(self.graph_to_screen(body, spos[k]));
+            let picked = self.scene_sel == Some(k);
+            let outline = if picked { Some((c_sel, 2.0)) } else if hover_scene == Some(k) { Some((Color::new(1.0, 1.0, 1.0, 0.45), 1.0)) } else { None };
+            let sub = format!("{}  •  {}", o.kind.name(), if o.kind.is_force() { "force" } else { "collision" });
+            draw_box(ui, r, c_scene, 1.0, outline, &o.name, &sub);
+            ui.record(&format!("scene:{}", o.name), r);
         }
 
         // interaction
@@ -792,11 +2404,23 @@ impl App {
             let after = (m - self.graph_to_screen(body, Vec2::ZERO)) / self.graph_zoom;
             self.graph_off += after - before;
         }
+        let at = Rect::new(m.x, m.y, 10.0, 0.0);
         if in_body && ui.active == 0 && self.graph_drag == GraphDrag::None {
             if inp.l_pressed {
-                if let Some(id) = hover_node {
+                if let Some((id, up)) = hover_port {
+                    // drag from a socket to link: from the top one to a new child, from the
+                    // bottom one to a new parent
+                    self.select(Sel::Node(id));
+                    self.graph_drag = if up { GraphDrag::LinkDown { parent: id } } else { GraphDrag::Link { from: id } };
+                    ui.active = hid("graph");
+                } else if let Some(id) = hover_node {
                     self.select(Sel::Node(id));
                     self.graph_drag = if inp.shift { GraphDrag::Link { from: id } } else { GraphDrag::Node { id, start: m, moved: false } };
+                    ui.active = hid("graph");
+                } else if let Some(k) = hover_scene {
+                    self.select(Sel::None);
+                    self.scene_sel = Some(k);
+                    self.graph_drag = GraphDrag::Scene { idx: k };
                     ui.active = hid("graph");
                 } else {
                     self.select(Sel::None);
@@ -806,9 +2430,15 @@ impl App {
             } else if inp.r_pressed {
                 if let Some(id) = hover_node {
                     self.select(Sel::Node(id));
-                    ui.open_popup(hid("gen.ctx"), Rect::new(m.x, m.y, 10.0, 0.0), vec!["Add branch".into(), "Add leaf".into(), "Duplicate".into(), "Hide / show".into(), "Delete".into()], None);
+                    let tree = vec![MenuItem::sub("Add", menu.clone()), MenuItem::sep(), MenuItem::leaf("Duplicate"), MenuItem::leaf("Hide / show"), MenuItem::leaf("Delete")];
+                    ui.open_menu(hid("gen.ctx"), at, tree);
+                } else if let Some(k) = hover_scene {
+                    self.scene_sel = Some(k);
+                    ui.open_menu(hid("gen.ctx.scene"), at, vec![MenuItem::leaf("Delete")]);
                 } else {
-                    self.graph_drag = GraphDrag::Pan;
+                    // empty space: every generator the Add menu offers
+                    self.select(Sel::None);
+                    ui.open_menu(hid("gen.ctx.add"), at, menu.clone());
                 }
             } else if inp.m_pressed {
                 self.graph_drag = GraphDrag::Pan;
@@ -831,14 +2461,37 @@ impl App {
             }
             GraphDrag::Link { from } => {
                 if let Some(f) = self.node(from) {
-                    let a = self.graph_to_screen(body, f.pos);
-                    draw_line(a.x, a.y, m.x, m.y, 2.0, C_ACCENT2);
+                    let a = bottom(self.graph_to_screen(body, f.pos));
+                    draw_wire(m, a, ww, c_wire, wire_style);
                 }
                 if !inp.l_down {
                     if let Some(to) = hover_node {
-                        // dragging from child onto the new parent
+                        // the dragged node gets the node it's dropped on as its parent
                         self.reparent(from, to);
                     }
+                    self.graph_drag = GraphDrag::None;
+                }
+            }
+            GraphDrag::LinkDown { parent } => {
+                if let Some(f) = self.node(parent) {
+                    let a = top(self.graph_to_screen(body, f.pos));
+                    draw_wire(a, m, ww, c_wire, wire_style);
+                }
+                if !inp.l_down {
+                    if let Some(to) = hover_node {
+                        self.reparent(to, parent);
+                    }
+                    self.graph_drag = GraphDrag::None;
+                }
+            }
+            GraphDrag::Scene { idx } => {
+                if inp.l_down {
+                    if let Some(p) = spos.get(idx) {
+                        if idx < self.scene_gpos.len() {
+                            self.scene_gpos[idx] = Some(*p + d / self.graph_zoom);
+                        }
+                    }
+                } else {
                     self.graph_drag = GraphDrag::None;
                 }
             }
@@ -853,12 +2506,12 @@ impl App {
         }
         self.graph_mouse = m;
         if self.nodes.len() == 1 {
-            let t = "Use + Add to grow a trunk from the Tree node";
+            let t = "Use + Add (or right-click here) to grow a trunk from the Tree node";
             let w = ui.text_w(t, 12.5);
             ui.text(t, body.x + (body.w - w) * 0.5, body.y + 30.0, 12.5, C_TEXT_FAINT);
         }
         ui.set_clip(None);
-        let hint = "Shift+drag a node onto another to link it  •  right-click a node for more";
+        let hint = "Drag from a socket onto a node to link  •  right-click for the Add menu";
         ui.text_fit(hint, body.x + 8.0, body.y + body.h - 18.0, body.w - 16.0, 11.0, C_TEXT_FAINT);
     }
 
@@ -1383,7 +3036,7 @@ impl App {
         rfd::FileDialog::new().add_filter("Mesh (OBJ)", &["obj"]).pick_file().map(|p| p.to_string_lossy().to_string())
     }
 
-    fn add_mesh_from_file(&mut self) {
+    pub(crate) fn add_mesh_from_file(&mut self) {
         if let Some(f) = Self::pick_mesh_file() {
             match meshio::load_obj(&f) {
                 Ok(g) => {
@@ -1558,7 +3211,8 @@ impl App {
             if self.mesh_show_material {
                 let idx: Vec<u16> = g.idx.iter().map(|&i| i as u16).collect();
                 gl_use_material(gm);
-                let light = Lighting { unlit: !self.mesh_lit, ..self.light };
+                // the mesh preview always draws plainly (no viewport render mode, wind or season)
+                let light = Lighting { unlit: !self.mesh_lit, mode: 0.0, wind: 0.0, season: -1.0, one_sided: false, ao_on: false, overdraw: false, ..self.light };
                 render::apply_material(gm, mat, &light, cam.position());
                 draw_mesh(&Mesh { vertices: verts, indices: idx, texture: mat.tex.clone() });
                 unsafe { get_internal_gl() }.flush();
@@ -1666,10 +3320,137 @@ pub(crate) fn icon_clipboard(r: Rect) {
     draw_line(cx - 3.0, cy + 2.0, cx + 3.0, cy + 2.0, 1.0, c);
 }
 
+/// A small drawn icon (about 16 px) for each viewport toolbar button, centred on `c`.
+fn toolbar_icon(key: &str, c: Vec2) {
+    let (x, y) = (c.x, c.y);
+    let w = Color::new(0.92, 0.93, 0.95, 1.0);
+    let ring = |r: f32, t: f32, col: Color| draw_circle_lines(x, y, r, t, col);
+    match key {
+        "vt.render" => {
+            // a shaded ball
+            draw_circle(x, y, 6.5, Color::new(0.35, 0.55, 0.9, 1.0));
+            draw_circle(x - 1.5, y - 1.5, 4.5, Color::new(0.55, 0.75, 1.0, 1.0));
+            draw_circle(x - 2.5, y - 2.5, 1.8, WHITE);
+        }
+        "vt.show" => {
+            // an eye
+            for s in [-1.0f32, 1.0] {
+                let mut prev = vec2(x - 7.0, y);
+                for i in 1..=8 {
+                    let t = i as f32 / 8.0;
+                    let p = vec2(x - 7.0 + 14.0 * t, y + s * 4.5 * (t * std::f32::consts::PI).sin());
+                    draw_line(prev.x, prev.y, p.x, p.y, 1.4, w);
+                    prev = p;
+                }
+            }
+            draw_circle(x, y, 2.6, Color::new(0.4, 0.75, 1.0, 1.0));
+        }
+        "vt.zoom" => {
+            ring(4.5, 1.6, w);
+            draw_line(x + 3.2, y + 3.2, x + 7.0, y + 7.0, 2.2, w);
+        }
+        "vt.forces" => {
+            // a curved push arrow
+            let col = Color::new(0.45, 0.85, 1.0, 1.0);
+            let mut prev = vec2(x - 7.0, y + 4.0);
+            for i in 1..=8 {
+                let t = i as f32 / 8.0;
+                let p = vec2(x - 7.0 + 12.0 * t, y + 4.0 - 8.0 * t * t);
+                draw_line(prev.x, prev.y, p.x, p.y, 1.8, col);
+                prev = p;
+            }
+            draw_triangle(vec2(x + 7.0, y - 5.5), vec2(x + 2.0, y - 6.0), vec2(x + 5.0, y - 1.0), col);
+        }
+        "vt.coll" => {
+            let col = Color::new(1.0, 0.55, 0.5, 1.0);
+            draw_circle_lines(x - 3.0, y + 1.0, 4.0, 1.4, col);
+            draw_rectangle_lines(x + 1.5, y - 6.0, 6.0, 12.0, 1.4, col);
+        }
+        "vt.wind" => {
+            for (dy, l) in [(-4.0f32, 12.0f32), (0.0, 9.0), (4.0, 13.0)] {
+                let mut prev = vec2(x - 7.0, y + dy);
+                for i in 1..=6 {
+                    let t = i as f32 / 6.0;
+                    let p = vec2(x - 7.0 + l * t, y + dy + (t * 6.28).sin() * 1.2);
+                    draw_line(prev.x, prev.y, p.x, p.y, 1.4, Color::new(0.75, 0.9, 1.0, 1.0));
+                    prev = p;
+                }
+            }
+        }
+        "vt.light" => {
+            let col = Color::new(1.0, 0.82, 0.25, 1.0);
+            draw_circle(x, y, 3.5, col);
+            for i in 0..8 {
+                let a = i as f32 * std::f32::consts::PI / 4.0;
+                draw_line(x + a.cos() * 5.0, y + a.sin() * 5.0, x + a.cos() * 7.5, y + a.sin() * 7.5, 1.4, col);
+            }
+        }
+        "vt.gens" => {
+            // a little tree
+            draw_rectangle(x - 1.2, y, 2.4, 7.0, Color::new(0.65, 0.45, 0.3, 1.0));
+            draw_circle(x, y - 2.0, 5.5, Color::new(0.4, 0.8, 0.4, 1.0));
+        }
+        "vt.nodes" => {
+            let col = Color::new(0.85, 0.85, 0.9, 1.0);
+            draw_line(x - 5.0, y + 4.0, x, y - 4.0, 1.4, col);
+            draw_line(x, y - 4.0, x + 5.0, y + 4.0, 1.4, col);
+            for (px, py) in [(x - 5.0, y + 4.0), (x, y - 4.0), (x + 5.0, y + 4.0)] {
+                draw_circle(px, py, 2.4, Color::new(0.95, 0.7, 0.3, 1.0));
+            }
+        }
+        "vt.season" => {
+            // a leaf, half green half autumn
+            draw_circle(x - 1.5, y, 5.0, Color::new(0.45, 0.8, 0.35, 1.0));
+            draw_circle(x + 1.5, y, 5.0, Color::new(0.95, 0.55, 0.15, 1.0));
+            draw_line(x - 6.0, y + 6.0, x + 4.0, y - 4.0, 1.2, Color::new(0.3, 0.2, 0.1, 1.0));
+        }
+        "vt.add" => {
+            draw_circle(x, y, 7.0, Color::new(0.35, 0.75, 0.45, 1.0));
+            draw_line(x - 4.0, y, x + 4.0, y, 2.0, WHITE);
+            draw_line(x, y - 4.0, x, y + 4.0, 2.0, WHITE);
+        }
+        "vt.vis" => {
+            ring(6.5, 1.4, w);
+            draw_circle(x, y, 2.5, w);
+            draw_line(x - 6.0, y + 6.0, x + 6.0, y - 6.0, 1.6, Color::new(1.0, 0.5, 0.4, 1.0));
+        }
+        "vt.gizmo" => {
+            draw_line(x - 5.0, y + 5.0, x + 6.0, y + 5.0, 2.0, Color::new(0.95, 0.35, 0.35, 1.0));
+            draw_line(x - 5.0, y + 5.0, x - 5.0, y - 6.0, 2.0, Color::new(0.4, 0.9, 0.4, 1.0));
+            draw_line(x - 5.0, y + 5.0, x + 3.0, y - 3.0, 2.0, Color::new(0.4, 0.6, 1.0, 1.0));
+        }
+        "vt.ao" => {
+            draw_circle(x, y, 6.5, Color::new(0.25, 0.25, 0.28, 1.0));
+            draw_circle(x - 1.5, y - 1.5, 5.0, Color::new(0.6, 0.6, 0.62, 1.0));
+            draw_circle(x - 2.5, y - 2.5, 2.8, Color::new(0.9, 0.9, 0.9, 1.0));
+        }
+        "vt.lcoll" => {
+            draw_circle(x - 2.5, y, 4.5, Color::new(0.45, 0.8, 0.35, 0.9));
+            draw_circle(x + 2.5, y, 4.5, Color::new(0.35, 0.65, 0.3, 0.9));
+            draw_line(x - 3.0, y - 3.0, x + 3.0, y + 3.0, 1.6, WHITE);
+            draw_line(x - 3.0, y + 3.0, x + 3.0, y - 3.0, 1.6, WHITE);
+        }
+        "vt.export" => {
+            draw_rectangle_lines(x - 6.0, y - 3.0, 9.0, 9.0, 1.4, w);
+            let col = Color::new(0.45, 0.85, 1.0, 1.0);
+            draw_line(x - 2.0, y + 1.0, x + 6.0, y - 7.0, 1.8, col);
+            draw_triangle(vec2(x + 7.0, y - 8.0), vec2(x + 1.5, y - 7.0), vec2(x + 6.0, y - 2.5), col);
+        }
+        _ => {}
+    }
+}
+
+fn any_perp3(d: Vec3) -> Vec3 {
+    if d.y.abs() < 0.9 { d.cross(Vec3::Y).normalize_or_zero() } else { d.cross(Vec3::X).normalize_or_zero() }
+}
+
 fn draw_gpu(gpu: &GpuTree, mats: &[Material], gm: &macroquad::material::Material, light: &Lighting, cam_pos: Vec3) {
     gl_use_material(gm);
     for (mi, meshes) in &gpu.parts {
-        let fallback = Material::new("?", 0);
+        // no material (NO_MATERIAL or a removed one): plain grey
+        let mut fallback = Material::new("?", 0);
+        fallback.color = [0.62, 0.62, 0.62];
+        fallback.opacity_from_alpha = false;
         let mut m = mats.get(*mi).unwrap_or(&fallback);
         // a material set draws as its first member (weights pick between members in the original)
         if m.is_set {
@@ -1684,4 +3465,234 @@ fn draw_gpu(gpu: &GpuTree, mats: &[Material], gm: &macroquad::material::Material
         unsafe { get_internal_gl() }.flush();
     }
     gl_use_default_material();
+}
+
+/// Every triangle edge of the tree as a strip `px_world` wide per unit of distance (the
+/// thickness in pixels already folded in), turned to face the camera and lifted a little toward
+/// it so the surface doesn't hide it; edges of selected vertices (alpha below 200) in `csel`.
+fn draw_thick_wires(parts: &[(usize, Vec<Mesh>)], cam: Vec3, ortho: bool, px_world: f32, c: Color, csel: Color) {
+    let (cn, cs): ([u8; 4], [u8; 4]) = (c.into(), csel.into());
+    let mut verts: Vec<Vertex> = Vec::with_capacity(32000);
+    let mut idx: Vec<u16> = Vec::with_capacity(48000);
+    let mut n = 0usize;
+    let flush = |verts: &mut Vec<Vertex>, idx: &mut Vec<u16>| {
+        if !idx.is_empty() {
+            let m = Mesh { vertices: std::mem::take(verts), indices: std::mem::take(idx), texture: None };
+            draw_mesh(&m);
+        }
+    };
+    'all: for (_, meshes) in parts {
+        for mesh in meshes {
+            for t in mesh.indices.chunks(3) {
+                if t.len() < 3 {
+                    continue;
+                }
+                for (i0, i1) in [(t[0], t[1]), (t[1], t[2]), (t[2], t[0])] {
+                    let (va, vb) = (&mesh.vertices[i0 as usize], &mesh.vertices[i1 as usize]);
+                    let (a, b) = (va.position, vb.position);
+                    let mid = (a + b) * 0.5;
+                    let to = cam - mid;
+                    let dist = if ortho { 1.0 } else { to.length() };
+                    let half = 0.5 * px_world * dist;
+                    let side = (b - a).cross(to);
+                    if side.length_squared() < 1e-14 {
+                        continue;
+                    }
+                    let side = side.normalize() * half;
+                    let lift = to.normalize_or_zero() * half * 2.0;
+                    let col = if va.color[3] < 200 && vb.color[3] < 200 { cs } else { cn };
+                    let base = verts.len() as u16;
+                    for p in [a - side + lift, a + side + lift, b + side + lift, b - side + lift] {
+                        verts.push(Vertex { position: p, uv: Vec2::ZERO, color: col, normal: Vec4::ZERO });
+                    }
+                    idx.extend_from_slice(&[base, base + 1, base + 2, base, base + 2, base + 3]);
+                    if verts.len() >= 31996 {
+                        flush(&mut verts, &mut idx);
+                    }
+                }
+                n += 1;
+                if n > 60000 {
+                    break 'all;
+                }
+            }
+        }
+    }
+    flush(&mut verts, &mut idx);
+}
+
+/// Spine-only generators' spines: a camera-facing yellow strip 2.5 px wide along each, and a
+/// small square at every point (one per segment). `px` = world size of a pixel per unit of
+/// distance.
+fn draw_spine_lines(lines: &[(u32, Vec<Vec3>)], cam: Vec3, ortho: bool, px: f32, sel: Option<u32>) {
+    let mut verts: Vec<Vertex> = Vec::with_capacity(8000);
+    let mut idx: Vec<u16> = Vec::with_capacity(12000);
+    let mut quad = |verts: &mut Vec<Vertex>, idx: &mut Vec<u16>, q: [Vec3; 4], col: [u8; 4]| {
+        let base = verts.len() as u16;
+        for p in q {
+            verts.push(Vertex { position: p, uv: Vec2::ZERO, color: col, normal: Vec4::ZERO });
+        }
+        idx.extend_from_slice(&[base, base + 1, base + 2, base, base + 2, base + 3]);
+        if verts.len() > 7990 {
+            draw_mesh(&Mesh { vertices: std::mem::take(verts), indices: std::mem::take(idx), texture: None });
+        }
+    };
+    for (id, pts) in lines {
+        let on = sel == Some(*id);
+        let line: [u8; 4] = if on { [255, 236, 120, 255] } else { [240, 200, 40, 255] };
+        let dot: [u8; 4] = if on { [255, 255, 200, 255] } else { [255, 225, 90, 255] };
+        let w = if on { 3.5 } else { 2.5 };
+        let scale = |p: Vec3| if ortho { px } else { px * (cam - p).length() };
+        for k in 0..pts.len().saturating_sub(1) {
+            let (a, b) = (pts[k], pts[k + 1]);
+            let to = cam - (a + b) * 0.5;
+            let side = (b - a).cross(to);
+            if side.length_squared() < 1e-14 {
+                continue;
+            }
+            let s = scale((a + b) * 0.5);
+            let side = side.normalize() * 0.5 * w * s;
+            let lift = to.normalize_or_zero() * 3.0 * s;
+            quad(&mut verts, &mut idx, [a - side + lift, a + side + lift, b + side + lift, b - side + lift], line);
+        }
+        for p in pts {
+            let to = (cam - *p).normalize_or_zero();
+            let right = to.cross(Vec3::Y).normalize_or(Vec3::X);
+            let up = right.cross(to).normalize_or(Vec3::Y);
+            let h = 3.5 * scale(*p);
+            let c = *p + to * 4.0 * scale(*p);
+            quad(&mut verts, &mut idx, [c - right * h - up * h, c + right * h - up * h, c + right * h + up * h, c - right * h + up * h], dot);
+        }
+    }
+    if !idx.is_empty() {
+        draw_mesh(&Mesh { vertices: verts, indices: idx, texture: None });
+    }
+}
+
+/// The Generation editor's node styles (Preferences > Node Editor, picture 41).
+pub const NODE_STYLES: [&str; 5] = ["Rectangle", "Rounded", "Circle", "Ellipse", "Hexagon"];
+
+/// A node's size in a style, at zoom 1.
+pub fn node_size(style: usize) -> Vec2 {
+    match style {
+        2 => vec2(58.0, 58.0),
+        3 => vec2(132.0, 56.0),
+        4 => vec2(132.0, 50.0),
+        _ => vec2(128.0, 46.0),
+    }
+}
+
+/// One generator node in a style, filling `r`: 0 Rectangle (a coloured header over the body), 1
+/// Rounded (a pill with a coloured cap), 2 Circle (a coloured disc, the name above and the count
+/// below, like the original's icons), 3 Ellipse (a coloured rim), 4 Hexagon (a coloured badge).
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn draw_node_shape(ui: &mut Ui, style: usize, r: Rect, header: Color, body: Color, text: Color, alpha: f32, outline: Option<(Color, f32)>, title: &str, sub: &str, z: f32) {
+    let fade = |c: Color, a: f32| Color::new(c.r, c.g, c.b, c.a * a);
+    let fs = (12.0 * z.sqrt()).clamp(9.0, 15.0);
+    let fs2 = (10.5 * z.sqrt()).clamp(8.0, 13.0);
+    let shadow = Color::new(0.0, 0.0, 0.0, 0.35 * alpha);
+    let line = |dflt: f32| outline.unwrap_or((Color::new(0.0, 0.0, 0.0, 0.55 * alpha), dflt));
+    match style {
+        1 => {
+            let rad = r.h * 0.5;
+            draw_round_rect(Rect::new(r.x + 3.0, r.y + 4.0, r.w, r.h), rad, shadow);
+            draw_round_rect(r, rad, fade(body, alpha));
+            draw_circle(r.x + rad, r.y + rad, rad - 3.0 * z, fade(header, alpha));
+            let (c, t) = line(1.0);
+            draw_round_rect_lines(r, rad, t, c);
+            let tx = r.x + r.h + 2.0 * z;
+            ui.text_fit(title, tx, r.y + r.h * 0.3 - fs * 0.5, r.w - r.h - 8.0 * z, fs, fade(text, alpha));
+            ui.text_fit(sub, tx, r.y + r.h * 0.68 - fs2 * 0.5, r.w - r.h - 8.0 * z, fs2, fade(text, 0.6 * alpha));
+        }
+        2 => {
+            let (cx, cy, rad) = (r.x + r.w * 0.5, r.y + r.h * 0.5, r.w.min(r.h) * 0.5);
+            draw_circle(cx + 2.0, cy + 3.0, rad, shadow);
+            draw_circle(cx, cy, rad, fade(Color::new(0.04, 0.04, 0.05, 1.0), alpha));
+            draw_circle(cx, cy, rad * 0.8, fade(header, alpha));
+            let (c, t) = line(1.5);
+            draw_circle_lines(cx, cy, rad, t, c);
+            // the kind's first letter in the disc
+            let letter: String = title.chars().next().map(|c| c.to_uppercase().to_string()).unwrap_or_default();
+            ui.text_center(&letter, Rect::new(r.x, r.y, r.w, r.h), (rad * 0.9).max(9.0), fade(text, alpha));
+            // the name and count beside the disc, clear of the sockets and wires
+            ui.text(title, r.x + r.w + 6.0 * z, cy - fs - 1.0, fs, fade(text, alpha));
+            ui.text(sub, r.x + r.w + 6.0 * z, cy + 1.0, fs2, fade(text, 0.6 * alpha));
+        }
+        3 => {
+            let (cx, cy) = (r.x + r.w * 0.5, r.y + r.h * 0.5);
+            draw_ellipse(cx + 2.0, cy + 3.0, r.w * 0.5, r.h * 0.5, 0.0, shadow);
+            draw_ellipse(cx, cy, r.w * 0.5, r.h * 0.5, 0.0, fade(header, alpha));
+            draw_ellipse(cx, cy, r.w * 0.5 - 4.0 * z, r.h * 0.5 - 4.0 * z, 0.0, fade(body, alpha));
+            if let Some((c, t)) = outline {
+                draw_ellipse_lines(cx, cy, r.w * 0.5, r.h * 0.5, 0.0, t, c);
+            }
+            let tw = ui.text_w(title, fs).min(r.w * 0.7);
+            ui.text_fit(title, cx - tw * 0.5, cy - fs - 1.0, r.w * 0.7, fs, fade(text, alpha));
+            let sw = ui.text_w(sub, fs2).min(r.w * 0.7);
+            ui.text_fit(sub, cx - sw * 0.5, cy + 1.0, r.w * 0.7, fs2, fade(text, 0.6 * alpha));
+        }
+        4 => {
+            let hx = |o: f32, d: f32| -> [Vec2; 6] {
+                let (x, y, w, h) = (r.x + o + d, r.y + d, r.w - 2.0 * d, r.h - 2.0 * d);
+                let k = h * 0.45;
+                [vec2(x + k, y), vec2(x + w - k, y), vec2(x + w, y + h * 0.5), vec2(x + w - k, y + h), vec2(x + k, y + h), vec2(x, y + h * 0.5)]
+            };
+            let fill = |pts: [Vec2; 6], c: Color, dy: f32| {
+                let ctr = pts.iter().fold(Vec2::ZERO, |a, p| a + *p) / 6.0 + vec2(0.0, dy);
+                for i in 0..6 {
+                    draw_triangle(ctr, pts[i] + vec2(0.0, dy), pts[(i + 1) % 6] + vec2(0.0, dy), c);
+                }
+            };
+            fill(hx(3.0, 0.0), shadow, 3.0);
+            fill(hx(0.0, 0.0), fade(header, alpha), 0.0);
+            fill(hx(0.0, 3.5 * z), fade(body, alpha), 0.0);
+            let (c, t) = line(1.0);
+            let p = hx(0.0, 0.0);
+            for i in 0..6 {
+                draw_line(p[i].x, p[i].y, p[(i + 1) % 6].x, p[(i + 1) % 6].y, t, c);
+            }
+            let k = r.h * 0.45;
+            ui.text_fit(title, r.x + k, r.y + r.h * 0.3 - fs * 0.5, r.w - 2.0 * k, fs, fade(text, alpha));
+            ui.text_fit(sub, r.x + k, r.y + r.h * 0.68 - fs2 * 0.5, r.w - 2.0 * k, fs2, fade(text, 0.6 * alpha));
+        }
+        _ => {
+            let hh = 20.0 * z;
+            draw_round_rect(Rect::new(r.x + 3.0, r.y + 4.0, r.w, r.h), 5.0 * z, shadow);
+            draw_round_rect(r, 5.0 * z, fade(body, alpha));
+            draw_round_rect(Rect::new(r.x, r.y, r.w, hh), 5.0 * z, fade(header, alpha));
+            draw_rectangle(r.x, r.y + hh - 5.0 * z, r.w, 5.0 * z, fade(header, alpha));
+            let (c, t) = line(1.0);
+            draw_round_rect_lines(r, 5.0 * z, t, c);
+            ui.text_fit(title, r.x + 7.0 * z, r.y + (hh - fs) * 0.5 - 1.0, r.w - 12.0 * z, fs, fade(text, alpha));
+            ui.text_fit(sub, r.x + 7.0 * z, r.y + hh + (r.h - hh - fs2) * 0.5 - 1.0, r.w - 12.0 * z, fs2, fade(text, 0.6 * alpha));
+        }
+    }
+}
+
+/// A node-graph wire: a vertical S-curve from  (a parent's top socket) up to  (a child's
+/// bottom socket).
+fn draw_wire(a: Vec2, b: Vec2, w: f32, col: Color, style: usize) {
+    // Preferences > Node Editor > Wire style (picture 41): 1 Straight, 2 Angled
+    if style == 1 {
+        draw_line(a.x, a.y, b.x, b.y, w, col);
+        return;
+    }
+    if style == 2 {
+        let my = (a.y + b.y) * 0.5;
+        for (p, q) in [(a, vec2(a.x, my)), (vec2(a.x, my), vec2(b.x, my)), (vec2(b.x, my), b)] {
+            draw_line(p.x, p.y, q.x, q.y, w, col);
+            draw_circle(q.x, q.y, w * 0.5, col);
+        }
+        return;
+    }
+    let k = ((b.y - a.y).abs() * 0.5).max(30.0);
+    let (c1, c2) = (a - vec2(0.0, k), b + vec2(0.0, k));
+    let mut prev = a;
+    for i in 1..=28 {
+        let t = i as f32 / 28.0;
+        let u = 1.0 - t;
+        let p = a * (u * u * u) + c1 * (3.0 * u * u * t) + c2 * (3.0 * u * t * t) + b * (t * t * t);
+        draw_line(prev.x, prev.y, p.x, p.y, w, col);
+        draw_circle(p.x, p.y, w * 0.5, col);
+        prev = p;
+    }
 }

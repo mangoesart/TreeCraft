@@ -1,0 +1,192 @@
+{
+  "id": "ev_c0a37c798ffcfca14f929f85d20682c5e1498605a8862506233a5ff9e0a02874",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Skin:Type|Shape Control:Style|Generation:Phyllotaxy:Arrangement:Style|Growth:Timing:Style|Vertex Color:Red:Style|Vertex Color:Mesh Asset:Style|Collision:Style)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410424d0",
+        "references": [
+          {
+            "from": "0x1400cfafd",
+            "function": "sub_1400cfac0"
+          },
+          {
+            "from": "0x140183e8d",
+            "function": "sub_140183e50"
+          },
+          {
+            "from": "0x1401e759d",
+            "function": "sub_1401e7560"
+          },
+          {
+            "from": "0x1402060cd",
+            "function": "sub_140206090"
+          },
+          {
+            "from": "0x140275e0d",
+            "function": "sub_140275dd0"
+          },
+          {
+            "from": "0x1404ce260",
+            "function": "sub_1404ce170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collision:Style"
+      },
+      {
+        "address": "0x141042558",
+        "references": [
+          {
+            "from": "0x1400d04a0",
+            "function": "sub_1400cff60"
+          },
+          {
+            "from": "0x1400f16fd",
+            "function": "sub_1400f12d0"
+          },
+          {
+            "from": "0x14013460d",
+            "function": "sub_1401341e0"
+          },
+          {
+            "from": "0x140184842",
+            "function": "sub_1401842f0"
+          },
+          {
+            "from": "0x1401e7d95",
+            "function": "sub_1401e7970"
+          },
+          {
+            "from": "0x140206dc1",
+            "function": "sub_140206530"
+          },
+          {
+            "from": "0x140276a12",
+            "function": "sub_1402764c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertex Color:Red:Style"
+      },
+      {
+        "address": "0x1410425a8",
+        "references": [
+          {
+            "from": "0x1400d027f",
+            "function": "sub_1400cff60"
+          },
+          {
+            "from": "0x14018461f",
+            "function": "sub_1401842f0"
+          },
+          {
+            "from": "0x140206b9c",
+            "function": "sub_140206530"
+          },
+          {
+            "from": "0x1402767ef",
+            "function": "sub_1402764c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Vertex Color:Mesh Asset:Style"
+      },
+      {
+        "address": "0x141047518",
+        "references": [
+          {
+            "from": "0x14012f7f1",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Style"
+      },
+      {
+        "address": "0x141047d08",
+        "references": [
+          {
+            "from": "0x1401335d1",
+            "function": "sub_140133100"
+          },
+          {
+            "from": "0x1401e7246",
+            "function": "sub_1401e6900"
+          },
+          {
+            "from": "0x140275511",
+            "function": "sub_140274ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Growth:Timing:Style"
+      },
+      {
+        "address": "0x141048240",
+        "references": [
+          {
+            "from": "0x1401408b4",
+            "function": "sub_140140870"
+          },
+          {
+            "from": "0x140193acb",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140197b9e",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Type"
+      },
+      {
+        "address": "0x14105e170",
+        "references": [
+          {
+            "from": "0x14021bb41",
+            "function": "sub_14021baf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Phyllotaxy:Arrangement:Style"
+      }
+    ],
+    "total": 7
+  },
+  "summary": "7 strings match \"^(Skin:Type|Shape Control:Style|Generation:Phyllotaxy:Arrangement:Style|Growth:Timing:Style|Vertex Color:Red:Style|Vertex Color:Mesh Asset:Style|Collision:Style)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 7,
+    "total": 7
+  },
+  "locations": [],
+  "links": []
+}

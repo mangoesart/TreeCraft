@@ -43,6 +43,10 @@ pub const MODE_ABSOLUTE: usize = 1;
 pub const MODE_INTERVAL: usize = 2;
 pub const MODE_PHYLLOTAXY: usize = 3;
 
+/// A generator's material slot left empty: the generator draws plain grey (new generators from
+/// the Add menu start this way; materials are assigned by hand).
+pub const NO_MATERIAL: usize = usize::MAX;
+
 #[derive(Clone, Debug)]
 pub struct Params {
     // Generation
@@ -112,9 +116,181 @@ pub struct Params {
     pub tree_radius: f32,
     pub lod_preview: i32,
     pub collect: bool,
+    /// The original's other generator properties (Properties panel tabs): kept by name when
+    /// changed from the original's default, not used by the tree yet.
+    pub extra: std::collections::BTreeMap<String, f64>,
+    /// Property curves (picture 24), keyed "<property name>|<kind>": kind 0 Parent (green: by
+    /// where each child sits along its parent), 1 Distribution (blue: across the children on a
+    /// parent, first to last), 2 Profile (yellow: along each branch's own length).
+    pub curves: std::collections::BTreeMap<String, Curve>,
+    /// Node edit mode (Tab): offsets for single nodes, by the node's number in the generator.
+    pub node_edits: std::collections::BTreeMap<usize, NodeEdit>,
+    /// Freehand mode: branches drawn by hand, each a list of points in tree space.
+    pub drawn: Vec<Vec<Vec3>>,
+    /// The original's Materials group (picture 25): Branch materials, each a material (or
+    /// INHERITED: the parent's) and a weight; each branch picks one by weight. Empty: `material`.
+    pub mat_list: Vec<(usize, f32)>,
+    /// Extension materials (kept; TreeCraft has no branch extensions).
+    pub ext_list: Vec<(usize, f32)>,
+    /// Close the tip and base of each branch (off by default, picture 34).
+    pub cap_ends: bool,
+    /// Which parent each curve reads its place on (1 = the direct parent, 2 = its parent ...),
+    /// keyed like `curves` (the original's curve editor "Parent level").
+    pub curve_levels: std::collections::BTreeMap<String, u8>,
+    /// Variance Settings per property (picture 35); the four TreeCraft already varied keep their
+    /// amount in len_var, angle_var, radius_var and leaf_size_var.
+    pub variances: std::collections::BTreeMap<String, Variance>,
+}
+
+/// A Materials entry that takes its parent branch's material (the original's "Inherited").
+pub const INHERITED: usize = usize::MAX - 1;
+
+/// A curve over 0..1: points (x, y) with x rising; y is the multiplier (1 = the value as set),
+/// kept within 0..1 ("Curve is clamped" in the original).
+#[derive(Clone, Debug, PartialEq)]
+pub struct Curve {
+    pub pts: Vec<Vec2>,
+    /// Each point's kind, as the original's curve editor inserts them (fn 0x1400dba00):
+    /// POINT_SMOOTH, POINT_STEP (holds its value until the next point) or POINT_COLLAPSED (a sharp
+    /// corner). Missing entries are smooth.
+    pub kinds: Vec<u8>,
+}
+
+pub const POINT_SMOOTH: u8 = 0;
+pub const POINT_STEP: u8 = 1;
+pub const POINT_COLLAPSED: u8 = 2;
+
+impl Curve {
+    pub fn flat() -> Self {
+        Curve { pts: vec![vec2(0.0, 1.0), vec2(1.0, 1.0)], kinds: vec![] }
+    }
+    pub fn from_points(p: &[(f32, f32)]) -> Self {
+        Curve { pts: p.iter().map(|(x, y)| vec2(*x, *y)).collect(), kinds: vec![] }
+    }
+    pub fn kind(&self, i: usize) -> u8 {
+        self.kinds.get(i).copied().unwrap_or(POINT_SMOOTH)
+    }
+    /// Keep `kinds` as long as `pts`.
+    pub fn fix_kinds(&mut self) {
+        self.kinds.resize(self.pts.len(), POINT_SMOOTH);
+    }
+    /// The slope at point i for smooth points (from its neighbours).
+    fn slope(&self, i: usize) -> f32 {
+        let n = self.pts.len();
+        let (a, b) = (self.pts[i.saturating_sub(1)], self.pts[(i + 1).min(n - 1)]);
+        if (b.x - a.x).abs() < 1e-6 {
+            0.0
+        } else {
+            (b.y - a.y) / (b.x - a.x)
+        }
+    }
+    pub fn eval(&self, x: f32) -> f32 {
+        let x = x.clamp(0.0, 1.0);
+        let pts = &self.pts;
+        match pts.len() {
+            0 => 1.0,
+            1 => pts[0].y,
+            n => {
+                if x <= pts[0].x {
+                    return pts[0].y;
+                }
+                for i in 0..n - 1 {
+                    let (a, b) = (pts[i], pts[i + 1]);
+                    if x <= b.x {
+                        let h = (b.x - a.x).max(1e-6);
+                        let f = ((x - a.x) / h).clamp(0.0, 1.0);
+                        if self.kind(i) == POINT_STEP {
+                            return a.y;
+                        }
+                        // a sharp corner at either end: straight; otherwise a smooth spline
+                        let y = if self.kind(i) == POINT_COLLAPSED || self.kind(i + 1) == POINT_COLLAPSED {
+                            a.y + (b.y - a.y) * f
+                        } else {
+                            let (m0, m1) = (self.slope(i) * h, self.slope(i + 1) * h);
+                            let (f2, f3) = (f * f, f * f * f);
+                            (2.0 * f3 - 3.0 * f2 + 1.0) * a.y + (f3 - 2.0 * f2 + f) * m0 + (-2.0 * f3 + 3.0 * f2) * b.y + (f3 - f2) * m1
+                        };
+                        return y.clamp(0.0, 1.0);
+                    }
+                }
+                pts[n - 1].y
+            }
+        }
+    }
+}
+
+pub const CURVE_KINDS: [&str; 3] = ["Parent", "Distribution", "Profile"];
+
+/// A property's Variance Settings (the original's +/- window, fn 0x1404f57d0): how far each node's
+/// value may stray, how the random values spread, and how alike neighbours are.
+#[derive(Clone, Debug, PartialEq)]
+pub struct Variance {
+    /// Up to this much above or below the value.
+    pub amount: f32,
+    /// Distribution: false Uniform (random), true Gaussian (bell curve).
+    pub gaussian: bool,
+    /// Cohesion: 0 Cohesive (neighbours along the parent alike) .. 1 Random.
+    pub cohesion: f32,
+    /// How quickly the cohesive part changes along the parent, and where it starts.
+    pub scale: f32,
+    pub offset: f32,
+}
+
+impl Default for Variance {
+    fn default() -> Self {
+        Variance { amount: 0.0, gaussian: false, cohesion: 1.0, scale: 1.0, offset: 0.0 }
+    }
+}
+
+pub const VAR_DISTRIBUTIONS: [&str; 2] = ["Uniform (random)", "Gaussian (bell curve)"];
+
+/// One node's offsets from what its generator computes (the original: "Property edits in this
+/// mode are offsets to the value computed by the generator and should be used for fine tuning").
+#[derive(Clone, Debug, PartialEq)]
+pub struct NodeEdit {
+    /// Length (leaves: size) multiplier.
+    pub length: f32,
+    /// Radius multiplier.
+    pub radius: f32,
+    /// Added to the start angle (0..1 = 0..180 degrees).
+    pub angle: f32,
+    /// Added turn around the parent (1 = a full turn).
+    pub roll: f32,
+    pub hidden: bool,
+}
+
+impl Default for NodeEdit {
+    fn default() -> Self {
+        NodeEdit { length: 1.0, radius: 1.0, angle: 0.0, roll: 0.0, hidden: false }
+    }
 }
 
 impl Params {
+    /// The person's defaults for a new generator from the Add menu (picture-22): no bending
+    /// (noise, jink, gravity 0), no taper or flare, every instance the same (no variances or
+    /// profiles), and no material (plain grey until one is assigned).
+    pub fn neutralize(&mut self) {
+        self.noise_amt = 0.0;
+        self.jink = 0.0;
+        self.gravity = 0.0;
+        self.len_var = 0.0;
+        self.len_profile = 0.0;
+        self.angle_var = 0.0;
+        self.angle_profile = 0.0;
+        self.radius_var = 0.0;
+        self.leaf_size_var = 0.0;
+        self.taper = 1.0;
+        self.flare = 0.0;
+        self.droop = 0.0;
+        self.fold = 0.0;
+        self.curl = 0.0;
+        self.leaf_twist = 0.0;
+        self.material = NO_MATERIAL;
+        self.leaf_material = NO_MATERIAL;
+        self.mat_list.clear();
+        self.ext_list.clear();
+    }
+
     pub fn new(kind: Kind) -> Self {
         let mut p = Params {
             gen_mode: MODE_CLASSIC,
@@ -174,6 +350,15 @@ impl Params {
             tree_radius: 10.0,
             lod_preview: 0,
             collect: false,
+            extra: std::collections::BTreeMap::new(),
+            curves: std::collections::BTreeMap::new(),
+            node_edits: std::collections::BTreeMap::new(),
+            drawn: vec![],
+            mat_list: vec![],
+            ext_list: vec![],
+            cap_ends: false,
+            curve_levels: std::collections::BTreeMap::new(),
+            variances: std::collections::BTreeMap::new(),
         };
         match kind {
             Kind::Tree => {
@@ -417,7 +602,8 @@ pub struct MatSlot {
 }
 
 /// The original's ten texture slots, in its panel order (fn 0x14006e3c0 / person's screenshot).
-pub const SLOT_NAMES: [&str; 10] = ["Color", "Opacity", "Normal", "Gloss", "Specular", "Metallic", "Subsurface", "Subsurface%", "AO", "Custom"];
+/// Slot 3 is Roughness (the original's Gloss, inverted: white = rough, picture 25).
+pub const SLOT_NAMES: [&str; 10] = ["Color", "Opacity", "Normal", "Roughness", "Specular", "Metallic", "Subsurface", "Subsurface%", "AO", "Custom"];
 /// Which slots hold a colour value (the others hold a number).
 pub const SLOT_IS_COLOR: [bool; 10] = [true, false, false, false, true, false, true, false, false, true];
 /// Choices read from the original's Materials panel (fn 0x140063f80, 8.4.2).
@@ -512,6 +698,10 @@ pub struct MeshLod {
     pub anchors: Vec<CutAnchor>,
     /// Vertex colour of each outline point (empty = all white).
     pub colors: Vec<[f32; 3]>,
+    /// Points inside the outline that are mesh vertices too (a click inside the shape adds one,
+    /// picture-17), and their colours (empty = white).
+    pub inner: Vec<Vec2>,
+    pub inner_colors: Vec<[f32; 3]>,
 }
 
 /// A green anchor in a cutout: picture position, angle (degrees clockwise from up) and the number
@@ -523,6 +713,46 @@ pub struct CutAnchor {
     pub id: usize,
     /// The original's anchor Side (fn 0x140301500): 0 Automatic, 1 Left, 2 Right. Stored only.
     pub side: u8,
+}
+
+/// Objects in the scene beside the tree (the viewport toolbar's Scene group): forces that bend
+/// branch growth in world space, and collision objects (simple primitives kept with the tree
+/// for collision at run time; they don't change growth).
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum SceneKind {
+    /// Pushes growth along `dir` everywhere.
+    Direction,
+    /// Pulls growth toward `pos` (pushes away with a negative strength), weaker with distance.
+    Magnet,
+    Sphere,
+    Capsule,
+}
+
+impl SceneKind {
+    pub fn name(self) -> &'static str {
+        match self {
+            SceneKind::Direction => "Direction",
+            SceneKind::Magnet => "Magnet",
+            SceneKind::Sphere => "Sphere",
+            SceneKind::Capsule => "Capsule",
+        }
+    }
+    pub fn is_force(self) -> bool {
+        matches!(self, SceneKind::Direction | SceneKind::Magnet)
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct SceneObj {
+    pub kind: SceneKind,
+    pub name: String,
+    pub pos: Vec3,
+    /// Force direction or capsule axis (unit length).
+    pub dir: Vec3,
+    /// Force strength, or the sphere's / capsule's radius.
+    pub size: f32,
+    /// Capsule length (between its two end centres).
+    pub length: f32,
 }
 
 /// Anchor Side choices, in the original's order (fn 0x140301500).

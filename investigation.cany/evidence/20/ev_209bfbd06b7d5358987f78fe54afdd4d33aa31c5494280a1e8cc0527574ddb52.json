@@ -1,0 +1,45 @@
+{
+  "id": "ev_209bfbd06b7d5358987f78fe54afdd4d33aa31c5494280a1e8cc0527574ddb52",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x140136e00"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x140136e00",
+    "function": "FUN_140136e00",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_140136e00(longlong param_1,longlong *param_2,longlong *param_3)\r\n\r\n{\r\n  char cVar1;\r\n  int iVar2;\r\n  undefined8 uVar3;\r\n  longlong lVar4;\r\n  undefined1 auStack_128 [32];\r\n  undefined1 local_108;\r\n  undefined8 local_100;\r\n  undefined1 local_f8;\r\n  undefined7 uStack_f7;\r\n  undefined8 local_e8;\r\n  ulonglong local_e0;\r\n  undefined1 local_d0;\r\n  undefined7 uStack_cf;\r\n  undefined8 local_c0;\r\n  ulonglong local_b8;\r\n  undefined1 local_a8;\r\n  undefined7 uStack_a7;\r\n  undefined8 local_98;\r\n  ulonglong local_90;\r\n  undefined1 local_78;\r\n  undefined7 uStack_77;\r\n  undefined8 local_68;\r\n  ulonglong local_60;\r\n  void *local_50 [3];\r\n  ulonglong local_38;\r\n  ulonglong local_28;\r\n  \r\n  local_100 = 0xfffffffffffffffe;\r\n  local_28 = DAT_141a96e80 ^ (ulonglong)auStack_128;\r\n  if (param_3 == (longlong *)0x0) {\r\n    cVar1 = FUN_1402e3080(*(longlong *)(param_1 + 0x98) + 0x430,param_1 + 0x108);\r\n  }\r\n  else {\r\n    lVar4 = *(longlong *)(*param_3 + 0x430);\r\n    FUN_14059b5e0(lVar4);\r\n    cVar1 = *(char *)(lVar4 + 0x10);\r\n  }\r\n  if (cVar1 == '\\0') {\r\n    uVar3 = (**(code **)(*DAT_141a9c730 + 0x2f0))(DAT_141a9c730,&local_78);\r\n    FUN_1400500a0(local_50,uVar3,\"/../app_data/Tree Window ToolBar/\");\r\n    if (0xf < local_60) {\r\n      operator_delete((void *)CONCAT71(uStack_77,local_78));\r\n    }\r\n    local_60 = 0xf;\r\n    local_68 = 0;\r\n    local_78 = 0;\r\n    lVar4 = param_2[1];\r\n    if (*param_2 != lVar4) {\r\n      lVar4 = FUN_1400c4460(lVar4,lVar4,*param_2,local_108);\r\n      FUN_1400c5560(lVar4,param_2[1],param_2 + 3,local_108);\r\n      param_2[1] = lVar4;\r\n    }\r\n    local_e0 = 0xf;\r\n    local_e8 = 0;\r\n    local_f8 = 0;\r\n    local_b8 = 0xf;\r\n    local_c0 = 0;\r\n    local_d0 = 0;\r\n    local_90 = 0xf;\r\n    local_98 = 0;\r\n    local_a8 = 0;\r\n    iVar2 = (**(code **)(*DAT_141a9c730 + 0x1e8))();\r\n    if (iVar2 < 4) {\r\n      FUN_14003a980(&local_f8,&DAT_14104274c,3);\r\n      FUN_14003a980(&local_d0,\"Generation:\",0xb);\r\n      FUN_1400ce650(param_2,&local_f8);\r\n    }\r\n    FUN_14003a980(&local_f8,\"Spine\",5);\r\n    FUN_14003a980(&local_d0,\"Spine:|Forces:\",0xe);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Shape\",5);\r\n    FUN_14003a980(&local_d0,\"Shape Control:\",0xe);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,&DAT_141042738,4);\r\n    FUN_14003a980(&local_d0,\"Skin:\",5);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,&DAT_141047ed4,2);\r\n    FUN_14003a980(&local_d0,\"UV Mapping|Lightmap\",0x13);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Displacement\",0xc);\r\n    FUN_14003a980(&local_d0,\"Displacement\",0xc);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Material\",8);\r\n    FUN_14003a980(&local_d0,\"Materials:|Season:|Vertex Color:|Lightmap\",0x29);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Animation\",9);\r\n    FUN_14003a980(&local_d0,\"Wind:|Growth:\",0xd);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Segments\",8);\r\n    FUN_14003a980(&local_d0,\"Segments:\",9);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,&DAT_141044a88,3);\r\n    FUN_14003a980(&local_d0,\"Dynamic LOD:\",0xc);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    FUN_14003a980(&local_f8,\"Hand Drawn\",10);\r\n    FUN_14003a980(&local_d0,\"Hand Drawn:\",0xb);\r\n    FUN_1400ce650(param_2,&local_f8);\r\n    if (0xf < local_90) {\r\n      operator_delete((void *)CONCAT71(uStack_a7,local_a8));\r\n    }\r\n    local_90 = 0xf;\r\n    local_98 = 0;\r\n    local_a8 = 0;\r\n    if (0xf < local_b8) {\r\n      operator_delete((void *)CONCAT71(uStack_cf,local_d0));\r\n    }\r\n    local_b8 = 0xf;\r\n    local_c0 = 0;\r\n    local_d0 = 0;\r\n    if (0xf < local_e0) {\r\n      operator_delete((void *)CONCAT71(uStack_f7,local_f8));\r\n    }\r\n    local_e0 = 0xf;\r\n    local_e8 = 0;\r\n    local_f8 = 0;\r\n    if (0xf < local_38) {\r\n      operator_delete(local_50[0]);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_140136e00(longlong param_1,longlong *param_2,longlong *param_3);"
+  },
+  "summary": "Pseudo-C for FUN_140136e00 from the Deep engine (128 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x140136e00"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

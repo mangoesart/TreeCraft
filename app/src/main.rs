@@ -9,6 +9,20 @@ mod props;
 mod render;
 mod textures;
 mod ui;
+mod undo;
+mod prefs;
+mod templates;
+mod stprops;
+mod stpanel;
+mod treefile;
+mod appmenu;
+mod icon_art;
+mod winstate;
+mod editmodes;
+mod viewnav;
+mod colorwheel;
+mod stcurves;
+mod splash;
 
 use app::{App, Sel};
 use macroquad::prelude::*;
@@ -18,10 +32,14 @@ use ui::*;
 
 /// Physical pixels per UI unit: the display's scaling, but never squeezing the layout
 /// below ~880 units tall.
+/// Preferences > General > Display scaling (picture 45), as f32 bits.
+static DISPLAY_SCALING: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0x3f80_0000);
+
 fn ui_scale() -> f32 {
     let dpi = screen_dpi_scale().max(0.5);
     let phys_h = screen_height() * dpi;
-    dpi.min(phys_h / 880.0).max(0.6)
+    let k = f32::from_bits(DISPLAY_SCALING.load(std::sync::atomic::Ordering::Relaxed)).clamp(0.5, 2.5);
+    (dpi.min(phys_h / 880.0).max(0.6) * k).max(0.3)
 }
 
 /// Macroquad units (physical / dpi) per UI unit.
@@ -29,15 +47,34 @@ fn ui_factor() -> f32 {
     ui_scale() / screen_dpi_scale().max(0.5)
 }
 
+/// A scripted run (--screenshot / --self-test) keeps the fixed 1600x900 window.
+fn scripted_run() -> bool {
+    std::env::args().any(|a| a == "--screenshot" || a == "--self-test")
+}
+
+fn window_icon() -> miniquad::conf::Icon {
+    let fill = |dst: &mut [u8], size: u32| dst.copy_from_slice(&icon_art::render(size));
+    let mut icon = miniquad::conf::Icon { small: [0; 16 * 16 * 4], medium: [0; 32 * 32 * 4], big: [0; 64 * 64 * 4] };
+    fill(&mut icon.small, 16);
+    fill(&mut icon.medium, 32);
+    fill(&mut icon.big, 64);
+    icon
+}
+
 fn window_conf() -> macroquad::conf::Conf {
+    // the size the window had when it was last closed un-maximized (picture 23)
+    let p = prefs::Prefs::load();
+    let (w, h) = if !scripted_run() && !p.window_max && p.window_w >= 400 && p.window_h >= 300 { (p.window_w, p.window_h) } else { (1600, 900) };
     macroquad::conf::Conf {
         miniquad_conf: miniquad::conf::Conf {
             window_title: "TreeCraft".to_string(),
-            window_width: 1600,
-            window_height: 900,
+            window_width: w,
+            window_height: h,
             high_dpi: true,
             window_resizable: true,
-            sample_count: 4,
+            // Preferences > Render > Multi-sampling (applies when TreeCraft starts; picture 45)
+            sample_count: [1, 2, 4, 8][p.msaa.min(3)],
+            icon: Some(window_icon()),
             ..Default::default()
         },
         draw_call_vertex_capacity: 32000,
@@ -46,57 +83,11 @@ fn window_conf() -> macroquad::conf::Conf {
     }
 }
 
-const MENUS: [(&str, &[&str]); 5] = [
-    ("File", &["New tree", "Quit"]),
-    ("Edit", &["Delete node", "Duplicate node", "Randomize", "Arrange nodes"]),
-    ("View", &["Perspective", "Front", "Back", "Left", "Right", "Top", "Bottom", "Toggle orthographic", "Frame tree"]),
-    ("Window", &["Generation", "Materials", "Meshes", "Window properties"]),
-    ("Help", &["Controls"]),
-];
-
-fn menu_bar(app: &mut App, ui: &mut Ui, w: f32) -> bool {
-    draw_rectangle(0.0, 0.0, w, 24.0, C_BG);
-    let mut x = 4.0;
-    let mut quit = false;
-    for (name, items) in MENUS.iter() {
-        let key = format!("menu.{}", name);
-        let tw = ui.text_w(name, 13.0) + 16.0;
-        let r = Rect::new(x, 1.0, tw, 22.0);
-        if ui.tool_button(&key, r, name, ui.popup_open_for(&key)) {
-            ui.open_popup(hid(&key), r, items.iter().map(|s| s.to_string()).collect(), None);
-        }
-        if let Some(i) = ui.take_popup_result(&key) {
-            let sel_node = if let Sel::Node(id) = app.sel { Some(id) } else { None };
-            match (*name, i) {
-                ("File", 0) => app.new_tree(),
-                ("File", 1) => quit = true,
-                ("Edit", 0) => match sel_node {
-                    Some(id) => app.delete_node(id),
-                    None => app.set_status("Select a node first"),
-                },
-                ("Edit", 1) => {
-                    if let Some(id) = sel_node {
-                        app.duplicate_node(id)
-                    }
-                }
-                ("Edit", 2) => app.randomize(sel_node),
-                ("Edit", 3) => app.arrange(),
-                ("View", v) if v <= 6 => app.cam.set_view(v),
-                ("View", 7) => app.cam.ortho = !app.cam.ortho,
-                ("View", 8) => app.frame_tree(),
-                ("Window", t) if t <= 2 => app.tab = t,
-                ("Window", 3) => app.select(Sel::Window),
-                ("Help", _) => app.set_status("Left-drag orbit • middle/shift-drag pan • wheel zoom • F frame • Del delete node"),
-                _ => {}
-            }
-        }
-        x += tw;
-    }
-    quit
-}
+use appmenu::menu_bar;
 
 fn keyboard(app: &mut App, ui: &Ui) {
-    if ui.popup.is_some() {
+    // no shortcuts while a menu is open or a name/text is being typed
+    if ui.popup.is_some() || app.mat_text_focus || app.mesh_editing || ui.editing() {
         return;
     }
     let i = &ui.inp;
@@ -107,17 +98,83 @@ fn keyboard(app: &mut App, ui: &Ui) {
     if i.key(KeyCode::Key0) || i.key(KeyCode::Kp0) {
         app.cam.set_view(0);
     }
-    if i.key(KeyCode::Key1) || i.key(KeyCode::Kp1) {
+    // views on the number pad
+    if i.key(KeyCode::Kp1) {
         app.cam.set_view(if i.ctrl { 2 } else { 1 });
     }
-    if i.key(KeyCode::Key3) || i.key(KeyCode::Kp3) {
+    if i.key(KeyCode::Kp3) {
         app.cam.set_view(if i.ctrl { 3 } else { 4 });
     }
-    if i.key(KeyCode::Key7) || i.key(KeyCode::Kp7) {
+    if i.key(KeyCode::Kp7) {
         app.cam.set_view(if i.ctrl { 6 } else { 5 });
     }
-    if i.key(KeyCode::Key5) || i.key(KeyCode::Kp5) {
+    if i.key(KeyCode::Kp5) {
         app.cam.ortho = !app.cam.ortho;
+    }
+    // the original's toolbar hot keys (fns 0x1405325b0, 0x140537430): Show > Leaves 1,
+    // Fronds 2, Branches 3, Zones 4, Targets 5, Proxies 9; Visibility > Toggle selected H,
+    // Toggle isolation I; Zoom Z; 6 / 7 / 8 toggle forces, collision objects and wind
+    for (k, show_index) in [(KeyCode::Key1, 0), (KeyCode::Key2, 1), (KeyCode::Key3, 2), (KeyCode::Key4, 3), (KeyCode::Key5, 4), (KeyCode::Key9, 5)] {
+        if i.key(k) && !i.ctrl && !i.alt {
+            app.toolbar_command("vt.show", &[show_index]);
+        }
+    }
+    for (k, key, item) in [(KeyCode::Key6, "vt.forces", 2), (KeyCode::Key7, "vt.coll", 2), (KeyCode::Key8, "vt.wind", 0)] {
+        if i.key(k) && !i.ctrl && !i.alt {
+            app.toolbar_command(key, &[item]);
+        }
+    }
+    // O toggles ambient occlusion; Alt+S steps to the next season (the original's hot keys)
+    if i.key(KeyCode::O) && !i.ctrl {
+        app.ao_on = !app.ao_on;
+    }
+    if i.key(KeyCode::S) && i.alt {
+        app.season = if app.season >= 1.0 { -1.0 } else if app.season < 0.0 { 0.0 } else { (app.season + 0.2).min(1.0) };
+    }
+    if i.key(KeyCode::H) && !i.ctrl {
+        app.toolbar_command("vt.vis", &[0]);
+    }
+    if i.key(KeyCode::I) && !i.ctrl {
+        app.toolbar_command("vt.vis", &[1]);
+    }
+    if i.key(KeyCode::Z) && !i.ctrl && !i.alt {
+        app.toolbar_command("vt.zoom", &[0]);
+    }
+    // File (the original's hot keys, fn 0x140294d60): Ctrl+N new, Ctrl+O open, Ctrl+W close,
+    // Ctrl+S save, Ctrl+Shift+S save as, Ctrl+Alt+Shift+S save with assets, Ctrl+E export mesh
+    if i.ctrl && i.key(KeyCode::S) {
+        if i.alt && i.shift {
+            app.save_with_assets();
+        } else {
+            app.save_tree(i.shift);
+        }
+    }
+    if i.ctrl && i.key(KeyCode::O) {
+        app.open_tree();
+    }
+    if i.ctrl && (i.key(KeyCode::N) || i.key(KeyCode::W)) {
+        app.file_new();
+    }
+    if i.ctrl && i.key(KeyCode::E) {
+        app.export_obj();
+    }
+    // Edit: Alt+Z / Alt+Y undo and redo the selection
+    if i.alt && !i.ctrl && i.key(KeyCode::Z) {
+        app.undo_selection();
+    }
+    if i.alt && !i.ctrl && i.key(KeyCode::Y) {
+        app.redo_selection();
+    }
+    // Undo / Redo (no limit): Ctrl+Z, Ctrl+Y or Ctrl+Shift+Z
+    if i.ctrl && i.key(KeyCode::Z) {
+        if i.shift {
+            app.redo();
+        } else {
+            app.undo();
+        }
+    }
+    if i.ctrl && i.key(KeyCode::Y) {
+        app.redo();
     }
     if i.key(KeyCode::Delete) {
         if let Some(id) = sel_node {
@@ -128,6 +185,10 @@ fn keyboard(app: &mut App, ui: &Ui) {
         if let Some(id) = sel_node {
             app.duplicate_node(id);
         }
+    }
+    // Tab: Generator / Node edit mode (the original's hot key)
+    if i.key(KeyCode::Tab) && !i.ctrl {
+        app.set_edit_mode(if app.edit_mode == 1 { 0 } else { 1 });
     }
     if i.key(KeyCode::Escape) {
         app.select(Sel::None);
@@ -154,6 +215,13 @@ fn layout(w: f32, h: f32, left_w: Option<f32>, dock_w: Option<f32>) -> Layout {
 
 /// One frame of the whole app. Returns false to quit.
 fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
+    // the original's preference tabs that work every frame (picture 45)
+    DISPLAY_SCALING.store(app.prefs.display_scaling.to_bits(), std::sync::atomic::Ordering::Relaxed);
+    ui.plain_numbers = !app.prefs.use_sliders;
+    textures::set_max_texture(512 << app.prefs.max_tex.min(4));
+    if !scripted_run() {
+        app.autosave_tick();
+    }
     let scale = ui_scale();
     let f = ui_factor();
     let dpi = screen_dpi_scale().max(0.5);
@@ -164,7 +232,7 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     ui.sh = h;
     ui.begin(inp);
     // a modal dialog takes all input: panels behind it see an idle mouse and no keys
-    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() {
+    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() || app.prefs_open || app.curve_takes_input(ui.inp.mx, ui.inp.my) || app.var_takes_input(ui.inp.mx, ui.inp.my) || app.welcome_takes_input() {
         let real = ui.inp.clone();
         ui.inp = Inp { mx: real.mx, my: real.my, ..Default::default() };
         ui.blocked = true;
@@ -179,6 +247,7 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
         let in_y = my > lay0.view.y && my < lay0.view.y + lay0.view.h;
         let on_left = in_y && (mx - (lay0.left.x + lay0.left.w + 2.0)).abs() <= 4.0;
         let on_right = in_y && (mx - (lay0.dock.x - 2.0)).abs() <= 4.0;
+        let (on_left, on_right) = (on_left && app.layout_mode != 2, on_right && app.layout_mode != 2);
         if app.split_drag == 0 && ui.active == 0 && ui.popup.is_none() && ui.inp.l_pressed && (on_left || on_right) {
             app.split_drag = if on_left { 1 } else { 2 };
             ui.inp.l_pressed = false;
@@ -199,7 +268,12 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
             draw_rectangle(x - 1.5, lay0.view.y, 3.0, lay0.view.h, C_ACCENT);
         }
     }
-    let lay = layout(w, h, app.left_w, app.dock_w);
+    let mut lay = layout(w, h, app.left_w, app.dock_w);
+    // Window > Layout > Full screen no bars: the viewport takes the whole window
+    let bars = app.layout_mode != 2;
+    if !bars {
+        lay.view = Rect::new(2.0, 26.0, w - 4.0, h - 28.0);
+    }
     app.viewport = lay.view;
 
     if app.dirty {
@@ -216,14 +290,28 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.pop_model_matrix();
     app.draw_viewport_3d(lay.view, scale, screen_height() * dpi);
+    // Selection > Outline: the ring around the selected generator (picture 30)
+    app.draw_selection_outline(lay.view, f);
 
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.push_model_matrix(Mat4::from_scale(vec3(f, f, 1.0)));
 
     let quit = menu_bar(app, ui, w);
-    props::draw_panel(app, ui, lay.left);
-    app.draw_dock(ui, lay.dock);
-    app.draw_viewport_overlay(ui, lay.view);
+    if bars {
+        props::draw_panel(app, ui, lay.left);
+        app.draw_dock(ui, lay.dock);
+    }
+    // a Render photo hides the viewport's own controls for its picture
+    if !app.shot_queue.first().map_or(false, |s| s.2) {
+        app.draw_viewport_overlay(ui, lay.view);
+    }
+    // Node and Freehand modes take viewport clicks first (picture 24)
+    if app.edit_mode_input(ui, lay.view) {
+        ui.inp.l_pressed = false;
+        ui.inp.l_down = false;
+    }
+    app.draw_edit_overlay();
+    app.viewport_pick(ui, lay.view);
     app.viewport_input(ui, lay.view);
     keyboard(app, ui);
     if let Some(real) = dialog_input {
@@ -231,6 +319,13 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     }
     app.draw_mesh_dialog(ui);
     app.draw_cutout_window(ui);
+    app.draw_prefs_window(ui);
+    app.draw_curve_window(ui);
+    app.draw_variance_window(ui);
+    app.draw_welcome(ui);
+    // undo history: keep the state after each finished edit (outside the modal windows)
+    let idle = !ui.inp.l_down && ui.active == 0 && app.cutout.is_none() && app.mesh_dialog.is_none() && app.mat_dialog.is_none() && !app.prefs_open && app.curve_drag.is_none() && !app.var_cohesion_drag && app.welcome.is_none();
+    app.undo_track(idle);
     ui.end();
 
     let gl = unsafe { get_internal_gl() };
@@ -324,19 +419,29 @@ impl SelfTest {
             27 => {
                 let ok = matches!(app.sel, Sel::Node(id) if app.node(id).map(|n| n.kind == Kind::Branch).unwrap_or(false));
                 self.snap.insert("sel_ok".into(), if ok { 1.0 } else { 0.0 });
-                let key = rects.keys().find(|k| k.starts_with("sl:n") && k.ends_with(".frequency")).cloned();
+                let key = rects.keys().find(|k| k.starts_with("sl:n") && (k.ends_with(".frequency") || k.ends_with(".Generation_Frequency"))).cloned();
+                // press on the spinner dial (picture 32), then drag it to the right
                 if let Some(r) = key.and_then(|k| rects.get(&k).cloned()) {
-                    i.mx = r.x + r.w * 0.25;
+                    i.mx = r.x + 20.0;
                     i.my = r.y + r.h * 0.5;
                     i.l_pressed = true;
                     i.l_down = true;
+                    self.snap.insert("dial_x".into(), i.mx);
+                    self.snap.insert("dial_y".into(), i.my);
                 }
                 self.phase += 1;
             }
             28 => {
-                i.l_released = true;
-                self.phase += 1;
-                self.wait = 2;
+                if !self.snap.contains_key("dragged") {
+                    i.mx = self.snap.get("dial_x").copied().unwrap_or(0.0) + 90.0;
+                    i.my = self.snap.get("dial_y").copied().unwrap_or(0.0);
+                    i.l_down = true;
+                    self.snap.insert("dragged".into(), 1.0);
+                } else {
+                    i.l_released = true;
+                    self.phase += 1;
+                    self.wait = 2;
+                }
             }
             29 => {
                 click(&mut i, rects.get("btn:gen.add"));
@@ -344,14 +449,20 @@ impl SelfTest {
                 self.wait = 1;
             }
             30 => {
-                click(&mut i, rects.get("pop:Leaf"));
+                click(&mut i, rects.get("pop:Leaf Mesh"));
                 self.phase += 1;
                 self.wait = 2;
             }
             31 => {
-                click(&mut i, rects.get("btn:vp.ortho"));
-                self.phase += 1;
-                self.wait = 2;
+                // Orthographic now sits in the view menu below the toolbar: open it, then pick it
+                if let Some(r) = rects.get("pop:Orthographic") {
+                    click(&mut i, Some(r));
+                    self.phase += 1;
+                    self.wait = 2;
+                } else {
+                    click(&mut i, rects.get("btn:vp.view"));
+                    self.wait = 2;
+                }
             }
             32 => {
                 let sel_ok = self.snap["sel_ok"] > 0.5;
@@ -502,21 +613,40 @@ impl SelfTest {
 }
 
 fn save_screenshot(path: &str) {
+    save_region(path, None);
+}
+
+/// Save the screen (or `region`: a rectangle in UI units and the window's width in UI units)
+/// as a PNG.
+fn save_region(path: &str, region: Option<(Rect, f32)>) -> bool {
     let img = get_screen_data();
     let w = img.width as usize;
     let h = img.height as usize;
-    let mut flipped = vec![0u8; w * h * 4];
-    for y in 0..h {
-        let src = &img.bytes[(h - 1 - y) * w * 4..(h - y) * w * 4];
-        flipped[y * w * 4..(y + 1) * w * 4].copy_from_slice(src);
+    let r = match region {
+        Some((r, ui_w)) => {
+            let k = w as f32 / ui_w.max(1.0);
+            Rect::new(r.x * k, r.y * k, r.w * k, r.h * k)
+        }
+        None => Rect::new(0.0, 0.0, w as f32, h as f32),
+    };
+    let x0 = (r.x.max(0.0) as usize).min(w.saturating_sub(1));
+    let y0 = (r.y.max(0.0) as usize).min(h.saturating_sub(1));
+    let rw = (r.w as usize).clamp(1, w - x0);
+    let rh = (r.h as usize).clamp(1, h - y0);
+    let mut out = vec![0u8; rw * rh * 4];
+    for y in 0..rh {
+        // the screen data runs bottom-up
+        let sy = h - 1 - (y0 + y);
+        let src = &img.bytes[(sy * w + x0) * 4..(sy * w + x0 + rw) * 4];
+        out[y * rw * 4..(y + 1) * rw * 4].copy_from_slice(src);
     }
-    for p in flipped.chunks_mut(4) {
+    for p in out.chunks_mut(4) {
         p[3] = 255;
     }
     if let Some(parent) = std::path::Path::new(path).parent() {
         let _ = std::fs::create_dir_all(parent);
     }
-    let _ = image::save_buffer(path, &flipped, w as u32, h as u32, image::ColorType::Rgba8);
+    image::save_buffer(path, &out, rw as u32, rh as u32, image::ColorType::Rgba8).is_ok()
 }
 
 #[macroquad::main(window_conf)]
@@ -538,11 +668,23 @@ async fn main() {
     let font = load_ttf_font_from_bytes(include_bytes!("../assets/fonts/InterVariable.ttf")).ok();
     let mut ui = Ui::new(font);
     let mut app = App::new();
+    // the program starts empty; the self-test (and TM_DEMO=1 / TM_EXTRAS=1 screenshots) start
+    // from a small demo tree
+    if test.is_some() || std::env::var("TM_DEMO").as_deref() == Ok("1") || std::env::var("TM_EXTRAS").as_deref() == Ok("1") {
+        app.load_demo();
+    }
     // optional start state for checking pictures: TM_TAB=0..2, TM_SEL=node name | mat:N | mesh:N
     if let Ok(t) = std::env::var("TM_TAB") {
         app.tab = t.parse().unwrap_or(0).min(2);
     }
     if let Ok(s) = std::env::var("TM_SEL") {
+        // TM_SEL=light: the light's settings in Properties; TM_HELP=1 opens the tips card (picture 43)
+        if s == "light" {
+            app.select(Sel::Light);
+        }
+        if std::env::var("TM_HELP").as_deref() == Ok("1") {
+            app.help_open = true;
+        }
         if let Some(n) = s.strip_prefix("mat:") {
             app.select(Sel::Material(n.parse().unwrap_or(0)));
         } else if let Some(n) = s.strip_prefix("mesh:") {
@@ -551,11 +693,102 @@ async fn main() {
             app.select(Sel::Node(id));
         }
     }
+    // TM_SPINEONLY=<node name>: that generator's Skin:Type set to Spine only (pictures)
+    if let Ok(s) = std::env::var("TM_SPINEONLY") {
+        if let Some(n) = app.nodes.iter_mut().find(|n| n.name == s) {
+            n.p.extra.insert("Skin:Type".into(), 3.0);
+            // TM_SEGPROFILE=1: a falling Profile curve on Segments:Length:Absolute (more
+            // segments at the base, picture 40)
+            if std::env::var("TM_SEGPROFILE").as_deref() == Ok("1") {
+                n.p.curves.insert("Segments:Length:Absolute|2".into(), model::Curve { pts: vec![vec2(0.0, 1.0), vec2(1.0, 0.0)], kinds: vec![] });
+            }
+            app.dirty = true;
+        }
+    }
+    // TM_RADIALPROFILE=<node>: a Linear decay second curve on its Segments:Radial:Absolute;
+    // TM_NODESTYLE=<n>: the Generation editor's node style; TM_PREFSPAGE=<n>: the Preferences page
+    if let Ok(s) = std::env::var("TM_RADIALPROFILE") {
+        if let Some(n) = app.nodes.iter_mut().find(|n| n.name == s) {
+            n.p.curves.insert("Segments:Radial:Absolute|2".into(), editmodes::preset_curve(4));
+            app.dirty = true;
+        }
+    }
+    if let Some(k) = std::env::var("TM_NODESTYLE").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs.node_style = k.min(app::NODE_STYLES.len() - 1);
+    }
+    if let Some(k) = std::env::var("TM_PREFSPAGE").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs_page = k;
+    }
+    // TM_THEMETAB=1: Themes > Node Editor (picture 44)
+    if let Some(k) = std::env::var("TM_THEMETAB").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs_theme_tab = k.min(1);
+    }
+    if std::env::var("TM_PREFS").as_deref() == Ok("1") {
+        app.prefs_open = true;
+        app.prefs_pick = Some(0);
+    }
     if std::env::var("TM_NEW").is_ok() {
         app.new_tree();
     }
+    // TM_SHADING=0|1|2 (Studio, MatCap, Flat), TM_GIZMO=<style>, TM_SHADEMENU=1: for pictures
+    if let Some(s) = std::env::var("TM_SHADING").ok().and_then(|s| s.parse::<u8>().ok()) {
+        app.shading = s.min(2);
+    }
+    if let Some(g) = std::env::var("TM_GIZMO").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs.gizmo_style = g.min(prefs::GIZMO_STYLES.len() - 1);
+    }
+    if std::env::var("TM_SHADEMENU").as_deref() == Ok("1") {
+        app.shading_open = true;
+    }
+    // TM_SELMODE=0|1|2 (Solid fill, Outline, Both), TM_SELMENU=1: for pictures
+    if let Some(s) = std::env::var("TM_SELMODE").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs.sel_mode = s.min(2);
+    }
+    if std::env::var("TM_SELMENU").as_deref() == Ok("1") {
+        app.sel_open = true;
+        // TM_WHEEL=1: with the colour wheel open on the fill colour
+        if std::env::var("TM_WHEEL").as_deref() == Ok("1") {
+            let c = app.prefs.sel_fill;
+            app.wheel = Some(colorwheel::Wheel::new("sel.fill", vec2(560.0, 210.0), [c[0], c[1], c[2]]));
+        }
+    }
+    // TM_CURVE=1: the curve editor open on the selected generator's Spine:Length:Absolute parent
+    // curve, set to the Bell preset (for pictures)
+    if std::env::var("TM_CURVE").as_deref() == Ok("1") {
+        if let Sel::Node(id) = app.sel {
+            let prop = "Spine:Length:Absolute".to_string();
+            if let Some(n) = app.nodes.iter_mut().find(|n| n.id == id) {
+                n.p.curves.insert(format!("{}|0", prop), editmodes::preset_curve(10));
+            }
+            app.curve_edit = Some((id, prop, 0));
+            app.curve_pin = true;
+            app.dirty = true;
+        }
+    }
+    // TM_VAR=1: Variance Settings open for the selected generator's Spine:Shape:Gravity
+    if std::env::var("TM_VAR").as_deref() == Ok("1") {
+        if let Sel::Node(id) = app.sel {
+            app.var_edit = Some((id, "Spine:Shape:Gravity".into(), Rect::new(300.0, 640.0, 26.0, 16.0)));
+            app.var_just_opened = true;
+        }
+    }
+    // TM_PTAB=<n>: the branch Properties tab to start on (5 = UV), for pictures
+    if let Ok(t) = std::env::var("TM_PTAB") {
+        app.prop_tab = t.parse().unwrap_or(0);
+    }
     if let Ok(t) = std::env::var("TM_MATTAB") {
         app.mat_subtab = t.parse().unwrap_or(0).min(1);
+    }
+    // TM_RENDER=<n>: start in render mode n (screenshots); TM_EXTRAS=1: bones, wind, a force
+    if let Some(n) = std::env::var("TM_RENDER").ok().and_then(|s| s.parse::<f32>().ok()) {
+        app.light.mode = n;
+    }
+    if std::env::var("TM_EXTRAS").as_deref() == Ok("1") {
+        app.show_bones = true;
+        app.season = 0.8;
+        app.scene.push(model::SceneObj { kind: model::SceneKind::Sphere, name: "Sphere 1".into(), pos: vec3(0.0, 8.0, 0.0), dir: Vec3::Y, size: 3.0, length: 0.0 });
+        app.scene.push(model::SceneObj { kind: model::SceneKind::Direction, name: "Direction 1".into(), pos: vec3(10.0, 12.0, 0.0), dir: vec3(-1.0, 0.0, 0.0), size: 0.6, length: 0.0 });
+        app.dirty = true;
     }
     if std::env::var("TM_DIALOG").as_deref() == Ok("cut") {
         app.open_cutout_editor(0);
@@ -573,7 +806,34 @@ async fn main() {
     let mut real = RealInput::new();
     let mut st = test.map(|p| SelfTest { path: p, frame: 0, steps: vec![], snap: HashMap::new(), phase: 0, wait: 20, hud: None });
     let mut frames = 0usize;
+    // closing the window with unsaved changes asks to save first (not in scripted runs)
+    let interactive = st.is_none() && shot.is_none();
+    if interactive {
+        prevent_quit();
+    }
+    // opens maximized unless it was last closed at a smaller size (picture 23)
+    let mut maximized = !interactive || !app.prefs.window_max;
+    // the welcome window over the loaded app (picture 37), and TreeCraft's Start-menu shortcut
+    // with its icon. TM_SPLASH=1 with --screenshot: a picture of the welcome window.
+    if interactive {
+        splash::ensure_start_menu_shortcut();
+        app.welcome = Some(get_time());
+    } else if shot.is_some() && std::env::var("TM_SPLASH").as_deref() == Ok("1") {
+        app.welcome = Some(get_time() - 2.0);
+    }
     loop {
+        if !maximized {
+            maximized = winstate::maximize();
+        }
+        if interactive && is_quit_requested() && app.confirm_discard() {
+            winstate::remember(&mut app.prefs);
+            app.keep_session();
+            break;
+        }
+        // File > Export image sequence turns the camera for each picture
+        if let Some((_, Some(yaw), _)) = app.shot_queue.first() {
+            app.cam.yaw = *yaw;
+        }
         let scale = ui_factor();
         let rects = ui.rects.clone();
         let texts = ui.texts.clone();
@@ -588,10 +848,22 @@ async fn main() {
             }
             None => real.read(scale),
         };
-        if !frame(&mut app, &mut ui, inp) {
+        if !frame(&mut app, &mut ui, inp) && (!interactive || app.confirm_discard()) {
+            if interactive {
+                winstate::remember(&mut app.prefs);
+            app.keep_session();
+            }
             break;
         }
         frames += 1;
+        if !app.shot_queue.is_empty() {
+            let (path, _, _) = app.shot_queue.remove(0);
+            if !path.as_os_str().is_empty() {
+                let v = app.viewport;
+                let ok = save_region(&path.display().to_string(), Some((v, screen_width() / scale)));
+                app.set_status(&if ok { format!("Saved {}", path.display()) } else { format!("Couldn't save {}", path.display()) });
+            }
+        }
         if frames == 5 && std::env::var("TM_DEBUG").is_ok() {
             eprintln!("screen {}x{} dpi {} scale {}", screen_width(), screen_height(), screen_dpi_scale(), ui_scale());
         }

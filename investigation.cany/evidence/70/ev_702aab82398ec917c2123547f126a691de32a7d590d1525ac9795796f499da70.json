@@ -1,0 +1,2412 @@
+{
+  "id": "ev_702aab82398ec917c2123547f126a691de32a7d590d1525ac9795796f499da70",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 80,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "kill|compensat|seam|welding|squash|weld"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141038098",
+        "references": [
+          {
+            "from": "0x14103a630",
+            "function": null
+          },
+          {
+            "from": "0x14103a638",
+            "function": null
+          },
+          {
+            "from": "0x141058b40",
+            "function": null
+          },
+          {
+            "from": "0x141058b48",
+            "function": null
+          },
+          {
+            "from": "0x14106b710",
+            "function": null
+          },
+          {
+            "from": "0x14106b718",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c40",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c48",
+            "function": null
+          },
+          {
+            "from": "0x1410a9cb0",
+            "function": null
+          },
+          {
+            "from": "0x1410a9cb8",
+            "function": null
+          },
+          {
+            "from": "0x1410ab840",
+            "function": null
+          },
+          {
+            "from": "0x1410ab848",
+            "function": null
+          },
+          {
+            "from": "0x1410b4330",
+            "function": null
+          },
+          {
+            "from": "0x1410b4338",
+            "function": null
+          },
+          {
+            "from": "0x1410bdbb0",
+            "function": null
+          },
+          {
+            "from": "0x1410bdbb8",
+            "function": null
+          },
+          {
+            "from": "0x1410c0c20",
+            "function": null
+          },
+          {
+            "from": "0x1410c0c28",
+            "function": null
+          },
+          {
+            "from": "0x1410c2540",
+            "function": null
+          },
+          {
+            "from": "0x1410c2548",
+            "function": null
+          },
+          {
+            "from": "0x1410c4130",
+            "function": null
+          },
+          {
+            "from": "0x1410c4138",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a70",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a78",
+            "function": null
+          },
+          {
+            "from": "0x1410c7400",
+            "function": null
+          },
+          {
+            "from": "0x1410c7408",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e90",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e98",
+            "function": null
+          },
+          {
+            "from": "0x1410caa80",
+            "function": null
+          },
+          {
+            "from": "0x1410caa88",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "RightElbowKillPitch"
+      },
+      {
+        "address": "0x1410380b0",
+        "references": [
+          {
+            "from": "0x14103a610",
+            "function": null
+          },
+          {
+            "from": "0x14103a618",
+            "function": null
+          },
+          {
+            "from": "0x141058b20",
+            "function": null
+          },
+          {
+            "from": "0x141058b28",
+            "function": null
+          },
+          {
+            "from": "0x14106b6f0",
+            "function": null
+          },
+          {
+            "from": "0x14106b6f8",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c20",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c28",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c90",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c98",
+            "function": null
+          },
+          {
+            "from": "0x1410ab820",
+            "function": null
+          },
+          {
+            "from": "0x1410ab828",
+            "function": null
+          },
+          {
+            "from": "0x1410b4310",
+            "function": null
+          },
+          {
+            "from": "0x1410b4318",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb90",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb98",
+            "function": null
+          },
+          {
+            "from": "0x1410c0c00",
+            "function": null
+          },
+          {
+            "from": "0x1410c0c08",
+            "function": null
+          },
+          {
+            "from": "0x1410c2520",
+            "function": null
+          },
+          {
+            "from": "0x1410c2528",
+            "function": null
+          },
+          {
+            "from": "0x1410c4110",
+            "function": null
+          },
+          {
+            "from": "0x1410c4118",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a50",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a58",
+            "function": null
+          },
+          {
+            "from": "0x1410c73e0",
+            "function": null
+          },
+          {
+            "from": "0x1410c73e8",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e70",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e78",
+            "function": null
+          },
+          {
+            "from": "0x1410caa60",
+            "function": null
+          },
+          {
+            "from": "0x1410caa68",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "LeftElbowKillPitch"
+      },
+      {
+        "address": "0x1410380c8",
+        "references": [
+          {
+            "from": "0x14103a5f0",
+            "function": null
+          },
+          {
+            "from": "0x14103a5f8",
+            "function": null
+          },
+          {
+            "from": "0x141058b00",
+            "function": null
+          },
+          {
+            "from": "0x141058b08",
+            "function": null
+          },
+          {
+            "from": "0x14106b6d0",
+            "function": null
+          },
+          {
+            "from": "0x14106b6d8",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c00",
+            "function": null
+          },
+          {
+            "from": "0x1410a0c08",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c70",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c78",
+            "function": null
+          },
+          {
+            "from": "0x1410ab800",
+            "function": null
+          },
+          {
+            "from": "0x1410ab808",
+            "function": null
+          },
+          {
+            "from": "0x1410b42f0",
+            "function": null
+          },
+          {
+            "from": "0x1410b42f8",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb70",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb78",
+            "function": null
+          },
+          {
+            "from": "0x1410c0be0",
+            "function": null
+          },
+          {
+            "from": "0x1410c0be8",
+            "function": null
+          },
+          {
+            "from": "0x1410c2500",
+            "function": null
+          },
+          {
+            "from": "0x1410c2508",
+            "function": null
+          },
+          {
+            "from": "0x1410c40f0",
+            "function": null
+          },
+          {
+            "from": "0x1410c40f8",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a30",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a38",
+            "function": null
+          },
+          {
+            "from": "0x1410c73c0",
+            "function": null
+          },
+          {
+            "from": "0x1410c73c8",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e50",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e58",
+            "function": null
+          },
+          {
+            "from": "0x1410caa40",
+            "function": null
+          },
+          {
+            "from": "0x1410caa48",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "RightKneeKillPitch"
+      },
+      {
+        "address": "0x1410380e0",
+        "references": [
+          {
+            "from": "0x14103a5d0",
+            "function": null
+          },
+          {
+            "from": "0x14103a5d8",
+            "function": null
+          },
+          {
+            "from": "0x141058ae0",
+            "function": null
+          },
+          {
+            "from": "0x141058ae8",
+            "function": null
+          },
+          {
+            "from": "0x14106b6b0",
+            "function": null
+          },
+          {
+            "from": "0x14106b6b8",
+            "function": null
+          },
+          {
+            "from": "0x1410a0be0",
+            "function": null
+          },
+          {
+            "from": "0x1410a0be8",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c50",
+            "function": null
+          },
+          {
+            "from": "0x1410a9c58",
+            "function": null
+          },
+          {
+            "from": "0x1410ab7e0",
+            "function": null
+          },
+          {
+            "from": "0x1410ab7e8",
+            "function": null
+          },
+          {
+            "from": "0x1410b42d0",
+            "function": null
+          },
+          {
+            "from": "0x1410b42d8",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb50",
+            "function": null
+          },
+          {
+            "from": "0x1410bdb58",
+            "function": null
+          },
+          {
+            "from": "0x1410c0bc0",
+            "function": null
+          },
+          {
+            "from": "0x1410c0bc8",
+            "function": null
+          },
+          {
+            "from": "0x1410c24e0",
+            "function": null
+          },
+          {
+            "from": "0x1410c24e8",
+            "function": null
+          },
+          {
+            "from": "0x1410c40d0",
+            "function": null
+          },
+          {
+            "from": "0x1410c40d8",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a10",
+            "function": null
+          },
+          {
+            "from": "0x1410c5a18",
+            "function": null
+          },
+          {
+            "from": "0x1410c73a0",
+            "function": null
+          },
+          {
+            "from": "0x1410c73a8",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e30",
+            "function": null
+          },
+          {
+            "from": "0x1410c8e38",
+            "function": null
+          },
+          {
+            "from": "0x1410caa20",
+            "function": null
+          },
+          {
+            "from": "0x1410caa28",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "LeftKneeKillPitch"
+      },
+      {
+        "address": "0x141039138",
+        "references": [
+          {
+            "from": "0x141039370",
+            "function": null
+          },
+          {
+            "from": "0x141039380",
+            "function": null
+          },
+          {
+            "from": "0x141057880",
+            "function": null
+          },
+          {
+            "from": "0x141057890",
+            "function": null
+          },
+          {
+            "from": "0x14106a450",
+            "function": null
+          },
+          {
+            "from": "0x14106a460",
+            "function": null
+          },
+          {
+            "from": "0x14109f980",
+            "function": null
+          },
+          {
+            "from": "0x14109f990",
+            "function": null
+          },
+          {
+            "from": "0x1410a89f0",
+            "function": null
+          },
+          {
+            "from": "0x1410a8a00",
+            "function": null
+          },
+          {
+            "from": "0x1410aa580",
+            "function": null
+          },
+          {
+            "from": "0x1410aa590",
+            "function": null
+          },
+          {
+            "from": "0x1410b3070",
+            "function": null
+          },
+          {
+            "from": "0x1410b3080",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8f0",
+            "function": null
+          },
+          {
+            "from": "0x1410bc900",
+            "function": null
+          },
+          {
+            "from": "0x1410bf960",
+            "function": null
+          },
+          {
+            "from": "0x1410bf970",
+            "function": null
+          },
+          {
+            "from": "0x1410c1280",
+            "function": null
+          },
+          {
+            "from": "0x1410c1290",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e70",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e80",
+            "function": null
+          },
+          {
+            "from": "0x1410c47b0",
+            "function": null
+          },
+          {
+            "from": "0x1410c47c0",
+            "function": null
+          },
+          {
+            "from": "0x1410c6140",
+            "function": null
+          },
+          {
+            "from": "0x1410c6150",
+            "function": null
+          },
+          {
+            "from": "0x1410c7bd0",
+            "function": null
+          },
+          {
+            "from": "0x1410c7be0",
+            "function": null
+          },
+          {
+            "from": "0x1410c97c0",
+            "function": null
+          },
+          {
+            "from": "0x1410c97d0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "MassCenterCompensation"
+      },
+      {
+        "address": "0x141039150",
+        "references": [
+          {
+            "from": "0x141039358",
+            "function": null
+          },
+          {
+            "from": "0x141057868",
+            "function": null
+          },
+          {
+            "from": "0x14106a438",
+            "function": null
+          },
+          {
+            "from": "0x14109f968",
+            "function": null
+          },
+          {
+            "from": "0x1410a89d8",
+            "function": null
+          },
+          {
+            "from": "0x1410aa568",
+            "function": null
+          },
+          {
+            "from": "0x1410b3058",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8d8",
+            "function": null
+          },
+          {
+            "from": "0x1410bf948",
+            "function": null
+          },
+          {
+            "from": "0x1410c1268",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e58",
+            "function": null
+          },
+          {
+            "from": "0x1410c4798",
+            "function": null
+          },
+          {
+            "from": "0x1410c6128",
+            "function": null
+          },
+          {
+            "from": "0x1410c7bb8",
+            "function": null
+          },
+          {
+            "from": "0x1410c97a8",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnkleProximityCompensationMode"
+      },
+      {
+        "address": "0x141039170",
+        "references": [
+          {
+            "from": "0x141039350",
+            "function": null
+          },
+          {
+            "from": "0x141039360",
+            "function": null
+          },
+          {
+            "from": "0x141057860",
+            "function": null
+          },
+          {
+            "from": "0x141057870",
+            "function": null
+          },
+          {
+            "from": "0x14106a430",
+            "function": null
+          },
+          {
+            "from": "0x14106a440",
+            "function": null
+          },
+          {
+            "from": "0x14109f960",
+            "function": null
+          },
+          {
+            "from": "0x14109f970",
+            "function": null
+          },
+          {
+            "from": "0x1410a89d0",
+            "function": null
+          },
+          {
+            "from": "0x1410a89e0",
+            "function": null
+          },
+          {
+            "from": "0x1410aa560",
+            "function": null
+          },
+          {
+            "from": "0x1410aa570",
+            "function": null
+          },
+          {
+            "from": "0x1410b3050",
+            "function": null
+          },
+          {
+            "from": "0x1410b3060",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8d0",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8e0",
+            "function": null
+          },
+          {
+            "from": "0x1410bf940",
+            "function": null
+          },
+          {
+            "from": "0x1410bf950",
+            "function": null
+          },
+          {
+            "from": "0x1410c1260",
+            "function": null
+          },
+          {
+            "from": "0x1410c1270",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e50",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e60",
+            "function": null
+          },
+          {
+            "from": "0x1410c4790",
+            "function": null
+          },
+          {
+            "from": "0x1410c47a0",
+            "function": null
+          },
+          {
+            "from": "0x1410c6120",
+            "function": null
+          },
+          {
+            "from": "0x1410c6130",
+            "function": null
+          },
+          {
+            "from": "0x1410c7bb0",
+            "function": null
+          },
+          {
+            "from": "0x1410c7bc0",
+            "function": null
+          },
+          {
+            "from": "0x1410c97a0",
+            "function": null
+          },
+          {
+            "from": "0x1410c97b0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnkleProximityCompensation"
+      },
+      {
+        "address": "0x141039190",
+        "references": [
+          {
+            "from": "0x141039338",
+            "function": null
+          },
+          {
+            "from": "0x141057848",
+            "function": null
+          },
+          {
+            "from": "0x14106a418",
+            "function": null
+          },
+          {
+            "from": "0x14109f948",
+            "function": null
+          },
+          {
+            "from": "0x1410a89b8",
+            "function": null
+          },
+          {
+            "from": "0x1410aa548",
+            "function": null
+          },
+          {
+            "from": "0x1410b3038",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8b8",
+            "function": null
+          },
+          {
+            "from": "0x1410bf928",
+            "function": null
+          },
+          {
+            "from": "0x1410c1248",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e38",
+            "function": null
+          },
+          {
+            "from": "0x1410c4778",
+            "function": null
+          },
+          {
+            "from": "0x1410c6108",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b98",
+            "function": null
+          },
+          {
+            "from": "0x1410c9788",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnkleHeightCompensationMode"
+      },
+      {
+        "address": "0x1410391b0",
+        "references": [
+          {
+            "from": "0x141039330",
+            "function": null
+          },
+          {
+            "from": "0x141039340",
+            "function": null
+          },
+          {
+            "from": "0x141057840",
+            "function": null
+          },
+          {
+            "from": "0x141057850",
+            "function": null
+          },
+          {
+            "from": "0x14106a410",
+            "function": null
+          },
+          {
+            "from": "0x14106a420",
+            "function": null
+          },
+          {
+            "from": "0x14109f940",
+            "function": null
+          },
+          {
+            "from": "0x14109f950",
+            "function": null
+          },
+          {
+            "from": "0x1410a89b0",
+            "function": null
+          },
+          {
+            "from": "0x1410a89c0",
+            "function": null
+          },
+          {
+            "from": "0x1410aa540",
+            "function": null
+          },
+          {
+            "from": "0x1410aa550",
+            "function": null
+          },
+          {
+            "from": "0x1410b3030",
+            "function": null
+          },
+          {
+            "from": "0x1410b3040",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8b0",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8c0",
+            "function": null
+          },
+          {
+            "from": "0x1410bf920",
+            "function": null
+          },
+          {
+            "from": "0x1410bf930",
+            "function": null
+          },
+          {
+            "from": "0x1410c1240",
+            "function": null
+          },
+          {
+            "from": "0x1410c1250",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e30",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e40",
+            "function": null
+          },
+          {
+            "from": "0x1410c4770",
+            "function": null
+          },
+          {
+            "from": "0x1410c4780",
+            "function": null
+          },
+          {
+            "from": "0x1410c6100",
+            "function": null
+          },
+          {
+            "from": "0x1410c6110",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b90",
+            "function": null
+          },
+          {
+            "from": "0x1410c7ba0",
+            "function": null
+          },
+          {
+            "from": "0x1410c9780",
+            "function": null
+          },
+          {
+            "from": "0x1410c9790",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "AnkleHeightCompensation"
+      },
+      {
+        "address": "0x1410391c8",
+        "references": [
+          {
+            "from": "0x141039318",
+            "function": null
+          },
+          {
+            "from": "0x141057828",
+            "function": null
+          },
+          {
+            "from": "0x14106a3f8",
+            "function": null
+          },
+          {
+            "from": "0x14109f928",
+            "function": null
+          },
+          {
+            "from": "0x1410a8998",
+            "function": null
+          },
+          {
+            "from": "0x1410aa528",
+            "function": null
+          },
+          {
+            "from": "0x1410b3018",
+            "function": null
+          },
+          {
+            "from": "0x1410bc898",
+            "function": null
+          },
+          {
+            "from": "0x1410bf908",
+            "function": null
+          },
+          {
+            "from": "0x1410c1228",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e18",
+            "function": null
+          },
+          {
+            "from": "0x1410c4758",
+            "function": null
+          },
+          {
+            "from": "0x1410c60e8",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b78",
+            "function": null
+          },
+          {
+            "from": "0x1410c9768",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "HipsHeightCompensationMode"
+      },
+      {
+        "address": "0x1410391e8",
+        "references": [
+          {
+            "from": "0x141039310",
+            "function": null
+          },
+          {
+            "from": "0x141039320",
+            "function": null
+          },
+          {
+            "from": "0x141057820",
+            "function": null
+          },
+          {
+            "from": "0x141057830",
+            "function": null
+          },
+          {
+            "from": "0x14106a3f0",
+            "function": null
+          },
+          {
+            "from": "0x14106a400",
+            "function": null
+          },
+          {
+            "from": "0x14109f920",
+            "function": null
+          },
+          {
+            "from": "0x14109f930",
+            "function": null
+          },
+          {
+            "from": "0x1410a8990",
+            "function": null
+          },
+          {
+            "from": "0x1410a89a0",
+            "function": null
+          },
+          {
+            "from": "0x1410aa520",
+            "function": null
+          },
+          {
+            "from": "0x1410aa530",
+            "function": null
+          },
+          {
+            "from": "0x1410b3010",
+            "function": null
+          },
+          {
+            "from": "0x1410b3020",
+            "function": null
+          },
+          {
+            "from": "0x1410bc890",
+            "function": null
+          },
+          {
+            "from": "0x1410bc8a0",
+            "function": null
+          },
+          {
+            "from": "0x1410bf900",
+            "function": null
+          },
+          {
+            "from": "0x1410bf910",
+            "function": null
+          },
+          {
+            "from": "0x1410c1220",
+            "function": null
+          },
+          {
+            "from": "0x1410c1230",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e10",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e20",
+            "function": null
+          },
+          {
+            "from": "0x1410c4750",
+            "function": null
+          },
+          {
+            "from": "0x1410c4760",
+            "function": null
+          },
+          {
+            "from": "0x1410c60e0",
+            "function": null
+          },
+          {
+            "from": "0x1410c60f0",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b70",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b80",
+            "function": null
+          },
+          {
+            "from": "0x1410c9760",
+            "function": null
+          },
+          {
+            "from": "0x1410c9770",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "HipsHeightCompensation"
+      },
+      {
+        "address": "0x141039200",
+        "references": [
+          {
+            "from": "0x1410392f8",
+            "function": null
+          },
+          {
+            "from": "0x141057808",
+            "function": null
+          },
+          {
+            "from": "0x14106a3d8",
+            "function": null
+          },
+          {
+            "from": "0x14109f908",
+            "function": null
+          },
+          {
+            "from": "0x1410a8978",
+            "function": null
+          },
+          {
+            "from": "0x1410aa508",
+            "function": null
+          },
+          {
+            "from": "0x1410b2ff8",
+            "function": null
+          },
+          {
+            "from": "0x1410bc878",
+            "function": null
+          },
+          {
+            "from": "0x1410bf8e8",
+            "function": null
+          },
+          {
+            "from": "0x1410c1208",
+            "function": null
+          },
+          {
+            "from": "0x1410c2df8",
+            "function": null
+          },
+          {
+            "from": "0x1410c4738",
+            "function": null
+          },
+          {
+            "from": "0x1410c60c8",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b58",
+            "function": null
+          },
+          {
+            "from": "0x1410c9748",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ScaleCompensationMode"
+      },
+      {
+        "address": "0x141039218",
+        "references": [
+          {
+            "from": "0x1410392f0",
+            "function": null
+          },
+          {
+            "from": "0x141039300",
+            "function": null
+          },
+          {
+            "from": "0x141057800",
+            "function": null
+          },
+          {
+            "from": "0x141057810",
+            "function": null
+          },
+          {
+            "from": "0x14106a3d0",
+            "function": null
+          },
+          {
+            "from": "0x14106a3e0",
+            "function": null
+          },
+          {
+            "from": "0x14109f900",
+            "function": null
+          },
+          {
+            "from": "0x14109f910",
+            "function": null
+          },
+          {
+            "from": "0x1410a8970",
+            "function": null
+          },
+          {
+            "from": "0x1410a8980",
+            "function": null
+          },
+          {
+            "from": "0x1410aa500",
+            "function": null
+          },
+          {
+            "from": "0x1410aa510",
+            "function": null
+          },
+          {
+            "from": "0x1410b2ff0",
+            "function": null
+          },
+          {
+            "from": "0x1410b3000",
+            "function": null
+          },
+          {
+            "from": "0x1410bc870",
+            "function": null
+          },
+          {
+            "from": "0x1410bc880",
+            "function": null
+          },
+          {
+            "from": "0x1410bf8e0",
+            "function": null
+          },
+          {
+            "from": "0x1410bf8f0",
+            "function": null
+          },
+          {
+            "from": "0x1410c1200",
+            "function": null
+          },
+          {
+            "from": "0x1410c1210",
+            "function": null
+          },
+          {
+            "from": "0x1410c2df0",
+            "function": null
+          },
+          {
+            "from": "0x1410c2e00",
+            "function": null
+          },
+          {
+            "from": "0x1410c4730",
+            "function": null
+          },
+          {
+            "from": "0x1410c4740",
+            "function": null
+          },
+          {
+            "from": "0x1410c60c0",
+            "function": null
+          },
+          {
+            "from": "0x1410c60d0",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b50",
+            "function": null
+          },
+          {
+            "from": "0x1410c7b60",
+            "function": null
+          },
+          {
+            "from": "0x1410c9740",
+            "function": null
+          },
+          {
+            "from": "0x1410c9750",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "ScaleCompensation"
+      },
+      {
+        "address": "0x1410416f0",
+        "references": [
+          {
+            "from": "0x1400bfa9f",
+            "function": "sub_1400bf800"
+          },
+          {
+            "from": "0x14017f705",
+            "function": "sub_14017f4c0"
+          },
+          {
+            "from": "0x14018f175",
+            "function": "sub_14018eba0"
+          },
+          {
+            "from": "0x14026ade1",
+            "function": "sub_14026aa80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:Weld"
+      },
+      {
+        "address": "0x141044420",
+        "references": [
+          {
+            "from": "0x1400e7276",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Geometry:Shift"
+      },
+      {
+        "address": "0x141044438",
+        "references": [
+          {
+            "from": "0x1400e7186",
+            "function": "sub_1400e6a60"
+          },
+          {
+            "from": "0x1403c30d7",
+            "function": "sub_1403c2b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Geometry:Stretch"
+      },
+      {
+        "address": "0x141044450",
+        "references": [
+          {
+            "from": "0x1400e7096",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Geometry:Spacing"
+      },
+      {
+        "address": "0x141044468",
+        "references": [
+          {
+            "from": "0x1400e6fa6",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Geometry:Spread"
+      },
+      {
+        "address": "0x141044480",
+        "references": [
+          {
+            "from": "0x1400e6ed1",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Geometry:Segments"
+      },
+      {
+        "address": "0x141044498",
+        "references": [
+          {
+            "from": "0x1400e6db9",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Clearance"
+      },
+      {
+        "address": "0x1410444a8",
+        "references": [
+          {
+            "from": "0x1400e6cd4",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Distance"
+      },
+      {
+        "address": "0x1410444b8",
+        "references": [
+          {
+            "from": "0x1400e6bd2",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Start"
+      },
+      {
+        "address": "0x1410444c8",
+        "references": [
+          {
+            "from": "0x1400e6b1a",
+            "function": "sub_1400e6a60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Keep"
+      },
+      {
+        "address": "0x1410444d8",
+        "references": [
+          {
+            "from": "0x1400e6a6d",
+            "function": "sub_1400e6a60"
+          },
+          {
+            "from": "0x1403c2b8d",
+            "function": "sub_1403c2b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Enabled"
+      },
+      {
+        "address": "0x141044740",
+        "references": [
+          {
+            "from": "0x1400f0972",
+            "function": "sub_1400eeb70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0Weld failed, mesh removed. Make sure the \"Start\" and \"Distance\" values push both rings onto the mesh geometry."
+      },
+      {
+        "address": "0x1410447b0",
+        "references": [
+          {
+            "from": "0x1400f0964",
+            "function": "sub_1400eeb70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Weld failed. Make sure the \"Start\" and \"Distance\" values push both rings onto the mesh geometry."
+      },
+      {
+        "address": "0x141044820",
+        "references": [
+          {
+            "from": "0x1400f072e",
+            "function": "sub_1400eeb70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0Weld failed, mesh removed. Make sure the mesh is narrow enough near the parent and that both weld discs cut through the mesh."
+      },
+      {
+        "address": "0x1410448a0",
+        "references": [
+          {
+            "from": "0x1400f0720",
+            "function": "sub_1400eeb70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Weld failed. Make sure the mesh is narrow enough near the parent and that both weld discs cut through the mesh."
+      },
+      {
+        "address": "0x141044aa8",
+        "references": [
+          {
+            "from": "0x1400f1c45",
+            "function": "sub_1400f1ab0"
+          },
+          {
+            "from": "0x1403c0cc1",
+            "function": "sub_1403c0c00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:"
+      },
+      {
+        "address": "0x141044ab0",
+        "references": [
+          {
+            "from": "0x1400f1c2e",
+            "function": "sub_1400f1ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld"
+      },
+      {
+        "address": "0x141045ae0",
+        "references": [
+          {
+            "from": "0x140100ad6",
+            "function": "sub_1401004e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Welding:"
+      },
+      {
+        "address": "0x141045e48",
+        "references": [
+          {
+            "from": "0x14010d02c",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Weld start"
+      },
+      {
+        "address": "0x1410461c0",
+        "references": [
+          {
+            "from": "0x14010e529",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Spread:Lower scale"
+      },
+      {
+        "address": "0x1410461e0",
+        "references": [
+          {
+            "from": "0x14010e435",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Spread:Upper scale"
+      },
+      {
+        "address": "0x141046200",
+        "references": [
+          {
+            "from": "0x14010e341",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Spread:Amount"
+      },
+      {
+        "address": "0x141046220",
+        "references": [
+          {
+            "from": "0x14010e24d",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Offset"
+      },
+      {
+        "address": "0x141046238",
+        "references": [
+          {
+            "from": "0x14010e16b",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Blend:Noise"
+      },
+      {
+        "address": "0x141046258",
+        "references": [
+          {
+            "from": "0x14010e089",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Blend:Contrast"
+      },
+      {
+        "address": "0x141046278",
+        "references": [
+          {
+            "from": "0x14010df95",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Blend:Texture"
+      },
+      {
+        "address": "0x1410462d8",
+        "references": [
+          {
+            "from": "0x14010dce8",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Blend:Lighting"
+      },
+      {
+        "address": "0x1410462f8",
+        "references": [
+          {
+            "from": "0x14010dc0a",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length:Weld scalar"
+      },
+      {
+        "address": "0x141046318",
+        "references": [
+          {
+            "from": "0x14010db43",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Force ray casts"
+      },
+      {
+        "address": "0x141046338",
+        "references": [
+          {
+            "from": "0x14010da8b",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Keep failed"
+      },
+      {
+        "address": "0x141046358",
+        "references": [
+          {
+            "from": "0x14010d9dd",
+            "function": "sub_14010d9d0"
+          },
+          {
+            "from": "0x140194224",
+            "function": "sub_140193a10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Welding:Enabled"
+      },
+      {
+        "address": "0x141047180",
+        "references": [
+          {
+            "from": "0x14012b909",
+            "function": "sub_14012b3e0"
+          },
+          {
+            "from": "0x14012c039",
+            "function": "sub_14012b973"
+          },
+          {
+            "from": "0x14012c2f8",
+            "function": "sub_14012b973"
+          },
+          {
+            "from": "0x14012c59e",
+            "function": "sub_14012b973"
+          },
+          {
+            "from": "0x14013f2f0",
+            "function": "sub_14013ef74"
+          },
+          {
+            "from": "0x14013fd8b",
+            "function": "sub_14013f380"
+          },
+          {
+            "from": "0x140140131",
+            "function": "sub_14013f380"
+          },
+          {
+            "from": "0x1401404be",
+            "function": "sub_14013f380"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed weld (Enable hints to see the errors and check start angle and weld offset)"
+      },
+      {
+        "address": "0x141047228",
+        "references": [
+          {
+            "from": "0x14012e13e",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2f2",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e483",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012ea82",
+            "function": "sub_14012ea82"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (parent too deformed?)"
+      },
+      {
+        "address": "0x141047258",
+        "references": [
+          {
+            "from": "0x14012e135",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2e9",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e47a",
+            "function": "sub_14012dae0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (branch too low on parent)"
+      },
+      {
+        "address": "0x141047290",
+        "references": [
+          {
+            "from": "0x14012e128",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2dc",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e46d",
+            "function": "sub_14012dae0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (branch too high on parent)"
+      },
+      {
+        "address": "0x141048060",
+        "references": [
+          {
+            "from": "0x1401418a3",
+            "function": "sub_140140870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Squash:Rotate"
+      },
+      {
+        "address": "0x141048078",
+        "references": [
+          {
+            "from": "0x14014179f",
+            "function": "sub_140140870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Squash:Amount"
+      },
+      {
+        "address": "0x1410480c8",
+        "references": [
+          {
+            "from": "0x14014128b",
+            "function": "sub_140140870"
+          },
+          {
+            "from": "0x1401942d5",
+            "function": "sub_140193a10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Light seam reduction"
+      },
+      {
+        "address": "0x1410480e8",
+        "references": [
+          {
+            "from": "0x140141193",
+            "function": "sub_140140870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Radius:Length kill ratio"
+      },
+      {
+        "address": "0x141048108",
+        "references": [
+          {
+            "from": "0x14014109b",
+            "function": "sub_140140870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Radius:Length compensation"
+      },
+      {
+        "address": "0x1410482f8",
+        "references": [
+          {
+            "from": "0x14014217b",
+            "function": "sub_140141d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Branch removed (length/radius larger than kill ratio)"
+      },
+      {
+        "address": "0x1410483b8",
+        "references": [
+          {
+            "from": "0x140147366",
+            "function": "sub_140146dc8"
+          },
+          {
+            "from": "0x140147d54",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x1401481c2",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014820d",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014865a",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x1401486a5",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148896",
+            "function": "sub_140148862"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed weld (parent too deformed?)"
+      },
+      {
+        "address": "0x1410483e0",
+        "references": [
+          {
+            "from": "0x14014735d",
+            "function": "sub_140146dc8"
+          },
+          {
+            "from": "0x140147d4b",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x1401481b9",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x1401481e9",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148204",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148651",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148681",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014869c",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014888d",
+            "function": "sub_140148862"
+          },
+          {
+            "from": "0x1401488bd",
+            "function": "sub_1401473a8"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed weld (branch too high on parent)"
+      },
+      {
+        "address": "0x141048410",
+        "references": [
+          {
+            "from": "0x14014734d",
+            "function": "sub_140146dc8"
+          },
+          {
+            "from": "0x140147d3b",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148182",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014819b",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x1401481e0",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014861a",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148633",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x140148678",
+            "function": "sub_1401473a8"
+          },
+          {
+            "from": "0x14014886f",
+            "function": "sub_140148862"
+          },
+          {
+            "from": "0x1401488b4",
+            "function": "sub_1401473a8"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed weld (branch too low on parent)"
+      },
+      {
+        "address": "0x141050f28",
+        "references": [
+          {
+            "from": "0x14018f14e",
+            "function": "sub_14018eba0"
+          },
+          {
+            "from": "0x14028168d",
+            "function": "sub_140281680"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Placement:Weld"
+      },
+      {
+        "address": "0x141051618",
+        "references": [
+          {
+            "from": "0x1401942ae",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14038f7d5",
+            "function": "sub_14038f2a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Light seam reduction"
+      },
+      {
+        "address": "0x141051638",
+        "references": [
+          {
+            "from": "0x1401941fd",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14038be1f",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Enabled"
+      },
+      {
+        "address": "0x141053378",
+        "references": [
+          {
+            "from": "0x1401b01fe",
+            "function": "sub_1401b0140"
+          },
+          {
+            "from": "0x1401b8fbd",
+            "function": "sub_1401b8ec0"
+          },
+          {
+            "from": "0x1401c2cda",
+            "function": "sub_1401c1a70"
+          },
+          {
+            "from": "0x1401c49d7",
+            "function": "sub_1401c3fa0"
+          },
+          {
+            "from": "0x14041a88d",
+            "function": "sub_14041a170"
+          },
+          {
+            "from": "0x14041b327",
+            "function": "sub_14041a170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "IncludeBranchSeamBlending"
+      },
+      {
+        "address": "0x141053aa8",
+        "references": [
+          {
+            "from": "0x1401b1e89",
+            "function": "sub_1401b1570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch seam blending"
+      },
+      {
+        "address": "0x1410540c8",
+        "references": [
+          {
+            "from": "0x1401b496e",
+            "function": "sub_1401b37a0"
+          },
+          {
+            "from": "0x1401bf561",
+            "function": "sub_1401bd740"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pIncludeBranchSeamBlending"
+      },
+      {
+        "address": "0x1410549f0",
+        "references": [
+          {
+            "from": "0x1401bcd0c",
+            "function": "sub_1401bb610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Seam blends"
+      },
+      {
+        "address": "0x141064c00",
+        "references": [
+          {
+            "from": "0x14025b7dd",
+            "function": "sub_14025a2f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1No geometry created (could not match all weld points, parent too deformed?)"
+      },
+      {
+        "address": "0x141094420",
+        "references": [
+          {
+            "from": "0x140381ddd",
+            "function": "sub_140380940"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed weld"
+      },
+      {
+        "address": "0x141094c30",
+        "references": [
+          {
+            "from": "0x14038b23d",
+            "function": "sub_140389ce0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Frond:Normals:Light seam reduction"
+      },
+      {
+        "address": "0x141094e10",
+        "references": [
+          {
+            "from": "0x14038c6da",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Intersection Blending:Style"
+      },
+      {
+        "address": "0x141094e40",
+        "references": [
+          {
+            "from": "0x14038c5e6",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Intersection Blending:Offset"
+      },
+      {
+        "address": "0x141094e70",
+        "references": [
+          {
+            "from": "0x14038c4f1",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Ratio"
+      },
+      {
+        "address": "0x141094e88",
+        "references": [
+          {
+            "from": "0x14038c3fc",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Distance"
+      },
+      {
+        "address": "0x141094ea0",
+        "references": [
+          {
+            "from": "0x14038c307",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Lower spread"
+      },
+      {
+        "address": "0x141094ec0",
+        "references": [
+          {
+            "from": "0x14038c212",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Upper spread"
+      },
+      {
+        "address": "0x141094ee0",
+        "references": [
+          {
+            "from": "0x14038c11a",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Weld"
+      },
+      {
+        "address": "0x141094ef0",
+        "references": [
+          {
+            "from": "0x14038c023",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Intersection Blending:Texture pull"
+      },
+      {
+        "address": "0x141094f28",
+        "references": [
+          {
+            "from": "0x14038bf7a",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Blend texture"
+      },
+      {
+        "address": "0x141094f48",
+        "references": [
+          {
+            "from": "0x14038bed6",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Normal blending"
+      },
+      {
+        "address": "0x141094f78",
+        "references": [
+          {
+            "from": "0x14038bce0",
+            "function": "sub_14038bca0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Welding:Style"
+      },
+      {
+        "address": "0x141095290",
+        "references": [
+          {
+            "from": "0x14038f013",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Geometry Types:Branch|(Branch:)(?!Cap)|Segments:Radial|Segments:Optimization|Segments:Weld|Materials:Branch|Texture Coordinates:"
+      },
+      {
+        "address": "0x14109a188",
+        "references": [
+          {
+            "from": "0x1403c33fa",
+            "function": "sub_1403c2b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Weld:Blend:Noise"
+      }
+    ],
+    "total": 1419
+  },
+  "summary": "1419 strings match \"kill|compensat|seam|welding|squash|weld\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 80,
+    "total": 1419,
+    "next_offset": 80
+  },
+  "locations": [],
+  "links": []
+}

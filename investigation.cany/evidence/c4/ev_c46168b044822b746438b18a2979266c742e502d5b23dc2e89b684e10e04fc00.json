@@ -1,0 +1,45 @@
+{
+  "id": "ev_c46168b044822b746438b18a2979266c742e502d5b23dc2e89b684e10e04fc00",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14010f240"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14010f240",
+    "function": "FUN_14010f240",
+    "pseudo_code": "\r\nvoid FUN_14010f240(void)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  FUN_14003a980(DAT_141a99218 + 0x3bf8,\"Lightmap:Weight\",0xf);\r\n  uVar1 = DAT_1415432f4;\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c28) = 4;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 2;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 0x10;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 1;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 4;\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c2c) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c34) = 0;\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c38) = 0x7f7fffff;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 0x40;\r\n  *(byte *)(DAT_141a99218 + 0x3c54) = *(byte *)(DAT_141a99218 + 0x3c54) | 0x80;\r\n  FUN_1405a4530(DAT_141a99218 + 0x3c20,uVar1);\r\n  FUN_1405a4530(DAT_141a99218 + 0x3c24,0);\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c40) = 1;\r\n  *(undefined4 *)(DAT_141a99218 + 0x3c44) = 9;\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_14010f240(void);"
+  },
+  "summary": "Pseudo-C for FUN_14010f240 from the Deep engine (25 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14010f240"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

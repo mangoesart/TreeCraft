@@ -14,3 +14,5 @@ All from the person's own installed copy, folder `C:\Program Files\SpeedTree\Spe
 Values read (not copied as files): node defaults from `templates\combined\*.stt`, material channels
 from `tree_templates\Games\Broadleaf.spm`, colours from `app_data\style.css`, generation mode
 names from the program (function 0x1403175a0). Textures (bark, leaf) are drawn by code.
+
+- `render_modes/**/*.fx` (install folder): the viewport render modes' formulas were read from these files and rewritten in TreeCraft's own shader (no file is copied or shipped).

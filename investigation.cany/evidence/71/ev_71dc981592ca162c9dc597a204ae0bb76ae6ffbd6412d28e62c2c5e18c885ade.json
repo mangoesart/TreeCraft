@@ -1,0 +1,271 @@
+{
+  "id": "ev_71dc981592ca162c9dc597a204ae0bb76ae6ffbd6412d28e62c2c5e18c885ade",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "keep aspect ratio|^Unrestricted$|^Start$|Relative \\("
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141044124",
+        "references": [
+          {
+            "from": "0x1400dea4c",
+            "function": "sub_1400de780"
+          },
+          {
+            "from": "0x140130b7d",
+            "function": "sub_14012ff90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Start"
+      },
+      {
+        "address": "0x1410475e0",
+        "references": [
+          {
+            "from": "0x140130a21",
+            "function": "sub_14012ff90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Relative (keep aspect ratio)"
+      },
+      {
+        "address": "0x141047728",
+        "references": [
+          {
+            "from": "0x1401300a8",
+            "function": "sub_14012ff90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Unrestricted"
+      },
+      {
+        "address": "0x1410894d8",
+        "references": [
+          {
+            "from": "0x1403117c2",
+            "function": "sub_140311710"
+          },
+          {
+            "from": "0x14031d173",
+            "function": "sub_14031d020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Keep aspect ratio"
+      },
+      {
+        "address": "0x1412e7cf0",
+        "references": [
+          {
+            "from": "0x1408529f2",
+            "function": "sub_140852960"
+          },
+          {
+            "from": "0x1408531a2",
+            "function": "sub_140853110"
+          },
+          {
+            "from": "0x140853f3c",
+            "function": "sub_140853ea0"
+          },
+          {
+            "from": "0x1409435b5",
+            "function": "sub_14094351e"
+          },
+          {
+            "from": "0x140943d25",
+            "function": "sub_140943c8e"
+          },
+          {
+            "from": "0x14094468c",
+            "function": "sub_1409445f0"
+          },
+          {
+            "from": "0x1409458f4",
+            "function": "sub_140945860"
+          },
+          {
+            "from": "0x140946562",
+            "function": "sub_1409464d0"
+          },
+          {
+            "from": "0x140947e9b",
+            "function": "sub_140947e00"
+          },
+          {
+            "from": "0x1409487aa",
+            "function": "sub_1409486d0"
+          },
+          {
+            "from": "0x140948963",
+            "function": "sub_1409488d0"
+          },
+          {
+            "from": "0x1409492cb",
+            "function": "sub_140949230"
+          },
+          {
+            "from": "0x140949d95",
+            "function": "sub_140949d00"
+          },
+          {
+            "from": "0x14094e585",
+            "function": "sub_14094e4c0"
+          },
+          {
+            "from": "0x14094f42f",
+            "function": "sub_14094f370"
+          },
+          {
+            "from": "0x14095013c",
+            "function": "sub_1409500a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x141383e24",
+        "references": [
+          {
+            "from": "0x140a87155",
+            "function": "sub_140a86b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Start"
+      },
+      {
+        "address": "0x1413e5a1c",
+        "references": [
+          {
+            "from": "0x140c8546e",
+            "function": "sub_140c85430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x1413e5a34",
+        "references": [
+          {
+            "from": "0x140c85924",
+            "function": "sub_140c857a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x1413e5d2c",
+        "references": [],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x1413e75cc",
+        "references": [
+          {
+            "from": "0x140c8d7e0",
+            "function": "sub_140c8d7ba"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x1413e7848",
+        "references": [
+          {
+            "from": "0x140c81e40",
+            "function": "sub_140c81db0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x1413e81f0",
+        "references": [
+          {
+            "from": "0x140c82b73",
+            "function": "sub_140c829a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "start"
+      },
+      {
+        "address": "0x141a7bf6c",
+        "references": [
+          {
+            "from": "0x141a7c1c8",
+            "function": null
+          }
+        ],
+        "section": ".data",
+        "text": "start"
+      },
+      {
+        "address": "0x141a7c604",
+        "references": [
+          {
+            "from": "0x1409e70f7",
+            "function": "sub_1409e69a0"
+          }
+        ],
+        "section": ".data",
+        "text": "start"
+      },
+      {
+        "address": "0x141a7c624",
+        "references": [
+          {
+            "from": "0x1409e7130",
+            "function": "sub_1409e69a0"
+          }
+        ],
+        "section": ".data",
+        "text": "start"
+      }
+    ],
+    "total": 15
+  },
+  "summary": "15 strings match \"keep aspect ratio|^Unrestricted$|^Start$|Relative \\(\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 15,
+    "total": 15
+  },
+  "locations": [],
+  "links": []
+}

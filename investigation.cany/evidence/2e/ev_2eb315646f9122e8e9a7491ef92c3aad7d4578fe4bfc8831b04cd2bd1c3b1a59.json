@@ -1,0 +1,624 @@
+{
+  "id": "ev_2eb315646f9122e8e9a7491ef92c3aad7d4578fe4bfc8831b04cd2bd1c3b1a59",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "(individual|freehand|Hot key: Tab|draw new|drawn)"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141047228",
+        "references": [
+          {
+            "from": "0x14012e13e",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2f2",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e483",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012ea82",
+            "function": "sub_14012ea82"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (parent too deformed?)"
+      },
+      {
+        "address": "0x141047258",
+        "references": [
+          {
+            "from": "0x14012e135",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2e9",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e47a",
+            "function": "sub_14012dae0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (branch too low on parent)"
+      },
+      {
+        "address": "0x141047290",
+        "references": [
+          {
+            "from": "0x14012e128",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e2dc",
+            "function": "sub_14012dae0"
+          },
+          {
+            "from": "0x14012e46d",
+            "function": "sub_14012dae0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1Failed hand drawn weld (branch too high on parent)"
+      },
+      {
+        "address": "0x141047aa0",
+        "references": [
+          {
+            "from": "0x140133008",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038e013",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f59c3",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Resample:Curve fit scalar"
+      },
+      {
+        "address": "0x141047ac8",
+        "references": [
+          {
+            "from": "0x140132e40",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038de4b",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f57fb",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Resample:Control point style"
+      },
+      {
+        "address": "0x141047af0",
+        "references": [
+          {
+            "from": "0x140132d5b",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038dd66",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f5716",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:New:Curve fit"
+      },
+      {
+        "address": "0x141047b20",
+        "references": [
+          {
+            "from": "0x140132ba3",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14038dbae",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f555e",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:New:Control point style"
+      },
+      {
+        "address": "0x141047b48",
+        "references": [
+          {
+            "from": "0x140132add",
+            "function": "sub_1401329e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Fit to mesh"
+      },
+      {
+        "address": "0x141047b60",
+        "references": [
+          {
+            "from": "0x140132a18",
+            "function": "sub_1401329e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Convert to hand drawn"
+      },
+      {
+        "address": "0x141047e30",
+        "references": [
+          {
+            "from": "0x1401371a9",
+            "function": "sub_140136e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:"
+      },
+      {
+        "address": "0x141047e40",
+        "references": [
+          {
+            "from": "0x140137192",
+            "function": "sub_140136e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn"
+      },
+      {
+        "address": "0x14105d168",
+        "references": [
+          {
+            "from": "0x140212e1c",
+            "function": "sub_140212a10"
+          },
+          {
+            "from": "0x1402143ea",
+            "function": "sub_140213e30"
+          },
+          {
+            "from": "0x140219e9f",
+            "function": "sub_140219d60"
+          },
+          {
+            "from": "0x14021c0cf",
+            "function": "sub_14021bdb0"
+          },
+          {
+            "from": "0x14021d66c",
+            "function": "sub_14021d260"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Individual"
+      },
+      {
+        "address": "0x14105f420",
+        "references": [
+          {
+            "from": "0x14022a816",
+            "function": "sub_14022a440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotConvertToHandDrawn( )"
+      },
+      {
+        "address": "0x14105f440",
+        "references": [
+          {
+            "from": "0x14022a7fb",
+            "function": "sub_14022a440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Convert to hand drawn"
+      },
+      {
+        "address": "0x14105f518",
+        "references": [
+          {
+            "from": "0x14022a4fb",
+            "function": "sub_14022a440"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotClearHandDrawn( )"
+      },
+      {
+        "address": "0x14105ff80",
+        "references": [
+          {
+            "from": "0x14022cf4d",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/generator_not_hand_drawn_source.png"
+      },
+      {
+        "address": "0x14105ffe0",
+        "references": [
+          {
+            "from": "0x14022ce75",
+            "function": "sub_14022c9a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/generator_hand-drawn.png"
+      },
+      {
+        "address": "0x141061820",
+        "references": [
+          {
+            "from": "0x14023ed1c",
+            "function": "sub_14023ebf0"
+          },
+          {
+            "from": "0x14023f2cc",
+            "function": "sub_14023efc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_bHandDrawnSource"
+      },
+      {
+        "address": "0x141061838",
+        "references": [
+          {
+            "from": "0x14023ecd0",
+            "function": "sub_14023ebf0"
+          },
+          {
+            "from": "0x14023f22a",
+            "function": "sub_14023efc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_bHandDrawnTarget"
+      },
+      {
+        "address": "0x141061850",
+        "references": [
+          {
+            "from": "0x14023ec84",
+            "function": "sub_14023ebf0"
+          },
+          {
+            "from": "0x14023f0bb",
+            "function": "sub_14023efc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_bHandDrawn"
+      },
+      {
+        "address": "0x141079778",
+        "references": [
+          {
+            "from": "0x1402d7c31",
+            "function": "sub_1402d6fb0"
+          },
+          {
+            "from": "0x1402db418",
+            "function": "sub_1402da3e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "HandDrawnPoints"
+      },
+      {
+        "address": "0x141079788",
+        "references": [
+          {
+            "from": "0x1402d7be6",
+            "function": "sub_1402d6fb0"
+          },
+          {
+            "from": "0x1402db3b5",
+            "function": "sub_1402da3e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "NumHandDrawnPoints"
+      },
+      {
+        "address": "0x1410797a0",
+        "references": [
+          {
+            "from": "0x1402d7b7e",
+            "function": "sub_1402d6fb0"
+          },
+          {
+            "from": "0x1402db32b",
+            "function": "sub_1402da3e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "HandDrawn"
+      },
+      {
+        "address": "0x1410950d0",
+        "references": [
+          {
+            "from": "0x14038dae8",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f5498",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn:Toggle hand drawn"
+      },
+      {
+        "address": "0x141096ff0",
+        "references": [
+          {
+            "from": "0x1403a90dc",
+            "function": "sub_1403a8c10"
+          },
+          {
+            "from": "0x1403a9ba9",
+            "function": "sub_1403a9830"
+          }
+        ],
+        "section": ".rdata",
+        "text": "DrawnCurve"
+      },
+      {
+        "address": "0x1410af0f8",
+        "references": [
+          {
+            "from": "0x1404e2f9c",
+            "function": "sub_1404e2ee0"
+          },
+          {
+            "from": "0x1404e3328",
+            "function": "sub_1404e32a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Toggle hand drawn"
+      },
+      {
+        "address": "0x1410af160",
+        "references": [
+          {
+            "from": "0x1404e3d7a",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/Branches.stt"
+      },
+      {
+        "address": "0x1410af188",
+        "references": [
+          {
+            "from": "0x1404e3d28",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/Targets.stt"
+      },
+      {
+        "address": "0x1410af1b0",
+        "references": [
+          {
+            "from": "0x1404e3cb0",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/SubD_Branches.stt"
+      },
+      {
+        "address": "0x1410af1e0",
+        "references": [
+          {
+            "from": "0x1404e3c37",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/_Trunk.stt"
+      },
+      {
+        "address": "0x1410af208",
+        "references": [
+          {
+            "from": "0x1404e39e6",
+            "function": "sub_1404e3910"
+          },
+          {
+            "from": "0x1404e4016",
+            "function": "sub_1404e3910"
+          },
+          {
+            "from": "0x1404e42bc",
+            "function": "sub_1404e3910"
+          },
+          {
+            "from": "0x1404e4318",
+            "function": "sub_1404e3910"
+          },
+          {
+            "from": "0x1404e436f",
+            "function": "sub_1404e3910"
+          },
+          {
+            "from": "0x1404e43d7",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "hand drawn node"
+      },
+      {
+        "address": "0x1410b05b0",
+        "references": [
+          {
+            "from": "0x1404f4606",
+            "function": "sub_1404f4310"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Individual control & LOD"
+      },
+      {
+        "address": "0x1410b1398",
+        "references": [
+          {
+            "from": "0x14050961a",
+            "function": "sub_140509450"
+          },
+          {
+            "from": "0x14050c134",
+            "function": "sub_14050b3d0"
+          },
+          {
+            "from": "0x14050c185",
+            "function": "sub_14050b3d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "WindWizard/m_pwIndividualLeaves"
+      },
+      {
+        "address": "0x1410b15a8",
+        "references": [
+          {
+            "from": "0x140509fa6",
+            "function": "sub_1405097c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Individually modeled leaves/needles"
+      },
+      {
+        "address": "0x1410b1808",
+        "references": [
+          {
+            "from": "0x14050b03e",
+            "function": "sub_14050a0d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwIndividualLeaves"
+      },
+      {
+        "address": "0x1410b1820",
+        "references": [
+          {
+            "from": "0x14050af72",
+            "function": "sub_14050a0d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwIndividualLabel"
+      },
+      {
+        "address": "0x1410b7e40",
+        "references": [
+          {
+            "from": "0x140533d49",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All property edits apply to the selected generator(s).  This mode affects all of the individuals nodes\ncreated by the generator(s) and allows parent curve editing.\n\nHot key: Tab"
+      },
+      {
+        "address": "0x1410b7f10",
+        "references": [
+          {
+            "from": "0x140533c00",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All property edits apply to the selected node(s).  Property edits in this mode are offsets to the\nthe value computed by the generator and should be used for fine tuning only.\n\nHot key: Tab"
+      },
+      {
+        "address": "0x1410b7ff0",
+        "references": [
+          {
+            "from": "0x140533a9e",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Toggle between editing generators and nodes.  Nodes are individual parts of the tree (like a leaf\nor a branch).  Generators are groups of nodes that represent a section of the model. Most editing\nshould be done on the generators to efficiently control large portions of the model.  Switch to editing\nnodes to fine tune the model before exporting.\n\nHot key: Tab"
+      },
+      {
+        "address": "0x1410ba6e0",
+        "references": [
+          {
+            "from": "0x1405471e0",
+            "function": "sub_140546290"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand drawing templates are not installed. Reinstall the application or make sure that '<installaction location>/templates/Hand Drawn/' exists and is populated."
+      }
+    ],
+    "total": 45
+  },
+  "summary": "45 strings match \"(individual|freehand|Hot key: Tab|draw new|drawn)\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 40,
+    "total": 45,
+    "next_offset": 40
+  },
+  "locations": [],
+  "links": []
+}

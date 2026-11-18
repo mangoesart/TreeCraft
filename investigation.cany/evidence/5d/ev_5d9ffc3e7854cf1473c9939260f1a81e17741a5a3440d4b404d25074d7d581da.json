@@ -1,0 +1,687 @@
+{
+  "id": "ev_5d9ffc3e7854cf1473c9939260f1a81e17741a5a3440d4b404d25074d7d581da",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": true,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Collision Objects|Render|Show|Zoom|Forces|Wind|Light|Generators|Nodes|Season|Visibility|AO|Export)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102dff8",
+        "references": [
+          {
+            "from": "0x1400490e7",
+            "function": "sub_140047920"
+          },
+          {
+            "from": "0x14004c35b",
+            "function": "sub_140049350"
+          },
+          {
+            "from": "0x140531bd9",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Render"
+      },
+      {
+        "address": "0x141033d90",
+        "references": [
+          {
+            "from": "0x140064362",
+            "function": "sub_140063f80"
+          },
+          {
+            "from": "0x140529d13",
+            "function": "sub_140529ca0"
+          },
+          {
+            "from": "0x140531d78",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season"
+      },
+      {
+        "address": "0x141036664",
+        "references": [
+          {
+            "from": "0x140077bef",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x140531c11",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140538b09",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Show"
+      },
+      {
+        "address": "0x14104266c",
+        "references": [
+          {
+            "from": "0x1400d09ec",
+            "function": "sub_1400d0850"
+          },
+          {
+            "from": "0x1401b20a2",
+            "function": "sub_1401b1570"
+          },
+          {
+            "from": "0x140306e84",
+            "function": "sub_140306360"
+          },
+          {
+            "from": "0x14040aa82",
+            "function": "sub_14040a1f0"
+          },
+          {
+            "from": "0x14049efd7",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x140531f80",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Wind"
+      },
+      {
+        "address": "0x14105f610",
+        "references": [
+          {
+            "from": "0x14022b3df",
+            "function": "sub_14022b200"
+          },
+          {
+            "from": "0x140413a6a",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140413abc",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140416aa3",
+            "function": "sub_140416870"
+          },
+          {
+            "from": "0x14041ddb9",
+            "function": "sub_14041cc00"
+          },
+          {
+            "from": "0x140420325",
+            "function": "sub_14041fbc0"
+          },
+          {
+            "from": "0x14042103d",
+            "function": "sub_140420fc0"
+          },
+          {
+            "from": "0x140421657",
+            "function": "sub_1404215a0"
+          },
+          {
+            "from": "0x140531f10",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140538647",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Forces"
+      },
+      {
+        "address": "0x141069220",
+        "references": [
+          {
+            "from": "0x140290bf9",
+            "function": "sub_140290be0"
+          },
+          {
+            "from": "0x140293124",
+            "function": "sub_140292fb0"
+          },
+          {
+            "from": "0x1404138e2",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x1404169b7",
+            "function": "sub_140416870"
+          },
+          {
+            "from": "0x140418abb",
+            "function": "sub_1404177e0"
+          },
+          {
+            "from": "0x14041db55",
+            "function": "sub_14041cc00"
+          },
+          {
+            "from": "0x140420238",
+            "function": "sub_14041fbc0"
+          },
+          {
+            "from": "0x140523684",
+            "function": "sub_140522c60"
+          },
+          {
+            "from": "0x1405256cf",
+            "function": "sub_140525570"
+          },
+          {
+            "from": "0x140532060",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140534fa9",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1410a2838",
+        "references": [
+          {
+            "from": "0x140413efd",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140413f4f",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140416ad4",
+            "function": "sub_140416870"
+          },
+          {
+            "from": "0x140419ef6",
+            "function": "sub_140419e80"
+          },
+          {
+            "from": "0x14041dde9",
+            "function": "sub_14041cc00"
+          },
+          {
+            "from": "0x140420358",
+            "function": "sub_14041fbc0"
+          },
+          {
+            "from": "0x14042106b",
+            "function": "sub_140420fc0"
+          },
+          {
+            "from": "0x140421689",
+            "function": "sub_1404215a0"
+          },
+          {
+            "from": "0x1404223c2",
+            "function": "sub_140421d20"
+          },
+          {
+            "from": "0x14052e99f",
+            "function": "sub_14052e620"
+          },
+          {
+            "from": "0x140531d00",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140533c9f",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generators"
+      },
+      {
+        "address": "0x1410a2880",
+        "references": [
+          {
+            "from": "0x140413b7d",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140413bcf",
+            "function": "sub_1404137b0"
+          },
+          {
+            "from": "0x140416b36",
+            "function": "sub_140416870"
+          },
+          {
+            "from": "0x14041de49",
+            "function": "sub_14041cc00"
+          },
+          {
+            "from": "0x1404203be",
+            "function": "sub_14041fbc0"
+          },
+          {
+            "from": "0x14052e8a1",
+            "function": "sub_14052e620"
+          },
+          {
+            "from": "0x140531cca",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140533b56",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Nodes"
+      },
+      {
+        "address": "0x1410b72a8",
+        "references": [
+          {
+            "from": "0x140531f48",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x1405388aa",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collision Objects"
+      },
+      {
+        "address": "0x1410b72bc",
+        "references": [
+          {
+            "from": "0x140531ed8",
+            "function": "sub_140531610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export"
+      },
+      {
+        "address": "0x1410b72d0",
+        "references": [
+          {
+            "from": "0x140531df0",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140539563",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x1410b72dc",
+        "references": [
+          {
+            "from": "0x140531c49",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x140538f3e",
+            "function": "sub_140537430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Zoom"
+      },
+      {
+        "address": "0x14136f8d4",
+        "references": [
+          {
+            "from": "0x140a46d65",
+            "function": "sub_140a44050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Show"
+      },
+      {
+        "address": "0x14136f950",
+        "references": [
+          {
+            "from": "0x140a47302",
+            "function": "sub_140a44050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x14138225c",
+        "references": [
+          {
+            "from": "0x140a8f8fc",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x141382cb0",
+        "references": [
+          {
+            "from": "0x140a8c810",
+            "function": "sub_140a8b490"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x1413831d4",
+        "references": [
+          {
+            "from": "0x140a88ea0",
+            "function": "sub_140a88e70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export"
+      },
+      {
+        "address": "0x1413831dc",
+        "references": [
+          {
+            "from": "0x140a88eb6",
+            "function": "sub_140a88e70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Export"
+      },
+      {
+        "address": "0x141383984",
+        "references": [
+          {
+            "from": "0x140a8672f",
+            "function": "sub_140a85cd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x141384224",
+        "references": [
+          {
+            "from": "0x140a87992",
+            "function": "sub_140a86b80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x141386a40",
+        "references": [
+          {
+            "from": "0x140aa1784",
+            "function": "sub_140aa1750"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x141387330",
+        "references": [
+          {
+            "from": "0x140aa71fa",
+            "function": "sub_140aa71b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Nodes"
+      },
+      {
+        "address": "0x1413aa250",
+        "references": [
+          {
+            "from": "0x140b3eb40",
+            "function": "sub_140b3ea70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x1413aaf6c",
+        "references": [
+          {
+            "from": "0x140b4320a",
+            "function": "sub_140b431e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413aaf7c",
+        "references": [
+          {
+            "from": "0x140b43221",
+            "function": "sub_140b431e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413b2390",
+        "references": [
+          {
+            "from": "0x140b86d5b",
+            "function": "sub_140b86c70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Show"
+      },
+      {
+        "address": "0x1413bc204",
+        "references": [
+          {
+            "from": "0x140bb6b95",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413bc20c",
+        "references": [
+          {
+            "from": "0x140bb6ba6",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413bc344",
+        "references": [
+          {
+            "from": "0x140bb6fde",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413bc34c",
+        "references": [
+          {
+            "from": "0x140bb6fef",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413c3da4",
+        "references": [
+          {
+            "from": "0x140bd01a5",
+            "function": "sub_140bcfbb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413c7878",
+        "references": [
+          {
+            "from": "0x141a902e0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x1413efc7c",
+        "references": [
+          {
+            "from": "0x140cb119e",
+            "function": "sub_140cb0a80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413f03c0",
+        "references": [
+          {
+            "from": "0x140ca3594",
+            "function": "sub_140ca3420"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x1413f849c",
+        "references": [
+          {
+            "from": "0x140cc8168",
+            "function": "sub_140cc8050"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x1413f8cb8",
+        "references": [
+          {
+            "from": "0x140cbf1d9",
+            "function": "sub_140cbf070"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x141401498",
+        "references": [
+          {
+            "from": "0x140cd4a2d",
+            "function": "sub_140cd4a20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x141401b18",
+        "references": [
+          {
+            "from": "0x140cdb015",
+            "function": "sub_140cdaea0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      },
+      {
+        "address": "0x141409e60",
+        "references": [
+          {
+            "from": "0x140cef5bc",
+            "function": "sub_140cef5b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Light"
+      },
+      {
+        "address": "0x14140a440",
+        "references": [
+          {
+            "from": "0x140cf8ef3",
+            "function": "sub_140cf8d40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Visibility"
+      }
+    ],
+    "total": 40
+  },
+  "summary": "40 strings match \"^(Collision Objects|Render|Show|Zoom|Forces|Wind|Light|Generators|Nodes|Season|Visibility|AO|Export)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 40,
+    "total": 40
+  },
+  "locations": [],
+  "links": []
+}

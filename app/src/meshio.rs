@@ -424,20 +424,70 @@ fn fold_flips(uvs: &[Vec2], faces: &mut Vec<[usize; 3]>, c: Vec2, d: Vec2) {
     }
 }
 
+/// Flip interior edges whose opposite corner falls inside the other triangle's circumcircle,
+/// until none do. Edges between consecutive outline points (indexes below n_out) stay.
+fn delaunay_flips(uvs: &[Vec2], faces: &mut Vec<[usize; 3]>, n_out: usize) {
+    let is_outline_edge = |a: usize, b: usize| a < n_out && b < n_out && ((a + 1) % n_out == b || (b + 1) % n_out == a);
+    let area = |a: usize, b: usize, c: usize| (uvs[b] - uvs[a]).perp_dot(uvs[c] - uvs[a]);
+    for _ in 0..faces.len() * 4 + 16 {
+        let mut edges: HashMap<(usize, usize), Vec<(usize, usize)>> = HashMap::new();
+        for (k, t) in faces.iter().enumerate() {
+            for j in 0..3 {
+                let (a, b, opp) = (t[j], t[(j + 1) % 3], t[(j + 2) % 3]);
+                edges.entry((a.min(b), a.max(b))).or_default().push((k, opp));
+            }
+        }
+        let mut keys: Vec<_> = edges.keys().copied().collect();
+        keys.sort_unstable();
+        let mut touched = vec![false; faces.len()];
+        let mut flipped = false;
+        for (a, b) in keys {
+            let v = &edges[&(a, b)];
+            if v.len() != 2 || is_outline_edge(a, b) {
+                continue;
+            }
+            let ((k1, c1), (k2, c2)) = (v[0], v[1]);
+            if touched[k1] || touched[k2] {
+                continue;
+            }
+            let Some((cc, r2)) = circum(uvs[a], uvs[b], uvs[c1]) else { continue };
+            if (uvs[c2] - cc).length_squared() >= r2 * (1.0 - 1e-6) {
+                continue;
+            }
+            // the new diagonal must lie inside the pair (a convex quad)
+            let (s1, s2) = (area(c1, c2, a), area(c1, c2, b));
+            if s1 * s2 >= 0.0 {
+                continue;
+            }
+            let wind = area(faces[k1][0], faces[k1][1], faces[k1][2]) >= 0.0;
+            let fix = |t: [usize; 3]| if (area(t[0], t[1], t[2]) >= 0.0) == wind { t } else { [t[0], t[2], t[1]] };
+            faces[k1] = fix([c1, c2, a]);
+            faces[k2] = fix([c1, c2, b]);
+            touched[k1] = true;
+            touched[k2] = true;
+            flipped = true;
+        }
+        if !flipped {
+            break;
+        }
+    }
+}
+
 thread_local! {
     /// recent cutout meshes by their inputs: the editor draws the same outline several times a frame
     static GEOM_CACHE: std::cell::RefCell<Vec<(u64, MeshGeom)>> = std::cell::RefCell::new(Vec::new());
 }
 
-fn geom_key(outline: &[Vec2], colors: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> u64 {
+fn geom_key(outline: &[Vec2], colors: &[[f32; 3]], inner: &[Vec2], inner_cols: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> u64 {
     use std::hash::{Hash, Hasher};
     let mut h = std::collections::hash_map::DefaultHasher::new();
-    for p in outline {
+    for p in outline.iter().chain(inner) {
         (p.x.to_bits(), p.y.to_bits()).hash(&mut h);
     }
-    for c in colors {
+    for c in colors.iter().chain(inner_cols) {
         (c[0].to_bits(), c[1].to_bits(), c[2].to_bits()).hash(&mut h);
     }
+    (inner.len(), inner_cols.len()).hash(&mut h);
     (anchor.x.to_bits(), anchor.y.to_bits(), o.tessellation.to_bits(), o.angle.to_bits()).hash(&mut h);
     (o.double_sided, o.improve_folding, outline.len(), colors.len()).hash(&mut h);
     h.finish()
@@ -446,11 +496,17 @@ fn geom_key(outline: &[Vec2], colors: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> 
 /// outline_geom_opts with a vertex colour per outline point (empty = none); new vertices get the
 /// average of the points they're made from.
 pub fn outline_geom_col(outline: &[Vec2], colors: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> MeshGeom {
-    let key = geom_key(outline, colors, anchor, o);
+    outline_geom_inner(outline, colors, &[], &[], anchor, o)
+}
+
+/// outline_geom_col with points inside the outline that become mesh vertices too (each joined to
+/// its neighbours, always including the nearest one) and their colours.
+pub fn outline_geom_inner(outline: &[Vec2], colors: &[[f32; 3]], inner: &[Vec2], inner_cols: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> MeshGeom {
+    let key = geom_key(outline, colors, inner, inner_cols, anchor, o);
     if let Some(g) = GEOM_CACHE.with(|c| c.borrow().iter().find(|e| e.0 == key).map(|e| e.1.clone())) {
         return g;
     }
-    let g = outline_geom_build(outline, colors, anchor, o);
+    let g = outline_geom_build(outline, colors, inner, inner_cols, anchor, o);
     GEOM_CACHE.with(|c| {
         let mut c = c.borrow_mut();
         if c.len() >= 8 {
@@ -461,11 +517,26 @@ pub fn outline_geom_col(outline: &[Vec2], colors: &[[f32; 3]], anchor: Vec2, o: 
     g
 }
 
-fn outline_geom_build(outline: &[Vec2], colors: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> MeshGeom {
+fn outline_geom_build(outline: &[Vec2], colors: &[[f32; 3]], inner: &[Vec2], inner_cols: &[[f32; 3]], anchor: Vec2, o: CutOpts) -> MeshGeom {
     let mut uvs: Vec<Vec2> = outline.to_vec();
     let use_col = colors.len() == outline.len() && !colors.is_empty();
     let mut cols: Vec<[f32; 3]> = if use_col { colors.to_vec() } else { vec![] };
     let mut faces: Vec<[usize; 3]> = triangulate(&uvs);
+    // inner points: each splits the triangle holding it, then edges are flipped toward a Delaunay
+    // triangulation (never the outline's own edges), which always joins a point to its nearest
+    // neighbour
+    let n_out = uvs.len();
+    for (i, &p) in inner.iter().enumerate() {
+        let Some(k) = faces.iter().position(|t| in_triangle(p, uvs[t[0]], uvs[t[1]], uvs[t[2]])) else { continue };
+        let t = faces.swap_remove(k);
+        uvs.push(p);
+        if use_col {
+            cols.push(inner_cols.get(i).copied().unwrap_or([1.0; 3]));
+        }
+        let pi = uvs.len() - 1;
+        faces.extend([[t[0], t[1], pi], [t[1], t[2], pi], [t[2], t[0], pi]]);
+        delaunay_flips(&uvs, &mut faces, n_out);
+    }
     // Improve folding (fn 0x1401a4ef0, called by fn 0x1402f8980 after triangulating and again
     // after tessellating): edges crossing the fold line (through the pivot along the Angle) are
     // flipped toward it
@@ -616,7 +687,7 @@ fn raw_geom(m: &LeafMesh, l: usize) -> Option<MeshGeom> {
         return Some(g.clone());
     }
     if lod.outline.len() >= 3 {
-        return Some(outline_geom_col(&lod.outline, &lod.colors, m.anchor, CutOpts::of(m)));
+        return Some(outline_geom_inner(&lod.outline, &lod.colors, &lod.inner, &lod.inner_colors, m.anchor, CutOpts::of(m)));
     }
     None
 }

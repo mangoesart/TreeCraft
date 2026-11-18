@@ -1,0 +1,606 @@
+{
+  "id": "ev_424caaf0006dab7de83f464e669b41823328c1de99741071a4af31258f9ee750",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": true,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "\\|.*:|^(Leaves:|Local Orientation:|Deformation:|Lighting:|Collision:)$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141042640",
+        "references": [
+          {
+            "from": "0x1400d0a34",
+            "function": "sub_1400d0850"
+          },
+          {
+            "from": "0x140184ff9",
+            "function": "sub_140184db0"
+          },
+          {
+            "from": "0x1401e8319",
+            "function": "sub_1401e8140"
+          },
+          {
+            "from": "0x1402072b8",
+            "function": "sub_140207170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Collision:"
+      },
+      {
+        "address": "0x1410426b0",
+        "references": [
+          {
+            "from": "0x1400d0998",
+            "function": "sub_1400d0850"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season|Leaves:Type|Vertex Color:|Lightmap"
+      },
+      {
+        "address": "0x1410426e0",
+        "references": [
+          {
+            "from": "0x1400d0964",
+            "function": "sub_1400d0850"
+          },
+          {
+            "from": "0x140184ee1",
+            "function": "sub_140184db0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Orientation:|Sensitivity:|Adjustments:|Deformation:"
+      },
+      {
+        "address": "0x141042718",
+        "references": [
+          {
+            "from": "0x1400d0930",
+            "function": "sub_1400d0850"
+          },
+          {
+            "from": "0x140184ea9",
+            "function": "sub_140184db0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:|Lighting:|Deformation:"
+      },
+      {
+        "address": "0x141044a90",
+        "references": [
+          {
+            "from": "0x1400f1c80",
+            "function": "sub_1400f1ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Material:|Vertex Color:"
+      },
+      {
+        "address": "0x141044ab8",
+        "references": [
+          {
+            "from": "0x1400f1c0a",
+            "function": "sub_1400f1ab0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh:|Lightmap:|Deformation:|Orientation:"
+      },
+      {
+        "address": "0x141047e70",
+        "references": [
+          {
+            "from": "0x1401370f8",
+            "function": "sub_140136e00"
+          },
+          {
+            "from": "0x1402072ec",
+            "function": "sub_140207170"
+          },
+          {
+            "from": "0x14038f1a2",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x1403f6279",
+            "function": "sub_1403f60a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Wind:|Growth:"
+      },
+      {
+        "address": "0x141047e90",
+        "references": [
+          {
+            "from": "0x1401370bd",
+            "function": "sub_140136e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Materials:|Season:|Vertex Color:|Lightmap"
+      },
+      {
+        "address": "0x141047ef8",
+        "references": [
+          {
+            "from": "0x140136f96",
+            "function": "sub_140136e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:|Forces:"
+      },
+      {
+        "address": "0x14104d0a8",
+        "references": [
+          {
+            "from": "0x140177fda",
+            "function": "sub_140177e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Forces:|Cap:|Displacement:"
+      },
+      {
+        "address": "0x14104efa0",
+        "references": [
+          {
+            "from": "0x140184f51",
+            "function": "sub_140184db0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season|Leaves:Type|Vertex Color:"
+      },
+      {
+        "address": "0x14104efc8",
+        "references": [
+          {
+            "from": "0x140184f19",
+            "function": "sub_140184db0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:|Material:|Lightmap"
+      },
+      {
+        "address": "0x14105a380",
+        "references": [
+          {
+            "from": "0x1401e82e1",
+            "function": "sub_1401e8140"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:|Vertex Color:"
+      },
+      {
+        "address": "0x14105a398",
+        "references": [
+          {
+            "from": "0x1401e8271",
+            "function": "sub_1401e8140"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Level of Detail:|Dynamic LOD:"
+      },
+      {
+        "address": "0x14105a3b8",
+        "references": [
+          {
+            "from": "0x1401e8239",
+            "function": "sub_1401e8140"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fins:|Orientation:|Lighting:|Deformation:"
+      },
+      {
+        "address": "0x14105bce8",
+        "references": [
+          {
+            "from": "0x140207284",
+            "function": "sub_140207170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Season:|Vertex Color:|Material:|Lightmap"
+      },
+      {
+        "address": "0x14105bd18",
+        "references": [
+          {
+            "from": "0x14020721c",
+            "function": "sub_140207170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape:|Segments:|Material:|Lighting:"
+      },
+      {
+        "address": "0x141063e00",
+        "references": [
+          {
+            "from": "0x1402595db",
+            "function": "sub_1402593d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "(Material:)(?!Inner)|Core:"
+      },
+      {
+        "address": "0x141063e28",
+        "references": [
+          {
+            "from": "0x1402595a0",
+            "function": "sub_1402593d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "(Material:)(?!Core)|Inner:"
+      },
+      {
+        "address": "0x141063e60",
+        "references": [
+          {
+            "from": "0x14025952a",
+            "function": "sub_1402593d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Outer:|^Inner:|^Core:|Segments:"
+      },
+      {
+        "address": "0x141066c80",
+        "references": [
+          {
+            "from": "0x14028b590",
+            "function": "sub_14028b3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:|Cards:"
+      },
+      {
+        "address": "0x141066c90",
+        "references": [
+          {
+            "from": "0x14028b555",
+            "function": "sub_14028b3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves:|Meshes:"
+      },
+      {
+        "address": "0x141066ca0",
+        "references": [
+          {
+            "from": "0x14028b51a",
+            "function": "sub_14028b3c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:|Placement:|Leaves:|Meshes:"
+      },
+      {
+        "address": "0x141095188",
+        "references": [
+          {
+            "from": "0x14038f1dd",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:|Level of Detail:"
+      },
+      {
+        "address": "0x1410951d0",
+        "references": [
+          {
+            "from": "0x14038f0f1",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "|Segments:Frond|Segments:Length|Segments:Optimization"
+      },
+      {
+        "address": "0x141095210",
+        "references": [
+          {
+            "from": "0x14038f09e",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Geometry Types:Frond|Geometry Types:Leaf|Frond:|Materials:Frond"
+      },
+      {
+        "address": "0x141095250",
+        "references": [
+          {
+            "from": "0x14038f063",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "|Segments:Radial|Segments:Length|Segments:Optimization"
+      },
+      {
+        "address": "0x141095290",
+        "references": [
+          {
+            "from": "0x14038f013",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Geometry Types:Branch|(Branch:)(?!Cap)|Segments:Radial|Segments:Optimization|Segments:Weld|Materials:Branch|Texture Coordinates:"
+      },
+      {
+        "address": "0x141095318",
+        "references": [
+          {
+            "from": "0x14038efd8",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:|Bifurcation:|Segments:Accuracy|Forces:"
+      },
+      {
+        "address": "0x14109c4a0",
+        "references": [
+          {
+            "from": "0x1403f6209",
+            "function": "sub_1403f60a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:|Cap:|Texture Coordinates:Cap"
+      },
+      {
+        "address": "0x14109c4c8",
+        "references": [
+          {
+            "from": "0x1403f61d1",
+            "function": "sub_1403f60a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:|Branch:"
+      },
+      {
+        "address": "0x14109c4e0",
+        "references": [
+          {
+            "from": "0x1403f6199",
+            "function": "sub_1403f60a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:|Spine:|Forces:|Wind:"
+      },
+      {
+        "address": "0x141167a6f",
+        "references": [],
+        "section": ".rdata",
+        "text": ": :!:\":#:$:%:&:':(:):*:+:,:-:.:/:0:1:2:3:4:5:6:7:8:9:::;:<:=:>:?:@:A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:[:\\:]:^:_:`:a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:{:|:}:~:"
+      },
+      {
+        "address": "0x14116fe6f",
+        "references": [],
+        "section": ".rdata",
+        "text": "| |!|\"|#|$|%|&|'|(|)|*|+|,|-|.|/|0|1|2|3|4|5|6|7|8|9|:|;|<|=|>|?|@|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|[|\\|]|^|_|`|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|{|||}|~|"
+      },
+      {
+        "address": "0x1411a7713",
+        "references": [],
+        "section": ".rdata",
+        "text": ": :!:!:\":\":#:$:$:%:&:&:':':(:):):*:+:+:,:,:-:.:.:/:0:0:1:1:2:3:3:4:4:5:6:6:7:8:8:9:9:::;:;:<:<:=:>:>:?:@:@:A:A:B:C:C:D:D:E:F:F:G:G:H:I:I:J:J:K:L:L:M:N:N:O:O:P:Q:Q:R:R:S:T:T:U:U:V:W:W:X:X:Y:Z:Z:[:[:\\:]:]:^:^:_:`:`:a:a:b:c:c:d:d:e:f:f:g:g:h:h:i:j:j:k:k:l:m:m:n:n:o:p:p:q:q:r:s:s:t:t:u:u:v:w:w:x:x:y:z:z:{:{:|:|:}:~:~:"
+      },
+      {
+        "address": "0x1411dd1fd",
+        "references": [],
+        "section": ".rdata",
+        "text": ";~;~;~;~;~;~;~;~;};};};};};};};};};|;|;|;|;|;|;|;|;{;{;{;{;{;{;{;{;{;z;z;z;z;z;z;z;z;y;y;y;y;y;y;y;y;y;x;x;x;x;x;x;x;x;x;w;w;w;w;w;w;w;w;v;v;v;v;v;v;v;v;v;u;u;u;u;u;u;u;u;t;t;t;t;t;t;t;t;t;s;s;s;s;s;s;s;s;s;r;r;r;r;r;r;r;r;q;q;q;q;q;q;q;q;q;p;p;p;p;p;p;p;p;o;o;o;o;o;o;o;o;o;n;n;n;n;n;n;n;n;n;m;m;m;m;m;m;m;m;l;l;l;l;l;l;l;l;l;k;k;k;k;k;k;k;k;j;j;j;j;j;j;j;j;j;i;i;i;i;i;i;i;i;i;h;h;h;h;h;h;h;h;g;g;g;g;g;g;g;g;g;f;f;f;f;f;f;f;f;f;e;e;e;e;e;e;e;e;d;d;d;d;d;d;d;d;d;c;c;c;c;c;c;c;c;c;b;b;b;b;b;b;b;b;a;a;a;a;a;a;a;a;a;`;`;`;`;`;`;`;`;`;_;_;_;_;_;_;_;_;^;^;^;^;^;^;^;^;^;];];];];];];];];];\\;\\;\\;\\;\\;\\;\\;\\;[;[;[;[;[;[;[;[;[;Z;Z;Z;Z;Z;Z;Z;Z;Z;Y;Y;Y;Y;Y;Y;Y;Y;X;X;X;X;X;X;X;X;X;W;W;W;W;W;W;W;W;W;V;V;V;V;V;V;V;V;V;U;U;U;U;U;U;U;U;T;T;T;T;T;T;T;T;T;S;S;S;S;S;S;S;S;S;R;R;R;R;R;R;R;R;R;Q;Q;Q;Q;Q;Q;Q;Q;P;P;P;P;P;P;P;P;P;O;O;O;O;O;O;O;O;O;N;N;N;N;N;N;N;N;N;M;M;M;M;M;M;M;M;L;L;L;L;L;L;L;L;L;K;K;K;K;K;K;K;K;K;J;J;J;J;J;J;J;J;J;I;I;I;I;I;I;I;I;H;H;H;H;H;H;H;H;H;G;G;G;G;G;G;G;G;G;F;F;F;F;F;F;F;F;F;E;E;E;E;E;E;E;E;E;D;D;D;D;D;D;D;D;C;C;C;C;C;C;C;C;C;B;B;B;B;B;B;B;B;B;A;A;A;A;A;A;A;A;A;@;@;@;@;@;@;@;@;@;?;?;?;?;?;?;?;?;?;>;>;>;>;>;>;>;>;=;=;=;=;=;=;=;=;=;<;<;<;<;<;<;<;<;<;;;;;;;;;;;;;;;;;;;:;:;:;:;:;:;:;:;:;9;9;9;9;9;9;9;9;9;8;8;8;8;8;8;8;8;8;7;7;7;7;7;7;7;7;6;6;6;6;6;6;6;6;6;5;5;5;5;5;5;5;5;5;4;4;4;4;4;4;4;4;4;3;3;3;3;3;3;3;3;3;2;2;2;2;2;2;2;2;2;1;1;1;1;1;1;1;1;1;0;0;0;0;0;0;0;0;0;/;/;/;/;/;/;/;/;/;.;.;.;.;.;.;.;.;-;-;-;-;-;-;-;-;-;,;,;,;,;,;,;,;,;,;+;+;+;+;+;+;+;+;+;*;*;*;*;*;*;*;*;*;);););););););););(;(;(;(;(;(;(;(;(;';';';';';';';';';&;&;&;&;&;&;&;&;&;%;%;%;%;%;%;%;%;%;$;$;$;$;$;$;$;$;$;#;#;#;#;#;#;#;#;#;\";\";\";\";\";\";\";\";\";!;!;!;!;!;!;!;!;!; ; ; ; ; ; ; ; ; ;"
+      },
+      {
+        "address": "0x1411ddef9",
+        "references": [],
+        "section": ".rdata",
+        "text": ":~:~:~:~:~:}:}:}:}:}:|:|:|:|:|:{:{:{:{:{:z:z:z:z:z:y:y:y:y:x:x:x:x:x:w:w:w:w:w:v:v:v:v:v:u:u:u:u:u:t:t:t:t:t:s:s:s:s:s:r:r:r:r:r:q:q:q:q:q:p:p:p:p:p:o:o:o:o:o:n:n:n:n:n:m:m:m:m:m:l:l:l:l:l:k:k:k:k:k:j:j:j:j:j:i:i:i:i:i:h:h:h:h:h:g:g:g:g:g:f:f:f:f:f:e:e:e:e:e:d:d:d:d:d:c:c:c:c:c:b:b:b:b:b:a:a:a:a:a:`:`:`:`:`:_:_:_:_:_:^:^:^:^:^:]:]:]:]:]:\\:\\:\\:\\:\\:[:[:[:[:[:Z:Z:Z:Z:Z:Y:Y:Y:Y:Y:X:X:X:X:X:W:W:W:W:W:V:V:V:V:V:U:U:U:U:U:T:T:T:T:T:T:S:S:S:S:S:R:R:R:R:R:Q:Q:Q:Q:Q:P:P:P:P:P:O:O:O:O:O:N:N:N:N:N:M:M:M:M:M:L:L:L:L:L:K:K:K:K:K:J:J:J:J:J:I:I:I:I:I:H:H:H:H:H:G:G:G:G:G:G:F:F:F:F:F:E:E:E:E:E:D:D:D:D:D:C:C:C:C:C:B:B:B:B:B:A:A:A:A:A:@:@:@:@:@:?:?:?:?:?:>:>:>:>:>:>:=:=:=:=:=:<:<:<:<:<:;:;:;:;:::::9:9:9:8:8:7:7:7:6:6:6:5:5:4:4:4:3:3:2:2:2:1:1:1:0:0:/:/:/:.:.:-:-:-:,:,:+:+:+:*:*:*:):):(:(:(:':':&:&:&:%:%:%:$:$:#:#:#:\":\":!:!:!: : : :"
+      },
+      {
+        "address": "0x1411de5a7",
+        "references": [],
+        "section": ".rdata",
+        "text": "9~9~9~9}9}9|9|9|9{9{9{9z9z9z9y9y9y9x9x9x9w9w9w9v9v9v9u9u9u9t9t9t9s9s9s9r9r9r9q9q9q9p9p9p9o9o9n9n9n9m9m9m9l9l9l9k9k9k9j9j9j9i9i9i9h9h9h9g9g9g9f9f9f9e9e9e9d9d9d9c9c9c9b9b9b9a9a9a9`9`9`9_9_9_9^9^9^9]9]9]9\\9\\9\\9[9[9[9Z9Z9Z9Y9Y9Y9X9X9X9W9W9W9V9V9V9U9U9U9T9T9T9S9S9S9R9R9R9Q9Q9Q9P9P9P9O9O9O9N9N9N9M9M9M9L9L9L9K9K9K9J9J9J9I9I9I9H9H9H9G9G9G9F9F9F9E9E9E9D9D9D9C9C9C9B9B9B9A9A9A9@9@9@9?9?9?9>9>9>9=9=9=9<9<9<9<9;9;9;9:9:9:9999999898989797979696969595959494949393939292929191919090909/9/9/9.9.9.9.9-9-9-9,9,9,9+9+9+9*9*9*9)9)9)9(9(9(9'9'9'9&9&9&9%9%9%9$9$9$9$9#9#9#9\"9\"9\"9!9!9!9 9 9 9"
+      },
+      {
+        "address": "0x1411deadb",
+        "references": [],
+        "section": ".rdata",
+        "text": "8~8}8}8|8|8{8{8z8y8y8x8x8w8w8v8v8u8t8t8s8s8r8r8q8q8p8o8o8n8n8m8m8l8l8k8j8j8i8i8h8h8g8g8f8f8e8d8d8c8c8b8b8a8a8`8_8_8^8^8]8]8\\8\\8[8[8Z8Y8Y8X8X8W8W8V8V8U8U8T8T8S8R8R8Q8Q8P8P8O8O8N8N8M8M8L8K8K8J8J8I8I8H8H8G8G8F8F8E8D8D8C8C8B8B8A8A8@8@8?8?8>8>8=8=8<8;8;8:8:898988888787868685858484838282818180808/8/8.8.8-8-8,8,8+8+8*8*8)8)8(8(8'8&8&8%8%8$8$8#8#8\"8\"8!8!8 8 8"
+      },
+      {
+        "address": "0x1411dedc3",
+        "references": [],
+        "section": ".rdata",
+        "text": "7~7}7|7{7z7y7x7w7v7u7u7t7s7r7q7p7o7n7m7l7k7j7i7h7h7g7f7e7d7c7b7a7`7_7^7]7\\7\\7[7Z7Y7X7W7V7U7T7S7R7Q7Q7P7O7N7M7L7K7J7I7H7G7G7F7E7D7C7B7A7@7?7>7=7=7<7;7:79787776757474737271707/7.7-7,7+7+7*7)7(7'7&7%7$7#7\"7\"7!7 7"
+      },
+      {
+        "address": "0x1411df00d",
+        "references": [],
+        "section": ".rdata",
+        "text": "6~6}6}6|6{6z6y6y6x6w6v6u6u6t6s6r6q6p6p6o6n6m6l6l6k6j6i6h6h6g6f6e6d6d6c6b6a6`6`6_6^6]6\\6\\6[6Z6Y6Y6X6W6V6U6U6T6S6R6Q6Q6P6O6N6M6M6L6K6J6J6I6H6G6F6F6E6D6C6B6B6A6@6?6?6>6=6<6;6;6:696868676665646463626161606/6.6-6-6,6+6*6*6)6(6'6'6&6%6$6#6#6\"6!6 6 6"
+      },
+      {
+        "address": "0x1411dfd8d",
+        "references": [],
+        "section": ".rdata",
+        "text": "*|*y*v*s*o*l*i*f*c*_*\\*Y*V*S*P*L*I*F*C*@*=*:*7*3*0*-***'*$*!*"
+      },
+      {
+        "address": "0x1411e0d6c",
+        "references": [],
+        "section": ".rdata",
+        "text": "~}|{zyyxwvutsrqpoonmlkjjihgfeedcbba`__^]\\\\[ZZYXWWVUUTSSRRQPPONNMMLKKJJIIHGGFFEEDDCCBBAA@@??>>==<<;;::9988877665554433322111000//...---,,,+++***)))(((''''&&&%%%$$$$####\"\"\"!!!!    "
+      },
+      {
+        "address": "0x14122dd2f",
+        "references": [],
+        "section": ".rdata",
+        "text": ": :!:\":#:$:%:&:':(:):*:+:,:-:.:/:0:1:2:3:4:5:6:7:8:9:::;:<:=:>:?:@:A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:[:\\:]:^:_:`:a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:{:|:}:~:"
+      },
+      {
+        "address": "0x14123612f",
+        "references": [],
+        "section": ".rdata",
+        "text": "| |!|\"|#|$|%|&|'|(|)|*|+|,|-|.|/|0|1|2|3|4|5|6|7|8|9|:|;|<|=|>|?|@|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|[|\\|]|^|_|`|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|{|||}|~|"
+      },
+      {
+        "address": "0x14126d9d3",
+        "references": [],
+        "section": ".rdata",
+        "text": ": :!:!:\":\":#:$:$:%:&:&:':':(:):):*:+:+:,:,:-:.:.:/:0:0:1:1:2:3:3:4:4:5:6:6:7:8:8:9:9:::;:;:<:<:=:>:>:?:@:@:A:A:B:C:C:D:D:E:F:F:G:G:H:I:I:J:J:K:L:L:M:N:N:O:O:P:Q:Q:R:R:S:T:T:U:U:V:W:W:X:X:Y:Z:Z:[:[:\\:]:]:^:^:_:`:`:a:a:b:c:c:d:d:e:f:f:g:g:h:h:i:j:j:k:k:l:m:m:n:n:o:p:p:q:q:r:s:s:t:t:u:u:v:w:w:x:x:y:z:z:{:{:|:|:}:~:~:"
+      },
+      {
+        "address": "0x1412a016d",
+        "references": [],
+        "section": ".rdata",
+        "text": ";~;~;~;~;~;~;~;~;};};};};};};};};};|;|;|;|;|;|;|;|;{;{;{;{;{;{;{;{;{;z;z;z;z;z;z;z;z;y;y;y;y;y;y;y;y;y;x;x;x;x;x;x;x;x;x;w;w;w;w;w;w;w;w;v;v;v;v;v;v;v;v;v;u;u;u;u;u;u;u;u;t;t;t;t;t;t;t;t;t;s;s;s;s;s;s;s;s;s;r;r;r;r;r;r;r;r;q;q;q;q;q;q;q;q;q;p;p;p;p;p;p;p;p;o;o;o;o;o;o;o;o;o;n;n;n;n;n;n;n;n;n;m;m;m;m;m;m;m;m;l;l;l;l;l;l;l;l;l;k;k;k;k;k;k;k;k;j;j;j;j;j;j;j;j;j;i;i;i;i;i;i;i;i;i;h;h;h;h;h;h;h;h;g;g;g;g;g;g;g;g;g;f;f;f;f;f;f;f;f;f;e;e;e;e;e;e;e;e;d;d;d;d;d;d;d;d;d;c;c;c;c;c;c;c;c;c;b;b;b;b;b;b;b;b;a;a;a;a;a;a;a;a;a;`;`;`;`;`;`;`;`;`;_;_;_;_;_;_;_;_;^;^;^;^;^;^;^;^;^;];];];];];];];];];\\;\\;\\;\\;\\;\\;\\;\\;[;[;[;[;[;[;[;[;[;Z;Z;Z;Z;Z;Z;Z;Z;Z;Y;Y;Y;Y;Y;Y;Y;Y;X;X;X;X;X;X;X;X;X;W;W;W;W;W;W;W;W;W;V;V;V;V;V;V;V;V;V;U;U;U;U;U;U;U;U;T;T;T;T;T;T;T;T;T;S;S;S;S;S;S;S;S;S;R;R;R;R;R;R;R;R;R;Q;Q;Q;Q;Q;Q;Q;Q;P;P;P;P;P;P;P;P;P;O;O;O;O;O;O;O;O;O;N;N;N;N;N;N;N;N;N;M;M;M;M;M;M;M;M;L;L;L;L;L;L;L;L;L;K;K;K;K;K;K;K;K;K;J;J;J;J;J;J;J;J;J;I;I;I;I;I;I;I;I;H;H;H;H;H;H;H;H;H;G;G;G;G;G;G;G;G;G;F;F;F;F;F;F;F;F;F;E;E;E;E;E;E;E;E;E;D;D;D;D;D;D;D;D;C;C;C;C;C;C;C;C;C;B;B;B;B;B;B;B;B;B;A;A;A;A;A;A;A;A;A;@;@;@;@;@;@;@;@;@;?;?;?;?;?;?;?;?;?;>;>;>;>;>;>;>;>;=;=;=;=;=;=;=;=;=;<;<;<;<;<;<;<;<;<;;;;;;;;;;;;;;;;;;;:;:;:;:;:;:;:;:;:;9;9;9;9;9;9;9;9;9;8;8;8;8;8;8;8;8;8;7;7;7;7;7;7;7;7;6;6;6;6;6;6;6;6;6;5;5;5;5;5;5;5;5;5;4;4;4;4;4;4;4;4;4;3;3;3;3;3;3;3;3;3;2;2;2;2;2;2;2;2;2;1;1;1;1;1;1;1;1;1;0;0;0;0;0;0;0;0;0;/;/;/;/;/;/;/;/;/;.;.;.;.;.;.;.;.;-;-;-;-;-;-;-;-;-;,;,;,;,;,;,;,;,;,;+;+;+;+;+;+;+;+;+;*;*;*;*;*;*;*;*;*;);););););););););(;(;(;(;(;(;(;(;(;';';';';';';';';';&;&;&;&;&;&;&;&;&;%;%;%;%;%;%;%;%;%;$;$;$;$;$;$;$;$;$;#;#;#;#;#;#;#;#;#;\";\";\";\";\";\";\";\";\";!;!;!;!;!;!;!;!;!; ; ; ; ; ; ; ; ; ;"
+      },
+      {
+        "address": "0x1412a0e69",
+        "references": [],
+        "section": ".rdata",
+        "text": ":~:~:~:~:~:}:}:}:}:}:|:|:|:|:|:{:{:{:{:{:z:z:z:z:z:y:y:y:y:x:x:x:x:x:w:w:w:w:w:v:v:v:v:v:u:u:u:u:u:t:t:t:t:t:s:s:s:s:s:r:r:r:r:r:q:q:q:q:q:p:p:p:p:p:o:o:o:o:o:n:n:n:n:n:m:m:m:m:m:l:l:l:l:l:k:k:k:k:k:j:j:j:j:j:i:i:i:i:i:h:h:h:h:h:g:g:g:g:g:f:f:f:f:f:e:e:e:e:e:d:d:d:d:d:c:c:c:c:c:b:b:b:b:b:a:a:a:a:a:`:`:`:`:`:_:_:_:_:_:^:^:^:^:^:]:]:]:]:]:\\:\\:\\:\\:\\:[:[:[:[:[:Z:Z:Z:Z:Z:Y:Y:Y:Y:Y:X:X:X:X:X:W:W:W:W:W:V:V:V:V:V:U:U:U:U:U:T:T:T:T:T:T:S:S:S:S:S:R:R:R:R:R:Q:Q:Q:Q:Q:P:P:P:P:P:O:O:O:O:O:N:N:N:N:N:M:M:M:M:M:L:L:L:L:L:K:K:K:K:K:J:J:J:J:J:I:I:I:I:I:H:H:H:H:H:G:G:G:G:G:G:F:F:F:F:F:E:E:E:E:E:D:D:D:D:D:C:C:C:C:C:B:B:B:B:B:A:A:A:A:A:@:@:@:@:@:?:?:?:?:?:>:>:>:>:>:>:=:=:=:=:=:<:<:<:<:<:;:;:;:;:::::9:9:9:8:8:7:7:7:6:6:6:5:5:4:4:4:3:3:2:2:2:1:1:1:0:0:/:/:/:.:.:-:-:-:,:,:+:+:+:*:*:*:):):(:(:(:':':&:&:&:%:%:%:$:$:#:#:#:\":\":!:!:!: : : :"
+      },
+      {
+        "address": "0x1412a1517",
+        "references": [],
+        "section": ".rdata",
+        "text": "9~9~9~9}9}9|9|9|9{9{9{9z9z9z9y9y9y9x9x9x9w9w9w9v9v9v9u9u9u9t9t9t9s9s9s9r9r9r9q9q9q9p9p9p9o9o9n9n9n9m9m9m9l9l9l9k9k9k9j9j9j9i9i9i9h9h9h9g9g9g9f9f9f9e9e9e9d9d9d9c9c9c9b9b9b9a9a9a9`9`9`9_9_9_9^9^9^9]9]9]9\\9\\9\\9[9[9[9Z9Z9Z9Y9Y9Y9X9X9X9W9W9W9V9V9V9U9U9U9T9T9T9S9S9S9R9R9R9Q9Q9Q9P9P9P9O9O9O9N9N9N9M9M9M9L9L9L9K9K9K9J9J9J9I9I9I9H9H9H9G9G9G9F9F9F9E9E9E9D9D9D9C9C9C9B9B9B9A9A9A9@9@9@9?9?9?9>9>9>9=9=9=9<9<9<9<9;9;9;9:9:9:9999999898989797979696969595959494949393939292929191919090909/9/9/9.9.9.9.9-9-9-9,9,9,9+9+9+9*9*9*9)9)9)9(9(9(9'9'9'9&9&9&9%9%9%9$9$9$9$9#9#9#9\"9\"9\"9!9!9!9 9 9 9"
+      },
+      {
+        "address": "0x1412a1a4b",
+        "references": [],
+        "section": ".rdata",
+        "text": "8~8}8}8|8|8{8{8z8y8y8x8x8w8w8v8v8u8t8t8s8s8r8r8q8q8p8o8o8n8n8m8m8l8l8k8j8j8i8i8h8h8g8g8f8f8e8d8d8c8c8b8b8a8a8`8_8_8^8^8]8]8\\8\\8[8[8Z8Y8Y8X8X8W8W8V8V8U8U8T8T8S8R8R8Q8Q8P8P8O8O8N8N8M8M8L8K8K8J8J8I8I8H8H8G8G8F8F8E8D8D8C8C8B8B8A8A8@8@8?8?8>8>8=8=8<8;8;8:8:898988888787868685858484838282818180808/8/8.8.8-8-8,8,8+8+8*8*8)8)8(8(8'8&8&8%8%8$8$8#8#8\"8\"8!8!8 8 8"
+      },
+      {
+        "address": "0x1412a1d33",
+        "references": [],
+        "section": ".rdata",
+        "text": "7~7}7|7{7z7y7x7w7v7u7u7t7s7r7q7p7o7n7m7l7k7j7i7h7h7g7f7e7d7c7b7a7`7_7^7]7\\7\\7[7Z7Y7X7W7V7U7T7S7R7Q7Q7P7O7N7M7L7K7J7I7H7G7G7F7E7D7C7B7A7@7?7>7=7=7<7;7:79787776757474737271707/7.7-7,7+7+7*7)7(7'7&7%7$7#7\"7\"7!7 7"
+      },
+      {
+        "address": "0x1412a1f7d",
+        "references": [],
+        "section": ".rdata",
+        "text": "6~6}6}6|6{6z6y6y6x6w6v6u6u6t6s6r6q6p6p6o6n6m6l6l6k6j6i6h6h6g6f6e6d6d6c6b6a6`6`6_6^6]6\\6\\6[6Z6Y6Y6X6W6V6U6U6T6S6R6Q6Q6P6O6N6M6M6L6K6J6J6I6H6G6F6F6E6D6C6B6B6A6@6?6?6>6=6<6;6;6:696868676665646463626161606/6.6-6-6,6+6*6*6)6(6'6'6&6%6$6#6#6\"6!6 6 6"
+      },
+      {
+        "address": "0x1412a2cfd",
+        "references": [],
+        "section": ".rdata",
+        "text": "*|*y*v*s*o*l*i*f*c*_*\\*Y*V*S*P*L*I*F*C*@*=*:*7*3*0*-***'*$*!*"
+      },
+      {
+        "address": "0x1412a3cdc",
+        "references": [],
+        "section": ".rdata",
+        "text": "~}|{zyyxwvutsrqpoonmlkjjihgfeedcbba`__^]\\\\[ZZYXWWVUUTSSRRQPPONNMMLKKJJIIHGGFFEEDDCCBBAA@@??>>==<<;;::9988877665554433322111000//...---,,,+++***)))(((''''&&&%%%$$$$####\"\"\"!!!!    "
+      },
+      {
+        "address": "0x1412e97f0",
+        "references": [
+          {
+            "from": "0x1408554be",
+            "function": "sub_1408553a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "((((shared->type) == 1) || ((shared->type) == 2)) ? 1 : 0)"
+      },
+      {
+        "address": "0x1412fc4c0",
+        "references": [],
+        "section": ".rdata",
+        "text": "!_drop->forward[_i] || !((((const H5_obj_t *)((_drop->forward[_i])->key))->fileno < ((const H5_obj_t *)key)->fileno) ? 1 : (((const H5_obj_t *)((_drop->forward[_i])->key))->addr < ((const H5_obj_t *)key)->addr))"
+      },
+      {
+        "address": "0x1412fc8c0",
+        "references": [],
+        "section": ".rdata",
+        "text": "!_drop->forward[_i] || !(((_drop->forward[_i])->hashval == hashval) ? (strcmp((const char *)(_drop->forward[_i])->key,(const char *)key) < 0) : ((_drop->forward[_i])->hashval < hashval))"
+      },
+      {
+        "address": "0x14148aec0",
+        "references": [
+          {
+            "from": "0x140dc12dc",
+            "function": "sub_140dc0f10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "((##any | ##other) | List of (xs:anyURI | (##targetNamespace | ##local)))"
+      },
+      {
+        "address": "0x141538c11",
+        "references": [],
+        "section": ".rdata",
+        "text": "~}|{zyxwvutsrqponmlkjihgfedcba`_^]\\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;:9876543210/.-,+*)('&%$#\"! "
+      },
+      {
+        "address": "0x14185c381",
+        "references": [],
+        "section": ".data",
+        "text": ":x:|:"
+      }
+    ],
+    "total": 70
+  },
+  "summary": "70 strings match \"\\|.*:|^(Leaves:|Local Orientation:|Deformation:|Lighting:|Collision:)$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 60,
+    "total": 70,
+    "next_offset": 60
+  },
+  "locations": [],
+  "links": []
+}

@@ -105,5 +105,9 @@
   {"name": "pan", "group": "controls", "value": "middle drag or shift+left drag", "estimated": true},
   {"name": "zoom", "group": "controls", "value": "wheel or right drag", "estimated": true},
   {"name": "default camera", "group": "camera", "value": "perspective", "source": "person's request"},
-  {"name": "field of view", "group": "camera", "value": 45, "unit": "degrees", "estimated": true}
+  {"name": "field of view", "group": "camera", "value": 45, "unit": "degrees", "estimated": true},
+  {"name": "recent files kept", "group": "file", "value": 16, "source": "function 0x1402a76e0"},
+  {"name": "incremental save suffix", "group": "file", "value": "_%03d (or _001 added)", "source": "function 0x14041c880"},
+  {"name": "save prompt text", "group": "file", "value": "This tree has been modified. / The tree [%1] has been modified. + Do you wish to save your changes?", "source": "function 0x1402b3f80"},
+  {"name": "save prompt buttons", "group": "file", "value": "Yes, No, Cancel (default Cancel)", "source": "function 0x1402b3f80 (0x414000, 0x400000)"}
 ]}

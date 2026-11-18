@@ -133,6 +133,9 @@ pub struct CutoutEditor {
     pub anchor_sides: Vec<u8>,
     /// Vertex colour of each outline point.
     pub colors: Vec<[f32; 3]>,
+    /// Points inside the outline that are mesh vertices too (picture-17), and their colours.
+    pub inner: Vec<Vec2>,
+    pub inner_colors: Vec<[f32; 3]>,
     /// The colour the paint tool puts down.
     pub paint: [f32; 3],
     xform: Option<Xform>,
@@ -163,14 +166,28 @@ impl CutoutEditor {
     }
     /// The canvas as a level: outline, its colours and the green anchors.
     fn as_level(&self) -> MeshLod {
-        let plain = self.colors.iter().all(|c| *c == [1.0, 1.0, 1.0]);
-        MeshLod { file: String::new(), outline: self.outline.clone(), geom: None, anchors: self.green(), colors: if plain { vec![] } else { self.colors.clone() } }
+        let plain = self.colors.iter().chain(&self.inner_colors).all(|c| *c == [1.0, 1.0, 1.0]);
+        MeshLod {
+            file: String::new(),
+            outline: self.outline.clone(),
+            geom: None,
+            anchors: self.green(),
+            colors: if plain { vec![] } else { self.colors.clone() },
+            inner: self.inner.clone(),
+            inner_colors: if plain { vec![] } else { self.inner_colors.clone() },
+        }
+    }
+    /// The canvas's mesh: outline, inner points, colours and options.
+    fn geom(&self) -> crate::model::MeshGeom {
+        meshio::outline_geom_inner(&self.outline, &self.colors, &self.inner, &self.inner_colors, self.anchors[0], self.opts)
     }
     /// Put a level's outline, colours and green anchors on the canvas (the pivot stays).
     fn load_level(&mut self, l: usize) {
         let lv = self.lods[l].clone();
         self.outline = lv.outline.clone();
         self.colors = if lv.colors.len() == lv.outline.len() { lv.colors.clone() } else { vec![[1.0; 3]; lv.outline.len()] };
+        self.inner = lv.inner.clone();
+        self.inner_colors = if lv.inner_colors.len() == lv.inner.len() { lv.inner_colors.clone() } else { vec![[1.0; 3]; lv.inner.len()] };
         self.anchors.truncate(1);
         self.anchor_angles = vec![0.0];
         self.anchor_ids = vec![0];
@@ -232,6 +249,8 @@ impl App {
             anchor_ids: vec![0],
             anchor_sides: vec![0],
             colors: vec![],
+            inner: vec![],
+            inner_colors: vec![],
             paint: PAINT_COLORS[0].1,
             xform: None,
             id_popup: None,
@@ -389,6 +408,8 @@ impl App {
             // fn 0x1402f7c90: asks first, resets, then switches to Add/Move points
             ed.outline.clear(); // back to a clean slate
             ed.colors.clear();
+            ed.inner.clear();
+            ed.inner_colors.clear();
             ed.tool = Tool::AddPoints;
         }
         tip(ui, rb, "Reset points");
@@ -433,6 +454,7 @@ impl App {
             // fn 0x1402fd070 fills every colour with the canvas's current paint colour (+0x124,
             // the value the brush uses in fn 0x140300880)
             ed.colors = vec![ed.paint; ed.outline.len()];
+            ed.inner_colors = vec![ed.paint; ed.inner.len()];
             ed.tool = Tool::PaintColor;
         }
         tip(ui, cb, "Reset colour (every point takes the swatch colour)");
@@ -541,7 +563,7 @@ impl App {
         }
 
         // ---- bottom: counts, Confirm, Cancel
-        let g = meshio::outline_geom_opts(&ed.outline, ed.anchors[0], ed.opts);
+        let g = ed.geom();
         let (nv, nf) = if ed.outline.len() >= 3 { (g.pos.len(), g.idx.len() / 3) } else { (0, 0) };
         let label = format!("V:{}  F:{}   editing: {}", nv, nf, LOD_NAMES[ed.target]);
         ui.text(&label, cv_area.x + 4.0, bottom + 14.0, 12.0, C_TEXT_DIM);
@@ -623,7 +645,8 @@ impl App {
         );
         ui.set_clip(Some(area));
         ui.record("cutout.canvas", cv);
-        checker(cv, 16.0);
+        // the original's canvas checkerboard uses 7 px squares (constant 0x14107cab0, fn 0x1402fe130)
+        checker(cv, 7.0);
         // the material's picture (colour, or its opacity as grey)
         if ed.material > 0 {
             let mi = ed.material - 1;
@@ -723,11 +746,14 @@ impl App {
             draw_line(a.x, a.y, b.x, b.y, 2.0, cyan);
         }
         if ed.outline.len() >= 3 {
-            let g = meshio::outline_geom_opts(&ed.outline, ed.anchors[0], ed.opts);
+            if ed.inner_colors.len() != ed.inner.len() {
+                ed.inner_colors.resize(ed.inner.len(), [1.0; 3]);
+            }
+            let g = ed.geom();
             // in colour mode the triangles show the painted vertex colours, blended across each
             // triangle as the leaf will get them (picture-16)
             if ed.tool == Tool::PaintColor && ed.colors.len() == ed.outline.len() {
-                let gc = meshio::outline_geom_col(&ed.outline, &ed.colors, ed.anchors[0], ed.opts);
+                let gc = g.clone();
                 let n_front = if ed.opts.double_sided { gc.idx.len() / 2 } else { gc.idx.len() };
                 let to_v = |i: usize| {
                     let p = to_s(gc.uv[i]);
@@ -740,13 +766,15 @@ impl App {
                     draw_mesh(&macroquad::models::Mesh { vertices, indices, texture: None });
                 }
             }
-            let tri_c = Color::new(0.2, 0.9, 0.9, 0.35);
+            // inner (triangle) edges: yellow and thicker so they read over the picture (picture-18);
+            // the outline is drawn over them in cyan
+            let tri_c = Color::new(1.0, 0.86, 0.1, 0.85);
             let n_front = if ed.opts.double_sided { g.idx.len() / 2 } else { g.idx.len() };
             for f in g.idx[..n_front].chunks(3) {
                 let (a, b, c) = (to_s(g.uv[f[0] as usize]), to_s(g.uv[f[1] as usize]), to_s(g.uv[f[2] as usize]));
-                draw_line(a.x, a.y, b.x, b.y, 1.0, tri_c);
-                draw_line(b.x, b.y, c.x, c.y, 1.0, tri_c);
-                draw_line(c.x, c.y, a.x, a.y, 1.0, tri_c);
+                draw_line(a.x, a.y, b.x, b.y, 1.6, tri_c);
+                draw_line(b.x, b.y, c.x, c.y, 1.6, tri_c);
+                draw_line(c.x, c.y, a.x, a.y, 1.6, tri_c);
             }
             for i in 0..ed.outline.len() {
                 let a = to_s(ed.outline[i]);
@@ -758,26 +786,33 @@ impl App {
         if ed.colors.len() != ed.outline.len() {
             ed.colors.resize(ed.outline.len(), [1.0; 3]);
         }
-        // painted vertex colours: a coloured halo under each point
-        for (k, p) in ed.outline.iter().enumerate() {
-            let c = ed.colors[k];
-            if c != [1.0, 1.0, 1.0] {
+        if ed.inner_colors.len() != ed.inner.len() {
+            ed.inner_colors.resize(ed.inner.len(), [1.0; 3]);
+        }
+        // painted vertex colours: a coloured halo under each point (outline, then inner points)
+        for (p, c) in ed.outline.iter().zip(&ed.colors).chain(ed.inner.iter().zip(&ed.inner_colors)) {
+            if *c != [1.0, 1.0, 1.0] {
                 let s = to_s(*p);
                 draw_circle(s.x, s.y, 9.0, Color::new(c[0], c[1], c[2], 0.85));
             }
         }
         // grab radii from fn 0x140300880: points 7 px (+20 with Remove points), pivot 10 px,
-        // anchors 7 px (27 with Remove anchors)
+        // anchors 7 px (27 with Remove anchors). Point k >= outline.len() is inner point k - n.
         let pt_r = if ed.tool == Tool::RemovePoints { 27.0 } else { 7.0 };
-        let hover_pt = ed.outline.iter().position(|p| to_s(*p).distance(m) < pt_r);
+        let n_out = ed.outline.len();
+        let hover_pt = ed.outline.iter().chain(&ed.inner).position(|p| to_s(*p).distance(m) < pt_r);
         let hover_anc = ed.anchors.iter().enumerate().position(|(k, p)| {
             let r = if k == 0 { 10.0 } else if ed.tool == Tool::RemoveAnchors { 27.0 } else { 7.0 };
             to_s(*p).distance(m) < r
         });
-        for (k, p) in ed.outline.iter().enumerate() {
+        for (k, p) in ed.outline.iter().chain(&ed.inner).enumerate() {
             let s = to_s(*p);
             let hot = hover_pt == Some(k) || ed.drag == Some((false, k));
             draw_circle(s.x, s.y, if hot { 6.0 } else { 4.5 }, if hot { WHITE } else { Color::new(0.9, 0.15, 0.15, 1.0) });
+            if k >= n_out && !hot {
+                // inner points have a light ring
+                draw_circle_lines(s.x, s.y, 5.5, 1.0, Color::new(1.0, 0.8, 0.8, 0.9));
+            }
         }
         // the pivot is white, the other anchors green, each with its number below it
         for (k, p) in ed.anchors.iter().enumerate() {
@@ -835,7 +870,8 @@ impl App {
             ed.xform = Some(Xform {
                 start: uv_raw,
                 center,
-                outline: ed.outline.clone(),
+                // the outline then the inner points (split again after transforming)
+                outline: ed.outline.iter().chain(&ed.inner).copied().collect(),
                 anchors: ed.anchors.clone(),
                 angles: ed.anchor_angles.clone(),
                 pivot_angle: ed.opts.angle,
@@ -879,7 +915,10 @@ impl App {
                         Box::new(move |p| c + (p - c) * k)
                     }
                 };
-                ed.outline = outline0.iter().map(|p| f(*p)).collect();
+                let moved: Vec<Vec2> = outline0.iter().map(|p| f(*p)).collect();
+                let n = ed.outline.len().min(moved.len());
+                ed.outline = moved[..n].to_vec();
+                ed.inner = moved[n..].to_vec();
                 ed.anchors = anchors0.iter().map(|p| f(*p)).collect();
             } else {
                 ed.xform = None;
@@ -986,12 +1025,18 @@ impl App {
             // the first dab on press is 10 px (fn 0x140301500), the drag 20 px (fn 0x140300880)
             let r = if ed.paint_prev.is_none() { 10.0 } else { BRUSH };
             let a = ed.paint_prev.unwrap_or(m);
-            for (k, p) in ed.outline.iter().enumerate() {
-                let s = to_s(*p);
+            let n_out = ed.outline.len();
+            for k in 0..n_out + ed.inner.len() {
+                let p = if k < n_out { ed.outline[k] } else { ed.inner[k - n_out] };
+                let s = to_s(p);
                 let ab = m - a;
                 let t = if ab.length_squared() > 1e-6 { ((s - a).dot(ab) / ab.length_squared()).clamp(0.0, 1.0) } else { 0.0 };
                 if (a + ab * t).distance(s) < r {
-                    ed.colors[k] = ed.paint;
+                    if k < n_out {
+                        ed.colors[k] = ed.paint;
+                    } else if let Some(c) = ed.inner_colors.get_mut(k - n_out) {
+                        *c = ed.paint;
+                    }
                 }
             }
             ed.paint_prev = Some(m);
@@ -1014,6 +1059,14 @@ impl App {
                         // anchors can always be dragged
                         ed.drag = Some((true, k));
                         ed.sel_anchor = k;
+                    } else if ed.outline.len() >= 3 && point_in_poly(&ed.outline, uv) {
+                        // a click inside the shape adds an inner vertex there, joined into the
+                        // triangles (always to its nearest vertex); the outline stays (picture-17)
+                        let near = ed.outline.iter().zip(&ed.colors).chain(ed.inner.iter().zip(&ed.inner_colors)).min_by(|a, b| a.0.distance(uv).total_cmp(&b.0.distance(uv)));
+                        let c = near.map(|(_, c)| *c).unwrap_or([1.0; 3]);
+                        ed.inner.push(uv);
+                        ed.inner_colors.push(c);
+                        ed.drag = Some((false, ed.outline.len() + ed.inner.len() - 1));
                     } else {
                         let at = insert_index(&ed.outline, uv);
                         let mut next = ed.outline.clone();
@@ -1036,7 +1089,13 @@ impl App {
                     }
                 }
                 Tool::RemovePoints => {
-                    if let Some(k) = hover_pt {
+                    if let Some(k) = hover_pt.filter(|k| *k >= ed.outline.len()) {
+                        let i = k - ed.outline.len();
+                        ed.inner.remove(i);
+                        if i < ed.inner_colors.len() {
+                            ed.inner_colors.remove(i);
+                        }
+                    } else if let Some(k) = hover_pt {
                         let mut next = ed.outline.clone();
                         next.remove(k);
                         if is_simple(&next) {
@@ -1103,6 +1162,12 @@ impl App {
                     if k < ed.anchors.len() {
                         ed.anchors[k] = uv;
                     }
+                } else if k >= ed.outline.len() {
+                    // an inner point stays inside the shape
+                    let i = k - ed.outline.len();
+                    if i < ed.inner.len() && point_in_poly(&ed.outline, uv) {
+                        ed.inner[i] = uv;
+                    }
                 } else if k < ed.outline.len() {
                     // a move that would make the outline cross itself is refused
                     let mut next = ed.outline.clone();
@@ -1116,7 +1181,7 @@ impl App {
             }
         }
         let hint = match ed.tool {
-            Tool::AddPoints => "Click to add a point (it joins the closest point), drag a point or the white pivot to move it, drag a knob to turn the pivot's or an anchor's angle",
+            Tool::AddPoints => "Click outside the shape to add an outline point, inside it to add an inner vertex; drag a point or the white pivot to move it, drag a knob to turn an angle",
             Tool::RemovePoints => "Click a point to remove it",
             Tool::AddAnchors => "Click to add a green anchor, drag one to move it, drag its knob to set its angle (white = pivot, where the leaf attaches)",
             Tool::RemoveAnchors => "Click an anchor to remove it",
@@ -1148,11 +1213,12 @@ impl App {
             draw_rectangle_lines(pv.x, pv.y, pv.w, pv.h, if l == ed.target { 2.0 } else { 1.0 }, if l == ed.target { C_ACCENT2 } else { C_LINE });
             // what this level holds now (the canvas, for the level being edited)
             let geom = if l == ed.target && ed.outline.len() >= 3 {
-                Some(meshio::outline_geom_col(&ed.outline, &ed.colors, ed.anchors[0], ed.opts))
+                Some(ed.geom())
             } else if let Some(g) = &ed.lods[l].geom {
                 Some(g.clone())
             } else if ed.lods[l].outline.len() >= 3 {
-                Some(meshio::outline_geom_col(&ed.lods[l].outline, &ed.lods[l].colors, ed.anchors[0], ed.opts))
+                let lv = &ed.lods[l];
+                Some(meshio::outline_geom_inner(&lv.outline, &lv.colors, &lv.inner, &lv.inner_colors, ed.anchors[0], ed.opts))
             } else {
                 None
             };
@@ -1468,15 +1534,16 @@ mod tests {
     }
 
     #[test]
-    fn a_click_inside_cuts_a_notch_into_the_nearest_edge() {
+    fn an_inner_point_joins_the_mesh_at_its_nearest_vertex() {
         let sq = vec![vec2(0.1, 0.1), vec2(0.9, 0.1), vec2(0.9, 0.9), vec2(0.1, 0.9)];
-        // just inside the right edge: it goes between the two right corners
-        let p = vec2(0.8, 0.5);
-        let at = insert_index(&sq, p);
-        assert_eq!(at, 2);
-        let mut next = sq.clone();
-        next.insert(at, p);
-        assert!(is_simple(&next));
+        // near the top-right corner (index 1), off the triangles' shared diagonal
+        let p = vec2(0.75, 0.3);
+        let g = meshio::outline_geom_inner(&sq, &[], &[p], &[], vec2(0.5, 0.9), CutOpts::default());
+        assert_eq!(g.uv.len(), 5, "the outline stays, plus one inner vertex");
+        assert_eq!(g.idx.len() / 3, 4, "a square with one inner point has 4 triangles");
+        let edge = g.idx.chunks(3).any(|t| t.contains(&4) && t.contains(&1));
+        assert!(edge, "the inner point is joined to its nearest corner");
+        assert!(point_in_poly(&sq, p));
     }
 
     #[test]

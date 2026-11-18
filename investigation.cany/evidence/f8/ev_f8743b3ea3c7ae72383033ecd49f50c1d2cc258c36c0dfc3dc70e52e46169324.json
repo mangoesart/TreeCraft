@@ -1,0 +1,312 @@
+{
+  "id": "ev_f8743b3ea3c7ae72383033ecd49f50c1d2cc258c36c0dfc3dc70e52e46169324",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_library_calls_list",
+  "params": {
+    "contains": "opengl32",
+    "kind": null,
+    "limit": 20,
+    "offset": 80,
+    "path": null
+  },
+  "result": {
+    "bound_modules": [],
+    "format": "pe",
+    "imports": [
+      {
+        "hint": 274,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexCoord2f",
+        "slot": "0x141026080"
+      },
+      {
+        "hint": 275,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexCoord2fv",
+        "slot": "0x141026160"
+      },
+      {
+        "hint": 308,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexImage2D",
+        "slot": "0x141026138"
+      },
+      {
+        "hint": 309,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexParameterf",
+        "slot": "0x141026028"
+      },
+      {
+        "hint": 310,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexParameterfv",
+        "slot": "0x1410262c8"
+      },
+      {
+        "hint": 311,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTexParameteri",
+        "slot": "0x141026130"
+      },
+      {
+        "hint": 315,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTranslated",
+        "slot": "0x141026260"
+      },
+      {
+        "hint": 316,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glTranslatef",
+        "slot": "0x1410260f8"
+      },
+      {
+        "hint": 317,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex2d",
+        "slot": "0x141026298"
+      },
+      {
+        "hint": 319,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex2f",
+        "slot": "0x1410260d8"
+      },
+      {
+        "hint": 320,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex2fv",
+        "slot": "0x1410260c0"
+      },
+      {
+        "hint": 321,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex2i",
+        "slot": "0x141026018"
+      },
+      {
+        "hint": 327,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex3f",
+        "slot": "0x1410261b0"
+      },
+      {
+        "hint": 328,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex3fv",
+        "slot": "0x141026190"
+      },
+      {
+        "hint": 335,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glVertex4f",
+        "slot": "0x1410262d0"
+      },
+      {
+        "hint": 342,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glViewport",
+        "slot": "0x1410261c8"
+      },
+      {
+        "hint": 351,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "wglGetCurrentDC",
+        "slot": "0x141026308"
+      },
+      {
+        "hint": 355,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "wglGetProcAddress",
+        "slot": "0x141026258"
+      }
+    ],
+    "libraries": [
+      {
+        "by_ordinal_only": 0,
+        "imports": 15,
+        "kinds": [
+          "normal"
+        ],
+        "name": "ADVAPI32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 12,
+        "kinds": [
+          "normal"
+        ],
+        "name": "GLU32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "IPHLPAPI.DLL"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 93,
+        "kinds": [
+          "normal"
+        ],
+        "name": "KERNEL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 81,
+        "kinds": [
+          "normal"
+        ],
+        "name": "MSVCP100.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 304,
+        "kinds": [
+          "normal"
+        ],
+        "name": "MSVCR100.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 98,
+        "kinds": [
+          "normal"
+        ],
+        "name": "OPENGL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 411,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtCore4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1556,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtGui4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 27,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtNetwork4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 64,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtOpenGL4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtWebKit4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "SHELL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 5,
+        "kinds": [
+          "normal"
+        ],
+        "name": "USER32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 17,
+        "kinds": [
+          "normal"
+        ],
+        "name": "VCOMP100.DLL"
+      },
+      {
+        "by_ordinal_only": 24,
+        "imports": 27,
+        "kinds": [
+          "normal"
+        ],
+        "name": "WS2_32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 21,
+        "kinds": [
+          "normal"
+        ],
+        "name": "nvtt.dll"
+      }
+    ],
+    "matching": 98,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe",
+    "total": 2734
+  },
+  "summary": "2734 imported function(s) from 17 libraries.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 18,
+    "total": 98
+  },
+  "locations": [
+    {
+      "kind": "path",
+      "value": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

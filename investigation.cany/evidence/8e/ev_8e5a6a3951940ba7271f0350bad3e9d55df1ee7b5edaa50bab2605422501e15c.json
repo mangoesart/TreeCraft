@@ -1,0 +1,747 @@
+{
+  "id": "ev_8e5a6a3951940ba7271f0350bad3e9d55df1ee7b5edaa50bab2605422501e15c",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_library_calls_list",
+  "params": {
+    "contains": "opengl32",
+    "kind": null,
+    "limit": 80,
+    "offset": 0,
+    "path": null
+  },
+  "result": {
+    "bound_modules": [],
+    "format": "pe",
+    "imports": [
+      {
+        "hint": 7,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glAlphaFunc",
+        "slot": "0x1410262c0"
+      },
+      {
+        "hint": 10,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glBegin",
+        "slot": "0x141026188"
+      },
+      {
+        "hint": 11,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glBindTexture",
+        "slot": "0x141026128"
+      },
+      {
+        "hint": 13,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glBlendFunc",
+        "slot": "0x1410260b8"
+      },
+      {
+        "hint": 14,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glCallList",
+        "slot": "0x1410260a0"
+      },
+      {
+        "hint": 15,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glCallLists",
+        "slot": "0x141026250"
+      },
+      {
+        "hint": 16,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glClear",
+        "slot": "0x1410261d0"
+      },
+      {
+        "hint": 17,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glClearAccum",
+        "slot": "0x1410262d8"
+      },
+      {
+        "hint": 18,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glClearColor",
+        "slot": "0x1410261e8"
+      },
+      {
+        "hint": 22,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glClipPlane",
+        "slot": "0x141026098"
+      },
+      {
+        "hint": 27,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColor3f",
+        "slot": "0x141026040"
+      },
+      {
+        "hint": 28,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColor3fv",
+        "slot": "0x1410260c8"
+      },
+      {
+        "hint": 43,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColor4f",
+        "slot": "0x1410261f8"
+      },
+      {
+        "hint": 44,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColor4fv",
+        "slot": "0x1410260e8"
+      },
+      {
+        "hint": 55,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColorMask",
+        "slot": "0x1410260b0"
+      },
+      {
+        "hint": 56,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glColorMaterial",
+        "slot": "0x1410262f8"
+      },
+      {
+        "hint": 63,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glCullFace",
+        "slot": "0x141026110"
+      },
+      {
+        "hint": 65,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDeleteLists",
+        "slot": "0x141026058"
+      },
+      {
+        "hint": 66,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDeleteTextures",
+        "slot": "0x141026108"
+      },
+      {
+        "hint": 67,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDepthFunc",
+        "slot": "0x141026210"
+      },
+      {
+        "hint": 68,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDepthMask",
+        "slot": "0x141026170"
+      },
+      {
+        "hint": 69,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDepthRange",
+        "slot": "0x1410261a0"
+      },
+      {
+        "hint": 70,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDisable",
+        "slot": "0x1410261f0"
+      },
+      {
+        "hint": 73,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDrawBuffer",
+        "slot": "0x1410262b0"
+      },
+      {
+        "hint": 74,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glDrawElements",
+        "slot": "0x1410262e0"
+      },
+      {
+        "hint": 79,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glEnable",
+        "slot": "0x1410261d8"
+      },
+      {
+        "hint": 81,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glEnd",
+        "slot": "0x141026198"
+      },
+      {
+        "hint": 82,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glEndList",
+        "slot": "0x141026168"
+      },
+      {
+        "hint": 96,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFinish",
+        "slot": "0x141026238"
+      },
+      {
+        "hint": 97,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFlush",
+        "slot": "0x141026230"
+      },
+      {
+        "hint": 98,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFogf",
+        "slot": "0x141026290"
+      },
+      {
+        "hint": 99,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFogfv",
+        "slot": "0x141026288"
+      },
+      {
+        "hint": 100,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFogi",
+        "slot": "0x141026280"
+      },
+      {
+        "hint": 102,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glFrontFace",
+        "slot": "0x141026278"
+      },
+      {
+        "hint": 104,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGenLists",
+        "slot": "0x141026148"
+      },
+      {
+        "hint": 105,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGenTextures",
+        "slot": "0x141026120"
+      },
+      {
+        "hint": 108,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGetDoublev",
+        "slot": "0x141026268"
+      },
+      {
+        "hint": 109,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGetError",
+        "slot": "0x141026118"
+      },
+      {
+        "hint": 110,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGetFloatv",
+        "slot": "0x1410262f0"
+      },
+      {
+        "hint": 111,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGetIntegerv",
+        "slot": "0x141026140"
+      },
+      {
+        "hint": 124,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glGetString",
+        "slot": "0x1410261b8"
+      },
+      {
+        "hint": 135,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glHint",
+        "slot": "0x141026300"
+      },
+      {
+        "hint": 142,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glIndexi",
+        "slot": "0x141026008"
+      },
+      {
+        "hint": 150,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glIsEnabled",
+        "slot": "0x141026000"
+      },
+      {
+        "hint": 154,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLightModelfv",
+        "slot": "0x141026270"
+      },
+      {
+        "hint": 155,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLightModeli",
+        "slot": "0x141026070"
+      },
+      {
+        "hint": 157,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLightf",
+        "slot": "0x141026048"
+      },
+      {
+        "hint": 158,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLightfv",
+        "slot": "0x141026078"
+      },
+      {
+        "hint": 161,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLineStipple",
+        "slot": "0x141026178"
+      },
+      {
+        "hint": 162,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLineWidth",
+        "slot": "0x141026180"
+      },
+      {
+        "hint": 163,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glListBase",
+        "slot": "0x141026010"
+      },
+      {
+        "hint": 164,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLoadIdentity",
+        "slot": "0x1410260f0"
+      },
+      {
+        "hint": 165,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLoadMatrixd",
+        "slot": "0x141026050"
+      },
+      {
+        "hint": 166,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glLoadMatrixf",
+        "slot": "0x141026208"
+      },
+      {
+        "hint": 177,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glMaterialf",
+        "slot": "0x141026090"
+      },
+      {
+        "hint": 178,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glMaterialfv",
+        "slot": "0x141026088"
+      },
+      {
+        "hint": 181,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glMatrixMode",
+        "slot": "0x141026200"
+      },
+      {
+        "hint": 183,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glMultMatrixf",
+        "slot": "0x141026220"
+      },
+      {
+        "hint": 184,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glNewList",
+        "slot": "0x141026150"
+      },
+      {
+        "hint": 189,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glNormal3f",
+        "slot": "0x1410262a8"
+      },
+      {
+        "hint": 190,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glNormal3fv",
+        "slot": "0x141026158"
+      },
+      {
+        "hint": 196,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glOrtho",
+        "slot": "0x141026038"
+      },
+      {
+        "hint": 202,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPixelStorei",
+        "slot": "0x1410261c0"
+      },
+      {
+        "hint": 206,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPointSize",
+        "slot": "0x1410261a8"
+      },
+      {
+        "hint": 207,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPolygonMode",
+        "slot": "0x1410260a8"
+      },
+      {
+        "hint": 208,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPolygonOffset",
+        "slot": "0x1410260e0"
+      },
+      {
+        "hint": 210,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPopAttrib",
+        "slot": "0x141026248"
+      },
+      {
+        "hint": 211,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPopClientAttrib",
+        "slot": "0x141026030"
+      },
+      {
+        "hint": 212,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPopMatrix",
+        "slot": "0x141026228"
+      },
+      {
+        "hint": 215,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPushAttrib",
+        "slot": "0x1410261e0"
+      },
+      {
+        "hint": 216,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPushClientAttrib",
+        "slot": "0x141026020"
+      },
+      {
+        "hint": 217,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glPushMatrix",
+        "slot": "0x141026218"
+      },
+      {
+        "hint": 243,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glReadBuffer",
+        "slot": "0x1410262b8"
+      },
+      {
+        "hint": 244,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glReadPixels",
+        "slot": "0x141026240"
+      },
+      {
+        "hint": 255,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glRotatef",
+        "slot": "0x1410260d0"
+      },
+      {
+        "hint": 257,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glScalef",
+        "slot": "0x141026100"
+      },
+      {
+        "hint": 258,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glScissor",
+        "slot": "0x1410262e8"
+      },
+      {
+        "hint": 260,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glShadeModel",
+        "slot": "0x1410262a0"
+      },
+      {
+        "hint": 261,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glStencilFunc",
+        "slot": "0x141026060"
+      },
+      {
+        "hint": 263,
+        "kind": "normal",
+        "library": "OPENGL32.dll",
+        "name": "glStencilOp",
+        "slot": "0x141026068"
+      }
+    ],
+    "libraries": [
+      {
+        "by_ordinal_only": 0,
+        "imports": 15,
+        "kinds": [
+          "normal"
+        ],
+        "name": "ADVAPI32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 12,
+        "kinds": [
+          "normal"
+        ],
+        "name": "GLU32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "IPHLPAPI.DLL"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 93,
+        "kinds": [
+          "normal"
+        ],
+        "name": "KERNEL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 81,
+        "kinds": [
+          "normal"
+        ],
+        "name": "MSVCP100.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 304,
+        "kinds": [
+          "normal"
+        ],
+        "name": "MSVCR100.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 98,
+        "kinds": [
+          "normal"
+        ],
+        "name": "OPENGL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 411,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtCore4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1556,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtGui4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 27,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtNetwork4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 64,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtOpenGL4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "QtWebKit4.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 1,
+        "kinds": [
+          "normal"
+        ],
+        "name": "SHELL32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 5,
+        "kinds": [
+          "normal"
+        ],
+        "name": "USER32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 17,
+        "kinds": [
+          "normal"
+        ],
+        "name": "VCOMP100.DLL"
+      },
+      {
+        "by_ordinal_only": 24,
+        "imports": 27,
+        "kinds": [
+          "normal"
+        ],
+        "name": "WS2_32.dll"
+      },
+      {
+        "by_ordinal_only": 0,
+        "imports": 21,
+        "kinds": [
+          "normal"
+        ],
+        "name": "nvtt.dll"
+      }
+    ],
+    "matching": 98,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe",
+    "total": 2734
+  },
+  "summary": "2734 imported function(s) from 17 libraries.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "partial",
+    "examined": 80,
+    "total": 98,
+    "next_offset": 80
+  },
+  "locations": [
+    {
+      "kind": "path",
+      "value": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

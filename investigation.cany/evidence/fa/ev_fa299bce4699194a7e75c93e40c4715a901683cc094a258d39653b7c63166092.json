@@ -1,0 +1,45 @@
+{
+  "id": "ev_fa299bce4699194a7e75c93e40c4715a901683cc094a258d39653b7c63166092",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1404f57d0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1404f57d0",
+    "function": "FUN_1404f57d0",
+    "pseudo_code": "\r\nvoid FUN_1404f57d0(longlong param_1,QWidget *param_2)\r\n\r\n{\r\n  code *pcVar1;\r\n  int *piVar2;\r\n  code *pcVar3;\r\n  QString *pQVar4;\r\n  undefined8 uVar5;\r\n  code *pcVar6;\r\n  code *local_res8;\r\n  Data *local_res18;\r\n  Data *local_res20;\r\n  Data *local_78;\r\n  Data *local_70;\r\n  Data *local_68;\r\n  Data *local_60;\r\n  Data *local_58;\r\n  Data *local_50;\r\n  Data *local_48;\r\n  Data *local_40;\r\n  undefined8 local_38;\r\n  \r\n  local_38 = 0xfffffffffffffffe;\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_res18,\"CVarianceSettingsDialog\",\"Form\",0);\r\n  QWidget::setWindowTitle(param_2,pQVar4);\r\n  LOCK();\r\n  *(int *)local_res18 = *(int *)local_res18 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res18 == 0) {\r\n    QString::free(local_res18);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_res20,\"CVarianceSettingsDialog\",\"Variance\",0);\r\n  QLabel::setText(*(QLabel **)(param_1 + 0x10),pQVar4);\r\n  LOCK();\r\n  *(int *)local_res20 = *(int *)local_res20 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res20 == 0) {\r\n    QString::free(local_res20);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_70,\"CVarianceSettingsDialog\",\"Distribution\",0)\r\n  ;\r\n  QLabel::setText(*(QLabel **)(param_1 + 0x30),pQVar4);\r\n  LOCK();\r\n  *(int *)local_70 = *(int *)local_70 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_70 == 0) {\r\n    QString::free(local_70);\r\n  }\r\n  QComboBox::clear(*(QComboBox **)(param_1 + 0x38));\r\n  QCoreApplication::translate((char *)&local_60,\"CVarianceSettingsDialog\",\"Gaussian (bell curve)\",0)\r\n  ;\r\n  uVar5 = QCoreApplication::translate\r\n                    ((char *)&local_50,\"CVarianceSettingsDialog\",\"Uniform (random)\",0);\r\n  local_res8 = shared_null_exref;\r\n  LOCK();\r\n  *(int *)shared_null_exref = *(int *)shared_null_exref + 1;\r\n  UNLOCK();\r\n  FUN_140047890(&local_res8,uVar5);\r\n  FUN_140047890(&local_res8);\r\n  QComboBox::insertItems(*(QComboBox **)(param_1 + 0x38),0,(QStringList *)&local_res8);\r\n  pcVar3 = local_res8;\r\n  LOCK();\r\n  *(int *)local_res8 = *(int *)local_res8 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_res8 == 0) {\r\n    pcVar6 = local_res8 + (longlong)*(int *)(local_res8 + 0xc) * 8 + 0x18;\r\n    pcVar1 = local_res8 + (longlong)*(int *)(local_res8 + 8) * 8 + 0x18;\r\n    while (pcVar1 != pcVar6) {\r\n      pcVar6 = pcVar6 + -8;\r\n      piVar2 = *(int **)pcVar6;\r\n      LOCK();\r\n      *piVar2 = *piVar2 + -1;\r\n      UNLOCK();\r\n      if (*piVar2 == 0) {\r\n        QString::free(*(Data **)pcVar6);\r\n      }\r\n    }\r\n    qFree(pcVar3);\r\n  }\r\n  LOCK();\r\n  *(int *)local_50 = *(int *)local_50 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_50 == 0) {\r\n    QString::free(local_50);\r\n  }\r\n  LOCK();\r\n  *(int *)local_60 = *(int *)local_60 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_60 == 0) {\r\n    QString::free(local_60);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_40,\"CVarianceSettingsDialog\",\"Cohesion\",0);\r\n  QGroupBox::setTitle(*(QGroupBox **)(param_1 + 0x48),pQVar4);\r\n  LOCK();\r\n  *(int *)local_40 = *(int *)local_40 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_40 == 0) {\r\n    QString::free(local_40);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_78,\"CVarianceSettingsDialog\",\"Cohesive\",0);\r\n  QLabel::setText(*(QLabel **)(param_1 + 0x60),pQVar4);\r\n  LOCK();\r\n  *(int *)local_78 = *(int *)local_78 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_78 == 0) {\r\n    QString::free(local_78);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_68,\"CVarianceSettingsDialog\",\"Random\",0);\r\n  QLabel::setText(*(QLabel **)(param_1 + 0x70),pQVar4);\r\n  LOCK();\r\n  *(int *)local_68 = *(int *)local_68 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_68 == 0) {\r\n    QString::free(local_68);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_58,\"CVarianceSettingsDialog\",\"Scale\",0);\r\n  QLabel::setText(*(QLabel **)(param_1 + 0x80),pQVar4);\r\n  LOCK();\r\n  *(int *)local_58 = *(int *)local_58 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_58 == 0) {\r\n    QString::free(local_58);\r\n  }\r\n  pQVar4 = (QString *)\r\n           QCoreApplication::translate((char *)&local_48,\"CVarianceSettingsDialog\",\"Offset\",0);\r\n  QLabel::setText(*(QLabel **)(param_1 + 0xa0),pQVar4);\r\n  LOCK();\r\n  *(int *)local_48 = *(int *)local_48 + -1;\r\n  UNLOCK();\r\n  if (*(int *)local_48 == 0) {\r\n    QString::free(local_48);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1404f57d0(longlong param_1,QWidget *param_2);"
+  },
+  "summary": "Pseudo-C for FUN_1404f57d0 from the Deep engine (143 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1404f57d0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

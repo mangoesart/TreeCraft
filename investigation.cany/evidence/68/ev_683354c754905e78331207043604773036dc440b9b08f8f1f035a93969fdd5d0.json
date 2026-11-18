@@ -1,0 +1,46 @@
+{
+  "id": "ev_683354c754905e78331207043604773036dc440b9b08f8f1f035a93969fdd5d0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_browse",
+  "params": {
+    "address": "0x14178e050",
+    "limit": 200,
+    "offset": 0,
+    "section": null
+  },
+  "result": {
+    "strings": [],
+    "total": 0
+  },
+  "summary": "0 strings (showing 0).",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "strings are read from data sections; text built at run time or stored compressed isn't listed"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 0,
+    "total": 0
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14178e050"
+    }
+  ],
+  "links": []
+}

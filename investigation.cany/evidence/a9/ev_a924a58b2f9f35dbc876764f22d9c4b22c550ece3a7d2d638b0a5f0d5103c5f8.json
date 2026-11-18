@@ -1,0 +1,425 @@
+{
+  "id": "ev_a924a58b2f9f35dbc876764f22d9c4b22c550ece3a7d2d638b0a5f0d5103c5f8",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 30,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Segments:Radial|Segments:Length|Segments:Accuracy"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141046088",
+        "references": [
+          {
+            "from": "0x14010be33",
+            "function": "sub_14010bb90"
+          },
+          {
+            "from": "0x140195903",
+            "function": "sub_140193a10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length:Optimization"
+      },
+      {
+        "address": "0x1410460a8",
+        "references": [
+          {
+            "from": "0x14010bd3f",
+            "function": "sub_14010bb90"
+          },
+          {
+            "from": "0x140195436",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401954af",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195544",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401956ee",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195715",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14019603f",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140196066",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401961af",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14019986a",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199912",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1401999f2",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199c3a",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199c6d",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14019a1e5",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length: + Relative"
+      },
+      {
+        "address": "0x1410460c8",
+        "references": [
+          {
+            "from": "0x14010bc4f",
+            "function": "sub_14010bb90"
+          },
+          {
+            "from": "0x14019530e",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401953c6",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401955fc",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195675",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14019580c",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195f4b",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195f72",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401996d4",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1401997cc",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199aea",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199b92",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199db0",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length:Absolute"
+      },
+      {
+        "address": "0x1410460e8",
+        "references": [
+          {
+            "from": "0x14010bb9d",
+            "function": "sub_14010bb90"
+          },
+          {
+            "from": "0x1401951db",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195202",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14019953d",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x140199570",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1401fb96b",
+            "function": "sub_1401fb960"
+          },
+          {
+            "from": "0x1403851dd",
+            "function": "sub_140384f20"
+          },
+          {
+            "from": "0x1403f00ef",
+            "function": "sub_1403f00c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Accuracy"
+      },
+      {
+        "address": "0x1410462f8",
+        "references": [
+          {
+            "from": "0x14010dc0a",
+            "function": "sub_14010d9d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length:Weld scalar"
+      },
+      {
+        "address": "0x141048180",
+        "references": [
+          {
+            "from": "0x140140caf",
+            "function": "sub_140140870"
+          },
+          {
+            "from": "0x140195aad",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195b26",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195bbb",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195e58",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195e7f",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140196133",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140199feb",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14019a093",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14019a13b",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Radial: + Relative"
+      },
+      {
+        "address": "0x1410481a0",
+        "references": [
+          {
+            "from": "0x140140bbb",
+            "function": "sub_140140870"
+          },
+          {
+            "from": "0x1401959f5",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195c73",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195cec",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195d65",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195d8c",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140199ef3",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Radial:Absolute"
+      },
+      {
+        "address": "0x1410514b0",
+        "references": [
+          {
+            "from": "0x1401959ce",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140195b94",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x140199ec0",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14038f459",
+            "function": "sub_14038f2a0"
+          },
+          {
+            "from": "0x1403f04e6",
+            "function": "sub_1403f00c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Radial"
+      },
+      {
+        "address": "0x1410514e0",
+        "references": [
+          {
+            "from": "0x1401952e7",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14019551d",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x1401957e5",
+            "function": "sub_140193a10"
+          },
+          {
+            "from": "0x14038529b",
+            "function": "sub_140384f20"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length"
+      },
+      {
+        "address": "0x141051768",
+        "references": [
+          {
+            "from": "0x140199634",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x1403f01a9",
+            "function": "sub_1403f00c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Segments:Length Style"
+      },
+      {
+        "address": "0x1410951d0",
+        "references": [
+          {
+            "from": "0x14038f0f1",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "|Segments:Frond|Segments:Length|Segments:Optimization"
+      },
+      {
+        "address": "0x141095250",
+        "references": [
+          {
+            "from": "0x14038f063",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "|Segments:Radial|Segments:Length|Segments:Optimization"
+      },
+      {
+        "address": "0x141095290",
+        "references": [
+          {
+            "from": "0x14038f013",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Geometry Types:Branch|(Branch:)(?!Cap)|Segments:Radial|Segments:Optimization|Segments:Weld|Materials:Branch|Texture Coordinates:"
+      },
+      {
+        "address": "0x141095318",
+        "references": [
+          {
+            "from": "0x14038efd8",
+            "function": "sub_14038ee90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:|Bifurcation:|Segments:Accuracy|Forces:"
+      }
+    ],
+    "total": 14
+  },
+  "summary": "14 strings match \"Segments:Radial|Segments:Length|Segments:Accuracy\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 14,
+    "total": 14
+  },
+  "locations": [],
+  "links": []
+}

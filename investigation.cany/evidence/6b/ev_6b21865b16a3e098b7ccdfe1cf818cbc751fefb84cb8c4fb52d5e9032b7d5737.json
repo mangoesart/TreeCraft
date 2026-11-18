@@ -1,0 +1,149 @@
+{
+  "id": "ev_6b21865b16a3e098b7ccdfe1cf818cbc751fefb84cb8c4fb52d5e9032b7d5737",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "(parent|profile|distribution).{0,40}curve|curve.{0,40}(parent|profile|distribution)"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14104cec0",
+        "references": [
+          {
+            "from": "0x140175941",
+            "function": "sub_140175753"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0The last point of the 'Lip:Height' profile curve must be 1.0."
+      },
+      {
+        "address": "0x14104cf00",
+        "references": [
+          {
+            "from": "0x140175919",
+            "function": "sub_140175753"
+          }
+        ],
+        "section": ".rdata",
+        "text": "0The first point of the 'Lip:Height' profile curve must be 0.0."
+      },
+      {
+        "address": "0x141066a00",
+        "references": [
+          {
+            "from": "0x14028928f",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Parent curve reference"
+      },
+      {
+        "address": "0x141096e98",
+        "references": [
+          {
+            "from": "0x1403a6a50",
+            "function": "sub_1403a68e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "ParentCurve.png"
+      },
+      {
+        "address": "0x141099a78",
+        "references": [
+          {
+            "from": "0x1403ba1f4",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ProfileCurve()"
+      },
+      {
+        "address": "0x141099a88",
+        "references": [
+          {
+            "from": "0x1403ba162",
+            "function": "sub_1403b99d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1ParentCurve()"
+      },
+      {
+        "address": "0x1410b7e40",
+        "references": [
+          {
+            "from": "0x140533d49",
+            "function": "sub_1405325b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "All property edits apply to the selected generator(s).  This mode affects all of the individuals nodes\ncreated by the generator(s) and allows parent curve editing.\n\nHot key: Tab"
+      },
+      {
+        "address": "0x1410ba4f0",
+        "references": [
+          {
+            "from": "0x1405456df",
+            "function": "sub_140543dd0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Ctrl = parent curve, Shift = variance"
+      },
+      {
+        "address": "0x1410bec28",
+        "references": [],
+        "section": ".rdata",
+        "text": " (parent curve)"
+      },
+      {
+        "address": "0x1410f1280",
+        "references": [],
+        "section": ".rdata",
+        "text": "ParentCurve()"
+      },
+      {
+        "address": "0x1410f128e",
+        "references": [],
+        "section": ".rdata",
+        "text": "ProfileCurve()"
+      }
+    ],
+    "total": 11
+  },
+  "summary": "11 strings match \"(parent|profile|distribution).{0,40}curve|curve.{0,40}(parent|profile|distribution)\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 11,
+    "total": 11
+  },
+  "locations": [],
+  "links": []
+}

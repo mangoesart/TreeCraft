@@ -1,0 +1,40 @@
+{
+  "id": "ev_f7a137acd49430397bb8bed83938ffa9dc3f19ff3ae580d4a86ed971a8f450ec",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_disassemble",
+  "params": {
+    "function": "0x14010ef60"
+  },
+  "result": {
+    "assembly": "sub_14010ef60:\n  0x14010ef60  4883ec28             sub rsp, 0x28\n  0x14010ef64  488b0dada29801       mov rcx, [0x141a99218]\n  0x14010ef6b  488d15ee29f300       lea rdx, [0x141041960]  ; \"Season:Start offset\"\n  0x14010ef72  41b813000000         mov r8d, 0x13\n  0x14010ef78  4881c128450000       add rcx, 0x4528\n  0x14010ef7f  e8fcb9f2ff           call 0x14003a980  ; sub_14003a980\n  0x14010ef84  488b058da29801       mov rax, [0x141a99218]\n  0x14010ef8b  0f57c9               xorps xmm1, xmm1\n  0x14010ef8e  c7805845000004000000 mov dword ptr [rax+0x4558], 4\n  0x14010ef98  488b0579a29801       mov rax, [0x141a99218]\n  0x14010ef9f  80888445000002       or byte ptr [rax+0x4584], 2\n  0x14010efa6  488b056ba29801       mov rax, [0x141a99218]\n  0x14010efad  80888445000010       or byte ptr [rax+0x4584], 0x10\n  0x14010efb4  488b055da29801       mov rax, [0x141a99218]\n  0x14010efbb  c7805c45000001000000 mov dword ptr [rax+0x455c], 1\n  0x14010efc5  488b054ca29801       mov rax, [0x141a99218]\n  0x14010efcc  c78064450000000080be mov dword ptr [rax+0x4564], 0xbe800000\n  0x14010efd6  488b053ba29801       mov rax, [0x141a99218]\n  0x14010efdd  c780684500000000803e mov dword ptr [rax+0x4568], 0x3e800000\n  0x14010efe7  488b052aa29801       mov rax, [0x141a99218]\n  0x14010efee  80a084450000bf       and byte ptr [rax+0x4584], 0xbf\n  0x14010eff5  488b051ca29801       mov rax, [0x141a99218]\n  0x14010effc  80888445000080       or byte ptr [rax+0x4584], 0x80\n  0x14010f003  488b0d0ea29801       mov rcx, [0x141a99218]\n  0x14010f00a  4881c150450000       add rcx, 0x4550\n  0x14010f011  e81a554900           call 0x1405a4530\n  0x14010f016  488b0dfba19801       mov rcx, [0x141a99218]\n  0x14010f01d  f30f100dc3d9f100     movss xmm1, [0x14102c9e8]\n  0x14010f025  4881c154450000       add rcx, 0x4554\n  0x14010f02c  e8ff544900           call 0x1405a4530\n  0x14010f031  4c8b1de0a19801       mov r11, [0x141a99218]\n  0x14010f038  488d150929f300       lea rdx, [0x141041948]  ; \"Season:Time scale\"\n  0x14010f03f  41c7837045000001000000 mov dword ptr [r11+0x4570], 1\n  0x14010f04a  488b0dc7a19801       mov rcx, [0x141a99218]\n  0x14010f051  41b811000000         mov r8d, 0x11\n  0x14010f057  4881c1d0450000       add rcx, 0x45d0\n  0x14010f05e  e81db9f2ff           call 0x14003a980  ; sub_14003a980\n  0x14010f063  4c8b1daea19801       mov r11, [0x141a99218]\n  0x14010f06a  f30f100d82424301     movss xmm1, [0x1415432f4]\n  0x14010f072  41c7830046000004000000 mov dword ptr [r11+0x4600], 4\n  0x14010f07d  488b0594a19801       mov rax, [0x141a99218]\n  0x14010f084  80882c46000002       or byte ptr [rax+0x462c], 2\n  0x14010f08b  488b0586a19801       mov rax, [0x141a99218]\n  0x14010f092  80882c46000001       or byte ptr [rax+0x462c], 1\n  0x14010f099  488b0578a19801       mov rax, [0x141a99218]\n  0x14010f0a0  80882c46000010       or byte ptr [rax+0x462c], 0x10\n  0x14010f0a7  488b056aa19801       mov rax, [0x141a99218]\n  0x14010f0ae  c7800446000001000000 mov dword ptr [rax+0x4604], 1\n  0x14010f0b8  488b0559a19801       mov rax, [0x141a99218]\n  0x14010f0bf  c7800c46000000000000 mov dword ptr [rax+0x460c], 0\n  0x14010f0c9  488b0548a19801       mov rax, [0x141a99218]\n  0x14010f0d0  c780104600000000803f mov dword ptr [rax+0x4610], 0x3f800000\n  0x14010f0da  488b0537a19801       mov rax, [0x141a99218]\n  0x14010f0e1  80a02c460000bf       and byte ptr [rax+0x462c], 0xbf\n  0x14010f0e8  488b0529a19801       mov rax, [0x141a99218]\n  0x14010f0ef  80882c46000080       or byte ptr [rax+0x462c], 0x80\n  0x14010f0f6  488b0d1ba19801       mov rcx, [0x141a99218]\n  0x14010f0fd  4881c1f8450000       add rcx, 0x45f8\n  0x14010f104  e827544900           call 0x1405a4530\n  0x14010f109  488b0d08a19801       mov rcx, [0x141a99218]\n  0x14010f110  f30f100dd0d8f100     movss xmm1, [0x14102c9e8]\n  0x14010f118  4881c1fc450000       add rcx, 0x45fc\n  0x14010f11f  e80c544900           call 0x1405a4530\n  0x14010f124  4c8b1deda09801       mov r11, [0x141a99218]\n  0x14010f12b  488d154673f300       lea rdx, [0x141046478]  ; \"Season:Descendant offset\"\n  0x14010f132  41c7831846000001000000 mov dword ptr [r11+0x4618], 1\n  0x14010f13d  488b05d4a09801       mov rax, [0x141a99218]\n  0x14010f144  41b818000000         mov r8d, 0x18\n  0x14010f14a  c7801c46000004000000 mov dword ptr [rax+0x461c], 4\n  0x14010f154  488b0dbda09801       mov rcx, [0x141a99218]\n  0x14010f15b  4881c178460000       add rcx, 0x4678\n  0x14010f162  e819b8f2ff           call 0x14003a980  ; sub_14003a980\n  0x14010f167  4c8b1daaa09801       mov r11, [0x141a99218]\n  0x14010f16e  41c783a846000004000000 mov dword ptr [r11+0x46a8], 4\n  0x14010f179  488b0598a09801       mov rax, [0x141a99218]\n  0x14010f180  8088d446000002       or byte ptr [rax+0x46d4], 2\n  0x14010f187  488b058aa09801       mov rax, [0x141a99218]\n  0x14010f18e  80a0d4460000fe       and byte ptr [rax+0x46d4], 0xfe\n  0x14010f195  488b057ca09801       mov rax, [0x141a99218]\n  0x14010f19c  8088d446000010       or byte ptr [rax+0x46d4], 0x10\n  0x14010f1a3  488b056ea09801       mov rax, [0x141a99218]\n  0x14010f1aa  c780ac46000001000000 mov dword ptr [rax+0x46ac], 1\n  0x14010f1b4  488b055da09801       mov rax, [0x141a99218]\n  0x14010f1bb  0f57c9               xorps xmm1, xmm1\n  0x14010f1be  c780b446000000000000 mov dword ptr [rax+0x46b4], 0\n  0x14010f1c8  488b0549a09801       mov rax, [0x141a99218]\n  0x14010f1cf  c780b846000000000040 mov dword ptr [rax+0x46b8], 0x40000000\n  0x14010f1d9  488b0538a09801       mov rax, [0x141a99218]\n  0x14010f1e0  80a0d4460000bf       and byte ptr [rax+0x46d4], 0xbf\n  0x14010f1e7  488b052aa09801       mov rax, [0x141a99218]\n  0x14010f1ee  8088d446000080       or byte ptr [rax+0x46d4], 0x80\n  0x14010f1f5  488b0d1ca09801       mov rcx, [0x141a99218]\n  0x14010f1fc  4881c1a0460000       add rcx, 0x46a0\n  0x14010f203  e828534900           call 0x1405a4530\n  0x14010f208  488b0d09a09801       mov rcx, [0x141a99218]\n  0x14010f20f  0f57c9               xorps xmm1, xmm1\n  0x14010f212  4881c1a4460000       add rcx, 0x46a4\n  0x14010f219  e812534900           call 0x1405a4530\n  0x14010f21e  4c8b1df39f9801       mov r11, [0x141a99218]\n  0x14010f225  41c783c046000001000000 mov dword ptr [r11+0x46c0], 1\n  0x14010f230  4883c428             add rsp, 0x28\n  0x14010f234  c3                   ret\n",
+    "entry": "0x14010ef60",
+    "function": "sub_14010ef60",
+    "instructions": 102
+  },
+  "summary": "102 instructions of sub_14010ef60.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 102,
+    "total": 102
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14010ef60"
+    }
+  ],
+  "links": []
+}

@@ -1,0 +1,533 @@
+{
+  "id": "ev_dcd864e2d0469ee699cf0b07295c116c86b1da386d9c9d5697c67695b949b1d4",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 100,
+      "name": "referenced_strings",
+      "offset": 0
+    },
+    "source": {
+      "evidence_id": "ev_2ee4a516cd9f0056e3e17c1150a17b85cedfabd35206e2aeb696f216b86efb4e",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": true,
+      "examined": 95,
+      "next_offset": null,
+      "status": "page",
+      "total": 95
+    },
+    "from_evidence": "ev_2ee4a516cd9f0056e3e17c1150a17b85cedfabd35206e2aeb696f216b86efb4e",
+    "from_tool": "native_function_study",
+    "shown": {
+      "items": [
+        {
+          "address": "0x141060598",
+          "from": "0x140537524",
+          "text": "Add geometry to selected"
+        },
+        {
+          "address": "0x14105f3e8",
+          "from": "0x140537591",
+          "text": "Add geometry"
+        },
+        {
+          "address": "0x1410b89f8",
+          "from": "0x140537619",
+          "text": "Add force"
+        },
+        {
+          "address": "0x1410b7138",
+          "from": "0x140537668",
+          "text": "/../app_data/Tree Window ToolBar/add_only.png"
+        },
+        {
+          "address": "0x14105eba8",
+          "from": "0x14053778a",
+          "text": "1SlotAddForce( )"
+        },
+        {
+          "address": "0x141037a08",
+          "from": "0x14053783e",
+          "text": "Mesh"
+        },
+        {
+          "address": "0x141060738",
+          "from": "0x140537897",
+          "text": "/../app_data/Tree Window ToolBar/force-mesh.png"
+        },
+        {
+          "address": "0x141060720",
+          "from": "0x14053796c",
+          "text": "No specified mesh"
+        },
+        {
+          "address": "0x1410b7168",
+          "from": "0x140537b6e",
+          "text": "Add collision object"
+        },
+        {
+          "address": "0x141047510",
+          "from": "0x140537c9e",
+          "text": "Sphere"
+        },
+        {
+          "address": "0x14105ecd0",
+          "from": "0x140537cbe",
+          "text": "1SlotAddCollisionSphere( )"
+        },
+        {
+          "address": "0x14104fc98",
+          "from": "0x140537d2c",
+          "text": "Capsule"
+        },
+        {
+          "address": "0x14105ecb0",
+          "from": "0x140537d49",
+          "text": "1SlotAddCollisionCapsule( )"
+        },
+        {
+          "address": "0x1410b8e30",
+          "from": "0x140537dae",
+          "text": "Add scene anchor"
+        },
+        {
+          "address": "0x1410b8e18",
+          "from": "0x140537dce",
+          "text": "1SlotAddSceneAnchor( )"
+        },
+        {
+          "address": "0x14106032c",
+          "from": "0x140537e20",
+          "text": "Select"
+        },
+        {
+          "address": "0x1410b7180",
+          "from": "0x140537e6f",
+          "text": "/../app_data/Tree Window ToolBar/selection_only.png"
+        },
+        {
+          "address": "0x1410b4bf0",
+          "from": "0x140537f50",
+          "text": "Parent\tDown"
+        },
+        {
+          "address": "0x1410b4bd8",
+          "from": "0x140537f6d",
+          "text": "1SlotSelectAction( )"
+        },
+        {
+          "address": "0x1410b4bc0",
+          "from": "0x140537ff4",
+          "text": "Next sibling\tRight"
+        },
+        {
+          "address": "0x1410b4ba8",
+          "from": "0x1405380a7",
+          "text": "Previous sibling\tLeft"
+        },
+        {
+          "address": "0x1410b4b98",
+          "from": "0x14053814e",
+          "text": "All siblings"
+        },
+        {
+          "address": "0x1410b4b88",
+          "from": "0x140538201",
+          "text": "Child\tUp"
+        },
+        {
+          "address": "0x1410b4b78",
+          "from": "0x1405382a8",
+          "text": "All children"
+        },
+        {
+          "address": "0x1410b8e08",
+          "from": "0x14053835b",
+          "text": "Descendants"
+        },
+        {
+          "address": "0x1410602b0",
+          "from": "0x14053842e",
+          "text": "Cut\tCtrl+X"
+        },
+        {
+          "address": "0x1410602a0",
+          "from": "0x14053844e",
+          "text": "1SlotCut( )"
+        },
+        {
+          "address": "0x141060290",
+          "from": "0x1405384be",
+          "text": "Copy\tCtrl+C"
+        },
+        {
+          "address": "0x141060280",
+          "from": "0x1405384db",
+          "text": "1SlotCopy( )"
+        },
+        {
+          "address": "0x14105f3b0",
+          "from": "0x140538542",
+          "text": "Paste\tCtrl+V"
+        },
+        {
+          "address": "0x14105f3a0",
+          "from": "0x140538562",
+          "text": "1SlotPaste( )"
+        },
+        {
+          "address": "0x141060210",
+          "from": "0x1405385de",
+          "text": "Duplicate\tCtrl+D"
+        },
+        {
+          "address": "0x1410601f8",
+          "from": "0x1405385fb",
+          "text": "1SlotDuplicate( )"
+        },
+        {
+          "address": "0x14105f610",
+          "from": "0x140538647",
+          "text": "Forces"
+        },
+        {
+          "address": "0x14105ebd0",
+          "from": "0x1405386d6",
+          "text": "1SlotSelectForce( )"
+        },
+        {
+          "address": "0x1410b72a8",
+          "from": "0x1405388aa",
+          "text": "Collision Objects"
+        },
+        {
+          "address": "0x14105ecf0",
+          "from": "0x140538930",
+          "text": "1SlotSelectCollisionObject( )"
+        },
+        {
+          "address": "0x141036664",
+          "from": "0x140538b09",
+          "text": "Show"
+        },
+        {
+          "address": "0x1410613b8",
+          "from": "0x140538bd2",
+          "text": "Bones"
+        },
+        {
+          "address": "0x1410b5438",
+          "from": "0x140538bef",
+          "text": "1SlotToggleDrawFlag( )"
+        },
+        {
+          "address": "0x1410613c0",
+          "from": "0x140538c95",
+          "text": "Normals"
+        },
+        {
+          "address": "0x1410b5408",
+          "from": "0x140538d58",
+          "text": "Disable two sided rendering"
+        },
+        {
+          "address": "0x1410b8df8",
+          "from": "0x140538e01",
+          "text": "Render mode"
+        },
+        {
+          "address": "0x1410b8dc0",
+          "from": "0x140538e50",
+          "text": "/../app_data/Tree Window ToolBar/render_mode_only.png"
+        },
+        {
+          "address": "0x1410b72dc",
+          "from": "0x140538f3e",
+          "text": "Zoom"
+        },
+        {
+          "address": "0x1410b8d90",
+          "from": "0x140538f8d",
+          "text": "/../app_data/Tree Window ToolBar/zoom_only.png"
+        },
+        {
+          "address": "0x14105e8e8",
+          "from": "0x14053907f",
+          "text": "1SlotZoomAll( )"
+        },
+        {
+          "address": "0x1410b8d80",
+          "from": "0x140539106",
+          "text": "All (all views)"
+        },
+        {
+          "address": "0x14105b470",
+          "from": "0x1405391aa",
+          "text": "Selected"
+        },
+        {
+          "address": "0x1410b8d68",
+          "from": "0x1405391c7",
+          "text": "1SlotZoomSelected( )"
+        },
+        {
+          "address": "0x1410b8d50",
+          "from": "0x140539265",
+          "text": "Selected (all views)"
+        },
+        {
+          "address": "0x1410b8d40",
+          "from": "0x140539329",
+          "text": "Copy camera"
+        },
+        {
+          "address": "0x1410b8d30",
+          "from": "0x140539346",
+          "text": "1SlotCamera( )"
+        },
+        {
+          "address": "0x1410b8d20",
+          "from": "0x1405393ee",
+          "text": "Paste camera"
+        },
+        {
+          "address": "0x1410b8d10",
+          "from": "0x1405394b6",
+          "text": "Reset camera\t>"
+        },
+        {
+          "address": "0x1410b72d0",
+          "from": "0x140539563",
+          "text": "Visibility"
+        },
+        {
+          "address": "0x1410b8cd0",
+          "from": "0x1405395b2",
+          "text": "/../app_data/Generation ToolBar/toggle_visibility_only.png"
+        },
+        {
+          "address": "0x1410b8cb8",
+          "from": "0x140539687",
+          "text": "Toggle selected\tH"
+        },
+        {
+          "address": "0x1410b8c98",
+          "from": "0x1405396a7",
+          "text": "1SlotVisibilityAction( )"
+        },
+        {
+          "address": "0x1410b8c80",
+          "from": "0x14053974f",
+          "text": "Toggle isolation\tI"
+        },
+        {
+          "address": "0x1410b6050",
+          "from": "0x140539823",
+          "text": "Show all"
+        },
+        {
+          "address": "0x1410b8c70",
+          "from": "0x1405398bb",
+          "text": "Manipulator"
+        },
+        {
+          "address": "0x1410b8c40",
+          "from": "0x1405398e7",
+          "text": "/../app_data/Tree Window ToolBar/translate.png"
+        },
+        {
+          "address": "0x1410b8c30",
+          "from": "0x140539a05",
+          "text": "Translate"
+        },
+        {
+          "address": "0x1410b6e38",
+          "from": "0x140539a25",
+          "text": "1SlotTranslate()"
+        },
+        {
+          "address": "0x141033d1c",
+          "from": "0x140539a85",
+          "text": "Scale"
+        },
+        {
+          "address": "0x1410b6e18",
+          "from": "0x140539aa5",
+          "text": "1SlotScale()"
+        },
+        {
+          "address": "0x1410b8c24",
+          "from": "0x140539b05",
+          "text": "Rotate"
+        },
+        {
+          "address": "0x1410b6e28",
+          "from": "0x140539b25",
+          "text": "1SlotRotate()"
+        },
+        {
+          "address": "0x1410a2888",
+          "from": "0x140539b75",
+          "text": "Window"
+        },
+        {
+          "address": "0x14106c0b8",
+          "from": "0x140539bba",
+          "text": "Layout"
+        },
+        {
+          "address": "0x1410b8c10",
+          "from": "0x140539c51",
+          "text": "1SlotLayout( )"
+        },
+        {
+          "address": "0x1410b8c04",
+          "from": "0x140539cfc",
+          "text": "Four"
+        },
+        {
+          "address": "0x1410b8bf0",
+          "from": "0x140539dcd",
+          "text": "Two (over under)"
+        },
+        {
+          "address": "0x1410b8bd8",
+          "from": "0x140539e9c",
+          "text": "Two (side by side)"
+        },
+        {
+          "address": "0x1410b8bc0",
+          "from": "0x140539f74",
+          "text": "Center window splitter"
+        },
+        {
+          "address": "0x1410b8bb0",
+          "from": "0x14053a063",
+          "text": "Viewport"
+        },
+        {
+          "address": "0x1410b58d8",
+          "from": "0x14053a0d5",
+          "text": "Perspective"
+        },
+        {
+          "address": "0x1410b8b98",
+          "from": "0x14053a0f6",
+          "text": "1SlotViewport( )"
+        },
+        {
+          "address": "0x1410b8b88",
+          "from": "0x14053a192",
+          "text": "XY Plane"
+        },
+        {
+          "address": "0x1410b8b78",
+          "from": "0x14053a255",
+          "text": "XZ Plane"
+        },
+        {
+          "address": "0x1410b8b68",
+          "from": "0x14053a316",
+          "text": "YZ Plane"
+        },
+        {
+          "address": "0x1410b8b58",
+          "from": "0x14053a3d7",
+          "text": "Demo camera"
+        },
+        {
+          "address": "0x141794b78",
+          "from": "0x14053a482",
+          "text": "pfSA"
+        },
+        {
+          "address": "0x141794b50",
+          "from": "0x14053a489",
+          "text": "pfSA"
+        },
+        {
+          "address": "0x1410b8b38",
+          "from": "0x14053a5dc",
+          "text": "Disable background image"
+        },
+        {
+          "address": "0x1410b8b10",
+          "from": "0x14053a5fd",
+          "text": "1SlotViewportDisableBackground( )"
+        },
+        {
+          "address": "0x14102e320",
+          "from": "0x14053a677",
+          "text": "Navigation"
+        },
+        {
+          "address": "0x141054558",
+          "from": "0x14053a6f8",
+          "text": "Standard"
+        },
+        {
+          "address": "0x1410b8af8",
+          "from": "0x14053a719",
+          "text": "1SlotNavigation( )"
+        },
+        {
+          "address": "0x1410b8ae8",
+          "from": "0x14053a7d7",
+          "text": "Trackball"
+        },
+        {
+          "address": "0x1410b8ad8",
+          "from": "0x14053a8b0",
+          "text": "Traveler"
+        },
+        {
+          "address": "0x1410b8ac8",
+          "from": "0x14053a992",
+          "text": "Properties..."
+        },
+        {
+          "address": "0x1410b8aa8",
+          "from": "0x14053a9b3",
+          "text": "1SlotWindowProperties( )"
+        },
+        {
+          "address": "0x1410b8a68",
+          "from": "0x14053aa04",
+          "text": "/../app_data/Tree Window ToolBar/tree_window_properties.png"
+        }
+      ],
+      "list": "referenced_strings",
+      "offset": 0,
+      "total": 95
+    }
+  },
+  "summary": "Part of native_function_study evidence (page).",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 95,
+    "total": 95
+  },
+  "locations": [],
+  "links": [
+    "ev_2ee4a516cd9f0056e3e17c1150a17b85cedfabd35206e2aeb696f216b86efb4e"
+  ]
+}

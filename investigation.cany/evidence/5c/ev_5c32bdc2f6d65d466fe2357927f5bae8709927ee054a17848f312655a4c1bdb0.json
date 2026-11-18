@@ -1,0 +1,280 @@
+{
+  "id": "ev_5c32bdc2f6d65d466fe2357927f5bae8709927ee054a17848f312655a4c1bdb0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 20,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Default generator|From file|templates/|\\.stt"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14105eb20",
+        "references": [
+          {
+            "from": "0x140224260",
+            "function": "sub_1402241d0"
+          },
+          {
+            "from": "0x140233f17",
+            "function": "sub_140233e80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Templates (*.stt);;All files (*.*)"
+      },
+      {
+        "address": "0x14105f130",
+        "references": [
+          {
+            "from": "0x1402289be",
+            "function": "sub_140228270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Default generator"
+      },
+      {
+        "address": "0x14105f168",
+        "references": [
+          {
+            "from": "0x14022895a",
+            "function": "sub_140228270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "From file..."
+      },
+      {
+        "address": "0x14105f18c",
+        "references": [
+          {
+            "from": "0x14022876e",
+            "function": "sub_140228270"
+          }
+        ],
+        "section": ".rdata",
+        "text": ".stt"
+      },
+      {
+        "address": "0x141078048",
+        "references": [
+          {
+            "from": "0x1402c8e22",
+            "function": "sub_1402c8c00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../tree_templates/"
+      },
+      {
+        "address": "0x1410925a8",
+        "references": [
+          {
+            "from": "0x1403436ee",
+            "function": "sub_140342250"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/SimplifiedFronds.stt"
+      },
+      {
+        "address": "0x1410925d0",
+        "references": [
+          {
+            "from": "0x14034365e",
+            "function": "sub_140342250"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/SimplifiedFrondMeshes.stt"
+      },
+      {
+        "address": "0x1410925f8",
+        "references": [
+          {
+            "from": "0x1403435d8",
+            "function": "sub_140342250"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/SimplifiedFrondMeshesFolded.stt"
+      },
+      {
+        "address": "0x1410929a0",
+        "references": [
+          {
+            "from": "0x140347400",
+            "function": "sub_140347350"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/sketch/branch.stt"
+      },
+      {
+        "address": "0x1410929c0",
+        "references": [
+          {
+            "from": "0x1403473a2",
+            "function": "sub_140347350"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../app_data/sketch/trunk.stt"
+      },
+      {
+        "address": "0x1410af160",
+        "references": [
+          {
+            "from": "0x1404e3d7a",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/Branches.stt"
+      },
+      {
+        "address": "0x1410af188",
+        "references": [
+          {
+            "from": "0x1404e3d28",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/Targets.stt"
+      },
+      {
+        "address": "0x1410af1b0",
+        "references": [
+          {
+            "from": "0x1404e3cb0",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/SubD_Branches.stt"
+      },
+      {
+        "address": "0x1410af1e0",
+        "references": [
+          {
+            "from": "0x1404e3c37",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "/../templates/Hand Drawn/_Trunk.stt"
+      },
+      {
+        "address": "0x1410ba6e0",
+        "references": [
+          {
+            "from": "0x1405471e0",
+            "function": "sub_140546290"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand drawing templates are not installed. Reinstall the application or make sure that '<installaction location>/templates/Hand Drawn/' exists and is populated."
+      },
+      {
+        "address": "0x1410e7c78",
+        "references": [
+          {
+            "from": "0x1405ecffe",
+            "function": "sub_1405ecfb0"
+          },
+          {
+            "from": "0x1405ed39b",
+            "function": "sub_1405ed2d6"
+          }
+        ],
+        "section": ".rdata",
+        "text": "error loading module '%s' from file '%s':\n\t%s"
+      },
+      {
+        "address": "0x1410f9b20",
+        "references": [
+          {
+            "from": "0x14061f617",
+            "function": "sub_14061f5d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Failed to create mux object from file"
+      },
+      {
+        "address": "0x1412d9d40",
+        "references": [
+          {
+            "from": "0x140835dce",
+            "function": "sub_140835c50"
+          },
+          {
+            "from": "0x1408366e2",
+            "function": "sub_1408364b0"
+          },
+          {
+            "from": "0x140870e2f",
+            "function": "sub_140870cb0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "can't delete object from file"
+      },
+      {
+        "address": "0x141328648",
+        "references": [
+          {
+            "from": "0x14093e7aa",
+            "function": "sub_14093e210"
+          }
+        ],
+        "section": ".rdata",
+        "text": "unable to get root group location from file ID"
+      },
+      {
+        "address": "0x14133de30",
+        "references": [
+          {
+            "from": "0x14097aaec",
+            "function": "sub_14097a980"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Family member size should be %lu.  But the size from file access property is %lu"
+      }
+    ],
+    "total": 21
+  },
+  "summary": "21 strings match \"Default generator|From file|templates/|\\.stt\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 20,
+    "total": 21,
+    "next_offset": 20
+  },
+  "locations": [],
+  "links": []
+}

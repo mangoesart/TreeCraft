@@ -1,0 +1,231 @@
+{
+  "id": "ev_342fd91d7c372d51f966a3cc28b5da6c47fac19476eb3a9e2d8e5613f7af329d",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 40,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "Shape Control:|Stop shape control|Shape scale|Match one v tile|Allow forces|Orientation:Unify|Orientation:Alignment"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x141045e08",
+        "references": [
+          {
+            "from": "0x14010d1b5",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length:Match one v tile"
+      },
+      {
+        "address": "0x141045e68",
+        "references": [
+          {
+            "from": "0x14010cf81",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Unify"
+      },
+      {
+        "address": "0x141045f50",
+        "references": [
+          {
+            "from": "0x14010c716",
+            "function": "sub_14010bb90"
+          },
+          {
+            "from": "0x1401930aa",
+            "function": "sub_140192780"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Orientation:Alignment"
+      },
+      {
+        "address": "0x141045ff0",
+        "references": [
+          {
+            "from": "0x14010c258",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length:Shape scale"
+      },
+      {
+        "address": "0x141046010",
+        "references": [
+          {
+            "from": "0x14010c1b4",
+            "function": "sub_14010bb90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Length:Stop shape control"
+      },
+      {
+        "address": "0x141047458",
+        "references": [
+          {
+            "from": "0x14012fe03",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Distribution style"
+      },
+      {
+        "address": "0x141047480",
+        "references": [
+          {
+            "from": "0x14012fce7",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Distribution"
+      },
+      {
+        "address": "0x1410474a0",
+        "references": [
+          {
+            "from": "0x14012fbdd",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Size:+ % of size"
+      },
+      {
+        "address": "0x1410474c0",
+        "references": [
+          {
+            "from": "0x14012fad3",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Size:Absolute"
+      },
+      {
+        "address": "0x1410474e0",
+        "references": [
+          {
+            "from": "0x14012f9c1",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Position"
+      },
+      {
+        "address": "0x141047518",
+        "references": [
+          {
+            "from": "0x14012f7f1",
+            "function": "sub_14012f7b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:Style"
+      },
+      {
+        "address": "0x141047ee0",
+        "references": [
+          {
+            "from": "0x140136fd1",
+            "function": "sub_140136e00"
+          },
+          {
+            "from": "0x1402a0baf",
+            "function": "sub_1402a0b10"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Shape Control:"
+      },
+      {
+        "address": "0x14105d9a0",
+        "references": [
+          {
+            "from": "0x1402182cc",
+            "function": "sub_140217e60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Classic:Orientation:Alignment"
+      },
+      {
+        "address": "0x14105d9e0",
+        "references": [
+          {
+            "from": "0x140218127",
+            "function": "sub_140217e60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Generation:Orientation:Alignment"
+      },
+      {
+        "address": "0x1410622b0",
+        "references": [
+          {
+            "from": "0x140248545",
+            "function": "sub_140247820"
+          },
+          {
+            "from": "0x1402d09e0",
+            "function": "sub_1402d03d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Forces:Allow forces"
+      },
+      {
+        "address": "0x1410b1c80",
+        "references": [
+          {
+            "from": "0x140510d57",
+            "function": "sub_140510880"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Placement:Orientation:Alignment"
+      }
+    ],
+    "total": 16
+  },
+  "summary": "16 strings match \"Shape Control:|Stop shape control|Shape scale|Match one v tile|Allow forces|Orientation:Unify|Orientation:Alignment\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 16,
+    "total": 16
+  },
+  "locations": [],
+  "links": []
+}

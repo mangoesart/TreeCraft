@@ -1,0 +1,45 @@
+{
+  "id": "ev_a0766bea5163899d166270bdd971c28a9171f5621ccec962bd6d11b4ef5bedd0",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x14041c880"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x14041c880",
+    "function": "FUN_14041c880",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n/* WARNING: Removing unreachable block (ram,0x00014041c924) */\r\n\r\nchar FUN_14041c880(longlong param_1)\r\n\r\n{\r\n  bool bVar1;\r\n  char cVar2;\r\n  char *pcVar3;\r\n  undefined8 ****ppppuVar4;\r\n  longlong lVar5;\r\n  char *pcVar6;\r\n  undefined8 uVar7;\r\n  FILE *_File;\r\n  longlong lVar8;\r\n  char *pcVar9;\r\n  ulonglong uVar10;\r\n  int iVar11;\r\n  uint uVar12;\r\n  undefined1 auStack_f8 [32];\r\n  undefined8 local_d8;\r\n  char local_d0;\r\n  undefined7 uStack_cf;\r\n  ulonglong local_c0;\r\n  ulonglong local_b8;\r\n  undefined8 ***local_a8 [2];\r\n  ulonglong local_98;\r\n  ulonglong local_90;\r\n  void *local_80 [3];\r\n  ulonglong local_68;\r\n  void *local_58 [3];\r\n  ulonglong local_40;\r\n  ulonglong local_30;\r\n  \r\n  local_d8 = 0xfffffffffffffffe;\r\n  local_30 = DAT_141a96e80 ^ (ulonglong)auStack_f8;\r\n  cVar2 = '\\0';\r\n  if (*(longlong *)(param_1 + 0x6478) == 0) {\r\n    FUN_14059f080(DAT_141a9c730,\r\n                  \"<alert>Cannot save incremental version with no current save file.\\n\");\r\n    goto LAB_14041cbc5;\r\n  }\r\n  FUN_1400550f0(local_58,param_1 + 0x6468,0x2e);\r\n  FUN_140055180(&local_d0,param_1 + 0x6468,0x2e);\r\n  uVar10 = local_b8;\r\n  bVar1 = false;\r\n  if (local_c0 == 0) {\r\nLAB_14041cadf:\r\n    FUN_1400403d0(&local_d0,&DAT_1410a2d18,4);\r\n  }\r\n  else {\r\n    pcVar6 = (char *)CONCAT71(uStack_cf,local_d0);\r\n    pcVar9 = &local_d0;\r\n    if (0xf < local_b8) {\r\n      pcVar9 = pcVar6;\r\n    }\r\n    for (pcVar9 = pcVar9 + (local_c0 - 1); *pcVar9 != '_'; pcVar9 = pcVar9 + -1) {\r\n      pcVar3 = (char *)FUN_140039120(&local_d0);\r\n      if (pcVar9 == pcVar3) goto LAB_14041cadf;\r\n    }\r\n    pcVar3 = &local_d0;\r\n    if (0xf < uVar10) {\r\n      pcVar3 = pcVar6;\r\n    }\r\n    uVar10 = (longlong)pcVar9 - (longlong)pcVar3;\r\n    if (uVar10 == 0xffffffffffffffff) goto LAB_14041cadf;\r\n    FUN_140054e40(&local_d0,local_a8,uVar10 + 1);\r\n    iVar11 = 0;\r\n    uVar12 = 0;\r\n    lVar8 = 0;\r\n    if (local_98 == 0) {\r\nLAB_14041ca05:\r\n      if (local_c0 < uVar10) {\r\n        FUN_14008ace0(&local_d0,uVar10 - local_c0,0);\r\n      }\r\n      else {\r\n        lVar5 = local_c0 - uVar10;\r\n        lVar8 = -1;\r\n        if ((lVar5 == -1) || (lVar8 = lVar5, lVar5 != 0)) {\r\n          pcVar6 = &local_d0;\r\n          if (0xf < local_b8) {\r\n            pcVar6 = (char *)CONCAT71(uStack_cf,local_d0);\r\n          }\r\n          memmove(pcVar6 + uVar10,pcVar6 + uVar10 + lVar8,(local_c0 - lVar8) - uVar10);\r\n          local_c0 = local_c0 - lVar8;\r\n          pcVar6 = &local_d0;\r\n          if (0xf < local_b8) {\r\n            pcVar6 = (char *)CONCAT71(uStack_cf,local_d0);\r\n          }\r\n          pcVar6[local_c0] = '\\0';\r\n        }\r\n      }\r\n      uVar7 = FUN_140040c70(local_80,\"_%03d\",iVar11 + 1);\r\n      FUN_1400402b0(&local_d0,uVar7,0,0xffffffffffffffff);\r\n      if (0xf < local_68) {\r\n        operator_delete(local_80[0]);\r\n      }\r\n    }\r\n    else {\r\n      do {\r\n        if (bVar1) goto LAB_14041cacc;\r\n        iVar11 = iVar11 * 10;\r\n        ppppuVar4 = local_a8;\r\n        if (0xf < local_90) {\r\n          ppppuVar4 = (undefined8 ****)local_a8[0];\r\n        }\r\n        if (*(char *)(lVar8 + (longlong)ppppuVar4) < '0') {\r\nLAB_14041c9eb:\r\n          bVar1 = true;\r\n        }\r\n        else {\r\n          ppppuVar4 = local_a8;\r\n          if (0xf < local_90) {\r\n            ppppuVar4 = (undefined8 ****)local_a8[0];\r\n          }\r\n          if ('9' < *(char *)(lVar8 + (longlong)ppppuVar4)) goto LAB_14041c9eb;\r\n          ppppuVar4 = local_a8;\r\n          if (0xf < local_90) {\r\n            ppppuVar4 = (undefined8 ****)local_a8[0];\r\n          }\r\n          iVar11 = iVar11 + -0x30 + (int)*(char *)(lVar8 + (longlong)ppppuVar4);\r\n        }\r\n        uVar12 = uVar12 + 1;\r\n        lVar8 = lVar8 + 1;\r\n      } while (uVar12 < local_98);\r\n      if (!bVar1) goto LAB_14041ca05;\r\n    }\r\nLAB_14041cacc:\r\n    if (0xf < local_90) {\r\n      operator_delete(local_a8[0]);\r\n    }\r\n    if (bVar1) goto LAB_14041cadf;\r\n  }\r\n  uVar7 = FUN_1400568a0(local_80,&DAT_141034668,local_58);\r\n  FUN_1400402b0(&local_d0,uVar7,0,0xffffffffffffffff);\r\n  if (0xf < local_68) {\r\n    operator_delete(local_80[0]);\r\n  }\r\n  pcVar6 = &local_d0;\r\n  if (0xf < local_b8) {\r\n    pcVar6 = (char *)CONCAT71(uStack_cf,local_d0);\r\n  }\r\n  _File = fopen(pcVar6,\"r\");\r\n  if (_File == (FILE *)0x0) {\r\n    cVar2 = FUN_14041b960(param_1,&local_d0,0,0);\r\n  }\r\n  else {\r\n    FUN_14059f080(DAT_141a9c730,\"<alert>Incremented file already exists. File not saved.\\n\");\r\n    fclose(_File);\r\n  }\r\n  if (0xf < local_b8) {\r\n    operator_delete((void *)CONCAT71(uStack_cf,local_d0));\r\n  }\r\n  local_b8 = 0xf;\r\n  local_c0 = 0;\r\n  local_d0 = '\\0';\r\n  if (0xf < local_40) {\r\n    operator_delete(local_58[0]);\r\n  }\r\n  if (cVar2 != '\\0') {\r\n    *(undefined1 *)(param_1 + 0x6490) = 0;\r\n  }\r\nLAB_14041cbc5:\r\n  FUN_140414e10(param_1);\r\n  return cVar2;\r\n}\r\n\r\n",
+    "signature": "char FUN_14041c880(longlong param_1);"
+  },
+  "summary": "Pseudo-C for FUN_14041c880 from the Deep engine (168 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x14041c880"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

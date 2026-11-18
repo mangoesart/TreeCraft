@@ -1,0 +1,43 @@
+{
+  "id": "ev_061eb62a8fae195ed3be6d3af6a9c99f3c0e7bd3ea24bdffa5baf6838c8c6621",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_call_site_resolve",
+  "params": {
+    "address": "0x1402ffaeb"
+  },
+  "result": {
+    "instruction": "call 0x140607082",
+    "site": "0x1402ffaeb",
+    "status": "resolved",
+    "targets": [
+      {
+        "address": "0x140607082",
+        "name": null
+      }
+    ]
+  },
+  "summary": "Call site 0x1402ffaeb: resolved (1 candidate targets).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402ffaeb"
+    }
+  ],
+  "links": []
+}

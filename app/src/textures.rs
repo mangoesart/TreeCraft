@@ -143,15 +143,53 @@ pub fn white_image() -> ImageBuf {
     ImageBuf { w: 4, h: 4, px: vec![255u8; 64] }
 }
 
-pub fn load_image_file(path: &str) -> Result<ImageBuf, String> {
+/// Preferences > Render > Max texture resolution (picture 45): larger pictures are scaled down.
+static MAX_TEX: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(2048);
+
+pub fn set_max_texture(px: u32) {
+    MAX_TEX.store(px.clamp(64, 16384), std::sync::atomic::Ordering::Relaxed);
+}
+
+/// Pictures already read by `preload` (path -> image), used once.
+static PRELOADED: std::sync::Mutex<Vec<(String, ImageBuf)>> = std::sync::Mutex::new(Vec::new());
+
+/// Preferences > General > Use multiple processors (picture 45): read several pictures at once,
+/// one per processor, before the materials ask for them.
+pub fn preload(paths: Vec<String>) {
+    let paths: Vec<String> = paths.into_iter().filter(|p| !p.is_empty()).collect();
+    if paths.len() < 2 {
+        return;
+    }
+    let threads = std::thread::available_parallelism().map_or(2, |n| n.get()).min(paths.len());
+    let chunks: Vec<Vec<String>> = (0..threads).map(|t| paths.iter().skip(t).step_by(threads).cloned().collect()).collect();
+    let done: Vec<(String, ImageBuf)> = std::thread::scope(|sc| {
+        let hs: Vec<_> = chunks.into_iter().map(|c| sc.spawn(move || c.into_iter().filter_map(|p| decode_file(&p).ok().map(|i| (p, i))).collect::<Vec<_>>())).collect();
+        hs.into_iter().flat_map(|h| h.join().unwrap_or_default()).collect()
+    });
+    if let Ok(mut v) = PRELOADED.lock() {
+        v.extend(done);
+    }
+}
+
+fn decode_file(path: &str) -> Result<ImageBuf, String> {
     let img = image::open(path).map_err(|e| e.to_string())?;
-    let img = if img.width() > 1024 || img.height() > 1024 {
-        img.resize(1024, 1024, image::imageops::FilterType::Triangle)
+    let max = MAX_TEX.load(std::sync::atomic::Ordering::Relaxed);
+    let img = if img.width() > max || img.height() > max {
+        img.resize(max, max, image::imageops::FilterType::Triangle)
     } else {
         img
     };
     let rgba = img.to_rgba8();
     Ok(ImageBuf { w: rgba.width() as usize, h: rgba.height() as usize, px: rgba.into_raw() })
+}
+
+pub fn load_image_file(path: &str) -> Result<ImageBuf, String> {
+    if let Ok(mut v) = PRELOADED.lock() {
+        if let Some(i) = v.iter().position(|(p, _)| p == path) {
+            return Ok(v.swap_remove(i).1);
+        }
+    }
+    decode_file(path)
 }
 
 fn rgb_to_hsv(r: f32, g: f32, b: f32) -> (f32, f32, f32) {
@@ -185,6 +223,13 @@ fn hsv_to_rgb(h: f32, s: f32, v: f32) -> (f32, f32, f32) {
     };
     let m = v - c;
     (r + m, g + m, b + m)
+}
+
+/// Let a texture repeat past 0..1 both ways, so bark tiles along and around branches by its UVs
+/// (picture 33; textures start out clamped at their edges).
+pub fn set_repeat(t: &Texture2D) {
+    let id = t.raw_miniquad_id();
+    unsafe { get_internal_gl() }.quad_context.texture_set_wrap(id, macroquad::miniquad::TextureWrap::Repeat, macroquad::miniquad::TextureWrap::Repeat);
 }
 
 /// Rebuild a material's base picture and GPU texture when its settings changed.
@@ -258,6 +303,7 @@ pub fn refresh_material(m: &mut Material) {
         }
         let tex = Texture2D::from_rgba8(out.w as u16, out.h as u16, &out.px);
         tex.set_filter(FilterMode::Linear);
+        set_repeat(&tex);
         m.tex = Some(tex);
         m.adjusted = Some(out);
         m.dirty_tex = false;

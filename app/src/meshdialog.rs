@@ -257,6 +257,15 @@ impl App {
         for n in &mut self.nodes {
             n.p.material = remap(n.p.material);
             n.p.leaf_material = remap(n.p.leaf_material);
+            // Materials lists: entries whose material went are dropped; Inherited stays
+            for list in [&mut n.p.mat_list, &mut n.p.ext_list] {
+                list.retain(|(k, _)| *k == INHERITED || map.get(*k).copied().flatten().is_some());
+                for (k, _) in list.iter_mut() {
+                    if *k != INHERITED {
+                        *k = remap(*k);
+                    }
+                }
+            }
         }
         for m in &mut self.meshes {
             m.ref_material = remap(m.ref_material);

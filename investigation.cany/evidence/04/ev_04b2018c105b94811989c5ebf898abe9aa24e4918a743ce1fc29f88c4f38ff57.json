@@ -1,0 +1,45 @@
+{
+  "id": "ev_04b2018c105b94811989c5ebf898abe9aa24e4918a743ce1fc29f88c4f38ff57",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x140184db0"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x140184db0",
+    "function": "FUN_140184db0",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_140184db0(undefined8 param_1,longlong *param_2)\r\n\r\n{\r\n  int iVar1;\r\n  longlong lVar2;\r\n  undefined1 auStack_c8 [32];\r\n  undefined1 local_a8;\r\n  undefined8 local_a0;\r\n  undefined1 local_98;\r\n  undefined7 uStack_97;\r\n  undefined8 local_88;\r\n  ulonglong local_80;\r\n  undefined1 local_70;\r\n  undefined7 uStack_6f;\r\n  undefined8 local_60;\r\n  ulonglong local_58;\r\n  undefined1 local_48;\r\n  undefined7 uStack_47;\r\n  undefined8 local_38;\r\n  ulonglong local_30;\r\n  ulonglong local_18;\r\n  \r\n  local_a0 = 0xfffffffffffffffe;\r\n  local_18 = DAT_141a96e80 ^ (ulonglong)auStack_c8;\r\n  lVar2 = param_2[1];\r\n  if (*param_2 != lVar2) {\r\n    lVar2 = FUN_1400c4460(lVar2,lVar2,*param_2,local_a8);\r\n    FUN_1400c5560(lVar2,param_2[1],param_2 + 3,local_a8);\r\n    param_2[1] = lVar2;\r\n  }\r\n  local_80 = 0xf;\r\n  local_88 = 0;\r\n  local_98 = 0;\r\n  local_58 = 0xf;\r\n  local_60 = 0;\r\n  local_70 = 0;\r\n  local_30 = 0xf;\r\n  local_38 = 0;\r\n  local_48 = 0;\r\n  iVar1 = (**(code **)(*DAT_141a9c730 + 0x1e8))();\r\n  if (iVar1 < 4) {\r\n    FUN_14003a980(&local_98,&DAT_14104274c,3);\r\n    FUN_14003a980(&local_70,\"Generation:\",0xb);\r\n    FUN_1400ce650(param_2,&local_98);\r\n  }\r\n  FUN_14003a980(&local_98,&DAT_141042738,4);\r\n  FUN_14003a980(&local_70,\"Leaves:|Lighting:|Deformation:\",0x1e);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,\"Orientation\",0xb);\r\n  FUN_14003a980(&local_70,\"Orientation:|Sensitivity:|Adjustments:|Deformation:\",0x33);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,\"Lighting\",8);\r\n  FUN_14003a980(&local_70,\"Lighting:|Material:|Lightmap\",0x1c);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,\"Material\",8);\r\n  FUN_14003a980(&local_70,\"Season|Leaves:Type|Vertex Color:\",0x20);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,&DAT_141044a88,3);\r\n  FUN_14003a980(&local_70,\"Dynamic LOD:\",0xc);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,\"Animation\",9);\r\n  FUN_14003a980(&local_70,\"Wind|Growth\",0xb);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  FUN_14003a980(&local_98,\"Collision\",9);\r\n  FUN_14003a980(&local_70,\"Collision:\",10);\r\n  FUN_1400ce650(param_2,&local_98);\r\n  if (0xf < local_30) {\r\n    operator_delete((void *)CONCAT71(uStack_47,local_48));\r\n  }\r\n  local_30 = 0xf;\r\n  local_38 = 0;\r\n  local_48 = 0;\r\n  if (0xf < local_58) {\r\n    operator_delete((void *)CONCAT71(uStack_6f,local_70));\r\n  }\r\n  local_58 = 0xf;\r\n  local_60 = 0;\r\n  local_70 = 0;\r\n  if (0xf < local_80) {\r\n    operator_delete((void *)CONCAT71(uStack_97,local_98));\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_140184db0(undefined8 param_1,longlong *param_2);"
+  },
+  "summary": "Pseudo-C for FUN_140184db0 from the Deep engine (87 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x140184db0"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

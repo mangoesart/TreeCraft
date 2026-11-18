@@ -1,0 +1,578 @@
+{
+  "id": "ev_487ab62fd9f064b320f0632916ce71b3719711d71f6353b268233c87eda740eb",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "core_evidence_browse",
+  "params": {
+    "show": {
+      "kind": "function-part",
+      "limit": 110,
+      "name": "referenced_strings",
+      "offset": 0
+    },
+    "source": {
+      "evidence_id": "ev_690c40935cb6915a2e78544a4c31e39d422fbe1b830d5c4ff662635909fa1713",
+      "kind": "saved"
+    }
+  },
+  "result": {
+    "coverage": {
+      "at_end": true,
+      "examined": 104,
+      "next_offset": null,
+      "status": "page",
+      "total": 104
+    },
+    "from_evidence": "ev_690c40935cb6915a2e78544a4c31e39d422fbe1b830d5c4ff662635909fa1713",
+    "from_tool": "native_function_study",
+    "shown": {
+      "items": [
+        {
+          "address": "0x1410b8828",
+          "from": "0x140532647",
+          "text": "/../app_data/cursors/target_mask.bmp"
+        },
+        {
+          "address": "0x1410b8808",
+          "from": "0x1405326aa",
+          "text": "/../app_data/cursors/target.bmp"
+        },
+        {
+          "address": "0x141044ae8",
+          "from": "0x1405328e4",
+          "text": "/../app_data/Tree Window ToolBar/"
+        },
+        {
+          "address": "0x1410404d0",
+          "from": "0x1405329dc",
+          "text": "Resolution"
+        },
+        {
+          "address": "0x141061318",
+          "from": "0x140532af7",
+          "text": "RibbonButton"
+        },
+        {
+          "address": "0x1410b87f0",
+          "from": "0x140532b48",
+          "text": "resolution_icon.png"
+        },
+        {
+          "address": "0x1410b8780",
+          "from": "0x140532bbb",
+          "text": "Set the polygonal resolution for this model.\n\nHot keys: D - decrease resolution, Ctrl+D increase resolution"
+        },
+        {
+          "address": "0x1410b8768",
+          "from": "0x140532c07",
+          "text": "1SlotResolutionMenu()"
+        },
+        {
+          "address": "0x14102e500",
+          "from": "0x140532c11",
+          "text": "2clicked()"
+        },
+        {
+          "address": "0x1410b8758",
+          "from": "0x140532c6b",
+          "text": "LeftRibbon"
+        },
+        {
+          "address": "0x14103665c",
+          "from": "0x140532caf",
+          "text": "High"
+        },
+        {
+          "address": "0x1410b86c0",
+          "from": "0x140532d09",
+          "text": "High resolution (full segments in the branches, highest LOD meshes, all nodes computed).\n\nHot keys: D - decrease resolution, Ctrl+D increase resolution"
+        },
+        {
+          "address": "0x1410b86a0",
+          "from": "0x140532d50",
+          "text": "1SlotHighResolution()"
+        },
+        {
+          "address": "0x1410b8690",
+          "from": "0x140532db4",
+          "text": "MiddleRibbon"
+        },
+        {
+          "address": "0x141043980",
+          "from": "0x140532dec",
+          "text": "Medium"
+        },
+        {
+          "address": "0x1410b85f0",
+          "from": "0x140532e4e",
+          "text": "Medium resolution (reduced segments in the branches, second LOD meshes, some nodes removed).\n\nHot keys: D - decrease resolution, Ctrl+D increase resolution"
+        },
+        {
+          "address": "0x1410b85d8",
+          "from": "0x140532e89",
+          "text": "1SlotMediumResolution()"
+        },
+        {
+          "address": "0x1410b8530",
+          "from": "0x140532f87",
+          "text": "Low resolution (significantly reduced segments in the branches, lowest LOD meshes, many nodes removed).\n\nHot keys: D - decrease resolution, Ctrl+D increase resolution"
+        },
+        {
+          "address": "0x1410b8510",
+          "from": "0x140532fce",
+          "text": "1SlotLowResolution()"
+        },
+        {
+          "address": "0x1410b8500",
+          "from": "0x140533032",
+          "text": "RightRibbon"
+        },
+        {
+          "address": "0x1410366a0",
+          "from": "0x140533076",
+          "text": "Draft"
+        },
+        {
+          "address": "0x1410b8450",
+          "from": "0x1405330cc",
+          "text": "Draft resolution (ultra low resolution everywhere, intended for fast computing and workflow acceleration only).\n\nHot keys: D - decrease resolution, Ctrl+D increase resolution"
+        },
+        {
+          "address": "0x1410b8430",
+          "from": "0x140533113",
+          "text": "1SlotDraftResolution()"
+        },
+        {
+          "address": "0x1410b8428",
+          "from": "0x1405331cf",
+          "text": "View"
+        },
+        {
+          "address": "0x1410b8418",
+          "from": "0x14053332f",
+          "text": "show_icon.png"
+        },
+        {
+          "address": "0x1410b83e0",
+          "from": "0x1405333a2",
+          "text": "Control which geometry types are shown in the viewport."
+        },
+        {
+          "address": "0x1410b83c8",
+          "from": "0x1405333dd",
+          "text": "1SlotNewShowMenu()"
+        },
+        {
+          "address": "0x1410b83b8",
+          "from": "0x140533492",
+          "text": "render_icon.png"
+        },
+        {
+          "address": "0x1410b8380",
+          "from": "0x140533505",
+          "text": "Specify the style in which the scene is rendered."
+        },
+        {
+          "address": "0x1410b8360",
+          "from": "0x140533540",
+          "text": "1SlotNewRenderModeMenu()"
+        },
+        {
+          "address": "0x1410b8350",
+          "from": "0x1405335f5",
+          "text": "zoom_icon.png"
+        },
+        {
+          "address": "0x1410b82d0",
+          "from": "0x140533668",
+          "text": "Zoom the camera view to show the selection.  If nothing is selected, zoom out far enough to show the whole model.\n\nHot key: Z"
+        },
+        {
+          "address": "0x1410b82b0",
+          "from": "0x1405336a3",
+          "text": "1SlotZoomSmart()"
+        },
+        {
+          "address": "0x1410b8298",
+          "from": "0x140533758",
+          "text": "view_target_icon.png"
+        },
+        {
+          "address": "0x1410b8190",
+          "from": "0x1405337cb",
+          "text": "Click this button and then click any spot on the model to set the view's\npivot point on that part of the model.  The camera will zoom to and pivot around\nthe selected point.\n\nHot key: N\n('double-clicking' anywhere on the model is a shortcut for this action)"
+        },
+        {
+          "address": "0x1410b8170",
+          "from": "0x140533806",
+          "text": "1SlotNavigationFocus()"
+        },
+        {
+          "address": "0x141079894",
+          "from": "0x1405338bb",
+          "text": "Edit"
+        },
+        {
+          "address": "0x1410b8160",
+          "from": "0x1405339d6",
+          "text": "ModeButton"
+        },
+        {
+          "address": "0x1410b6cc0",
+          "from": "0x140533a1c",
+          "text": "edit_mode_icon.png"
+        },
+        {
+          "address": "0x1410b7ff0",
+          "from": "0x140533a9e",
+          "text": "Toggle between editing generators and nodes.  Nodes are individual parts of the tree (like a leaf\nor a branch).  Generators are groups of nodes that represent a section of the model. Most editing\nshould be done on the generators to efficiently control large portions of the model.  Switch to editing\nnodes to fine tune the model before exporting.\n\nHot key: Tab"
+        },
+        {
+          "address": "0x1410b7fd0",
+          "from": "0x140533ae5",
+          "text": "1SlotAllowNodeEditing()"
+        },
+        {
+          "address": "0x1410a2880",
+          "from": "0x140533b56",
+          "text": "Nodes"
+        },
+        {
+          "address": "0x1410b7f10",
+          "from": "0x140533c00",
+          "text": "All property edits apply to the selected node(s).  Property edits in this mode are offsets to the\nthe value computed by the generator and should be used for fine tuning only.\n\nHot key: Tab"
+        },
+        {
+          "address": "0x1410b7ef8",
+          "from": "0x140533c3b",
+          "text": "1SlotNodeEdit()"
+        },
+        {
+          "address": "0x1410a2838",
+          "from": "0x140533c9f",
+          "text": "Generators"
+        },
+        {
+          "address": "0x1410b7e40",
+          "from": "0x140533d49",
+          "text": "All property edits apply to the selected generator(s).  This mode affects all of the individuals nodes\ncreated by the generator(s) and allows parent curve editing.\n\nHot key: Tab"
+        },
+        {
+          "address": "0x1410b7e28",
+          "from": "0x140533d90",
+          "text": "1SlotGeneratorEdit()"
+        },
+        {
+          "address": "0x1410b7e10",
+          "from": "0x140533e2a",
+          "text": "edit_add_icon.png"
+        },
+        {
+          "address": "0x141061270",
+          "from": "0x140533eac",
+          "text": "Add geometry to the model based on a set of predefined templates.  Once a template has been added,\nselect any of the new generators to edit the model."
+        },
+        {
+          "address": "0x1410b7df8",
+          "from": "0x140533ef3",
+          "text": "1SlotAddGeometry()"
+        },
+        {
+          "address": "0x1410b7dd8",
+          "from": "0x140533f8d",
+          "text": "edit_visibility_icon.png"
+        },
+        {
+          "address": "0x1410b7d60",
+          "from": "0x14053400f",
+          "text": "Control how much of the model is visible.  Use these options to\ntemporarily reduce computing and rendering complexity."
+        },
+        {
+          "address": "0x1410b7d40",
+          "from": "0x140534056",
+          "text": "1SlotVisibilityMenu()"
+        },
+        {
+          "address": "0x1410b7d28",
+          "from": "0x1405340fc",
+          "text": "edit_season_icon.png"
+        },
+        {
+          "address": "0x1410b7c70",
+          "from": "0x14053417e",
+          "text": "Set the season of the current model.  This is applicable to any models that makes use of the season\nproperties on generators and the season curves on materials.\n\nHot key: Alt+S"
+        },
+        {
+          "address": "0x1410b7c60",
+          "from": "0x1405341c5",
+          "text": "1SlotSeason()"
+        },
+        {
+          "address": "0x1410b7c48",
+          "from": "0x14053426b",
+          "text": "edit_gizmo_icon.png"
+        },
+        {
+          "address": "0x1410b7c20",
+          "from": "0x1405342ed",
+          "text": "Set options for the transform gizmo.\n"
+        },
+        {
+          "address": "0x1410b7c10",
+          "from": "0x140534334",
+          "text": "1SlotGizmo()"
+        },
+        {
+          "address": "0x1410b7c04",
+          "from": "0x140534407",
+          "text": "Post"
+        },
+        {
+          "address": "0x1410b7bf8",
+          "from": "0x14053457a",
+          "text": "ao_icon.png"
+        },
+        {
+          "address": "0x1410b7b40",
+          "from": "0x1405345ed",
+          "text": "Compute ambient occlusion on the model. Once computed, ambient occlusion settings can be edited\nby selecting the light.  Recomputing the tree will clear AO values.\n\n\nHot key: O"
+        },
+        {
+          "address": "0x1410b7b30",
+          "from": "0x140534634",
+          "text": "1SlotAO()"
+        },
+        {
+          "address": "0x1410b7b18",
+          "from": "0x1405346d6",
+          "text": "leaf_collision_icon.png"
+        },
+        {
+          "address": "0x1410b7960",
+          "from": "0x140534749",
+          "text": "Eliminate colliding leaf meshes.  Meshes are removed in the background according to the quality setting:\n\nHigh:\t\tleaf-leaf and leaf-branch collisions are eliminated, as many leaves as possible remain (slowest)\nMedium:\tleaf-leaf and leaf-branch collisions are eliminated, more leaves are removed in favor of faster execution\nLow:\t\tmost leaf-leaf collision are eliminated, leaf-branch collisions are ignored\nNone:\t\tcollisions are ignored"
+        },
+        {
+          "address": "0x1410b7940",
+          "from": "0x140534784",
+          "text": "1SlotCollision()"
+        },
+        {
+          "address": "0x1410b7930",
+          "from": "0x140534826",
+          "text": "export_icon.png"
+        },
+        {
+          "address": "0x1410b78c0",
+          "from": "0x140534899",
+          "text": "Export the model as a mesh (including animation, unwrapped textures, hierarchy, and other features if desired)."
+        },
+        {
+          "address": "0x141073b58",
+          "from": "0x1405348d4",
+          "text": "1SlotExport()"
+        },
+        {
+          "address": "0x1410b7898",
+          "from": "0x140534974",
+          "text": "Collapse or expand the toolbar."
+        },
+        {
+          "address": "0x1410b7888",
+          "from": "0x1405349af",
+          "text": "1SlotCompress()"
+        },
+        {
+          "address": "0x1410b7880",
+          "from": "0x140534a5a",
+          "text": "Scene"
+        },
+        {
+          "address": "0x1410b7870",
+          "from": "0x140534bab",
+          "text": "forces_icon.png"
+        },
+        {
+          "address": "0x1410b7770",
+          "from": "0x140534c1e",
+          "text": "Access force functions.  Forces are modeling tools that manipulate growth in world-space.  Examples\nof their use include gravity (downward direction forces) and growing geometry around 3d\ngeometry (mesh forces)\n\nHot key: 6 (toggles forces in the viewport)"
+        },
+        {
+          "address": "0x1410b7750",
+          "from": "0x140534c5c",
+          "text": "1SlotNewForcesMenu()"
+        },
+        {
+          "address": "0x1410b7738",
+          "from": "0x140534d04",
+          "text": "collision_icon.png"
+        },
+        {
+          "address": "0x1410b7660",
+          "from": "0x140534d77",
+          "text": "Access collision object functions.  Collision objects are simple geometric primitives\nthat can be accessed via the SDK to assist with collision at run-time.\n\nHot key: 7 (toggles collision objects in the viewport)"
+        },
+        {
+          "address": "0x1410b7640",
+          "from": "0x140534db5",
+          "text": "1SlotNewCollisionObjectsMenu()"
+        },
+        {
+          "address": "0x1410b7630",
+          "from": "0x140534e5d",
+          "text": "wind_icon.png"
+        },
+        {
+          "address": "0x1410b7570",
+          "from": "0x140534ed0",
+          "text": "Access high level wind functions.  Wind is controlled by a combination of properties in the\nmodel (typically in the 'Wind' group) and properties of the fan object.\n\nHot key: 8 (toggles wind)"
+        },
+        {
+          "address": "0x1410b7550",
+          "from": "0x140534f0e",
+          "text": "1SlotNewWindMenu()"
+        },
+        {
+          "address": "0x141069220",
+          "from": "0x140534fa9",
+          "text": "Light"
+        },
+        {
+          "address": "0x1410b7540",
+          "from": "0x140534ffa",
+          "text": "light_icon.png"
+        },
+        {
+          "address": "0x1410b7520",
+          "from": "0x14053506d",
+          "text": "Access light properties."
+        },
+        {
+          "address": "0x1410b7508",
+          "from": "0x1405350b7",
+          "text": "1SlotNewLightMenu()"
+        },
+        {
+          "address": "0x1410b74f8",
+          "from": "0x140535153",
+          "text": "ToolsGroup"
+        },
+        {
+          "address": "0x1410b74f0",
+          "from": "0x140535193",
+          "text": "Misc"
+        },
+        {
+          "address": "0x1410b74e0",
+          "from": "0x1405352f7",
+          "text": "focus_icon.png"
+        },
+        {
+          "address": "0x1410b74a0",
+          "from": "0x140535379",
+          "text": "Enable this option to speed up computation time during edits."
+        },
+        {
+          "address": "0x1410b7488",
+          "from": "0x1405353c3",
+          "text": "1SlotFastEdit(bool)"
+        },
+        {
+          "address": "0x141035000",
+          "from": "0x1405353cd",
+          "text": "2toggled(bool)"
+        },
+        {
+          "address": "0x1410b6d20",
+          "from": "0x140535427",
+          "text": "selection_only.png"
+        },
+        {
+          "address": "0x1410b7450",
+          "from": "0x1405354de",
+          "text": "Select which tool is used for selected scene objects."
+        },
+        {
+          "address": "0x1410b7438",
+          "from": "0x140535528",
+          "text": "1SlotTransformMenu()"
+        },
+        {
+          "address": "0x1410b7418",
+          "from": "0x14053558c",
+          "text": "tree_window_properties.png"
+        },
+        {
+          "address": "0x1410b7400",
+          "from": "0x14053568d",
+          "text": "1SlotWindowMenu()"
+        },
+        {
+          "address": "0x1410b73f0",
+          "from": "0x14053574d",
+          "text": "Leaves\t1"
+        },
+        {
+          "address": "0x1410b5438",
+          "from": "0x14053575f",
+          "text": "1SlotToggleDrawFlag( )"
+        },
+        {
+          "address": "0x1410b73e0",
+          "from": "0x1405357d9",
+          "text": "Fronds\t2"
+        },
+        {
+          "address": "0x1410b73d0",
+          "from": "0x14053586d",
+          "text": "Branches\t3"
+        },
+        {
+          "address": "0x1410b73c8",
+          "from": "0x1405358f9",
+          "text": "Zones\t4"
+        },
+        {
+          "address": "0x1410b73b8",
+          "from": "0x140535985",
+          "text": "Proxies\t9"
+        },
+        {
+          "address": "0x1410b73a8",
+          "from": "0x140535a11",
+          "text": "Targets\t5"
+        },
+        {
+          "address": "0x1410b7258",
+          "from": "0x140535abb",
+          "text": "preferences/m_bCompressedToolbar"
+        }
+      ],
+      "list": "referenced_strings",
+      "offset": 0,
+      "total": 104
+    }
+  },
+  "summary": "Part of native_function_study evidence (page).",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [],
+  "coverage": {
+    "status": "complete",
+    "examined": 104,
+    "total": 104
+  },
+  "locations": [],
+  "links": [
+    "ev_690c40935cb6915a2e78544a4c31e39d422fbe1b830d5c4ff662635909fa1713"
+  ]
+}

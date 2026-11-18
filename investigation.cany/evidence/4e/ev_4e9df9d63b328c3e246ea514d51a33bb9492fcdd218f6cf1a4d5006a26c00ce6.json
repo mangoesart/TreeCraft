@@ -1,0 +1,791 @@
+{
+  "id": "ev_4e9df9d63b328c3e246ea514d51a33bb9492fcdd218f6cf1a4d5006a26c00ce6",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^Curve - |CurveEditor|Curve editor|curve preset|Draw curve|Flip horizontal|Flip vertical|Smooth|Linear interpolation|Set all points"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14102d888",
+        "references": [
+          {
+            "from": "0x140045feb",
+            "function": "sub_140045a40"
+          },
+          {
+            "from": "0x140046e18",
+            "function": "sub_1400462e0"
+          },
+          {
+            "from": "0x140046e55",
+            "function": "sub_1400462e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "preferences/m_bSmoothScrolling"
+      },
+      {
+        "address": "0x14102e9c0",
+        "references": [
+          {
+            "from": "0x14004bcf7",
+            "function": "sub_140049350"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwSmoothScrolling"
+      },
+      {
+        "address": "0x141031418",
+        "references": [
+          {
+            "from": "0x1400523d9",
+            "function": "sub_140051e30"
+          },
+          {
+            "from": "0x14040adc0",
+            "function": "sub_14040a1f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing"
+      },
+      {
+        "address": "0x141031430",
+        "references": [
+          {
+            "from": "0x14005238e",
+            "function": "sub_140051e30"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Amount of smoothing applied to the displacement map before it is applied to the geometry."
+      },
+      {
+        "address": "0x141031908",
+        "references": [
+          {
+            "from": "0x14005390d",
+            "function": "sub_1400529d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pSmoothing"
+      },
+      {
+        "address": "0x141031f80",
+        "references": [
+          {
+            "from": "0x140056db7",
+            "function": "sub_140056970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SmoothChange(int)"
+      },
+      {
+        "address": "0x1410400ac",
+        "references": [
+          {
+            "from": "0x1400a665c",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b94ab",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x140132d0e",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x140132fbb",
+            "function": "sub_1401329e0"
+          },
+          {
+            "from": "0x14018dd12",
+            "function": "sub_14018da60"
+          },
+          {
+            "from": "0x14038dd19",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x14038dfc6",
+            "function": "sub_14038dab0"
+          },
+          {
+            "from": "0x1403f56c9",
+            "function": "sub_1403f5460"
+          },
+          {
+            "from": "0x1403f5976",
+            "function": "sub_1403f5460"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smooth"
+      },
+      {
+        "address": "0x141046148",
+        "references": [
+          {
+            "from": "0x14010d26b",
+            "function": "sub_14010d260"
+          },
+          {
+            "from": "0x14019a7a5",
+            "function": "sub_140196510"
+          },
+          {
+            "from": "0x14019a84d",
+            "function": "sub_140196510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Subdivision:Smooth"
+      },
+      {
+        "address": "0x141046510",
+        "references": [
+          {
+            "from": "0x14010fc8f",
+            "function": "sub_14010f780"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine:Noise:Late:Smooth"
+      },
+      {
+        "address": "0x141046600",
+        "references": [
+          {
+            "from": "0x1401107d5",
+            "function": "sub_1401100e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Splits:Smooth:Outer"
+      },
+      {
+        "address": "0x141046620",
+        "references": [
+          {
+            "from": "0x1401106c4",
+            "function": "sub_1401100e0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Splits:Smooth:Inner"
+      },
+      {
+        "address": "0x141047d38",
+        "references": [
+          {
+            "from": "0x140133395",
+            "function": "sub_140133100"
+          },
+          {
+            "from": "0x140274c1d",
+            "function": "sub_140274ab0"
+          },
+          {
+            "from": "0x14038e49c",
+            "function": "sub_14038e110"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Growth:Smoothing"
+      },
+      {
+        "address": "0x1410480a8",
+        "references": [
+          {
+            "from": "0x140141479",
+            "function": "sub_140140870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Skin:Smooth"
+      },
+      {
+        "address": "0x141050c80",
+        "references": [
+          {
+            "from": "0x14018e071",
+            "function": "sub_14018da60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Tools:Smooth"
+      },
+      {
+        "address": "0x141050e98",
+        "references": [
+          {
+            "from": "0x14018f72d",
+            "function": "sub_14018eba0"
+          },
+          {
+            "from": "0x140289505",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Global smoothing"
+      },
+      {
+        "address": "0x1410530f0",
+        "references": [
+          {
+            "from": "0x1401b0f71",
+            "function": "sub_1401b0140"
+          },
+          {
+            "from": "0x1401ba395",
+            "function": "sub_1401b8ec0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "BonesSmooth"
+      },
+      {
+        "address": "0x1410536e8",
+        "references": [
+          {
+            "from": "0x1401b2d3a",
+            "function": "sub_1401b1570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Adjust bone weighting for a smoother rigging"
+      },
+      {
+        "address": "0x141053718",
+        "references": [
+          {
+            "from": "0x1401b2ce9",
+            "function": "sub_1401b1570"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smooth bones"
+      },
+      {
+        "address": "0x141053cf8",
+        "references": [
+          {
+            "from": "0x1401b64e1",
+            "function": "sub_1401b37a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pBonesSmooth"
+      },
+      {
+        "address": "0x141053d08",
+        "references": [
+          {
+            "from": "0x1401b643c",
+            "function": "sub_1401b37a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pBonesSmoothLabel"
+      },
+      {
+        "address": "0x141054780",
+        "references": [
+          {
+            "from": "0x1401bd562",
+            "function": "sub_1401bb610"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Ignore smooth LOD"
+      },
+      {
+        "address": "0x141054bc0",
+        "references": [
+          {
+            "from": "0x1401c0903",
+            "function": "sub_1401bd740"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pIgnoreSmoothLOD"
+      },
+      {
+        "address": "0x141055060",
+        "references": [
+          {
+            "from": "0x1401c2f0e",
+            "function": "sub_1401c1a70"
+          },
+          {
+            "from": "0x1401c4b1e",
+            "function": "sub_1401c3fa0"
+          },
+          {
+            "from": "0x14041a980",
+            "function": "sub_14041a170"
+          },
+          {
+            "from": "0x14041b41d",
+            "function": "sub_14041a170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "IgnoreSmoothLOD"
+      },
+      {
+        "address": "0x14105bbe8",
+        "references": [
+          {
+            "from": "0x140205c57",
+            "function": "sub_140205a50"
+          },
+          {
+            "from": "0x1402744c2",
+            "function": "sub_140273d80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Smooth"
+      },
+      {
+        "address": "0x141066948",
+        "references": [
+          {
+            "from": "0x14028986f",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Per vertex smoothing"
+      },
+      {
+        "address": "0x141066998",
+        "references": [
+          {
+            "from": "0x1402895ce",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Card smoothing"
+      },
+      {
+        "address": "0x141066a30",
+        "references": [
+          {
+            "from": "0x1402890df",
+            "function": "sub_1402890a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Lighting:Local smoothing"
+      },
+      {
+        "address": "0x1410967c8",
+        "references": [
+          {
+            "from": "0x1403a41cb",
+            "function": "sub_1403a3870"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Pin this curve editor so it doesn't go away."
+      },
+      {
+        "address": "0x141096bb8",
+        "references": [
+          {
+            "from": "0x1403a66a7",
+            "function": "sub_1403a65a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Curve Editor"
+      },
+      {
+        "address": "0x14109c328",
+        "references": [
+          {
+            "from": "0x1403f165d",
+            "function": "sub_1403f1190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch:Intersection:Smooth"
+      },
+      {
+        "address": "0x1410a1978",
+        "references": [
+          {
+            "from": "0x14040c9aa",
+            "function": "sub_14040b020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "m_pwForceSmoothing"
+      },
+      {
+        "address": "0x1410b9a78",
+        "references": [
+          {
+            "from": "0x14053f879",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Manipulator:Smooth lines"
+      },
+      {
+        "address": "0x1410b9b98",
+        "references": [
+          {
+            "from": "0x14053ee9b",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "General Rendering:Render States:Point smooth"
+      },
+      {
+        "address": "0x1410b9bf8",
+        "references": [
+          {
+            "from": "0x14053ed8b",
+            "function": "sub_14053c190"
+          }
+        ],
+        "section": ".rdata",
+        "text": "General Rendering:Render States:Line smooth"
+      },
+      {
+        "address": "0x1410e9d22",
+        "references": [],
+        "section": ".rdata",
+        "text": "SmoothChange(int)"
+      },
+      {
+        "address": "0x14115adb8",
+        "references": [
+          {
+            "from": "0x14115c088",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing not supported with nonstandard sampling ratios"
+      },
+      {
+        "address": "0x14136d3b8",
+        "references": [
+          {
+            "from": "0x14136d488",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x141382b98",
+        "references": [
+          {
+            "from": "0x140a8c47b",
+            "function": "sub_140a8b490"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1413b44a0",
+        "references": [
+          {
+            "from": "0x140b938c0",
+            "function": "sub_140b93640"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smooth"
+      },
+      {
+        "address": "0x1413b44a8",
+        "references": [
+          {
+            "from": "0x140b9397e",
+            "function": "sub_140b93640"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SmoothSpeed"
+      },
+      {
+        "address": "0x1413bc258",
+        "references": [
+          {
+            "from": "0x140bb6d02",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothgroup"
+      },
+      {
+        "address": "0x1413bc268",
+        "references": [
+          {
+            "from": "0x140bb6d13",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothgroup"
+      },
+      {
+        "address": "0x1413bc380",
+        "references": [
+          {
+            "from": "0x140bb7102",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothgroup"
+      },
+      {
+        "address": "0x1413bc390",
+        "references": [
+          {
+            "from": "0x140bb7113",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothgroup"
+      },
+      {
+        "address": "0x1413efde8",
+        "references": [
+          {
+            "from": "0x140caa84a",
+            "function": "sub_140caa3b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1413f0220",
+        "references": [
+          {
+            "from": "0x140ca299a",
+            "function": "sub_140ca2970"
+          },
+          {
+            "from": "0x140ca2c09",
+            "function": "sub_140ca2970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1413f0280",
+        "references": [
+          {
+            "from": "0x140ca2ab8",
+            "function": "sub_140ca2970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing"
+      },
+      {
+        "address": "0x1413f07a0",
+        "references": [
+          {
+            "from": "0x140c99dd4",
+            "function": "sub_140c99dc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x1413f08b8",
+        "references": [
+          {
+            "from": "0x140c9a08a",
+            "function": "sub_140c9a020"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x1413f86e8",
+        "references": [
+          {
+            "from": "0x140cc8d85",
+            "function": "sub_140cc8910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1413f8ad8",
+        "references": [
+          {
+            "from": "0x140cbe334",
+            "function": "sub_140cbe300"
+          },
+          {
+            "from": "0x140cbe629",
+            "function": "sub_140cbe300"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1413f8b38",
+        "references": [
+          {
+            "from": "0x140cbe43f",
+            "function": "sub_140cbe300"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing"
+      },
+      {
+        "address": "0x1413f8b48",
+        "references": [
+          {
+            "from": "0x140cbe487",
+            "function": "sub_140cbe300"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing"
+      },
+      {
+        "address": "0x1413f9068",
+        "references": [
+          {
+            "from": "0x140cb6fd3",
+            "function": "sub_140cb6fc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x141401368",
+        "references": [
+          {
+            "from": "0x140cd4918",
+            "function": "sub_140cd48b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x1414014c0",
+        "references": [
+          {
+            "from": "0x140cd4b04",
+            "function": "sub_140cd4a70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x141401930",
+        "references": [
+          {
+            "from": "0x140cda6e6",
+            "function": "sub_140cda650"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      },
+      {
+        "address": "0x1414019e8",
+        "references": [
+          {
+            "from": "0x140cda877",
+            "function": "sub_140cda650"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothing"
+      },
+      {
+        "address": "0x141409e88",
+        "references": [
+          {
+            "from": "0x140cef693",
+            "function": "sub_140cef600"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Smoothness"
+      },
+      {
+        "address": "0x14140a2b0",
+        "references": [
+          {
+            "from": "0x140cf32c8",
+            "function": "sub_140cf3230"
+          }
+        ],
+        "section": ".rdata",
+        "text": "LayerElementSmoothing"
+      }
+    ],
+    "total": 71
+  },
+  "summary": "71 strings match \"^Curve - |CurveEditor|Curve editor|curve preset|Draw curve|Flip horizontal|Flip vertical|Smooth|Linear interpolation|Set all points\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 60,
+    "total": 71,
+    "next_offset": 60
+  },
+  "locations": [],
+  "links": []
+}

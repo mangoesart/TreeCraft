@@ -1,0 +1,65 @@
+{
+  "id": "ev_2eae5ad8f6d1914f8a32fde50cb1e9a3a4fc187a4d7c899f0268090b4dec1ee1",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "literal",
+    "offset": 0,
+    "pattern": "has been modified"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410753d0",
+        "references": [
+          {
+            "from": "0x1402b4383",
+            "function": "sub_1402b3f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "The tree [%1] has been modified."
+      },
+      {
+        "address": "0x1410753f8",
+        "references": [
+          {
+            "from": "0x1402b42f4",
+            "function": "sub_1402b3f80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "This tree has been modified."
+      }
+    ],
+    "total": 2
+  },
+  "summary": "2 strings match \"has been modified\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 2,
+    "total": 2
+  },
+  "locations": [],
+  "links": []
+}

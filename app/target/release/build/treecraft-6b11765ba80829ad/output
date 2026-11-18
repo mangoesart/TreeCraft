@@ -1,0 +1,3 @@
+cargo:rerun-if-changed=src/icon_art.rs
+cargo:rerun-if-changed=build.rs
+cargo:rustc-link-arg-bins=C:\Users\sgv3d\Documents\Craft Anything\speedtree-modeler\app\target\release\build\treecraft-6b11765ba80829ad\out\treecraft_icon.res

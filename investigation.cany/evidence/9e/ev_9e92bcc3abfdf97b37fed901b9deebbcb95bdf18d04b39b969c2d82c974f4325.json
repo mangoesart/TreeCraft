@@ -1,0 +1,89 @@
+{
+  "id": "ev_9e92bcc3abfdf97b37fed901b9deebbcb95bdf18d04b39b969c2d82c974f4325",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_functions_decompile",
+  "params": {
+    "addresses": [
+      "0x1406070a0",
+      "0x14060704c",
+      "0x140607124",
+      "0x140607094",
+      "0x140607166",
+      "0x140607082",
+      "0x140607136",
+      "0x140607052"
+    ]
+  },
+  "result": {
+    "failed": 8,
+    "items": [
+      {
+        "error": "No function named or at 0x1406070a0",
+        "input": "0x1406070a0",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x14060704c",
+        "input": "0x14060704c",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607124",
+        "input": "0x140607124",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607094",
+        "input": "0x140607094",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607166",
+        "input": "0x140607166",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607082",
+        "input": "0x140607082",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607136",
+        "input": "0x140607136",
+        "ok": false
+      },
+      {
+        "error": "No function named or at 0x140607052",
+        "input": "0x140607052",
+        "ok": false
+      }
+    ],
+    "succeeded": 0
+  },
+  "summary": "Decompiled 0 of 8 functions.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "pseudo_code_inferred",
+      "message": "pseudo-C from the clean-room lifter is register-level and approximate"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 8,
+    "total": 8
+  },
+  "locations": [],
+  "links": []
+}

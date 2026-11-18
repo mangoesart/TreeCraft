@@ -1,0 +1,45 @@
+{
+  "id": "ev_16dba96d98cf20c53f97d9a0fcbdb9772c28dbb77b1b394bda54192116a90f51",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_function_pseudocode",
+  "params": {
+    "function": "0x1402a7f00"
+  },
+  "result": {
+    "engine": "ghidra",
+    "entry": "0x1402a7f00",
+    "function": "FUN_1402a7f00",
+    "pseudo_code": "\r\n/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */\r\n\r\nvoid FUN_1402a7f00(longlong param_1,QString *param_2,char param_3)\r\n\r\n{\r\n  longlong *plVar1;\r\n  int iVar2;\r\n  int *piVar3;\r\n  char cVar4;\r\n  longlong *plVar5;\r\n  undefined8 uVar6;\r\n  QFileInfo *this;\r\n  QString *pQVar7;\r\n  QVariant *this_00;\r\n  longlong *plVar8;\r\n  int *piVar9;\r\n  undefined1 auStack_188 [32];\r\n  char local_168;\r\n  undefined1 local_167 [7];\r\n  int *local_160;\r\n  Data *local_158;\r\n  Data *local_150;\r\n  Data *local_148;\r\n  void *local_140;\r\n  Data *local_138;\r\n  QSettings local_130 [16];\r\n  QVariant local_120 [16];\r\n  QVariant local_110 [16];\r\n  QSettings local_100 [16];\r\n  QString *local_f0;\r\n  QVariant local_e8 [16];\r\n  undefined8 local_d8;\r\n  QString local_d0 [56];\r\n  undefined1 local_98;\r\n  undefined7 uStack_97;\r\n  undefined8 local_88;\r\n  ulonglong local_80;\r\n  void *local_70;\r\n  ulonglong local_58;\r\n  ulonglong local_48;\r\n  \r\n  local_d8 = 0xfffffffffffffffe;\r\n  local_48 = DAT_141a96e80 ^ (ulonglong)auStack_188;\r\n  local_f0 = param_2;\r\n  local_140 = operator_new(0x7ef0);\r\n  if (local_140 == (void *)0x0) {\r\n    plVar5 = (longlong *)0x0;\r\n  }\r\n  else {\r\n    plVar5 = (longlong *)FUN_14053c190(local_140);\r\n  }\r\n  if (*(char *)(param_1 + 0x59a) == '\\0') {\r\n    QWidget::raise(*(QWidget **)(param_1 + 0x2b8));\r\n  }\r\n  *(longlong **)(param_1 + 0x3c8) = plVar5;\r\n  *(longlong **)(param_1 + 0x3d0) = plVar5;\r\n  plVar1 = plVar5 + 3;\r\n  (**(code **)(*plVar1 + 0x260))(plVar1,plVar5 + 0xf);\r\n  local_168 = '\\0';\r\n  uVar6 = QString::toStdString(param_2);\r\n  cVar4 = FUN_14041cc00(plVar1,uVar6,param_3,&local_168);\r\n  if (0xf < local_58) {\r\n    operator_delete(local_70);\r\n  }\r\n  if (cVar4 == '\\0') {\r\n    *(undefined8 *)(param_1 + 0x3c8) = 0;\r\n    *(undefined8 *)(param_1 + 0x3d0) = 0;\r\n    if (local_168 == '\\0') {\r\n      QSettings::QSettings(local_130,(QObject *)0x0);\r\n      local_148 = QString::fromAscii_helper(\"recentFileList\",-1);\r\n      QVariant::QVariant(local_e8);\r\n      this_00 = (QVariant *)QSettings::value(local_130,local_d0,(QVariant *)&local_148);\r\n      QVariant::toStringList(this_00);\r\n      QVariant::~QVariant((QVariant *)local_d0);\r\n      QVariant::~QVariant(local_e8);\r\n      LOCK();\r\n      *(int *)local_148 = *(int *)local_148 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_148 == 0) {\r\n        QString::free(local_148);\r\n      }\r\n      FUN_1402a1aa0(&local_160,param_2);\r\n      QVariant::QVariant(local_110,(QStringList *)&local_160);\r\n      local_158 = QString::fromAscii_helper(\"recentFileList\",-1);\r\n      QSettings::setValue(local_130,(QString *)&local_158,local_110);\r\n      LOCK();\r\n      *(int *)local_158 = *(int *)local_158 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_158 == 0) {\r\n        QString::free(local_158);\r\n      }\r\n      QVariant::~QVariant(local_110);\r\n      FUN_1402a4520(param_1);\r\n      (**(code **)(*plVar5 + 0x18))(plVar5,1);\r\n      (**(code **)(*(longlong *)(param_1 + 0x28) + 0x20))((longlong *)(param_1 + 0x28),0);\r\n      LOCK();\r\n      *local_160 = *local_160 + -1;\r\n      UNLOCK();\r\n      if (*local_160 == 0) {\r\n        piVar9 = local_160 + (longlong)local_160[3] * 2 + 6;\r\n        iVar2 = local_160[2];\r\n        while (local_160 + (longlong)iVar2 * 2 + 6 != piVar9) {\r\n          piVar9 = piVar9 + -2;\r\n          piVar3 = *(int **)piVar9;\r\n          LOCK();\r\n          *piVar3 = *piVar3 + -1;\r\n          UNLOCK();\r\n          if (*piVar3 == 0) {\r\n            QString::free(*(Data **)piVar9);\r\n          }\r\n        }\r\n        qFree(local_160);\r\n      }\r\n      QSettings::~QSettings(local_130);\r\n    }\r\n  }\r\n  else {\r\n    if (*(char *)(param_1 + 0x59a) == '\\0') {\r\n      FUN_14029ed40(param_1,plVar5);\r\n    }\r\n    if (param_3 == '\\0') {\r\n      QString::toStdString(param_2);\r\n      FUN_1402a76e0(param_1);\r\n    }\r\n    else {\r\n      plVar8 = plVar5 + 0xc90;\r\n      plVar5[0xc92] = 0;\r\n      if (0xf < (ulonglong)plVar5[0xc93]) {\r\n        plVar8 = (longlong *)*plVar8;\r\n      }\r\n      *(undefined1 *)plVar8 = 0;\r\n      local_80 = 0xf;\r\n      local_88 = 0;\r\n      local_98 = 0;\r\n      FUN_14003a980(&local_98,\"New SpeedTree\",0xd);\r\n      (**(code **)(*plVar1 + 0x10))(plVar1);\r\n      if (0xf < local_80) {\r\n        operator_delete((void *)CONCAT71(uStack_97,local_98));\r\n      }\r\n    }\r\n    if (*(char *)(param_1 + 0x59a) == '\\0') {\r\n      FUN_140226320(*(undefined8 *)(param_1 + 0x2c8));\r\n      cVar4 = FUN_1402225f0(*(undefined8 *)(param_1 + 0x2c8),local_167,local_167);\r\n      if (cVar4 != '\\0') {\r\n        FUN_14059f080(DAT_141a9c730);\r\n      }\r\n    }\r\n    *(undefined1 *)(param_1 + 0x3d8) = 1;\r\n    if (param_3 == '\\0') {\r\n      QSettings::QSettings(local_100,(QObject *)0x0);\r\n      this = (QFileInfo *)QFileInfo::QFileInfo((QFileInfo *)&local_140,param_2);\r\n      pQVar7 = (QString *)QFileInfo::absolutePath(this);\r\n      QVariant::QVariant(local_120,pQVar7);\r\n      local_150 = QString::fromAscii_helper(\"FilterDirectories/SpeedTree Model Files (*.spm)\",-1);\r\n      QSettings::setValue(local_100,(QString *)&local_150,local_120);\r\n      LOCK();\r\n      *(int *)local_150 = *(int *)local_150 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_150 == 0) {\r\n        QString::free(local_150);\r\n      }\r\n      QVariant::~QVariant(local_120);\r\n      LOCK();\r\n      *(int *)local_138 = *(int *)local_138 + -1;\r\n      UNLOCK();\r\n      if (*(int *)local_138 == 0) {\r\n        QString::free(local_138);\r\n      }\r\n      QFileInfo::~QFileInfo((QFileInfo *)&local_140);\r\n      QSettings::~QSettings(local_100);\r\n    }\r\n    *(undefined1 *)(param_1 + 0x408) = 1;\r\n  }\r\n  *(undefined8 *)(param_1 + 0x3c8) = 0;\r\n  FUN_140297aa0(param_1);\r\n  (**(code **)(*(longlong *)(param_1 + 0x28) + 0x158))(param_1 + 0x28);\r\n  (**(code **)(*(longlong *)(param_1 + 0x28) + 0x90))(param_1 + 0x28);\r\n  piVar9 = *(int **)param_2;\r\n  LOCK();\r\n  *piVar9 = *piVar9 + -1;\r\n  UNLOCK();\r\n  if (*piVar9 == 0) {\r\n    QString::free(*(Data **)param_2);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "signature": "void FUN_1402a7f00(longlong param_1,QString *param_2,char param_3);"
+  },
+  "summary": "Pseudo-C for FUN_1402a7f00 from the Deep engine (188 lines).",
+  "confidence": "derived",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "ghidra",
+    "engine_version": "12.1.4",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "deep_engine",
+      "message": "the pseudo-C comes from the external Deep engine (Ghidra), not the original source"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [
+    {
+      "kind": "address",
+      "value": "0x1402a7f00"
+    }
+  ],
+  "links": [],
+  "carries_target_content": true
+}

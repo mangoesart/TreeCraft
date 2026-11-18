@@ -1,0 +1,104 @@
+{
+  "id": "ev_665ed9aecafb42607756ba4936fe19e27378b994456c836d758abeaa9235d137",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 200,
+    "mode": "literal",
+    "offset": 0,
+    "pattern": "incremental"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x14106c650",
+        "references": [
+          {
+            "from": "0x140295229",
+            "function": "sub_140294d60"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Sa&ve incremental"
+      },
+      {
+        "address": "0x141071010",
+        "references": [
+          {
+            "from": "0x14029ae09",
+            "function": "sub_14029a960"
+          }
+        ],
+        "section": ".rdata",
+        "text": "actionSaveIncremental"
+      },
+      {
+        "address": "0x141073bf0",
+        "references": [
+          {
+            "from": "0x1402a656f",
+            "function": "sub_1402a64c0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "1SlotSaveIncremental( )"
+      },
+      {
+        "address": "0x1410a2d30",
+        "references": [
+          {
+            "from": "0x14041c8c9",
+            "function": "sub_14041c880"
+          }
+        ],
+        "section": ".rdata",
+        "text": "<alert>Cannot save incremental version with no current save file.\n"
+      },
+      {
+        "address": "0x1410ed61d",
+        "references": [],
+        "section": ".rdata",
+        "text": "SlotSaveIncremental()"
+      },
+      {
+        "address": "0x141316560",
+        "references": [
+          {
+            "from": "0x14091712e",
+            "function": "sub_140916fe7"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Incremental\n"
+      }
+    ],
+    "total": 6
+  },
+  "summary": "6 strings match \"incremental\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 6,
+    "total": 6
+  },
+  "locations": [],
+  "links": []
+}

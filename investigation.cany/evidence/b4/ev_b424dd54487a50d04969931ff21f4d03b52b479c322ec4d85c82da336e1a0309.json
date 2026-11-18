@@ -1,0 +1,922 @@
+{
+  "id": "ev_b424dd54487a50d04969931ff21f4d03b52b479c322ec4d85c82da336e1a0309",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_strings_find",
+  "params": {
+    "case_sensitive": false,
+    "limit": 60,
+    "mode": "regex",
+    "offset": 0,
+    "pattern": "^(Spine|Fronds?|Leaf Mesh|Leaves|Batched Leaves|Cap|Zone|Decoration|Hand Drawn|Mesh|Target|Knot|Shell|Cutting|Branch|Trunk|Cluster|Proxy)( generator)?$"
+  },
+  "result": {
+    "matches": [
+      {
+        "address": "0x1410361a4",
+        "references": [
+          {
+            "from": "0x140078967",
+            "function": "sub_140076fd0"
+          },
+          {
+            "from": "0x1400f100c",
+            "function": "sub_1400f0ea0"
+          },
+          {
+            "from": "0x1404f3b05",
+            "function": "sub_1404f3620"
+          },
+          {
+            "from": "0x14178d838",
+            "function": null
+          },
+          {
+            "from": "0x141792a00",
+            "function": null
+          },
+          {
+            "from": "0x141792a28",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Fronds"
+      },
+      {
+        "address": "0x141037a08",
+        "references": [
+          {
+            "from": "0x140086181",
+            "function": "sub_1400860d0"
+          },
+          {
+            "from": "0x1400a397c",
+            "function": "sub_1400a1580"
+          },
+          {
+            "from": "0x1400b437c",
+            "function": "sub_1400b19b0"
+          },
+          {
+            "from": "0x1400f1bf3",
+            "function": "sub_1400f1ab0"
+          },
+          {
+            "from": "0x1400f21f9",
+            "function": "sub_1400f21e0"
+          },
+          {
+            "from": "0x1401f4a70",
+            "function": "sub_1401f4210"
+          },
+          {
+            "from": "0x140443e02",
+            "function": "sub_1404439e0"
+          },
+          {
+            "from": "0x1404776c0",
+            "function": "sub_140477360"
+          },
+          {
+            "from": "0x1404abbfd",
+            "function": "sub_1404ab520"
+          },
+          {
+            "from": "0x140537034",
+            "function": "sub_140536ec0"
+          },
+          {
+            "from": "0x14053783e",
+            "function": "sub_140537430"
+          },
+          {
+            "from": "0x14053b1bb",
+            "function": "sub_14053ab20"
+          },
+          {
+            "from": "0x14178c620",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1410449e4",
+        "references": [
+          {
+            "from": "0x1400f0fbd",
+            "function": "sub_1400f0ea0"
+          },
+          {
+            "from": "0x1404f3b51",
+            "function": "sub_1404f3620"
+          },
+          {
+            "from": "0x14051afe6",
+            "function": "sub_14051ae20"
+          },
+          {
+            "from": "0x141792a08",
+            "function": null
+          },
+          {
+            "from": "0x141792a30",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaves"
+      },
+      {
+        "address": "0x141045e00",
+        "references": [
+          {
+            "from": "0x14014c3e9",
+            "function": "sub_14014c3d0"
+          },
+          {
+            "from": "0x140372206",
+            "function": "sub_140371e80"
+          },
+          {
+            "from": "0x14038effc",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x14039f728",
+            "function": "sub_14039f2f0"
+          },
+          {
+            "from": "0x1403e097e",
+            "function": "sub_1403e0700"
+          },
+          {
+            "from": "0x1403f61bb",
+            "function": "sub_1403f60a0"
+          },
+          {
+            "from": "0x140477468",
+            "function": "sub_140477360"
+          },
+          {
+            "from": "0x1404a078a",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x1404a31cf",
+            "function": "sub_14049ef30"
+          },
+          {
+            "from": "0x140512414",
+            "function": "sub_1405122b0"
+          },
+          {
+            "from": "0x1405125e2",
+            "function": "sub_1405122b0"
+          },
+          {
+            "from": "0x140515c72",
+            "function": "sub_140515b00"
+          },
+          {
+            "from": "0x140515e28",
+            "function": "sub_140515b00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Branch"
+      },
+      {
+        "address": "0x141047e40",
+        "references": [
+          {
+            "from": "0x140137192",
+            "function": "sub_140136e00"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Hand Drawn"
+      },
+      {
+        "address": "0x141047f08",
+        "references": [
+          {
+            "from": "0x140136f7f",
+            "function": "sub_140136e00"
+          },
+          {
+            "from": "0x14036f629",
+            "function": "sub_14036f610"
+          },
+          {
+            "from": "0x14038ba2c",
+            "function": "sub_140389ce0"
+          },
+          {
+            "from": "0x14038efc1",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x1403f6183",
+            "function": "sub_1403f60a0"
+          },
+          {
+            "from": "0x1404aaaad",
+            "function": "sub_1404a4760"
+          },
+          {
+            "from": "0x1404b0899",
+            "function": "sub_1404ae0b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine"
+      },
+      {
+        "address": "0x14104b5e8",
+        "references": [
+          {
+            "from": "0x140166442",
+            "function": "sub_140166310"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x14104cac4",
+        "references": [
+          {
+            "from": "0x14016f66d",
+            "function": "sub_14016f650"
+          },
+          {
+            "from": "0x14016f74c",
+            "function": "sub_14016f6e0"
+          },
+          {
+            "from": "0x14017a709",
+            "function": "sub_14017a6f0"
+          },
+          {
+            "from": "0x14038f115",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x14038f12c",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x1403e0a3e",
+            "function": "sub_1403e0700"
+          },
+          {
+            "from": "0x1403f61f3",
+            "function": "sub_1403f60a0"
+          },
+          {
+            "from": "0x140477530",
+            "function": "sub_140477360"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cap"
+      },
+      {
+        "address": "0x14105b818",
+        "references": [
+          {
+            "from": "0x140207809",
+            "function": "sub_1402077f0"
+          },
+          {
+            "from": "0x140372362",
+            "function": "sub_140371e80"
+          },
+          {
+            "from": "0x14038b9dd",
+            "function": "sub_140389ce0"
+          },
+          {
+            "from": "0x14038f087",
+            "function": "sub_14038ee90"
+          },
+          {
+            "from": "0x14039f842",
+            "function": "sub_14039f2f0"
+          },
+          {
+            "from": "0x14039fb6d",
+            "function": "sub_14039f2f0"
+          },
+          {
+            "from": "0x140477594",
+            "function": "sub_140477360"
+          },
+          {
+            "from": "0x1404ce1ff",
+            "function": "sub_1404ce170"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Frond"
+      },
+      {
+        "address": "0x1410605b8",
+        "references": [
+          {
+            "from": "0x14022e054",
+            "function": "sub_14022de20"
+          },
+          {
+            "from": "0x140237a7c",
+            "function": "sub_140237980"
+          },
+          {
+            "from": "0x140237bc9",
+            "function": "sub_140237b10"
+          },
+          {
+            "from": "0x14026aa59",
+            "function": "sub_14026aa40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Leaf Mesh"
+      },
+      {
+        "address": "0x1410637f0",
+        "references": [
+          {
+            "from": "0x140254919",
+            "function": "sub_140254900"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Knot"
+      },
+      {
+        "address": "0x1410766b0",
+        "references": [
+          {
+            "from": "0x1402be0a4",
+            "function": "sub_1402bdaf0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x14107e410",
+        "references": [
+          {
+            "from": "0x1403101e9",
+            "function": "sub_1403101d0"
+          },
+          {
+            "from": "0x14047e37d",
+            "function": "sub_14047dc90"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Proxy"
+      },
+      {
+        "address": "0x141092998",
+        "references": [
+          {
+            "from": "0x1403474a8",
+            "function": "sub_140347350"
+          },
+          {
+            "from": "0x1404e3f82",
+            "function": "sub_1404e3910"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Trunk"
+      },
+      {
+        "address": "0x141093104",
+        "references": [
+          {
+            "from": "0x14034c8e7",
+            "function": "sub_14034c4f0"
+          },
+          {
+            "from": "0x140404c69",
+            "function": "sub_140404c50"
+          },
+          {
+            "from": "0x14040674c",
+            "function": "sub_140405d90"
+          },
+          {
+            "from": "0x140406e04",
+            "function": "sub_140405d90"
+          },
+          {
+            "from": "0x140531c81",
+            "function": "sub_140531610"
+          },
+          {
+            "from": "0x14054a4cc",
+            "function": "sub_140549430"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Target"
+      },
+      {
+        "address": "0x1410a7720",
+        "references": [
+          {
+            "from": "0x140471d7d",
+            "function": "sub_140471310"
+          }
+        ],
+        "section": ".rdata",
+        "text": "spine"
+      },
+      {
+        "address": "0x1410b0fe8",
+        "references": [
+          {
+            "from": "0x140502776",
+            "function": "sub_140502010"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Frond Generator"
+      },
+      {
+        "address": "0x1410b1bc8",
+        "references": [
+          {
+            "from": "0x140510859",
+            "function": "sub_140510840"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Zone"
+      },
+      {
+        "address": "0x1410e57e8",
+        "references": [
+          {
+            "from": "0x1405d2054",
+            "function": "sub_1405d2030"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141381f38",
+        "references": [
+          {
+            "from": "0x140a8f044",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cluster"
+      },
+      {
+        "address": "0x141382344",
+        "references": [
+          {
+            "from": "0x140a8fc2d",
+            "function": "sub_140a8d690"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141397994",
+        "references": [
+          {
+            "from": "0x141397ab0",
+            "function": null
+          }
+        ],
+        "section": ".rdata",
+        "text": "Spine"
+      },
+      {
+        "address": "0x1413a955c",
+        "references": [
+          {
+            "from": "0x140b45658",
+            "function": "sub_140b45320"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1413a9794",
+        "references": [
+          {
+            "from": "0x140b41630",
+            "function": "sub_140b414f0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1413b0514",
+        "references": [
+          {
+            "from": "0x140b7dafd",
+            "function": "sub_140b7d970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x1413b05cc",
+        "references": [
+          {
+            "from": "0x140b7d842",
+            "function": "sub_140b7d620"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x1413bc1f4",
+        "references": [
+          {
+            "from": "0x140bb6b4c",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc1fc",
+        "references": [
+          {
+            "from": "0x140bb6b5d",
+            "function": "sub_140bb6970"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc334",
+        "references": [
+          {
+            "from": "0x140bb6f95",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413bc33c",
+        "references": [
+          {
+            "from": "0x140bb6fa6",
+            "function": "sub_140bb6d70"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413c29a8",
+        "references": [
+          {
+            "from": "0x140bd0819",
+            "function": "sub_140bd0510"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cluster"
+      },
+      {
+        "address": "0x1413c2ed4",
+        "references": [
+          {
+            "from": "0x140bcb2cf",
+            "function": "sub_140bcb000"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1413c316c",
+        "references": [
+          {
+            "from": "0x140bc7114",
+            "function": "sub_140bc6fc0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1413eefa8",
+        "references": [
+          {
+            "from": "0x140cb27e5",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413eefcc",
+        "references": [
+          {
+            "from": "0x140cb291e",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413ef098",
+        "references": [
+          {
+            "from": "0x140cb2f1c",
+            "function": "sub_140cb26b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cluster"
+      },
+      {
+        "address": "0x1413ef324",
+        "references": [
+          {
+            "from": "0x140cafe51",
+            "function": "sub_140cafac0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1413efc74",
+        "references": [
+          {
+            "from": "0x140cb114d",
+            "function": "sub_140cb0a80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413f7954",
+        "references": [
+          {
+            "from": "0x140ccf522",
+            "function": "sub_140ccf390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x1413f7a60",
+        "references": [
+          {
+            "from": "0x140ccfa3e",
+            "function": "sub_140ccf390"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Cluster"
+      },
+      {
+        "address": "0x1413f7d8c",
+        "references": [
+          {
+            "from": "0x140cc74bd",
+            "function": "sub_140cc71a0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1414027cc",
+        "references": [
+          {
+            "from": "0x140ce7871",
+            "function": "sub_140ce7540"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x1414096dc",
+        "references": [
+          {
+            "from": "0x140cf734b",
+            "function": "sub_140cf7160"
+          }
+        ],
+        "section": ".rdata",
+        "text": "SPINE"
+      },
+      {
+        "address": "0x14140d9cc",
+        "references": [
+          {
+            "from": "0x140d155f1",
+            "function": "sub_140d155b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141411d9c",
+        "references": [
+          {
+            "from": "0x140d18294",
+            "function": "sub_140d181b0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x14141449c",
+        "references": [
+          {
+            "from": "0x140d2dc14",
+            "function": "sub_140d2cff0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141415064",
+        "references": [
+          {
+            "from": "0x140d2cec9",
+            "function": "sub_140d2c4d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141415104",
+        "references": [
+          {
+            "from": "0x140d2cf92",
+            "function": "sub_140d2c4d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141416554",
+        "references": [
+          {
+            "from": "0x140d2b5a1",
+            "function": "sub_140d2b060"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141418c04",
+        "references": [
+          {
+            "from": "0x140d2c25e",
+            "function": "sub_140d2c200"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141418c78",
+        "references": [
+          {
+            "from": "0x140d2ab72",
+            "function": "sub_140d2ab40"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x141418ccc",
+        "references": [
+          {
+            "from": "0x140d2826d",
+            "function": "sub_140d281d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "Mesh"
+      },
+      {
+        "address": "0x141418cdc",
+        "references": [
+          {
+            "from": "0x140d282ba",
+            "function": "sub_140d281d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "mesh"
+      },
+      {
+        "address": "0x141419eb8",
+        "references": [
+          {
+            "from": "0x140d2a8ed",
+            "function": "sub_140d299d0"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x141481080",
+        "references": [
+          {
+            "from": "0x140d7e47c",
+            "function": "sub_140d7e420"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x14149834c",
+        "references": [
+          {
+            "from": "0x140df128e",
+            "function": "sub_140df1270"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      },
+      {
+        "address": "0x1414a9838",
+        "references": [
+          {
+            "from": "0x140df5573",
+            "function": "sub_140df4c80"
+          }
+        ],
+        "section": ".rdata",
+        "text": "target"
+      }
+    ],
+    "total": 57
+  },
+  "summary": "57 strings match \"^(Spine|Fronds?|Leaf Mesh|Leaves|Batched Leaves|Cap|Zone|Decoration|Hand Drawn|Mesh|Target|Knot|Shell|Cutting|Branch|Trunk|Cluster|Proxy)( generator)?$\".",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "data_sections_only",
+      "message": "only strings stored in the file are searched (absence is not proof)"
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 57,
+    "total": 57
+  },
+  "locations": [],
+  "links": []
+}
