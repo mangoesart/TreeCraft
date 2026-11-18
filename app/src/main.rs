@@ -219,6 +219,8 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     DISPLAY_SCALING.store(app.prefs.display_scaling.to_bits(), std::sync::atomic::Ordering::Relaxed);
     ui.plain_numbers = !app.prefs.use_sliders;
     textures::set_max_texture(512 << app.prefs.max_tex.min(4));
+    let last_dir = app.tree_path.as_ref().and_then(|p| p.parent().map(|d| d.to_path_buf())).or_else(|| app.prefs.recent.first().and_then(|r| std::path::Path::new(r).parent().map(|d| d.to_path_buf())));
+    prefs::set_dialog_state(app.prefs.native_dialogs, last_dir);
     if !scripted_run() {
         app.autosave_tick();
     }
@@ -718,6 +720,27 @@ async fn main() {
     }
     if let Some(k) = std::env::var("TM_PREFSPAGE").ok().and_then(|s| s.parse::<usize>().ok()) {
         app.prefs_page = k;
+    }
+    // TM_FHBEND=<node>: Freehand mode on that generator, bent 35 degrees (picture 46)
+    if let Ok(s) = std::env::var("TM_FHBEND") {
+        if let Some(n) = app.nodes.iter_mut().find(|n| n.name == s) {
+            for (k, v) in [("Angle", 35.0), ("AxisX", 1.0), ("AxisY", 0.0), ("AxisZ", 0.0), ("Lower", 0.35), ("Upper", 0.8)] {
+                n.p.extra.insert(format!("Freehand:{}", k), v);
+            }
+            // TM_FHKEPT=1: an earlier bend near the top, kept (picture 47)
+            if std::env::var("TM_FHKEPT").as_deref() == Ok("1") {
+                for (k, v) in [("Angle", 50.0), ("AxisX", 0.0), ("AxisY", 0.0), ("AxisZ", 1.0), ("Lower", 0.7), ("Upper", 0.95), ("Shape", 1.0)] {
+                    n.p.extra.insert(format!("Freehand:Kept0:{}", k), v);
+                }
+                n.p.extra.insert("Freehand:KeptCount".into(), 1.0);
+                n.p.extra.insert("Freehand:Lower".into(), 0.2);
+                n.p.extra.insert("Freehand:Upper".into(), 0.45);
+            }
+            let id = n.id;
+            app.select(Sel::Node(id));
+            app.edit_mode = 2;
+            app.dirty = true;
+        }
     }
     // TM_THEMETAB=1: Themes > Node Editor (picture 44)
     if let Some(k) = std::env::var("TM_THEMETAB").ok().and_then(|s| s.parse::<usize>().ok()) {

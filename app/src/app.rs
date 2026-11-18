@@ -238,6 +238,12 @@ pub struct App {
     /// Freehand: the stroke being drawn (screen points) and where it attaches.
     pub(crate) free_stroke: Vec<Vec2>,
     pub(crate) free_anchor: Option<Vec3>,
+    /// Freehand's bend controller (picture 46): the part dragged (1 top, 2 band, 3 pivot) and the
+    /// mouse, pivot, top, screen span and screen direction when the drag began.
+    pub(crate) fh_drag: u8,
+    /// The controller part under the mouse (picture 47).
+    pub(crate) fh_hover: u8,
+    pub(crate) fh_grab: (Vec2, f32, f32, f32, Vec2),
     /// Where a left click started in the viewport (a click without dragging picks a mesh).
     pub(crate) click_start: Option<Vec2>,
     /// UV tab preview: show the picture, and which (0 Diffuse, 1 Normal, 2 Opacity).
@@ -500,6 +506,9 @@ impl App {
             var_cohesion_drag: false,
             free_stroke: vec![],
             free_anchor: None,
+            fh_drag: 0,
+            fh_hover: 0,
+            fh_grab: (Vec2::ZERO, 0.0, 0.0, 1.0, Vec2::ZERO),
             click_start: None,
             uv_show_tex: true,
             uv_slot: 0,
@@ -676,6 +685,7 @@ impl App {
             self.sel_fwd.clear();
             self.sel = s;
             self.prop_scroll = 0.0;
+            self.prop_scroll_target = 0.0;
             self.dirty = true;
         }
         if let Sel::Material(i) = s {
@@ -1087,6 +1097,20 @@ impl App {
             let ext = (self.bounds.1 - self.bounds.0).length();
             // below the grid by a share of the camera distance, so they never fight (picture 43)
             render::draw_ground((ext * 0.9).clamp(12.0, 400.0), -(self.cam.dist * 0.004).max(0.02), self.prefs.color("ground"));
+        }
+        // the world origin (picture 46): a filled disc in its own colour, lit up while the Tree
+        // node is selected
+        {
+            let tree_sel = matches!(self.sel, Sel::Node(id) if self.node(id).map_or(false, |n| n.kind == Kind::Tree));
+            let c = self.prefs.color("origin");
+            let (fill, ring, rw) = if tree_sel {
+                (Color::new((c.r * 1.3).min(1.0), (c.g * 1.3).min(1.0), (c.b * 1.3).min(1.0), (c.a + 0.1).min(1.0)), self.prefs.color("picked"), 0.14)
+            } else {
+                (Color::new(c.r, c.g, c.b, c.a * 0.75), Color::new(c.r * 0.6, c.g * 0.6, c.b * 0.6, c.a), 0.035)
+            };
+            let ext = (self.bounds.1 - self.bounds.0).length();
+            let rad = (ext * 0.1).clamp(2.5, 40.0);
+            render::draw_disc(rad, (self.cam.dist * 0.0008).max(0.004), fill, ring, rw * rad);
         }
         if self.show_grid {
             let p = &self.prefs;
@@ -1658,7 +1682,7 @@ impl App {
     /// group per material) to a file the person picks.
     pub(crate) fn export_obj(&mut self) {
         let Some(gpu) = &self.gpu else { return };
-        let Some(path) = rfd::FileDialog::new().set_title("Export tree").add_filter("Wavefront OBJ", &["obj"]).set_file_name("tree.obj").save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Export tree").add_filter("Wavefront OBJ", &["obj"]).set_file_name("tree.obj").save_file() else { return };
         let s = self.obj_text(gpu);
         match std::fs::write(&path, s) {
             Ok(()) => self.set_status(&format!("Exported {}", path.display())),
@@ -2043,7 +2067,7 @@ impl App {
         let label = trail.last().cloned().unwrap_or_default();
         // a template: the generators (and scene objects) the original's template file holds
         if label == "From file..." {
-            let Some(path) = rfd::FileDialog::new().set_title("Add from template").add_filter("Templates", &["stt"]).add_filter("All files", &["*"]).pick_file() else { return };
+            let Some(path) = crate::prefs::file_dialog().set_title("Add from template").add_filter("Templates", &["stt"]).add_filter("All files", &["*"]).pick_file() else { return };
             match crate::templates::load_stt(&path) {
                 Ok(list) => self.build_template(list),
                 Err(e) => self.set_status(&format!("Couldn't read that template: {}", e)),
@@ -2566,7 +2590,7 @@ impl App {
     /// "Custom" material preview: pick an OBJ and show the material on it. Returns false when
     /// nothing was loaded.
     pub fn load_custom_preview(&mut self) -> bool {
-        let f = match rfd::FileDialog::new().add_filter("Wavefront OBJ", &["obj"]).pick_file() {
+        let f = match crate::prefs::file_dialog().add_filter("Wavefront OBJ", &["obj"]).pick_file() {
             Some(f) => f.to_string_lossy().to_string(),
             None => return false,
         };
@@ -3033,7 +3057,7 @@ impl App {
     }
 
     fn pick_mesh_file() -> Option<String> {
-        rfd::FileDialog::new().add_filter("Mesh (OBJ)", &["obj"]).pick_file().map(|p| p.to_string_lossy().to_string())
+        crate::prefs::file_dialog().add_filter("Mesh (OBJ)", &["obj"]).pick_file().map(|p| p.to_string_lossy().to_string())
     }
 
     pub(crate) fn add_mesh_from_file(&mut self) {
@@ -3134,7 +3158,7 @@ impl App {
             }
         };
         let name = format!("{}_{}.obj", self.meshes[cur].name.replace(' ', "_"), LOD_NAMES[l]);
-        if let Some(p) = rfd::FileDialog::new().add_filter("Mesh (OBJ)", &["obj"]).set_file_name(&name).save_file() {
+        if let Some(p) = crate::prefs::file_dialog().add_filter("Mesh (OBJ)", &["obj"]).set_file_name(&name).save_file() {
             match meshio::save_obj(&p.to_string_lossy(), &g) {
                 Ok(()) => self.set_status("Mesh exported"),
                 Err(e) => self.set_status(&format!("Couldn't export: {}", e)),

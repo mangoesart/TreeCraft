@@ -16,7 +16,7 @@ use macroquad::prelude::*;
 
 /// (key saved in the file, label, default colour as RGBA)
 /// Keys starting with node_ are the Node Editor's colours; the rest the 3D viewport's.
-pub const VIEWPORT_COLORS: [(&str, &str, [f32; 4]); 33] = [
+pub const VIEWPORT_COLORS: [(&str, &str, [f32; 4]); 34] = [
     ("bg_top", "Background (top)", [0.26, 0.27, 0.29, 1.0]),
     ("bg_bottom", "Background (bottom)", [0.14, 0.14, 0.15, 1.0]),
     ("grid", "Grid", [1.0, 1.0, 1.0, 0.07]),
@@ -53,6 +53,8 @@ pub const VIEWPORT_COLORS: [(&str, &str, [f32; 4]); 33] = [
     ("sky_horizon", "Sky (horizon)", [0.75, 0.88, 0.98, 1.0]),
     ("sky_ground", "Below the horizon", [0.64, 0.65, 0.61, 1.0]),
     ("ground", "Ground", [0.55, 0.55, 0.50, 1.0]),
+    // the world origin's disc (picture 46)
+    ("origin", "World origin", [0.80, 0.42, 0.26, 0.85]),
 ];
 
 /// Viewport backgrounds (Preferences > Themes): TreeCraft's dark gradient, or the original's sky.
@@ -1123,5 +1125,30 @@ impl App {
         ui.text("Data", page.x + 4.0, page.y + 2.0, 13.0, C_TEXT);
         ui.text("TreeCraft never collects or sends any data about how it's used.", page.x + 8.0, page.y + 32.0, 12.5, C_TEXT_DIM);
         ui.text("Everything stays on this computer, so there's no reporting to turn on or off.", page.x + 8.0, page.y + 52.0, 12.5, C_TEXT_DIM);
+    }
+}
+
+/// Preferences > General > Always use native file dialogs (picture 45): off, TreeCraft's file
+/// windows open in the folder used last; on, wherever the system chooses.
+static DIALOG_NATIVE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+static DIALOG_DIR: std::sync::Mutex<Option<std::path::PathBuf>> = std::sync::Mutex::new(None);
+
+/// Called every frame with the setting and the folder used last.
+pub fn set_dialog_state(native: bool, dir: Option<std::path::PathBuf>) {
+    DIALOG_NATIVE.store(native, std::sync::atomic::Ordering::Relaxed);
+    if let Ok(mut d) = DIALOG_DIR.lock() {
+        *d = dir;
+    }
+}
+
+/// A file window, opening in the folder used last unless native dialogs are asked for.
+pub fn file_dialog() -> rfd::FileDialog {
+    let fd = rfd::FileDialog::new();
+    if DIALOG_NATIVE.load(std::sync::atomic::Ordering::Relaxed) {
+        return fd;
+    }
+    match DIALOG_DIR.lock().ok().and_then(|d| d.clone()).filter(|d| d.is_dir()) {
+        Some(d) => fd.set_directory(d),
+        None => fd,
     }
 }

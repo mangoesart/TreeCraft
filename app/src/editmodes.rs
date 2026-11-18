@@ -30,6 +30,18 @@ fn ray_segment(o: Vec3, d: Vec3, a: Vec3, b: Vec3) -> (f32, f32, f32) {
     (p.distance(q), s, t)
 }
 
+/// Freehand's bend controller on a generator (picture 46).
+pub(crate) struct FhCtrl {
+    id: u32,
+    lower: f32,
+    upper: f32,
+    len: f32,
+    pivot: Vec3,
+    top: Vec3,
+    tan: Vec3,
+    band: Vec<Vec3>,
+}
+
 impl App {
     /// The curve editor keeps the mouse while it is over it (or dragging); elsewhere the app
     /// works as usual, the editor staying open beside it (picture 34).
@@ -345,7 +357,12 @@ impl App {
             }
             _ => {
                 if self.free_stroke.is_empty() {
-                    if !(over && ui.inp.l_pressed && !ui.inp.alt) {
+                    // the bend controller's handles first (picture 46)
+                    if self.freehand_input(ui, over, &mat) {
+                        return true;
+                    }
+                    // Ctrl + drag draws a new branch
+                    if !(over && ui.inp.l_pressed && !ui.inp.alt && ui.inp.ctrl) {
                         return false;
                     }
                     // start on an existing branch to grow from it
@@ -379,6 +396,236 @@ impl App {
                 true
             }
         }
+    }
+
+    /// Freehand's bend controller on the selected generator (picture 46): its first node's spine,
+    /// the pivot and top as shares of its length, the points there, and the spine's direction at
+    /// the pivot.
+    fn fh_controller(&self) -> Option<FhCtrl> {
+        let Sel::Node(id) = self.sel else { return None };
+        let n = self.node(id)?;
+        if !n.kind.makes_spines() {
+            return None;
+        }
+        let g = self.geo.as_ref()?;
+        let pts = g.hits.iter().find(|h| h.0 == id && h.2.len() > 1)?.2.clone();
+        let get = |k: &str, d: f32| n.p.extra.get(k).map(|v| *v as f32).unwrap_or(d);
+        let lower = get("Freehand:Lower", 0.3).clamp(0.0, 0.95);
+        let upper = get("Freehand:Upper", 1.0).clamp(lower + 0.05, 1.0);
+        let mut cum = vec![0.0f32; pts.len()];
+        for k in 1..pts.len() {
+            cum[k] = cum[k - 1] + pts[k].distance(pts[k - 1]);
+        }
+        let len = cum[pts.len() - 1].max(1e-4);
+        let at = |s: f32| -> (Vec3, Vec3) {
+            let d = s.clamp(0.0, 1.0) * len;
+            let mut k = 0;
+            while k + 2 < pts.len() && cum[k + 1] < d {
+                k += 1;
+            }
+            let f = ((d - cum[k]) / (cum[k + 1] - cum[k]).max(1e-6)).clamp(0.0, 1.0);
+            (pts[k].lerp(pts[k + 1], f), (pts[k + 1] - pts[k]).normalize_or(Vec3::Y))
+        };
+        let (pivot, tan) = at(lower);
+        let (top, _) = at(upper);
+        let band: Vec<Vec3> = (0..=16).map(|i| at(lower + (upper - lower) * i as f32 / 16.0).0).collect();
+        Some(FhCtrl { id, lower, upper, len, pivot, top, tan, band })
+    }
+
+    /// Freehand mode: the bend controller's handles take left drags (Ctrl + drag draws a branch).
+    fn freehand_input(&mut self, ui: &mut Ui, over: bool, mat: &Mat4) -> bool {
+        let m = ui.mouse();
+        let ctrl = self.fh_controller();
+        // what's under the mouse, to light it (picture 47)
+        self.fh_hover = match (&ctrl, over) {
+            (Some(c), true) => self.fh_hit(mat, m, c),
+            _ => 0,
+        };
+        if self.fh_drag == 0 {
+            if !(over && ui.inp.l_pressed && !ui.inp.alt) || ui.inp.ctrl {
+                return false;
+            }
+            let Some(c) = ctrl else { return false };
+            let (Some(sp), Some(st)) = (self.to_screen(mat, c.pivot), self.to_screen(mat, c.top)) else { return false };
+            let part = self.fh_hit(mat, m, &c);
+            if part == 0 {
+                return false;
+            }
+            // screen length of one whole spine-length along the band, and its screen direction
+            let span = (st - sp).length() / (c.upper - c.lower).max(0.05);
+            let sdir = (st - sp).normalize_or(vec2(0.0, -1.0));
+            // moving the band or the pivot keeps the bend made so far where it is (picture 47): it
+            // joins the kept bends and the controller starts a new, straight one
+            if part != 1 {
+                if let Some(n) = self.nodes.iter_mut().find(|x| x.id == c.id) {
+                    let ang = n.p.extra.get("Freehand:Angle").copied().unwrap_or(0.0);
+                    if ang.abs() > 0.01 {
+                        let i = n.p.extra.get("Freehand:KeptCount").copied().unwrap_or(0.0) as usize;
+                        for k in ["Lower", "Upper", "Angle", "AxisX", "AxisY", "AxisZ", "Shape"] {
+                            if let Some(v) = n.p.extra.get(&format!("Freehand:{}", k)).copied() {
+                                n.p.extra.insert(format!("Freehand:Kept{}:{}", i, k), v);
+                            }
+                        }
+                        n.p.extra.insert("Freehand:KeptCount".into(), (i + 1) as f64);
+                        n.p.extra.insert("Freehand:Angle".into(), 0.0);
+                        self.dirty = true;
+                    }
+                }
+            }
+            self.fh_drag = part;
+            self.fh_grab = (m, c.lower, c.upper, span, sdir);
+            return true;
+        }
+        if !ui.inp.l_down {
+            self.fh_drag = 0;
+            return true;
+        }
+        let Some(c) = ctrl else {
+            self.fh_drag = 0;
+            return true;
+        };
+        let (m0, lo0, up0, span, sdir) = self.fh_grab;
+        let ds = (m - m0).dot(sdir) / span.max(1.0);
+        let mut vals: Vec<(&str, f32)> = vec![];
+        match self.fh_drag {
+            1 => {
+                // the top handle: aim the band from the pivot at the mouse (on the plane facing the
+                // camera through the top), turning round the axis between the two
+                if let Some(target) = self.screen_to_plane(mat, m, c.top) {
+                    let v0 = c.tan * (c.len * (c.upper - c.lower)).max(0.01);
+                    let v1 = target - c.pivot;
+                    let axis = v0.cross(v1);
+                    if axis.length_squared() > 1e-10 && v1.length_squared() > 1e-8 {
+                        let axis = axis.normalize();
+                        let ang = v0.normalize().dot(v1.normalize()).clamp(-1.0, 1.0).acos().to_degrees();
+                        vals = vec![("Angle", ang), ("AxisX", axis.x), ("AxisY", axis.y), ("AxisZ", axis.z)];
+                    }
+                }
+            }
+            2 => {
+                // the band: slide the whole controller along the generator
+                let w = up0 - lo0;
+                let lo = (lo0 + ds).clamp(0.0, 1.0 - w);
+                vals = vec![("Lower", lo), ("Upper", lo + w)];
+            }
+            _ => {
+                // the pivot: stretch or shorten the band from below
+                vals = vec![("Lower", (lo0 + ds).clamp(0.0, up0 - 0.05))];
+            }
+        }
+        if let Some(n) = self.nodes.iter_mut().find(|x| x.id == c.id) {
+            for (k, v) in vals {
+                n.p.extra.insert(format!("Freehand:{}", k), v as f64);
+            }
+            self.dirty = true;
+        }
+        true
+    }
+
+    /// Which part of the controller is under the mouse: 1 top handle, 2 band, 3 pivot, 0 none.
+    fn fh_hit(&self, mat: &Mat4, m: Vec2, c: &FhCtrl) -> u8 {
+        let (Some(sp), Some(st)) = (self.to_screen(mat, c.pivot), self.to_screen(mat, c.top)) else { return 0 };
+        if st.distance(m) < 14.0 {
+            return 1;
+        }
+        if sp.distance(m) < 13.0 {
+            return 3;
+        }
+        let on_band = c.band.windows(2).any(|w| {
+            if let (Some(a), Some(b)) = (self.to_screen(mat, w[0]), self.to_screen(mat, w[1])) {
+                let ab = b - a;
+                let t = ((m - a).dot(ab) / ab.length_squared().max(1e-6)).clamp(0.0, 1.0);
+                (a + ab * t).distance(m) < 8.0
+            } else {
+                false
+            }
+        });
+        if on_band {
+            2
+        } else {
+            0
+        }
+    }
+
+    /// Over the viewport in Freehand mode (pictures 46, 47): the controller, drawn as a glowing
+    /// band that shades from cyan at the pivot to green at the top with small beads along it, a
+    /// pill-shaped hinge at the pivot and a ringed knob with bend arrows at the top; the part under
+    /// the mouse or being dragged grows and brightens. The bend, and how many earlier bends are
+    /// kept, show on a small tag by the knob.
+    fn draw_freehand_controller(&self) {
+        let Some(c) = self.fh_controller() else { return };
+        let mat = self.view_matrix();
+        let pts: Vec<Vec2> = c.band.iter().filter_map(|p| self.to_screen(&mat, *p)).collect();
+        if pts.len() < 2 {
+            return;
+        }
+        let lit = |part: u8| self.fh_drag == part || (self.fh_drag == 0 && self.fh_hover == part);
+        let cyan = Color::new(0.2, 0.75, 1.0, 1.0);
+        let green = Color::new(0.3, 0.95, 0.5, 1.0);
+        let mix = |t: f32| Color::new(cyan.r + (green.r - cyan.r) * t, cyan.g + (green.g - cyan.g) * t, cyan.b + (green.b - cyan.b) * t, 1.0);
+        let n = pts.len() - 1;
+        let bw = if lit(2) { 6.0 } else { 4.0 };
+        // a soft glow, a dark edge, then the coloured band
+        for w in pts.windows(2) {
+            draw_line(w[0].x, w[0].y, w[1].x, w[1].y, bw + 12.0, Color::new(0.2, 0.75, 1.0, if lit(2) { 0.22 } else { 0.12 }));
+        }
+        for w in pts.windows(2) {
+            draw_line(w[0].x, w[0].y, w[1].x, w[1].y, bw + 3.0, Color::new(0.03, 0.06, 0.1, 0.85));
+            draw_circle(w[1].x, w[1].y, (bw + 3.0) * 0.5, Color::new(0.03, 0.06, 0.1, 0.85));
+        }
+        for (k, w) in pts.windows(2).enumerate() {
+            let c0 = mix(k as f32 / n as f32);
+            draw_line(w[0].x, w[0].y, w[1].x, w[1].y, bw, c0);
+            draw_circle(w[1].x, w[1].y, bw * 0.5, c0);
+        }
+        // beads along the band
+        for (k, p) in pts.iter().enumerate().skip(2).step_by(3) {
+            if k < n - 1 {
+                draw_circle(p.x, p.y, bw * 0.32, Color::new(1.0, 1.0, 1.0, 0.75));
+            }
+        }
+        // the pivot: a pill across the band with a hinge dot
+        let (sp, st) = (pts[0], pts[n]);
+        let d = (pts[1] - pts[0]).normalize_or(vec2(0.0, -1.0));
+        let nrm = vec2(-d.y, d.x);
+        let pw = if lit(3) { 15.0 } else { 12.0 };
+        let pink = if lit(3) { Color::new(1.0, 0.5, 0.8, 1.0) } else { Color::new(0.92, 0.3, 0.68, 1.0) };
+        draw_circle(sp.x, sp.y, pw + 8.0, Color::new(0.95, 0.3, 0.7, if lit(3) { 0.22 } else { 0.1 }));
+        draw_line(sp.x - nrm.x * pw, sp.y - nrm.y * pw, sp.x + nrm.x * pw, sp.y + nrm.y * pw, 11.0, Color::new(0.05, 0.03, 0.06, 0.9));
+        for e in [-1.0f32, 1.0] {
+            draw_circle(sp.x + nrm.x * pw * e, sp.y + nrm.y * pw * e, 5.5, Color::new(0.05, 0.03, 0.06, 0.9));
+            draw_circle(sp.x + nrm.x * pw * e, sp.y + nrm.y * pw * e, 4.0, pink);
+        }
+        draw_line(sp.x - nrm.x * pw, sp.y - nrm.y * pw, sp.x + nrm.x * pw, sp.y + nrm.y * pw, 8.0, pink);
+        draw_circle(sp.x, sp.y, 4.5, WHITE);
+        draw_circle(sp.x, sp.y, 2.2, pink);
+        // the top: a ringed knob with a small arrow either side (the ways it bends)
+        let r = if lit(1) { 12.0 } else { 9.5 };
+        draw_circle(st.x, st.y, r + 9.0, Color::new(0.3, 0.95, 0.5, if lit(1) { 0.25 } else { 0.12 }));
+        draw_circle(st.x, st.y, r + 2.5, Color::new(0.03, 0.06, 0.1, 0.9));
+        draw_circle(st.x, st.y, r, green);
+        draw_circle_lines(st.x, st.y, r - 3.0, 1.5, Color::new(1.0, 1.0, 1.0, 0.9));
+        draw_circle(st.x, st.y, 2.5, WHITE);
+        let td = (pts[n] - pts[n - 1]).normalize_or(vec2(0.0, -1.0));
+        let tn = vec2(-td.y, td.x);
+        for e in [-1.0f32, 1.0] {
+            let tip = st + tn * e * (r + 12.0);
+            let base = st + tn * e * (r + 5.0);
+            draw_triangle(tip, base + td * 4.5, base - td * 4.5, Color::new(1.0, 1.0, 1.0, if lit(1) { 0.95 } else { 0.6 }));
+        }
+        // the tag: this bend and how many earlier ones are kept
+        let ang = self.node(c.id).and_then(|n| n.p.extra.get("Freehand:Angle")).copied().unwrap_or(0.0);
+        let kept = self.node(c.id).and_then(|n| n.p.extra.get("Freehand:KeptCount")).copied().unwrap_or(0.0) as usize;
+        let mut t = if ang.abs() > 0.05 { format!("{:.0} deg", ang) } else { "drag to bend".to_string() };
+        if kept > 0 {
+            t = format!("{}  +{} kept", t, kept);
+        }
+        let tw = 10.0 + t.len() as f32 * 7.3;
+        let tr = Rect::new(st.x + r + 16.0, st.y - 10.0, tw, 20.0);
+        draw_rectangle(tr.x + 2.0, tr.y + 2.0, tr.w, tr.h, Color::new(0.0, 0.0, 0.0, 0.25));
+        draw_rectangle(tr.x, tr.y, tr.w, tr.h, Color::new(0.06, 0.08, 0.11, 0.85));
+        draw_rectangle(tr.x, tr.y, 3.0, tr.h, green);
+        draw_text(&t, tr.x + 8.0, tr.y + 14.5, 16.0, WHITE);
     }
 
     /// Turn a drawn stroke into a branch of the selected branch generator (a new "Hand Drawn"
@@ -456,14 +703,15 @@ impl App {
     /// Over the viewport: the stroke being drawn (Freehand).
     pub fn draw_edit_overlay(&self) {
         if self.edit_mode == 2 {
+            self.draw_freehand_controller();
             let c = self.prefs.color("picked");
             for w in self.free_stroke.windows(2) {
                 draw_line(w[0].x, w[0].y, w[1].x, w[1].y, 2.5, c);
             }
             let v = self.viewport;
-            let t = "Freehand: drag to draw a branch (start on a branch to grow from it)";
-            draw_rectangle(v.x + 8.0, v.y + v.h - 46.0, 430.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
-            draw_text(t, v.x + 14.0, v.y + v.h - 31.0, 16.0, c);
+            let t = "Freehand: knob bends, band slides, pink hinge moves the pivot; Ctrl+drag draws";
+            draw_rectangle(v.x + 38.0, v.y + v.h - 46.0, 600.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
+            draw_text(t, v.x + 44.0, v.y + v.h - 31.0, 16.0, c);
         } else if self.edit_mode == 1 {
             let v = self.viewport;
             let t = "Node mode: click a branch or leaf to fine-tune it (Tab: Generator mode)";

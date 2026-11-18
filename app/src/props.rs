@@ -24,6 +24,17 @@ pub struct Rows<'a> {
     pub var_req: Option<(String, Rect)>,
     /// The UV preview's settings and pictures for the shown branch generator (picture 25).
     pub uv: Option<UvView>,
+    /// Preferences > Property Bar (picture 45): Use group stacking (opening a group closes the
+    /// others), Group click (0 Slams to top, 1 Reveals), the group a click opened last frame to
+    /// bring into view, the panel's visible top and bottom, and what this frame asks for.
+    pub stack: bool,
+    pub click_mode: usize,
+    pub focus: Option<String>,
+    pub view: (f32, f32),
+    pub opened: Option<String>,
+    pub scroll_req: Option<f32>,
+    seen: Vec<String>,
+    focus_start: Option<f32>,
 }
 
 /// What the UV tab's preview needs: show the picture or not, which one (0 Diffuse, 1 Normal,
@@ -64,11 +75,46 @@ impl<'a> Rows<'a> {
     fn key(&self, k: &str) -> String {
         format!("{}.{}", self.prefix, k)
     }
+    /// A group that a click opened last frame has been drawn to here: scroll to it (Group click).
+    fn end_focus(&mut self) {
+        let Some(start) = self.focus_start.take() else { return };
+        let (top, bottom) = self.view;
+        let d = if self.click_mode == 0 {
+            // Slams to top: its header at the top of the panel
+            start - top - 4.0
+        } else if self.y > bottom {
+            // Reveals: just enough to show all of it, the header kept in view
+            (self.y - bottom + 8.0).min(start - top - 4.0)
+        } else if start < top {
+            start - top - 4.0
+        } else {
+            0.0
+        };
+        if d.abs() > 0.5 {
+            self.scroll_req = Some(d);
+        }
+    }
+
+    /// The panel is drawn: scroll requests settled, and with group stacking every other group
+    /// closed after one was opened.
+    pub fn finish(&mut self) {
+        self.end_focus();
+        if let (true, Some(k)) = (self.stack, self.opened.clone()) {
+            for g in self.seen.clone() {
+                if g != k {
+                    self.closed.insert(g);
+                }
+            }
+        }
+    }
+
     pub fn group(&mut self, title: &str) -> bool {
         // the group before this one has ended: its rows are no longer copied or pasted
         self.ui.grp_copy = false;
         self.ui.grp_paste = false;
+        self.end_focus();
         let key = self.key(&format!("grp.{}", title));
+        self.seen.push(key.clone());
         let r = Rect::new(self.x - 6.0, self.y + 4.0, self.w + 12.0, 24.0);
         self.ui.record(&format!("grp:{}", title), r);
         let open = !self.closed.contains(&key);
@@ -96,10 +142,14 @@ impl<'a> Rows<'a> {
         self.ui.text(title, r.x + 22.0, r.y + 5.0, 13.5, WHITE);
         if hot && self.ui.inp.l_pressed {
             if open {
-                self.closed.insert(key);
+                self.closed.insert(key.clone());
             } else {
                 self.closed.remove(&key);
+                self.opened = Some(key.clone());
             }
+        }
+        if open && self.focus.as_deref() == Some(key.as_str()) {
+            self.focus_start = Some(r.y);
         }
         self.y += 32.0;
         self.open = open;
@@ -641,15 +691,64 @@ fn node_mode_rows(r: &mut Rows, n: &mut Node, pick: Option<usize>) {
     }
 }
 
-/// Freehand mode: drawing branches by hand into the selected branch generator.
+/// Freehand mode (picture 46): the bend controller's settings for the selected generator - its
+/// pivot (the lower handle), the top of its band (the upper handle), how far and which way it
+/// bends and how the bend spreads over the band - plus Reset, and branches drawn by hand.
 fn freehand_rows(r: &mut Rows, n: &mut Node) {
     if r.group("Freehand") {
         if n.kind == Kind::Leaf {
-            r.note("Freehand draws branches: pick a Trunk or Branch generator.");
+            r.note("Freehand bends trunks and branches: pick a Trunk or Branch generator.");
             return;
         }
-        r.note("Drag in the viewport to draw a branch. Start on an existing");
-        r.note("branch to grow from it; it's drawn facing the camera.");
+        r.note("In the viewport: drag the green top handle to bend, the blue band");
+        r.note("to slide the controller, the pink handle to move the pivot.");
+        r.section("Bend controller");
+        let get = |p: &Params, k: &str, d: f32| p.extra.get(k).map(|v| *v as f32).unwrap_or(d);
+        let mut lower = get(&n.p, "Freehand:Lower", 0.3);
+        let mut upper = get(&n.p, "Freehand:Upper", 1.0);
+        let mut angle = get(&n.p, "Freehand:Angle", 0.0);
+        let axis = vec3(get(&n.p, "Freehand:AxisX", 0.0), get(&n.p, "Freehand:AxisY", 0.0), get(&n.p, "Freehand:AxisZ", 1.0)).normalize_or(Vec3::Z);
+        // the way the top leans, as degrees round the vertical
+        let lean = axis.cross(Vec3::Y);
+        let mut dir = if lean.length_squared() > 1e-6 { lean.x.atan2(lean.z).to_degrees() } else { 0.0 };
+        let mut shape = get(&n.p, "Freehand:Shape", 1.0);
+        let before = (lower, upper, angle, dir, shape);
+        r.f("fh.lower", "Pivot (lower handle)", &mut lower, 0.0, 1.0, 2);
+        r.f("fh.upper", "Top (upper handle)", &mut upper, 0.0, 1.0, 2);
+        r.f("fh.angle", "Bend (degrees)", &mut angle, -180.0, 180.0, 1);
+        r.f("fh.dir", "Bend direction (degrees)", &mut dir, -180.0, 180.0, 0);
+        r.f("fh.shape", "Bend shape (soft .. at the top)", &mut shape, 0.2, 4.0, 2);
+        if (lower, upper, angle, dir, shape) != before {
+            let lower = lower.clamp(0.0, 0.95);
+            let upper = upper.clamp(lower + 0.05, 1.0);
+            let d = dir.to_radians();
+            let ax = Vec3::Y.cross(vec3(d.sin(), 0.0, d.cos())).normalize_or(Vec3::Z);
+            for (k, v) in [("Lower", lower), ("Upper", upper), ("Angle", angle), ("AxisX", ax.x), ("AxisY", ax.y), ("AxisZ", ax.z), ("Shape", shape.clamp(0.2, 4.0))] {
+                n.p.extra.insert(format!("Freehand:{}", k), v as f64);
+            }
+            r.changed = true;
+        }
+        // bends made before the controller was moved stay (picture 47)
+        let kept = n.p.extra.get("Freehand:KeptCount").copied().unwrap_or(0.0) as usize;
+        r.info("Kept bends", &kept.to_string());
+        if kept > 0 && r.button("fh.undokept", "Remove the last kept bend") {
+            n.p.extra.retain(|k, _| !k.starts_with(&format!("Freehand:Kept{}:", kept - 1)));
+            n.p.extra.insert("Freehand:KeptCount".into(), (kept - 1) as f64);
+            r.changed = true;
+        }
+        if r.button("fh.resetbend", "Reset all bends") {
+            n.p.extra.retain(|k, _| !k.starts_with("Freehand:"));
+            r.changed = true;
+        }
+        // Reset: the generator back to a new one's settings (its name and links stay)
+        if r.button("fh.resetgen", "Reset generator to default") {
+            let mut q = Params::new(n.kind);
+            q.neutralize();
+            n.p = q;
+            r.changed = true;
+        }
+        r.section("Drawn branches");
+        r.note("Ctrl + drag in the viewport draws a new branch.");
         r.info("Drawn branches", &n.p.drawn.len().to_string());
         if !n.p.drawn.is_empty() {
             if r.button("free.undo", "Remove the last drawn branch") {
@@ -899,7 +998,7 @@ pub fn material_props(r: &mut Rows, m: &mut Material, mesh_names: &[String]) -> 
 }
 
 pub fn pick_image() -> Option<String> {
-    rfd::FileDialog::new()
+    crate::prefs::file_dialog()
         .add_filter("Images", &["png", "jpg", "jpeg", "tga", "bmp"])
         .pick_file()
         .map(|p| p.to_string_lossy().to_string())
@@ -964,7 +1063,13 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     let over_uv = app.uv_rect.map_or(false, |r| r.contains(ui.mouse()));
     app.uv_rect = None;
     if ui.hover_any(body) && ui.inp.wheel != 0.0 && ui.popup.is_none() && !over_uv {
-        app.prop_scroll = (app.prop_scroll - ui.inp.wheel * 60.0).max(0.0);
+        app.prop_scroll_target = (app.prop_scroll_target - ui.inp.wheel * 60.0).max(0.0);
+    }
+    // Preferences > Property Bar > Animate scrolling (picture 45): glide toward where it scrolls
+    if app.prefs.animate_scroll && (app.prop_scroll_target - app.prop_scroll).abs() > 0.5 {
+        app.prop_scroll += (app.prop_scroll_target - app.prop_scroll) * 0.25;
+    } else {
+        app.prop_scroll = app.prop_scroll_target;
     }
     ui.set_clip(Some(body));
     let start_y = y - app.prop_scroll;
@@ -972,7 +1077,29 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     let mat_names: Vec<String> = app.materials.iter().map(|m| m.name.clone()).collect();
     let mnames = mesh_names(&app.meshes);
     let mut closed = std::mem::take(&mut app.closed_groups);
-    let mut rows = Rows { ui, x, y: start_y, w, changed: false, prefix: String::new(), closed: &mut closed, open: true, curve_keys: Default::default(), curve_req: None, uv: None, var_amounts: Default::default(), var_req: None };
+    let mut rows = Rows {
+        ui,
+        x,
+        y: start_y,
+        w,
+        changed: false,
+        prefix: String::new(),
+        closed: &mut closed,
+        open: true,
+        curve_keys: Default::default(),
+        curve_req: None,
+        uv: None,
+        var_amounts: Default::default(),
+        var_req: None,
+        stack: app.prefs.group_stacking,
+        click_mode: app.prefs.group_click,
+        focus: app.prop_focus.take(),
+        view: (body.y, body.y + body.h),
+        opened: None,
+        scroll_req: None,
+        seen: vec![],
+        focus_start: None,
+    };
     match app.sel {
         Sel::None => {
             rows.note("");
@@ -1095,6 +1222,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                         app.uv_last_mouse = u.last_mouse;
                         app.uv_rect = u.rect;
                         app.prop_scroll = (app.prop_scroll + u.scroll_by).max(0.0);
+                        app.prop_scroll_target = app.prop_scroll;
                     }
                 }
                 if let Some((prop, vr)) = rows.var_req.take() {
@@ -1111,6 +1239,14 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                     rows.changed = true;
                 }
                 if rows.changed {
+                    // Preferences > General > Warn about node edit losses (picture 45): a change to
+                    // how many nodes the generator makes, or where, can leave single-node edits on
+                    // other nodes than before
+                    let o = &app.nodes[idx].p;
+                    let moved = o.frequency != n.p.frequency || o.number != n.p.number || o.seed != n.p.seed || o.gen_mode != n.p.gen_mode || o.first != n.p.first || o.last != n.p.last || o.interval != n.p.interval || o.per_node != n.p.per_node || o.limit != n.p.limit || o.relative != n.p.relative;
+                    if moved && app.prefs.warn_node_edits && !n.p.node_edits.is_empty() {
+                        app.set_status(&format!("Warning: {} has {} single-node edit(s); this change moves its nodes, so they may now apply to different nodes", n.name, n.p.node_edits.len()));
+                    }
                     app.nodes[idx] = n;
                     app.dirty = true;
                 }
@@ -1247,10 +1383,36 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
         }
     }
     let content_h = rows.y - start_y;
+    rows.finish();
+    let (opened, scroll_req, changed) = (rows.opened.clone(), rows.scroll_req, rows.changed);
     drop(rows);
     app.closed_groups = closed;
+    // a group a click opened is brought into view next frame (Group click)
+    if opened.is_some() {
+        app.prop_focus = opened;
+    }
+    if let Some(d) = scroll_req {
+        app.prop_scroll_target = (app.prop_scroll + d).max(0.0);
+    }
+    // Preferences > Tree Window > Hide selection indicator on edit (picture 45): while a value
+    // here is being changed
+    let now = get_time();
+    if changed || (ui.active != 0 && panel.contains(ui.mouse())) {
+        app.prop_edit_t = now;
+    }
+    let editing = now - app.prop_edit_t < 0.3;
+    let hide = match app.prefs.hide_sel_on_edit {
+        0 => editing,
+        1 => editing && app.wind_on,
+        _ => false,
+    };
+    if hide != app.sel_hidden {
+        app.sel_hidden = hide;
+        app.dirty = true;
+    }
     let max_scroll = (content_h - body.h + 20.0).max(0.0);
     app.prop_scroll = app.prop_scroll.min(max_scroll);
+    app.prop_scroll_target = app.prop_scroll_target.min(max_scroll);
     ui.set_clip(None);
     if max_scroll > 0.0 {
         let frac = body.h / (content_h + 20.0);
@@ -1324,12 +1486,13 @@ fn light_rows(r: &mut Rows, app: &mut App) {
         let mut pick = SHADOW_PRESETS
             .iter()
             .position(|p| (l.wrap - p.1).abs() < 1e-3 && (l.amb_intensity - p.2).abs() < 1e-3 && (l.ground_weight - p.3).abs() < 1e-3 && (l.ao_min - p.4).abs() < 1e-3 && (l.ao_contrast - p.5).abs() < 1e-3)
-            .map_or(0, |k| k + 1);
+            .unwrap_or(SHADOW_PRESETS.len());
         let before = pick;
-        let names: Vec<String> = std::iter::once("(custom)".to_string()).chain(SHADOW_PRESETS.iter().map(|p| p.0.to_string())).collect();
+        // Default first (picture 45), the styles, then "(custom)" when the values match none
+        let names: Vec<String> = SHADOW_PRESETS.iter().map(|p| p.0.to_string()).chain(std::iter::once("(custom)".to_string())).collect();
         r.combo("shpreset", "Style", &names, &mut pick);
-        if pick != before && pick > 0 {
-            let (_, w, ai, gw, aomin, aoc) = SHADOW_PRESETS[pick - 1];
+        if pick != before && pick < SHADOW_PRESETS.len() {
+            let (_, w, ai, gw, aomin, aoc) = SHADOW_PRESETS[pick];
             app.light.wrap = w;
             app.light.amb_intensity = ai;
             app.light.ground_weight = gw;

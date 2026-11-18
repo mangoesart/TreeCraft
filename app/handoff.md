@@ -106,3 +106,12 @@ props.rs light_rows (Sel::Light) replaces the Preferences Lighting page; PAGES n
 
 ## Picture 44
 render.rs: shadow FS opaque (GroundCol / Radius / ShadowColor = background), Wrap uniform, SHADOW_PRESETS; app.rs single shadow pass at -cam.dist x 0.002; props.rs light_rows: Shadow side light + Shadow presets; viewnav.rs person() rewritten; prefs.rs prefs_node_editor drawn inside Themes tab 1 (returns its end y), PAGES = Themes, Viewport, Wind, Global (Wind 2, Global 3). TM_THEMETAB for pictures.
+
+## Picture 45
+prefs.rs: new fields + pages General / Tree Window / Property Bar / Render / Data (PAGES indices 4-8), app_sig, file_dialog() + set_dialog_state (all rfd dialogs go through it). main.rs: DISPLAY_SCALING atomic in ui_scale, sample_count from prefs.msaa, per-frame prefs hooks (plain_numbers, max texture, dialog dir, autosave_tick). treefile.rs: autosave_tick, parallel textures::preload on open. textures.rs: MAX_TEX, preload / decode_file. app.rs: navigation schemes + reversals (vp_btn), sel_hidden in highlight, shadow drawn into shadow_rt then composited before the tree. props.rs: Rows stack / click_mode / focus / finish(), animate scroll (prop_scroll_target), hide-selection timing, node-edit warning, shadow style list (Default first). viewnav.rs: person() draws assets/human.png; fan and height size prefs. Note: test pictures may leave the person's prefs.txt changed (node_style=2 seen; left as is in case it was their choice).
+
+## Picture 46
+gen.rs freehand_bend (in make_spine before resample). editmodes.rs FhCtrl, fh_controller, freehand_input, draw_freehand_controller (edit_mode 2; Ctrl + drag = old stroke drawing). props.rs freehand_rows rewritten. app.rs fh_drag / fh_grab; origin disc via render::draw_disc before the grid, theme colour "origin". TM_FHBEND=<node> for pictures.
+
+## Picture 47
+gen.rs freehand_bend -> bend_once for each Freehand:Kept<i>: then Freehand:. editmodes.rs: fh_hit (hover + press), archive on band / pivot drag start, draw_freehand_controller redrawn; App.fh_hover. props.rs freehand_rows: kept count, remove last kept, reset all. TM_FHKEPT=1 (with TM_FHBEND) for pictures.

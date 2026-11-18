@@ -359,7 +359,7 @@ impl App {
     /// File > Save as with assets: copy every picture and mesh file the tree uses into
     /// "<name>_assets" beside the tree file, point the tree at the copies, then save.
     pub(crate) fn save_with_assets(&mut self) {
-        let Some(path) = rfd::FileDialog::new().set_title("Save tree with assets").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Save tree with assets").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file() else { return };
         let stem = path.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tree".into());
         let dir = path.with_file_name(format!("{}_assets", stem));
         if let Err(e) = std::fs::create_dir_all(&dir) {
@@ -410,7 +410,7 @@ impl App {
             only.extend(more);
         }
         let name = self.node(id).map(|n| n.name.clone()).unwrap_or_default();
-        let Some(path) = rfd::FileDialog::new().set_title("Export selected as mesh").add_filter("Wavefront OBJ", &["obj"]).set_file_name(&format!("{}.obj", name)).save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Export selected as mesh").add_filter("Wavefront OBJ", &["obj"]).set_file_name(&format!("{}.obj", name)).save_file() else { return };
         let geo = self.generate_with(Some(only));
         let gpu = crate::render::upload(&geo);
         let s = self.obj_text(&gpu);
@@ -427,7 +427,7 @@ impl App {
         };
         let text = crate::treefile::material_text(m);
         let name = m.name.clone();
-        let Some(path) = rfd::FileDialog::new().set_title("Export material").add_filter("TreeCraft material", &["tcmat"]).set_file_name(&format!("{}.tcmat", name)).save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Export material").add_filter("TreeCraft material", &["tcmat"]).set_file_name(&format!("{}.tcmat", name)).save_file() else { return };
         match std::fs::write(&path, text) {
             Ok(()) => self.set_status(&format!("Exported material \"{}\"", name)),
             Err(e) => self.set_status(&format!("Export failed: {}", e)),
@@ -435,7 +435,7 @@ impl App {
     }
 
     fn import_material(&mut self) {
-        let Some(path) = rfd::FileDialog::new().set_title("Import material asset").add_filter("TreeCraft material", &["tcmat"]).pick_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Import material asset").add_filter("TreeCraft material", &["tcmat"]).pick_file() else { return };
         let Some(mut m) = std::fs::read_to_string(&path).ok().and_then(|t| crate::treefile::material_from_text(&t)) else {
             self.set_status("That isn't a TreeCraft material file");
             return;
@@ -451,7 +451,7 @@ impl App {
 
     /// File > Export world building data: the tree's size and its collision objects as text.
     fn export_world_data(&mut self) {
-        let Some(path) = rfd::FileDialog::new().set_title("Export world building data").add_filter("Text", &["txt"]).set_file_name("tree_world.txt").save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Export world building data").add_filter("Text", &["txt"]).set_file_name("tree_world.txt").save_file() else { return };
         let (a, b) = self.bounds;
         let mut s = String::from("# TreeCraft world building data\n");
         s.push_str(&format!("height={}\nwidth_x={}\nwidth_z={}\nbounds_min={},{},{}\nbounds_max={},{},{}\n", b.y - a.y, b.x - a.x, b.z - a.z, a.x, a.y, a.z, b.x, b.y, b.z));
@@ -470,13 +470,13 @@ impl App {
     /// hides the viewport's own controls).
     fn export_image(&mut self, photo: bool) {
         let title = if photo { "Render photo" } else { "Export image" };
-        let Some(path) = rfd::FileDialog::new().set_title(title).add_filter("PNG image", &["png"]).set_file_name(if photo { "photo.png" } else { "tree.png" }).save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title(title).add_filter("PNG image", &["png"]).set_file_name(if photo { "photo.png" } else { "tree.png" }).save_file() else { return };
         self.shot_queue.push((path, None, photo));
     }
 
     /// File > Export image sequence: 36 pictures turning once around the tree.
     fn export_sequence(&mut self) {
-        let Some(dir) = rfd::FileDialog::new().set_title("Export image sequence (pick a folder)").pick_folder() else { return };
+        let Some(dir) = crate::prefs::file_dialog().set_title("Export image sequence (pick a folder)").pick_folder() else { return };
         let yaw0 = self.cam.yaw;
         for k in 0..36 {
             self.shot_queue.push((dir.join(format!("tree_{:03}.png", k)), Some(yaw0 + k as f32 * std::f32::consts::TAU / 36.0), true));

@@ -881,8 +881,52 @@ fn make_spine(
             }
         }
     }
+    freehand_bend(&mut pts, p);
     let pts = resample_spine(&pts, p, len);
     Some(build_spine(node.id, pts, r0, p))
+}
+
+/// Freehand's bends (pictures 46, 47): every bend kept from earlier (Freehand:Kept<i>:...,
+/// Freehand:KeptCount of them) in the order they were made, then the controller's own
+/// (Freehand:...). Each one: above its pivot (Lower, a share of the length) the spine turns round
+/// its Axis, little by little along its band up to the top (Upper), by Angle degrees in all; past
+/// the top it keeps that direction. Shape is how the turning spreads over the band (1 evenly,
+/// below 1 sooner near the pivot, above 1 later near the top). Lengths are kept.
+fn freehand_bend(pts: &mut Vec<Vec3>, p: &Params) {
+    let kept = pex(p, "Freehand:KeptCount", 0.0).max(0.0) as usize;
+    for i in 0..kept.min(64) {
+        bend_once(pts, p, &format!("Freehand:Kept{}:", i));
+    }
+    bend_once(pts, p, "Freehand:");
+}
+
+fn bend_once(pts: &mut Vec<Vec3>, p: &Params, pre: &str) {
+    let get = |k: &str, d: f32| pex(p, &format!("{}{}", pre, k), d);
+    let ang = get("Angle", 0.0);
+    if ang.abs() < 0.01 || pts.len() < 2 {
+        return;
+    }
+    let axis = vec3(get("AxisX", 0.0), get("AxisY", 0.0), get("AxisZ", 1.0)).normalize_or_zero();
+    if axis == Vec3::ZERO {
+        return;
+    }
+    let lo = get("Lower", 0.3).clamp(0.0, 0.95);
+    let hi = get("Upper", 1.0).clamp(lo + 0.05, 1.0);
+    let shape = get("Shape", 1.0).clamp(0.2, 4.0);
+    let mut cum = vec![0.0f32; pts.len()];
+    for k in 1..pts.len() {
+        cum[k] = cum[k - 1] + pts[k].distance(pts[k - 1]);
+    }
+    let total = cum[pts.len() - 1].max(1e-5);
+    let mut out = vec![pts[0]];
+    for k in 1..pts.len() {
+        let s = (cum[k - 1] + cum[k]) * 0.5 / total;
+        let w = ((s - lo) / (hi - lo)).clamp(0.0, 1.0).powf(shape);
+        let q = Quat::from_axis_angle(axis, ang.to_radians() * w);
+        let prev = out[k - 1];
+        out.push(prev + q * (pts[k] - pts[k - 1]));
+    }
+    *pts = out;
 }
 
 /// The Segments tab's Length settings (picture 39) laid on a grown spine: "+ Relative" segments

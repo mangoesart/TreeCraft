@@ -90,45 +90,26 @@ fn fan_icon(c: Vec2, s: f32, col: Color, spin: f32) {
     draw_circle(c.x, c.y, s * 0.13, Color::new(0.1, 0.1, 0.12, 1.0));
 }
 
-/// A person for scale beside the height indicator (pictures 43, 44; TreeCraft's own figure, not
-/// the original's waving man): an ordinary adult standing at ease, weight on one leg, arms
-/// relaxed, `tall` pixels high with the feet at `foot`.
+thread_local! {
+    /// The person for scale (picture 45: the reference figure the person gave), made once.
+    static HUMAN: std::cell::RefCell<Option<Texture2D>> = const { std::cell::RefCell::new(None) };
+}
+
+/// A person for scale beside the height indicator (picture 45: the person's own reference
+/// figure, its background cut away), `tall` pixels high with the feet at `foot`.
 fn person(foot: Vec2, tall: f32, col: Color) {
-    let s = tall;
-    let p = |x: f32, y: f32| vec2(foot.x + x * s, foot.y - y * s);
-    // a limb that narrows from `wa` to `wb`, with rounded ends
-    let limb = |a: Vec2, b: Vec2, wa: f32, wb: f32| {
-        let d = (b - a).normalize_or(vec2(0.0, 1.0));
-        let n = vec2(-d.y, d.x);
-        let (wa, wb) = (wa * s * 0.5, wb * s * 0.5);
-        draw_triangle(a + n * wa, a - n * wa, b + n * wb, col);
-        draw_triangle(a - n * wa, b - n * wb, b + n * wb, col);
-        draw_circle(a.x, a.y, wa, col);
-        draw_circle(b.x, b.y, wb, col);
-    };
-    // legs: the left one straight under the body, the right one a little out
-    limb(p(-0.045, 0.52), p(-0.05, 0.28), 0.085, 0.06);
-    limb(p(-0.05, 0.28), p(-0.05, 0.035), 0.06, 0.042);
-    limb(p(0.045, 0.52), p(0.065, 0.28), 0.085, 0.06);
-    limb(p(0.065, 0.28), p(0.085, 0.035), 0.06, 0.042);
-    // feet
-    limb(p(-0.065, 0.018), p(-0.02, 0.018), 0.035, 0.03);
-    limb(p(0.075, 0.018), p(0.12, 0.018), 0.035, 0.03);
-    // hips and body: narrower at the waist, broad at the shoulders
-    limb(p(0.0, 0.5), p(0.0, 0.6), 0.19, 0.155);
-    limb(p(0.0, 0.6), p(0.0, 0.79), 0.155, 0.235);
-    // shoulders, neck and head
-    limb(p(-0.1, 0.795), p(0.1, 0.795), 0.06, 0.06);
-    limb(p(0.0, 0.8), p(0.0, 0.86), 0.05, 0.045);
-    draw_ellipse(foot.x, foot.y - 0.93 * s, 0.052 * s, 0.065 * s, 0.0, col);
-    // arms hanging relaxed, slightly away from the body
-    limb(p(-0.115, 0.79), p(-0.14, 0.625), 0.052, 0.042);
-    limb(p(-0.14, 0.625), p(-0.145, 0.47), 0.042, 0.034);
-    limb(p(0.115, 0.79), p(0.14, 0.625), 0.052, 0.042);
-    limb(p(0.14, 0.625), p(0.15, 0.47), 0.042, 0.034);
-    // hands
-    draw_ellipse(foot.x - 0.147 * s, foot.y - 0.445 * s, 0.02 * s, 0.03 * s, 0.0, col);
-    draw_ellipse(foot.x + 0.152 * s, foot.y - 0.445 * s, 0.02 * s, 0.03 * s, 0.0, col);
+    let _ = col;
+    let t = HUMAN.with(|h| {
+        let mut h = h.borrow_mut();
+        if h.is_none() {
+            let t = Texture2D::from_file_with_format(include_bytes!("../assets/human.png"), Some(ImageFormat::Png));
+            t.set_filter(FilterMode::Linear);
+            *h = Some(t);
+        }
+        h.clone().unwrap()
+    });
+    let w = tall * t.width() / t.height().max(1.0);
+    draw_texture_ex(&t, foot.x - w * 0.5, foot.y - tall, WHITE, DrawTextureParams { dest_size: Some(vec2(w, tall)), ..Default::default() });
 }
 
 impl App {

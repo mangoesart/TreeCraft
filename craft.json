@@ -7,10 +7,10 @@
     "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe"
   },
   "stack": "Rust + macroquad",
-  "status": "building",
-  "note": "The builder stopped (Claude Code stopped: You've hit your 5-hour limit · resets 2:10am (America/Toronto)). Picking up where it left off…",
+  "status": "ready",
+  "note": "Ready: 4 of 5 checks pass, 3 of 3 claims hold; 1 comparison remains unverified. 1 question about the original is still open.",
   "created_ms": 1794110733302,
-  "updated_ms": 1794972098728,
+  "updated_ms": 1795026260803,
   "checks": [
     {
       "round": 1,
@@ -6868,6 +6868,204 @@
       "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
       "artifacts": [],
       "at_ms": 1794970898612
+    },
+    {
+      "round": 53,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795004193834
+    },
+    {
+      "round": 53,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-53\\screenshot.png"
+      ],
+      "at_ms": 1795004196848
+    },
+    {
+      "round": 53,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-53\\self-test.json"
+      ],
+      "at_ms": 1795004200251,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 53,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795004200263,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 53,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795004200263
+    },
+    {
+      "round": 54,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795004683746
+    },
+    {
+      "round": 54,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-54\\screenshot.png"
+      ],
+      "at_ms": 1795004686778
+    },
+    {
+      "round": 54,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-54\\self-test.json"
+      ],
+      "at_ms": 1795004690674,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 54,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795004690687,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 54,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795004690687
+    },
+    {
+      "round": 55,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795026254351
+    },
+    {
+      "round": 55,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-55\\screenshot.png"
+      ],
+      "at_ms": 1795026257397
+    },
+    {
+      "round": 55,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-55\\self-test.json"
+      ],
+      "at_ms": 1795026260773,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 55,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795026260786,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 55,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795026260787
     }
   ],
   "agent_session": "2b5bc499-023c-4b03-af39-666182b03b0f",
@@ -6878,7 +7076,7 @@
     "tool:native_window_capture",
     "tool:build_command_run"
   ],
-  "last_reply": "Now merging the Node Editor settings into Themes > Node Editor.Now the shadow: drawn once and solid (so overlapping parts can't flicker), placed between the ground and the grid.Now the shadow-side brightness (\"wrap\" light) and the shadow style presets.Now a normal human figure for scale.Themes > Node Editor now holds the node colours and all the node editor settings together. Running the full check.All four changes from your picture are in, and the app builds and passes its checks.\n\n- **Node Editor settings:** they now sit in Preferences > Themes > Node Editor, under the node colours. The separate Node Editor page is gone.\n- **Person for scale:** redrawn as an ordinary adult standing at ease, with weight on one leg and arms relaxed. It's still 1.8 units tall and is my own figure, not SpeedTree's.\n- **Shadow:** it's now hard and drawn once as a solid shade of the ground's colour, so overlapping parts can no longer stack up and flicker. It sits just under the grid, so the grid lines show over it.\n  - It does have a limit: being solid, it uses the ground colour or the plain colour below the horizon. That can look slightly off where it falls past the edge of the ground disc.\n- **Shadow side and presets:** Light > Shadows has a new \"Shadow side light\" setting that lets some sunlight wrap round onto the shaded side. It's on a little by default, so the dark side is lighter than before. Below it, a \"Shadow presets\" list offers five looks:\n  - Uncharted style (soft)\n  - Red Dead style (realistic)\n  - Zelda style (bright, painterly)\n  - The Last of Us style (moody)\n  - Ghost of Tsushima style (warm, airy)\n\n  These are my own interpretations of those games' looks, not values taken from them.\n\nI checked the Node Editor tab and the new hard shadow in pictures. The figure was drawn very small in the picture's default camera view, so I couldn't judge its look, and I can't test flicker from a still picture. I haven't tried the presets or the shadow-side setting by hand.",
+  "last_reply": "Now making the bend builder apply every kept bend, then the current one.Now the controller: archive the current bend when the band or pivot starts moving, and the new look.Builds. Extending the picture hook with a kept bend so I can see both bends and the new controller.Both bends show (the kept upper bend plus the new lower one) with the new controller. Shortening the hint line so it fits, then the full check.Both changes from your picture are in, and the app builds and passes its checks.\n\n- **Bends are kept:** moving the controller no longer loses a bend. As soon as you start dragging the band or the pink handle, the bend you've made stays where it is and the controller starts a fresh, straight one. You can build up several bends this way.\n  - The Freehand panel shows how many bends are kept, with \"Remove the last kept bend\" and \"Reset all bends\".\n- **New controller look:**\n  - The band glows and shades from cyan at the pivot to green at the top, with small beads along it.\n  - The pivot is a pink hinge shaped like a pill.\n  - The top is a ringed green knob with small arrows showing the ways it bends.\n  - Each part lights up when the mouse is over it or while you drag it, and a small tag by the knob shows the bend angle and how many earlier bends are kept.\n\nI checked a trunk with one kept bend near the top and a new bend lower down in a picture, and both showed with the new controller. I haven't dragged the handles by hand to confirm that moving the band or pink handle keeps the bend.",
   "asset_budget_usd": 5.0,
   "generate_assets": false,
   "questions": "ask",

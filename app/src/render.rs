@@ -582,6 +582,27 @@ pub fn draw_ground(radius: f32, y: f32, col: Color) {
     draw_mesh(&Mesh { vertices: v, indices: idx, texture: None });
 }
 
+/// A flat disc at the ground (picture 46: the world origin's marker): filled with `fill`, ringed
+/// with `ring` of width `ring_w`, at height `y`.
+pub fn draw_disc(radius: f32, y: f32, fill: Color, ring: Color, ring_w: f32) {
+    let seg = 64;
+    let mut v: Vec<Vertex> = vec![Vertex { position: vec3(0.0, y, 0.0), uv: Vec2::ZERO, color: fill.into(), normal: vec4(0.0, 1.0, 0.0, 1.0) }];
+    let mut idx: Vec<u16> = vec![];
+    for k in 0..=seg {
+        let a = k as f32 / seg as f32 * std::f32::consts::TAU;
+        let (c, s) = (a.cos(), a.sin());
+        v.push(Vertex { position: vec3(c * (radius - ring_w), y, s * (radius - ring_w)), uv: Vec2::ZERO, color: fill.into(), normal: vec4(0.0, 1.0, 0.0, 1.0) });
+        v.push(Vertex { position: vec3(c * (radius - ring_w), y, s * (radius - ring_w)), uv: Vec2::ZERO, color: ring.into(), normal: vec4(0.0, 1.0, 0.0, 1.0) });
+        v.push(Vertex { position: vec3(c * radius, y, s * radius), uv: Vec2::ZERO, color: ring.into(), normal: vec4(0.0, 1.0, 0.0, 1.0) });
+        if k < seg {
+            let b = (1 + k * 3) as u16;
+            idx.extend_from_slice(&[0, b, b + 3]);
+            idx.extend_from_slice(&[b + 1, b + 2, b + 4, b + 2, b + 5, b + 4]);
+        }
+    }
+    draw_mesh(&Mesh { vertices: v, indices: idx, texture: None });
+}
+
 /// The same shader drawing every layer additively without depth (Render > Other > Overdraw):
 /// places drawn over many times turn bright.
 pub fn make_overdraw_material() -> Result<macroquad::material::Material, String> {
@@ -662,7 +683,9 @@ pub struct Lighting {
 
 /// Shadow looks (picture 44), styles after well-known games (TreeCraft's own settings, not taken
 /// from those games): name, wrap, ambient intensity, ground weight, AO min, AO contrast.
-pub const SHADOW_PRESETS: [(&str, f32, f32, f32, f32, f32); 5] = [
+pub const SHADOW_PRESETS: [(&str, f32, f32, f32, f32, f32); 6] = [
+    // TreeCraft's starting look (picture 45)
+    ("Default", 0.3, 0.4, 0.3, 0.25, 0.0),
     ("Uncharted style (soft shadows)", 0.55, 0.75, 0.25, 0.45, 0.0),
     ("Red Dead style (realistic shadows)", 0.12, 0.45, 0.5, 0.25, 0.2),
     ("Zelda style (bright, painterly)", 0.75, 0.95, 0.2, 0.6, -0.2),

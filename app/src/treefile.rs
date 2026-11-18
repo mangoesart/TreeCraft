@@ -464,7 +464,7 @@ impl App {
     pub fn save_tree(&mut self, ask: bool) -> bool {
         let path = match (&self.tree_path, ask) {
             (Some(p), false) => Some(p.clone()),
-            _ => rfd::FileDialog::new().set_title("Save tree").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file(),
+            _ => crate::prefs::file_dialog().set_title("Save tree").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file(),
         };
         let Some(path) = path else { return false };
         self.save_tree_to(path)
@@ -517,7 +517,7 @@ impl App {
         if !self.confirm_discard() {
             return;
         }
-        let Some(path) = rfd::FileDialog::new().set_title("Open tree").add_filter("TreeCraft tree", &["tctree"]).pick_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Open tree").add_filter("TreeCraft tree", &["tctree"]).pick_file() else { return };
         self.open_path(path);
     }
 

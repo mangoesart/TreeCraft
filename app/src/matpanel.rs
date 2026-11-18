@@ -296,7 +296,7 @@ impl App {
 
     /// "+": pick texture files; each becomes a new material with that picture in its Color slot.
     pub(crate) fn add_materials_from_textures(&mut self) {
-        let files = rfd::FileDialog::new().add_filter("Images", &["png", "jpg", "jpeg", "tga", "bmp"]).pick_files().unwrap_or_default();
+        let files = crate::prefs::file_dialog().add_filter("Images", &["png", "jpg", "jpeg", "tga", "bmp"]).pick_files().unwrap_or_default();
         for f in files {
             let f = f.to_string_lossy().to_string();
             let stem = std::path::Path::new(&f).file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or("Material".into());
