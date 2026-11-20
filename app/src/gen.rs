@@ -1275,6 +1275,15 @@ struct SkinLook {
     blend_tex: f32,
     blend_contrast: f32,
     blend_noise: f32,
+    /// Welding > Segments (TreeCraft's own, picture 59): extra rings in the weld zone (0 =
+    /// automatic), how tightly they pack toward the parent, and how many more steps the rings
+    /// there go round in.
+    weld_rings: usize,
+    weld_bias: f32,
+    weld_radial: f32,
+    /// Welding > Push (picture 61): the weld's surface moved into (-) or out of (+) the parent by
+    /// this share of its radius, for parents whose surface isn't a round cylinder at the joint.
+    weld_push: f32,
     // Intersection > Texture Blend
     pull: f32,
     pull_offset: f32,
@@ -1307,6 +1316,10 @@ impl SkinLook {
             blend_tex: pex(p, "Skin:Welding:Blend:Texture", 0.75).clamp(0.0, 1.0),
             blend_contrast: pex(p, "Skin:Welding:Blend:Contrast", 5.0).max(0.0),
             blend_noise: pex(p, "Skin:Welding:Blend:Noise", 3.0).max(0.0),
+            weld_rings: pex(p, "Skin:Welding:Segments:Rings", 0.0).max(0.0).round() as usize,
+            weld_bias: pex(p, "Skin:Welding:Segments:Ring bias", 1.35).clamp(0.3, 5.0),
+            weld_radial: pex(p, "Skin:Welding:Segments:Radial detail", 2.0).clamp(1.0, 4.0),
+            weld_push: pex(p, "Skin:Welding:Push", 0.0).clamp(-0.9, 2.0),
             pull: if blend && weld.is_some() { pex(p, "Skin:Intersection:Texture Blend:Pull", 0.2) } else { 0.0 },
             pull_offset: pex(p, "Skin:Intersection:Texture Blend:Offset", 0.0),
             subd,
@@ -1377,12 +1390,12 @@ fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, wel
     }
 }
 
-/// Welding's extra rings (picture 58): the weld zone gets `8 + 6 x Offset` rings (6..32), closer
-/// together toward the parent, so the base can bend smoothly onto it; the rest of the branch
-/// keeps its own points.
-fn densify_base(s: &Spine, zone: f32, offset: f32) -> Spine {
-    let n = ((8.0 + 6.0 * offset).round() as usize).clamp(6, 32);
-    let mut ds: Vec<f32> = (0..=n).map(|i| zone * (i as f32 / n as f32).powf(1.35)).collect();
+/// Welding's extra rings (pictures 58, 59): the weld zone gets Welding > Segments > Rings rings
+/// (0 = automatic: 8 + 6 x Offset, up to 64), packed toward the parent by Ring bias, so the base
+/// can bend smoothly onto it; the rest of the branch keeps its own points.
+fn densify_base(s: &Spine, zone: f32, offset: f32, rings: usize, bias: f32) -> Spine {
+    let n = if rings > 0 { rings.clamp(2, 96) } else { ((8.0 + 6.0 * offset).round() as usize).clamp(6, 64) };
+    let mut ds: Vec<f32> = (0..=n).map(|i| zone * (i as f32 / n as f32).powf(bias.clamp(0.3, 5.0))).collect();
     ds.extend(s.cum.iter().copied().filter(|c| *c > zone * 1.0001));
     let len = s.len.max(1e-6);
     let mut out = Spine { node: s.node, pts: vec![], rad: vec![], tan: vec![], nrm: vec![], cum: vec![], len: s.len, mat: s.mat, parent_spine: s.parent_spine, pos_on_parent: s.pos_on_parent };
@@ -1399,11 +1412,18 @@ fn densify_base(s: &Spine, zone: f32, offset: f32) -> Spine {
 }
 
 fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, look: &SkinLook) {
-    // the weld zone: from the parent's middle out past its surface by Offset x the parent radius
-    let zone = look.weld.map_or(0.0, |(pr, _, _)| pr * (1.0 + look.weld_offset));
+    // the weld zone (picture 59): from the parent's middle to where the branch's lowest side
+    // leaves the parent (further for a branch leaving at a shallow angle), plus Offset x the
+    // parent radius of fillet
+    let zone = look.weld.map_or(0.0, |(pr, ptan, _)| {
+        let d0 = if s0.pts.len() > 1 { (s0.pts[1] - s0.pts[0]).normalize_or(Vec3::Y) } else { Vec3::Y };
+        let c = d0.dot(ptan.normalize_or(Vec3::Y)).abs();
+        let sn = (1.0 - c * c).sqrt().max(0.25);
+        (pr + s0.rad[0] * c) / sn + pr * look.weld_offset
+    });
     let dense;
     let s: &Spine = if zone > 0.0 && s0.len > zone * 0.2 && s0.pts.len() >= 2 {
-        dense = densify_base(s0, zone.min(s0.len), look.weld_offset);
+        dense = densify_base(s0, zone.min(s0.len), look.weld_offset, look.weld_rings, look.weld_bias);
         &dense
     } else {
         s0
@@ -1422,7 +1442,7 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
     let ring_n: Vec<usize> = (0..m)
         .map(|k| {
             let n = ((radial as f32 * curve_at(p, "Segments:Radial:Absolute", 2, s.cum[k] / s.len.max(1e-6))).round() as usize).clamp(3, 64);
-            if zone > 0.0 && s.cum[k] < zone { (n * 2).min(64) } else { n }
+            if zone > 0.0 && s.cum[k] < zone { ((n as f32 * look.weld_radial).round() as usize).clamp(3, 96) } else { n }
         })
         .collect();
     let need: usize = ring_n.iter().map(|r| r + 1).sum::<usize>() + 2;
@@ -1447,6 +1467,8 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
     let mut bmin = Vec3::splat(f32::MAX);
     let mut bmax = Vec3::splat(f32::MIN);
     let mut ring_start: Vec<usize> = Vec::with_capacity(m);
+    // the weld solver's cut distance per column (ring step count, column)
+    let mut cross_cache: HashMap<(usize, usize), f32> = HashMap::new();
     for k in 0..m {
         let radial = ring_n[k];
         ring_start.push(ch.v.len());
@@ -1456,7 +1478,6 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
         let sfrac = s.cum[k] / s.len;
         let dist = s.cum[k];
         let mut ao = if trunk { 0.8 + 0.2 * sfrac } else { 0.62 + 0.38 * sfrac };
-        let w = if zone > 0.0 { (1.0 - dist / zone).clamp(0.0, 1.0) } else { 0.0 };
         // Intersection > Texture Blend: near the parent the bark texture is pulled along the
         // branch (Pull), the pull starting further out with Offset
         let wp = if zone > 0.0 { (1.0 - (dist - look.pull_offset * zone) / zone).clamp(0.0, 1.0) } else { 0.0 };
@@ -1479,43 +1500,115 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
             let (na, nb) = ((a - squash_rot).cos() * (1.0 - squash), (a - squash_rot).sin());
             let mut nrm = (n * (na * cr - nb * sr) + b * (na * sr + nb * cr)).normalize_or(dir);
             let mut r = rad[k];
-            let mut weld_to: Option<(Vec3, Vec3, f32)> = None;
             // Welding > Blend's texture fade (picture 58): how far this spot of the base dissolves
             // into the parent's bark (0 solid .. 1 gone)
             let mut fade = 0.0f32;
-            if w > 0.0 {
-                if let Some((pr, ptan, pp)) = look.weld {
-                    // Welding > Spread (picture 57): the base widens over the parent, more toward
-                    // the parent's tip (Upper scale) or its base (Lower scale) ...
-                    let side = dir.normalize_or(dir).dot(ptan);
-                    let scale = if side >= 0.0 { look.upper } else { look.lower } * side.abs() + 0.25 * (1.0 - side.abs());
-                    r *= 1.0 + spread * 1.6 * w * w * (scale / 0.25);
-                    // ... and wraps onto the parent's surface there (the parent taken as a cylinder
-                    // along its direction at the joint): near the parent the ring lies on it, so
-                    // the joint never stands out of the parent; further out it eases back into the
-                    // branch's own tube
-                    let tube = s.pts[k] + dir * r;
-                    let v = tube - pp;
-                    let along = v.dot(ptan);
-                    let perp = v - ptan * along;
-                    let out = perp.normalize_or(dir);
-                    let surface = pp + ptan * along + out * (pr * 1.012);
-                    // how much it hugs the parent: fully at the parent's surface, none at the zone's end
-                    let hug = ((zone - dist) / (zone - pr * 0.999).max(1e-4)).clamp(0.0, 1.0);
-                    let hug = hug * hug * (3.0 - 2.0 * hug);
-                    weld_to = Some((surface, out, hug));
-                    // Welding > Blend: the joint's shading turns to the parent's (its surface
-                    // direction) by Texture, sharper with Contrast, ragged with Noise, so the joint
-                    // is hard to see; a faint darkening keeps the crease
-                    let jag = 1.0 + look.blend_noise * 0.05 * (a * 7.0 + dist * 13.0).sin();
-                    let wb = (hug * jag).clamp(0.0, 1.0).powf(1.0 + look.blend_contrast * 0.15);
-                    nrm = nrm.lerp(out, (look.blend_tex * wb).clamp(0.0, 1.0)).normalize_or(nrm);
-                    // the parent's own shading where it hugs it (a trunk's bark is lighter than a
-                    // branch's base), with a faint crease
-                    ao = ao + (0.86 - ao) * hug;
-                    ao *= 1.0 - 0.06 * look.blend_tex * wb;
-                    // the fade: strongest where the base lies on the parent, ending sooner with
-                    // more Contrast; the shader turns it into a ragged, bark-like edge
+            let mut pos = s.pts[k] + dir * r;
+            if let (true, Some((pr0, ptan0, pp))) = (dist < zone, look.weld) {
+                // (the cut is found on the parent's own surface; Push moves the result, below)
+                let pr = pr0;
+                // TreeCraft's weld solver (picture 59). The parent is taken as a cylinder along its
+                // direction at the joint. Each column of the base (one angle round the branch) is
+                // cut where it enters the parent, like a boolean cut: every vertex before the cut
+                // sits at the cut point on the parent's surface, so nothing of the branch is left
+                // inside the parent. After the cut, the base widens (Spread, more toward the
+                // parent's tip by Upper scale or its base by Lower scale) and settles down onto
+                // the parent's surface over a fillet as long as Offset x the parent radius, so it
+                // meets the parent smoothly.
+                let ptan = ptan0.normalize_or(Vec3::Y);
+                let radial_of = |q: Vec3| -> (f32, Vec3) {
+                    let v = q - pp;
+                    let perp = v - ptan * v.dot(ptan);
+                    (perp.length(), perp.normalize_or(dir))
+                };
+                let side = dir.normalize_or(dir).dot(ptan);
+                let scale = if side >= 0.0 { look.upper } else { look.lower } * side.abs() + 0.25 * (1.0 - side.abs());
+                let widen = |d: f32| -> f32 {
+                    let w = (1.0 - d / zone).clamp(0.0, 1.0);
+                    1.0 + spread * 1.6 * w * w * (scale / 0.25)
+                };
+                // a point of this column at distance d along the spine
+                let col_at = |d: f32| -> Vec3 {
+                    let t = (d / s.len.max(1e-6)).clamp(0.0, 1.0);
+                    let (tn2, n2, _) = s.frame(t);
+                    let b2 = tn2.cross(n2);
+                    let dir2 = n2 * (ca * cr - sa * sr) + b2 * (ca * sr + sa * cr);
+                    s.point(t) + dir2 * s.radius(t) * widen(d)
+                };
+                // where the column leaves the parent: march out, then halve the step
+                let key = (radial, j);
+                let cut = match cross_cache.get(&key) {
+                    Some(c) => *c,
+                    None => {
+                        let steps = 40;
+                        let mut prev = 0.0f32;
+                        let mut found = zone;
+                        if radial_of(col_at(0.0)).0 >= pr {
+                            found = 0.0;
+                        } else {
+                            for i in 1..=steps {
+                                let d = zone * i as f32 / steps as f32;
+                                if radial_of(col_at(d)).0 >= pr {
+                                    let (mut lo, mut hi) = (prev, d);
+                                    for _ in 0..10 {
+                                        let mid = (lo + hi) * 0.5;
+                                        if radial_of(col_at(mid)).0 >= pr { hi = mid } else { lo = mid }
+                                    }
+                                    found = hi;
+                                    break;
+                                }
+                                prev = d;
+                            }
+                        }
+                        cross_cache.insert(key, found);
+                        found
+                    }
+                };
+                let fillet = (pr * (0.35 + look.weld_offset * 0.6)).max(1e-3);
+                let (hug, out) = if dist <= cut {
+                    // before the cut: at the cut point, on the surface
+                    let q = col_at(cut);
+                    let (_, o) = radial_of(q);
+                    let v = q - pp;
+                    pos = pp + ptan * v.dot(ptan) + o * (pr * 1.003);
+                    (1.0, o)
+                } else {
+                    r *= widen(dist);
+                    pos = s.pts[k] + dir * r;
+                    let (rd, o) = radial_of(pos);
+                    // the fillet: settles toward the surface near the cut, eases out after it
+                    let u = ((dist - cut) / fillet).clamp(0.0, 1.0);
+                    let h = (1.0 - u) * (1.0 - u) * (1.0 + 2.0 * u);
+                    let excess = (rd - pr * 1.003).max(0.0);
+                    pos -= o * excess * h * 0.9;
+                    (h, o)
+                };
+                // never inside the parent
+                let (rd, o) = radial_of(pos);
+                if rd < pr * 1.003 {
+                    pos += o * (pr * 1.003 - rd);
+                }
+                // Push (pictures 61, 62): the whole edge near the parent moves in (-) or out (+)
+                // along the parent's surface direction by Push x its radius, evenly all the way
+                // round, fading out over the fillet; pushed in, it may go that far inside
+                if look.weld_push != 0.0 {
+                    let (_, o2) = radial_of(pos);
+                    pos += o2 * (look.weld_push * pr * hug);
+                }
+                // Welding > Blend: the joint's shading turns to the parent's (its surface
+                // direction) by Texture, sharper with Contrast, ragged with Noise; a faint
+                // darkening keeps the crease; the fade dissolves the base into the parent's bark
+                let jag = 1.0 + look.blend_noise * 0.05 * (a * 7.0 + dist * 13.0).sin();
+                let wb = (hug * jag).clamp(0.0, 1.0).powf(1.0 + look.blend_contrast * 0.15);
+                nrm = nrm.lerp(out, (look.blend_tex * wb).clamp(0.0, 1.0)).normalize_or(nrm);
+                ao = ao + (0.86 - ao) * hug;
+                ao *= 1.0 - 0.06 * look.blend_tex * wb;
+                // the dissolving texture fade (picture 58) is off for now (picture 60: it left a
+                // gap where the base meets the parent; texture blending comes later). The rule it
+                // used, kept for then: fade = Texture x smoothstep((hug - 0.5) x (1 + 0.3 Contrast)
+                // + 0.5) x ragged(Noise)
+                const TEXTURE_FADE: bool = false;
+                if TEXTURE_FADE {
                     let c = 1.0 + look.blend_contrast * 0.3;
                     let h2 = ((hug - 0.5) * c + 0.5).clamp(0.0, 1.0);
                     fade = (look.blend_tex * h2 * h2 * (3.0 - 2.0 * h2) * jag.min(1.2)).clamp(0.0, 1.0);
@@ -1526,10 +1619,6 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
             if seam > 0.0 && sfrac < 0.2 {
                 let k2 = seam * (1.0 - sfrac / 0.2);
                 nrm = nrm.lerp(s.tan[0], k2 * 0.8).normalize_or(nrm);
-            }
-            let mut pos = s.pts[k] + dir * r;
-            if let Some((surface, _, hug)) = weld_to {
-                pos = pos.lerp(surface, hug);
             }
             bmin = bmin.min(pos);
             bmax = bmax.max(pos);
@@ -1827,4 +1916,73 @@ fn collect(ctx: &GenCtx, spines: &[Spine]) -> HashMap<usize, MeshGeom> {
         out.insert(mi, g);
     }
     out
+}
+
+#[cfg(test)]
+mod weld_tests {
+    use super::*;
+
+    /// TreeCraft's weld solver (picture 59): a branch welded onto an upright trunk leaves nothing
+    /// inside the trunk, whatever angle it leaves at.
+    #[test]
+    fn welded_base_stays_out_of_the_parent() {
+        for &angle_deg in &[90.0f32, 60.0, 45.0, 30.0] {
+            let mut p = Params::new(Kind::Branch);
+            p.extra.insert("Skin:Welding:Enabled".into(), 1.0);
+            p.extra.insert("Skin:Welding:Spread:Amount".into(), 0.27);
+            p.extra.insert("Skin:Welding:Spread:Upper scale".into(), 0.58);
+            p.extra.insert("Skin:Welding:Spread:Lower scale".into(), 0.4);
+            let pr = 1.0f32;
+            let a = angle_deg.to_radians();
+            let dir = vec3(a.sin(), a.cos(), 0.0);
+            // the branch starts on the trunk's axis at height 5
+            let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, 5.0, 0.0) + dir * (i as f32 * 0.5)).collect();
+            let s = build_spine(1, pts, 0.6, &p);
+            let mut geo = TreeGeo::default();
+            skin(&s, &p, [255; 4], &mut geo, false, Some((pr, Vec3::Y, vec3(0.0, 5.0, 0.0))), 1, 0);
+            let mut n = 0;
+            let mut worst = f32::MAX;
+            for mg in geo.mats.values() {
+                for ch in &mg.chunks {
+                    for v in &ch.v {
+                        let q = v.position;
+                        let rd = (q.x * q.x + q.z * q.z).sqrt();
+                        worst = worst.min(rd);
+                        n += 1;
+                    }
+                }
+            }
+            assert!(n > 0, "no vertices at {} deg", angle_deg);
+            assert!(worst >= pr * 0.999, "a vertex {:.4} from the axis (inside the trunk) at {} deg", worst, angle_deg);
+        }
+    }
+
+    /// Welding > Push (picture 62): pushed in, the edge goes into the trunk on its upper side and
+    /// its lower side alike.
+    #[test]
+    fn push_moves_the_whole_edge() {
+        let mut p = Params::new(Kind::Branch);
+        p.extra.insert("Skin:Welding:Enabled".into(), 1.0);
+        p.extra.insert("Skin:Welding:Push".into(), -0.2);
+        let pr = 1.0f32;
+        let a = 50.0f32.to_radians();
+        let dir = vec3(a.sin(), a.cos(), 0.0);
+        let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, 5.0, 0.0) + dir * (i as f32 * 0.5)).collect();
+        let s = build_spine(1, pts, 0.6, &p);
+        let mut geo = TreeGeo::default();
+        skin(&s, &p, [255; 4], &mut geo, false, Some((pr, Vec3::Y, vec3(0.0, 5.0, 0.0))), 1, 0);
+        // the two sides split at the height where the branch's centre line leaves the trunk
+        let split = 5.0 + (pr / a.sin()) * a.cos();
+        let (mut upper, mut lower) = (f32::MAX, f32::MAX);
+        for mg in geo.mats.values() {
+            for ch in &mg.chunks {
+                for v in &ch.v {
+                    let q = v.position;
+                    let rd = (q.x * q.x + q.z * q.z).sqrt();
+                    if q.y > split { upper = upper.min(rd) } else { lower = lower.min(rd) }
+                }
+            }
+        }
+        assert!(upper < pr * 0.9 && lower < pr * 0.9, "pushed edge: upper {:.3}, lower {:.3}", upper, lower);
+    }
 }

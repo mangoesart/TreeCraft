@@ -321,8 +321,15 @@ impl App {
                         Some((id, _, _)) => self.select(Sel::Node(id)),
                         // a click on empty space lets go of the selected generator (picture 26)
                         None => {
-                            // ... and of a material, mesh or any other panel: back to the default view (picture 48)
-                            if !matches!(self.sel, Sel::None) {
+                            // a generator (picture 62, like Blender): the first click only drops
+                            // its highlight, its settings stay to edit; the next one deselects.
+                            // A material, mesh or any other panel goes back to the default view
+                            // (picture 48)
+                            if matches!(self.sel, Sel::Node(_)) && !self.sel_soft {
+                                self.sel_soft = true;
+                                self.dirty = true;
+                                self.set_status("Unhighlighted: its settings stay; click empty space again to deselect");
+                            } else if !matches!(self.sel, Sel::None) {
                                 self.select(Sel::None);
                             }
                         }

@@ -33,3 +33,15 @@ gen.rs: weld info is now (parent radius, tangent, point); skin_tube hugs the par
 
 ## Picture 58
 gen.rs: densify_base() at skin_tube's start when welded (zone computed first); ring_n doubled inside the zone; per-vertex fade into col[3]. render.rs FS: hash3/vnoise, weld fade discard + weldShade on base. TM_WELD=Branch (+ TM_WELDNEAR=1, + TM_RENDER=6 for wires) for pictures.
+
+## Picture 59
+gen.rs skin_tube: the zone uses the branch angle; densify_base(rings, bias); ring_n x weld_radial in the zone; the per-vertex solver (col_at, cross_cache, cut, fillet, the never-inside check). SkinLook.weld_rings / weld_bias / weld_radial; stprops + stpanel rows Skin:Welding:Segments:*. Test gen::weld_tests. Note: shot49.ps1 run twice back to back can catch the previous window; wait 9 s or take one shot per call.
+
+## Picture 60
+gen.rs skin_tube: const TEXTURE_FADE = false stops the per-vertex fade (the shader still reads alpha, now always full). Texture blending at the weld is deferred by the person's request.
+
+## Picture 61
+matpanel.rs slot 4 and props.rs material rows: Specular as one value. gen.rs SkinLook.weld_push (pr = pr0 x (1 + push) inside the solver); stprops + stpanel row Skin:Welding:Push. stpanel.rs: tab_bar restyled, sub_tab_bar(); draw() builds the Skin sub-tabs and filters rows (sub_filter); Rows.sub_tab <-> App.prop_sub_tab. TM_SUBTAB=<n> for pictures.
+
+## Picture 62
+gen.rs: Push applied after the never-inside step (o2 x push x pr x hug); tests in weld_tests. stpanel.rs draw(): sub-tabs for any tab != All with >= 3 entries; Rows.sub_tabs HashMap <-> App.prop_sub_tabs; Intersection merged into Welding. app.rs draw_dock tabs and matpanel SUBTABS restyled. App.sel_soft: editmodes viewport_pick (first empty click), GenCtx.highlight and the outline gate skip it, select() clears it; props subtitle hint.

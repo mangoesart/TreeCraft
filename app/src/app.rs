@@ -342,8 +342,14 @@ pub struct App {
     /// the window is open, and the pictures still to render.
     pub mat_export: Option<crate::matexport::MatExport>,
     pub mat_export_open: bool,
+    /// The sub-tab picked inside each generator tab (pictures 61, 62): 0 All, then General and
+    /// its sections; by "branch:<tab>" / "leaf:<tab>".
+    pub prop_sub_tabs: HashMap<String, usize>,
     /// Hold V and left-drag in the viewport: turning the light (picture 56).
     pub light_vdrag: bool,
+    /// Blender-like selection (picture 62): one click on empty space leaves the generator's
+    /// settings in the panel, editable, without its highlight; a second click deselects it.
+    pub sel_soft: bool,
     pub mat_export_job: Option<crate::matexport::ExportJob>,
     pub mat_export_result: Option<crate::matexport::ExportResult>,
     /// The Properties panel's tab for branch and for leaf generators (0 = All).
@@ -594,7 +600,9 @@ impl App {
             cam_rename: None,
             mat_export: None,
             mat_export_open: false,
+            prop_sub_tabs: HashMap::new(),
             light_vdrag: false,
+            sel_soft: false,
             mat_export_job: None,
             mat_export_result: None,
             prop_tab: 0,
@@ -722,6 +730,11 @@ impl App {
     }
 
     pub fn select(&mut self, s: Sel) {
+        // picking anything (again) brings its highlight back (picture 62)
+        if self.sel_soft {
+            self.sel_soft = false;
+            self.dirty = true;
+        }
         if self.sel != s {
             self.sel_back.push(self.sel);
             if self.sel_back.len() > 200 {
@@ -1273,7 +1286,7 @@ impl App {
             // Selection > Outline (picture 30): the selected generator's shape into a picture the
             // size of the viewport; draw_selection_outline rings it afterwards
             self.sel_drawn = false;
-            if self.prefs.sel_mode != 0 && self.highlight && !self.sel_hidden && matches!(self.sel, Sel::Node(_)) {
+            if self.prefs.sel_mode != 0 && self.highlight && !self.sel_hidden && !self.sel_soft && matches!(self.sel, Sel::Node(_)) {
                 if let Some(mm) = &self.mask_mat {
                     let (w, h) = (vp.2.max(1) as u32, vp.3.max(1) as u32);
                     if self.sel_rt.as_ref().map_or(true, |t| t.texture.width() as u32 != w || t.texture.height() as u32 != h) {
@@ -1851,7 +1864,8 @@ impl App {
             materials: &self.materials,
             meshes: &self.meshes,
             selected,
-            highlight: self.highlight && only.is_none() && !self.sel_hidden,
+            // (picture 62: after one click on empty space the generator's settings stay, unhighlighted)
+            highlight: self.highlight && only.is_none() && !self.sel_hidden && !self.sel_soft,
             show_branches: self.show_branches,
             forces: &forces,
             leaf_collision: self.leaf_collision,
@@ -2087,10 +2101,16 @@ impl App {
             let w = ui.text_w(t, 13.0) + 20.0;
             let tr = Rect::new(x, r.y, w, 26.0);
             ui.record(&format!("tab:{}", t), tr);
-            if i == self.tab {
-                draw_rectangle(tr.x, tr.y, tr.w, tr.h, C_PANEL);
-            }
             let hot = ui.hover(tr);
+            // the app's main-tab look (pictures 61, 62): the pick filled with the accent and lit
+            // along its top
+            let pill = Rect::new(tr.x + 2.0, tr.y + 2.0, tr.w - 4.0, tr.h - 4.0);
+            if i == self.tab {
+                draw_round_rect(pill, 4.0, C_ACCENT);
+                draw_rectangle(pill.x + 3.0, pill.y, pill.w - 6.0, 2.0, Color::new(1.0, 1.0, 1.0, 0.85));
+            } else if hot {
+                draw_round_rect(pill, 4.0, C_BTN_HOT);
+            }
             ui.text_center(t, tr, 13.0, if i == self.tab || hot { WHITE } else { C_TEXT_DIM });
             if hot && ui.inp.l_pressed {
                 self.tab = i;

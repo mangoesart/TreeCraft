@@ -153,12 +153,19 @@ pub const BRANCH_PROPS: &[StProp] = &[
     ("Skin:Welding:Keep failed", "false", false, 0.0),
     ("Skin:Welding:Force ray casts", "false", false, 0.0),
     ("Skin:Welding:Offset", "1", true, 0.0),
+    // TreeCraft's own (picture 61): the weld pushed into (-) or out of (+) the parent
+    ("Skin:Welding:Push", "0", false, 0.0),
     ("Skin:Welding:Spread:Amount", "0.1", true, 0.0),
     ("Skin:Welding:Spread:Upper scale", "0.25", true, 0.0),
     ("Skin:Welding:Spread:Lower scale", "0.25", true, 0.0),
     ("Skin:Welding:Blend:Texture", "0.75", true, 0.0),
     ("Skin:Welding:Blend:Contrast", "5", true, 0.0),
     ("Skin:Welding:Blend:Noise", "3", true, 0.0),
+    // TreeCraft's own weld segmentation (picture 59): extra rings in the weld zone (0 =
+    // automatic), how tightly they pack toward the parent, more steps round the rings there
+    ("Skin:Welding:Segments:Rings", "0", false, 0.0),
+    ("Skin:Welding:Segments:Ring bias", "1.35", false, 0.0),
+    ("Skin:Welding:Segments:Radial detail", "2", false, 0.0),
     ("Skin:Subdivision:Relax scale", "1", true, 0.0),
     ("Skin:Subdivision:Smooth", "0.5", true, 0.05),
     ("Skin:Subdivision:Texture density", "1", true, 0.0),

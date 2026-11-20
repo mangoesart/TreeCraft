@@ -34,6 +34,9 @@ pub struct Rows<'a> {
     pub scroll_req: Option<f32>,
     seen: Vec<String>,
     focus_start: Option<f32>,
+    /// The sub-tab picked inside each main tab that has them (pictures 61, 62), by
+    /// "branch:<tab>" / "leaf:<tab>", in and out.
+    pub sub_tabs: std::collections::HashMap<String, usize>,
 }
 
 /// What the UV tab's preview needs: show the picture or not, which one (0 Diffuse, 1 Normal,
@@ -966,7 +969,14 @@ pub fn material_props(r: &mut Rows, m: &mut Material, mesh_names: &[String]) -> 
         let mut rough = 1.0 - m.gloss;
         r.f("gloss", "Roughness", &mut rough, 0.0, 1.0, 2);
         m.gloss = 1.0 - rough;
-        r.color("specular", "Specular", &mut m.specular_color);
+        // Specular (picture 61): one value; the three channels stay equal
+        let mut spec = (m.specular_color[0] + m.specular_color[1] + m.specular_color[2]) / 3.0;
+        let before = spec;
+        r.f("specular", "Specular", &mut spec, 0.0, 1.0, 2);
+        if spec != before {
+            let v = spec.clamp(0.0, 1.0);
+            m.specular_color = [v, v, v];
+        }
         r.f("metallic", "Metallic", &mut m.metallic, 0.0, 1.0, 2);
     }
     if r.group("Subsurface") {
@@ -1009,7 +1019,8 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     let (title, sub): (String, String) = match app.sel {
         Sel::None => ("Nothing selected".to_string(), String::new()),
         Sel::Node(id) => match app.node(id) {
-            Some(n) => (n.name.clone(), n.kind.type_label().to_string()),
+            // (picture 62: unhighlighted after one click on empty space, still editable)
+            Some(n) => (n.name.clone(), if app.sel_soft { format!("{}  -  not highlighted (click empty space again to deselect)", n.kind.type_label()) } else { n.kind.type_label().to_string() }),
             None => ("Nothing selected".into(), String::new()),
         },
         Sel::Material(i) => (app.materials.get(i).map(|m| m.name.clone()).unwrap_or_default(), "Material".into()),
@@ -1119,6 +1130,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
         scroll_req: None,
         seen: vec![],
         focus_start: None,
+        sub_tabs: std::mem::take(&mut app.prop_sub_tabs),
     };
     match app.sel {
         Sel::None => {
@@ -1394,6 +1406,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     let content_h = rows.y - start_y;
     rows.finish();
     let (opened, scroll_req, changed) = (rows.opened.clone(), rows.scroll_req, rows.changed);
+    app.prop_sub_tabs = std::mem::take(&mut rows.sub_tabs);
     drop(rows);
     app.closed_groups = closed;
     // a group a click opened is brought into view next frame (Group click)

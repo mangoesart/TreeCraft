@@ -562,3 +562,36 @@ Orient, SpineStyle, PivotStyle, Collection, MoreLodsMeshID, Scale, Lod_1/Lod_2).
 - Joint segmentation:
   - With welding on, the weld zone (parent radius x (1 + Offset)) gets 8 + 6 x Offset extra rings (6..32), packed toward the parent (spacing ^1.35), and the rings there go round in twice as many steps (up to 64), joined to the rest by the existing ring zipper.
   - A bigger Offset gives a longer, smoother weld with more rings.
+
+## TreeCraft's weld solver: boolean cut, fillet, segment controls (picture 59)
+- The parent is taken as a cylinder along its direction at the joint.
+- Weld zone: from the parent's middle to where the branch's lowest side leaves it, (pr + r0 |cos|) / max(sin, 0.25), plus Offset x pr of fillet. A shallow-angled branch gets a longer zone.
+- Boolean cut: each column of the base (one angle round the branch) is cut where it enters the parent. The crossing is found by marching 40 steps along the column, then halving the step 10 times, and is cached per column.
+  - Every vertex before the cut sits at the cut point on the parent's surface (0.3% outside it), so no mesh is left inside the parent.
+  - A final check pushes any vertex that would still be inside back out to the surface.
+- Fillet: after the cut the base widens (Spread x 1.6, shaped by Upper / Lower scale) and settles 90% of the way down onto the surface. It eases out over Offset-based length pr x (0.35 + 0.6 Offset), with the falloff (1-u)^2 (1+2u).
+- Blend (normals, shading, the dissolving fade) follows the fillet's hold on the surface.
+- Welding > Segments (TreeCraft's own rows):
+  - Rings: extra rings in the weld zone; 0 = automatic, 8 + 6 x Offset.
+  - Ring bias (1.35): how tightly they pack toward the parent.
+  - Radial detail (2): how many times more steps the rings in the zone go round.
+- Tested: cargo test weld welds a branch onto an upright trunk at 90, 60, 45 and 30 degrees, and no vertex comes within the trunk's radius.
+
+## Weld texture fade off for now (picture 60)
+- The dissolving texture fade (picture 58) left out pixels on the welded base, so a gap showed between branch and trunk. It's switched off (gen.rs TEXTURE_FADE = false) until texture blending is taken up again; the rule is kept in the code. The weld mesh, fillet, normals and shading are unchanged; the base now shows its bark all the way to the trunk.
+
+## Specular one value, weld Push, Skin sub-tabs, main tab look (picture 61)
+- Material Specular is one value (0..1) on the material card and in the Properties panel; the three colour channels are kept equal under it.
+- Welding > Push (TreeCraft's own, -0.5..0.5, default 0): the surface the weld meets moves into (-) or out of (+) the parent by that share of its radius. It is used for the cut, the fillet and the never-inside check, so a weld can close a gap on a parent whose surface isn't round at the joint (a coarse, faceted trunk sits inside its round radius).
+- Skin tab sub-tabs: All, General (the rows above the sections), then one per section (Radius, Welding, Subdivision, Intersection, Squash, Splits). Only the picked one's rows show; TreeCraft's extra Skin rows go with All and General. Other main tabs have none yet (to follow if the person likes them).
+- Main tabs look distinct: solid rounded buttons on a dark strip, the picked one in the accent colour with a light line along its top. Sub-tabs are plain smaller words with an accent underline under the picked one, above a thin divider.
+
+## Even Push, sub-tabs everywhere, Blender-like deselect (picture 62)
+- Welding > Push now moves the finished weld edge along the parent's surface direction by Push x the parent radius, weighted by the fillet's hold (1 at the cut, easing to 0). The cut is found on the parent's own surface, so the upper and lower sides move alike. Tested: gen::weld_tests::push_moves_the_whole_edge (Push -0.2 brings both sides inside 0.9 of the radius).
+- Sub-tabs on every generator tab but All, whenever a tab has more than one part (General plus its sections). Each tab keeps its own pick (branch:<tab> / leaf:<tab>). On the Skin tab the Intersection rows (Texture Blend) show under Welding, and Intersection no longer has its own sub-tab.
+- The same tab looks across the app: the Generation / Materials / Meshes tabs use the main-tab style (accent fill, light top line); the material card's Settings / Meshes use the sub-tab style (accent underline).
+- Selection like Blender:
+  - A generator picked: highlighted, its settings shown.
+  - One click on empty viewport space: the highlight and outline go, but its settings stay in the panel, still editable. The panel's subtitle says "not highlighted (click empty space again to deselect)".
+  - A second click on empty space: fully deselected (the default panel).
+  - Picking anything brings the highlight back. Materials, meshes and other panels still go straight back to the default view on one click.

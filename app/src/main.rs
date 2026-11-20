@@ -882,6 +882,10 @@ async fn main() {
     if let Ok(t) = std::env::var("TM_PTAB") {
         app.prop_tab = t.parse().unwrap_or(0);
     }
+    // TM_SUBTAB=<n>: the sub-tab inside the Skin tab (picture 61), for pictures
+    if let Ok(t) = std::env::var("TM_SUBTAB") {
+        app.prop_sub_tabs.insert("branch:Skin".into(), t.parse().unwrap_or(0));
+    }
     if let Ok(t) = std::env::var("TM_MATTAB") {
         app.mat_subtab = t.parse().unwrap_or(0).min(1);
     }

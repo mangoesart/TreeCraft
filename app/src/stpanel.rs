@@ -7,6 +7,7 @@
 
 use crate::model::*;
 use crate::props::Rows;
+use crate::ui::{draw_round_rect, C_ACCENT, C_BTN, C_BTN_HOT, C_TEXT, C_TEXT_DIM};
 use crate::stprops::{StProp, BRANCH_PROPS, LEAF_PROPS};
 
 /// Branch generator tabs: the original's (fn 0x140136e00), each a label and the name patterns
@@ -146,6 +147,10 @@ fn used_extra(name: &str) -> Option<(f32, f32)> {
         "Skin:Welding:Spread:Amount" | "Skin:Welding:Blend:Texture" | "Skin:Intersection:Texture Blend:Pull" => (0.0, 1.0),
         "Skin:Welding:Spread:Upper scale" | "Skin:Welding:Spread:Lower scale" => (0.0, 2.0),
         "Skin:Welding:Blend:Contrast" | "Skin:Welding:Blend:Noise" => (0.0, 10.0),
+        "Skin:Welding:Segments:Rings" => (0.0, 64.0),
+        "Skin:Welding:Push" => (-0.5, 0.5),
+        "Skin:Welding:Segments:Ring bias" => (0.5, 4.0),
+        "Skin:Welding:Segments:Radial detail" => (1.0, 4.0),
         "Skin:Subdivision:Relax scale" => (0.0, 2.0),
         "Skin:Subdivision:Smooth" | "Skin:Squash:Amount" => (0.0, 1.0),
         "Skin:Subdivision:Texture density" => (0.0, 4.0),
@@ -291,25 +296,76 @@ fn groups(table: &[StProp]) -> Vec<&'static str> {
     out
 }
 
-/// Draw the tab bar; returns the chosen tab.
+/// Draw the main tab bar; returns the chosen tab. Main tabs (picture 61) are solid rounded
+/// buttons on a dark strip, the picked one filled with the accent and lit along its top, so they
+/// read as the top level; the sub-tabs under them are lighter (sub_tab_bar).
 pub fn tab_bar(r: &mut Rows, kind: Kind, tab: usize) -> usize {
+    use macroquad::prelude::*;
     let names: Vec<&str> = if kind == Kind::Leaf { LEAF_TABS.iter().map(|t| t.0).collect() } else { BRANCH_TABS.iter().map(|t| t.0).collect() };
     let mut tab = tab.min(names.len() - 1);
-    let (mut x, mut y) = (r.x - 4.0, r.y);
+    // lay out first, to size the strip behind
+    let mut spots = vec![];
+    let (mut x, mut y) = (r.x - 2.0, r.y + 4.0);
+    for n in &names {
+        let w = r.ui.text_w(n, 12.5) + 16.0;
+        if x + w > r.x + r.w + 2.0 {
+            x = r.x - 2.0;
+            y += 28.0;
+        }
+        spots.push(Rect::new(x, y, w, 24.0));
+        x += w + 3.0;
+    }
+    let bottom = y + 24.0 + 4.0;
+    draw_round_rect(Rect::new(r.x - 6.0, r.y, r.w + 12.0, bottom - r.y), 5.0, Color::new(0.0, 0.0, 0.0, 0.28));
+    for (i, (n, b)) in names.iter().zip(&spots).enumerate() {
+        let on = i == tab;
+        let hot = r.ui.hover(*b);
+        r.ui.record(&format!("btn:ptab.{}", n), *b);
+        let bg = if on { C_ACCENT } else if hot { C_BTN_HOT } else { C_BTN };
+        draw_round_rect(*b, 4.0, bg);
+        if on {
+            draw_rectangle(b.x + 3.0, b.y, b.w - 6.0, 2.0, Color::new(1.0, 1.0, 1.0, 0.85));
+        }
+        r.ui.text_center(n, *b, 12.5, if on { WHITE } else { C_TEXT });
+        if hot && r.ui.inp.l_pressed {
+            tab = i;
+        }
+    }
+    r.y = bottom + 6.0;
+    tab
+}
+
+/// The sub-tabs inside a main tab (picture 61): plain words on the panel with a thin accent line
+/// under the picked one, smaller than the main tabs so the two levels don't look alike.
+pub fn sub_tab_bar(r: &mut Rows, names: &[String], pick: usize) -> usize {
+    use macroquad::prelude::*;
+    let mut pick = pick.min(names.len().saturating_sub(1));
+    let (mut x, mut y) = (r.x, r.y);
     for (i, n) in names.iter().enumerate() {
         let w = r.ui.text_w(n, 12.0) + 14.0;
-        if x + w > r.x + r.w + 4.0 {
-            x = r.x - 4.0;
+        if x + w > r.x + r.w {
+            x = r.x;
             y += 24.0;
         }
-        let b = macroquad::prelude::Rect::new(x, y, w, 22.0);
-        if r.ui.button_ex(&format!("ptab.{}", n), b, n, i == tab, true) {
-            tab = i;
+        let b = Rect::new(x, y, w, 22.0);
+        let on = i == pick;
+        let hot = r.ui.hover(b);
+        r.ui.record(&format!("btn:psub.{}", n), b);
+        if hot && !on {
+            draw_rectangle(b.x, b.y, b.w, b.h, Color::new(1.0, 1.0, 1.0, 0.05));
+        }
+        r.ui.text_center(n, b, 12.0, if on { WHITE } else { C_TEXT_DIM });
+        if on {
+            draw_rectangle(b.x + 4.0, b.y + b.h - 2.0, b.w - 8.0, 2.0, C_ACCENT);
+        }
+        if hot && r.ui.inp.l_pressed {
+            pick = i;
         }
         x += w + 2.0;
     }
+    draw_line(r.x - 4.0, y + 23.0, r.x + r.w + 4.0, y + 23.0, 1.0, Color::new(1.0, 1.0, 1.0, 0.08));
     r.y = y + 30.0;
-    tab
+    pick
 }
 
 /// The generator's properties for one tab. `extra_rows` draws TreeCraft's own settings that have
@@ -328,6 +384,49 @@ pub fn draw(r: &mut Rows, p: &mut Params, kind: Kind, tab: usize, extra_rows: &m
         if let Some(i) = gs.iter().position(|g| *g == "Materials") {
             let g = gs.remove(i);
             gs.insert(0, g);
+        }
+    }
+    // sub-tabs (picture 61): on the Skin tab, one per section of its properties (Radius,
+    // Welding, Subdivision ...), "General" for the rows above them and "All" first; the rows
+    // shown are the picked sub-tab's
+    // (picture 62: on every main tab but All, when it has more than one part; each tab keeps its
+    // own pick; the Skin tab's Intersection rows sit under Welding)
+    let mut sub_filter: Option<String> = None;
+    let tab_name = tabs.get(tab).map(|t| t.0).unwrap_or("");
+    if tab != 0 && !tab_name.is_empty() {
+        let mut names: Vec<String> = vec!["All".into()];
+        let mut general = false;
+        for g in &gs {
+            for (name, _, _, _) in table.iter().filter(|t| t.0.split(':').next() == Some(*g)) {
+                if !on_tab(name, pattern) || !shown_for_mode(name, mode_now) || name.starts_with("Materials:Branch:") {
+                    continue;
+                }
+                let parts: Vec<&str> = name.split(':').collect();
+                if parts.len() > 2 {
+                    let s = parts[1].to_string();
+                    if !names.contains(&s) {
+                        names.push(s);
+                    }
+                } else {
+                    general = true;
+                }
+            }
+        }
+        if general {
+            names.insert(1, "General".into());
+        }
+        // Intersection's Texture Blend belongs with Welding (picture 62)
+        if names.iter().any(|n| n == "Welding") {
+            names.retain(|n| n != "Intersection");
+        }
+        if names.len() >= 3 {
+            let key = format!("{}:{}", if kind == Kind::Leaf { "leaf" } else { "branch" }, tab_name);
+            let cur = r.sub_tabs.get(&key).copied().unwrap_or(0);
+            let pick = sub_tab_bar(r, &names, cur);
+            r.sub_tabs.insert(key, pick);
+            if pick > 0 {
+                sub_filter = Some(names[pick].clone());
+            }
         }
     }
     for g in gs {
@@ -374,6 +473,13 @@ pub fn draw(r: &mut Rows, p: &mut Params, kind: Kind, tab: usize, extra_rows: &m
             // sections (picture 32): the first part below the group (U, V, Absolute ...) as a band,
             // deeper parts (Fractional, Twist ...) as indented headings under it
             let first = if parts.len() > 2 { parts[1].to_string() } else { String::new() };
+            // only the picked sub-tab's rows (picture 61)
+            match sub_filter.as_deref() {
+                Some("General") if !first.is_empty() => continue,
+                Some("Welding") if first == "Intersection" => {}
+                Some(f) if f != "General" && first != f => continue,
+                _ => {}
+            }
             let rest = if parts.len() > 3 { parts[2..parts.len() - 1].join(" > ") } else { String::new() };
             let sub = format!("{}|{}", first, rest);
             if sub != last_sub {
@@ -496,6 +602,9 @@ pub fn draw(r: &mut Rows, p: &mut Params, kind: Kind, tab: usize, extra_rows: &m
             r.ui.unclamped = false;
             // (variance is the +/- button at the end of the row now, picture 35)
         }
-        extra_rows(r, p, g);
+        // TreeCraft's own rows of the group go with All and General
+        if matches!(sub_filter.as_deref(), None | Some("General")) {
+            extra_rows(r, p, g);
+        }
     }
 }

@@ -120,9 +120,15 @@ impl App {
             let tw = ui.text_w(t, 12.5) + 18.0;
             let tr = Rect::new(tx, y, tw, 22.0);
             ui.record(&format!("mattab:{}", t), tr);
-            draw_rectangle(tr.x, tr.y, tr.w, tr.h, if i == self.mat_subtab { C_PANEL2 } else { C_PANEL });
+            // the app's sub-tab look (pictures 61, 62): plain words, an accent line under the pick
             let hot = ui.hover(tr);
+            if hot && i != self.mat_subtab {
+                draw_rectangle(tr.x, tr.y, tr.w, tr.h, Color::new(1.0, 1.0, 1.0, 0.05));
+            }
             ui.text_center(t, tr, 12.5, if i == self.mat_subtab || hot { WHITE } else { C_TEXT_DIM });
+            if i == self.mat_subtab {
+                draw_rectangle(tr.x + 4.0, tr.y + tr.h - 2.0, tr.w - 8.0, 2.0, C_ACCENT);
+            }
             if ui.clicked(tr) {
                 self.mat_subtab = i;
                 self.color_edit = None;
@@ -488,7 +494,16 @@ impl App {
         group_box(ui, Rect::new(r.x, r.y, r.w, r.h), SLOT_NAMES[s]);
         let vr = Rect::new(r.x + 6.0, r.y + 18.0, r.w - 12.0, 20.0);
         let m = &mut self.materials[c];
-        let changed = if let Some(col) = m.slot_color(s) {
+        let changed = if s == 4 {
+            // Specular (picture 61): one value, not a colour; the three channels stay equal
+            let mut v = (m.specular_color[0] + m.specular_color[1] + m.specular_color[2]) / 3.0;
+            let c = ui.slider(&format!("mat.slotval{}", s), vr, &mut v, 0.0, 1.0, 2);
+            if c {
+                let v = v.clamp(0.0, 1.0);
+                m.specular_color = [v, v, v];
+            }
+            c
+        } else if let Some(col) = m.slot_color(s) {
             color_field(ui, &mut self.color_edit, (0, s), vr, col)
         } else if let Some(v) = m.slot_value(s) {
             let max = if s == 2 { 2.0 } else { 1.0 };
