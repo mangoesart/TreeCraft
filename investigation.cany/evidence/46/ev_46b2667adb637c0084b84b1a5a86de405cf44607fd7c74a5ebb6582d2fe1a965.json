@@ -1,0 +1,78 @@
+{
+  "id": "ev_46b2667adb637c0084b84b1a5a86de405cf44607fd7c74a5ebb6582d2fe1a965",
+  "subject": {
+    "kind": "pe",
+    "sha256": "2147974321b3577bb9c8c679c8b74475a8aa1ca3df68d11c8cf1dab26334ebce",
+    "name": "SpeedTree Modeler Games Indie.exe"
+  },
+  "operation": "native_bytes_find",
+  "params": {
+    "encoding": "both",
+    "limit": 5,
+    "offset": 0,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe",
+    "pattern": null,
+    "text": "A2C if possible"
+  },
+  "result": {
+    "file_size": 28937728,
+    "limit": 5,
+    "match_cap_reached": false,
+    "matches": [
+      {
+        "address": "0x1410b9dc0",
+        "bytes": "41324320696620706f737369626c65",
+        "file_offset": 17531840,
+        "file_offset_hex": "0x10b83c0",
+        "length": 15,
+        "matched": "utf8",
+        "section": ".rdata"
+      }
+    ],
+    "native_container": "pe",
+    "offset": 0,
+    "path": "C:\\Program Files\\SpeedTree\\SpeedTree Games Indie v8.4.2\\win64\\SpeedTree Modeler Games Indie.exe",
+    "searched_for": [
+      {
+        "kind": "utf8",
+        "length": 15
+      },
+      {
+        "kind": "utf16le",
+        "length": 30
+      }
+    ],
+    "total_matches": 1
+  },
+  "summary": "1 match(es) for utf8 + utf16le in SpeedTree Modeler Games Indie.exe; showing 1 from #0.",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "windows-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "file_bytes_only",
+      "message": "The file's bytes are searched as stored: compressed, encrypted or packed regions and data built at run time are not seen, so no match is not proof of absence."
+    },
+    {
+      "code": "unmapped_regions",
+      "message": "Matches in headers, overlays or debug data that are not loaded into memory have no virtual address."
+    }
+  ],
+  "coverage": {
+    "status": "complete",
+    "examined": 1,
+    "total": 1
+  },
+  "locations": [
+    {
+      "kind": "file_offset",
+      "value": "0x10b83c0"
+    }
+  ],
+  "links": []
+}

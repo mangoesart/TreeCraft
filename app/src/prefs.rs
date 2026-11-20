@@ -54,7 +54,8 @@ pub const VIEWPORT_COLORS: [(&str, &str, [f32; 4]); 34] = [
     ("sky_ground", "Below the horizon", [0.64, 0.65, 0.61, 1.0]),
     ("ground", "Ground", [0.55, 0.55, 0.50, 1.0]),
     // the world origin's disc (picture 46)
-    ("origin", "World origin", [0.80, 0.42, 0.26, 0.85]),
+    // a faint pale yellow (picture 56)
+    ("origin", "World origin", [0.90, 0.90, 0.60, 0.20]),
 ];
 
 /// Viewport backgrounds (Preferences > Themes): TreeCraft's dark gradient, or the original's sky.
@@ -295,6 +296,10 @@ impl Prefs {
                     if k == "wire_shaded" && c == [0.0, 0.0, 0.0, 0.45] {
                         continue;
                     }
+                    // the old orange world-origin default gives way to the pale one (picture 56)
+                    if k == "origin" && (c[0] - 0.80).abs() < 0.005 && (c[1] - 0.42).abs() < 0.005 && (c[2] - 0.26).abs() < 0.005 {
+                        continue;
+                    }
                     p.colors[i] = c;
                 }
                 continue;
@@ -526,8 +531,17 @@ impl App {
         let side = Rect::new(r.x + 8.0, r.y + 34.0, 150.0, r.h - 76.0);
         draw_round_rect(side, 6.0, C_BG);
         self.prefs_page = self.prefs_page.min(PAGES.len() - 1);
+        // Global properties moved to the Properties panel (picture 49): its page is gone from the list
+        if self.prefs_page == 3 {
+            self.prefs_page = 1;
+        }
+        let mut row = 0usize;
         for (i, name) in PAGES.iter().enumerate() {
-            let b = Rect::new(side.x + 4.0, side.y + 4.0 + i as f32 * 26.0, side.w - 8.0, 24.0);
+            if i == 3 {
+                continue;
+            }
+            let b = Rect::new(side.x + 4.0, side.y + 4.0 + row as f32 * 26.0, side.w - 8.0, 24.0);
+            row += 1;
             let on = self.prefs_page == i;
             if on {
                 draw_round_rect(b, 4.0, Color::new(0.30, 0.47, 0.78, 1.0));
@@ -781,12 +795,15 @@ impl App {
 
     /// The original's window properties (fn 0x14052e030) that apply to TreeCraft's viewport.
     fn prefs_viewport(&mut self, ui: &mut Ui, page: Rect) {
-        ui.text("Viewport  (the original's Window properties)", page.x + 4.0, page.y + 2.0, 13.0, C_TEXT);
+        // (the original's Window properties are in the Properties panel now, picture 49)
+        ui.text("Viewport display", page.x + 4.0, page.y + 2.0, 13.0, C_TEXT);
         let mut y = page.y + 30.0;
         let lw = 250.0;
         let fw = (page.w - lw - 20.0).min(360.0);
         let mut row = |ui: &mut Ui, y: &mut f32, label: &str, tip: &str| -> Rect {
-            ui.text(label, page.x + 8.0, *y + 3.0, 12.5, C_TEXT_DIM);
+            // right-aligned against its control (picture 57)
+            let tw = ui.text_w(label, 12.5);
+            ui.text(label, page.x + lw - 10.0 - tw, *y + 3.0, 12.5, C_TEXT_DIM);
             let r = Rect::new(page.x + lw, *y, fw, 20.0);
             if Rect::new(page.x, *y, page.w, 22.0).contains(ui.mouse()) {
                 ui.tooltip = Some(tip.to_string());
@@ -897,7 +914,9 @@ impl App {
         let lw = 170.0;
         let fw = (page.w - lw - 20.0).min(360.0);
         let mut row = |ui: &mut Ui, y: &mut f32, label: &str, tip: &str| -> Rect {
-            ui.text(label, page.x + 4.0, *y + 3.0, 12.5, C_TEXT_DIM);
+            // right-aligned against its control (picture 57)
+            let tw = ui.text_w(label, 12.5);
+            ui.text(label, page.x + lw - 10.0 - tw, *y + 3.0, 12.5, C_TEXT_DIM);
             let r = Rect::new(page.x + lw, *y, fw, 20.0);
             if Rect::new(page.x, *y, page.w, 22.0).contains(ui.mouse()) {
                 ui.tooltip = Some(tip.to_string());
@@ -977,7 +996,9 @@ impl Prefs {
 fn pref_row(ui: &mut Ui, page: Rect, y: &mut f32, label: &str, tip: &str) -> Rect {
     let lw = 230.0;
     let fw = (page.w - lw - 20.0).min(320.0);
-    ui.text(label, page.x + 8.0, *y + 3.0, 12.5, C_TEXT_DIM);
+    // right-aligned against its control (picture 57)
+    let tw = ui.text_w(label, 12.5);
+    ui.text(label, page.x + lw - 10.0 - tw, *y + 3.0, 12.5, C_TEXT_DIM);
     let r = Rect::new(page.x + lw, *y, fw, 20.0);
     if Rect::new(page.x, *y, page.w, 22.0).contains(ui.mouse()) {
         ui.tooltip = Some(tip.to_string());

@@ -182,6 +182,16 @@ pub fn write(app: &App) -> String {
         let _ = writeln!(s, "\n[scene]\nkind={}", o.kind.name());
         put_scene(o, &mut s, "");
     }
+    // custom cameras (picture 50)
+    crate::cameras::write(&app.cameras, &mut s);
+    // Window properties (picture 49)
+    if !app.winp.is_empty() || !app.win_image_path.is_empty() {
+        s.push_str("\n[window]\n");
+        let _ = writeln!(s, "image={}", esc(&app.win_image_path));
+        for (k, v) in &app.winp {
+            let _ = writeln!(s, "{}={}", k, v);
+        }
+    }
     s
 }
 
@@ -259,6 +269,9 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
     let mut mats: Vec<Material> = vec![];
     let mut meshes: Vec<LeafMesh> = vec![];
     let mut scene: Vec<SceneObj> = vec![];
+    let mut winp: std::collections::BTreeMap<String, f64> = Default::default();
+    let mut win_image = String::new();
+    let mut cams: Vec<crate::cameras::ViewCam> = vec![];
     let mut section = "";
     for line in lines {
         let line = line.trim_end_matches('\r');
@@ -282,6 +295,11 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                 "[scene]" => {
                     scene.push(SceneObj { kind: SceneKind::Sphere, name: String::new(), pos: Vec3::ZERO, dir: Vec3::Y, size: 1.0, length: 0.0 });
                     "scene"
+                }
+                "[window]" => "window",
+                "[camera]" => {
+                    cams.push(crate::cameras::blank());
+                    "camera"
                 }
                 _ => "",
             };
@@ -398,6 +416,18 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                     get_scene(o, k, v);
                 }
             }
+            "camera" => {
+                if let Some(c) = cams.last_mut() {
+                    crate::cameras::read_line(c, k, v);
+                }
+            }
+            "window" => {
+                if k == "image" {
+                    win_image = unesc(v);
+                } else if let Ok(x) = v.parse() {
+                    winp.insert(k.to_string(), x);
+                }
+            }
             _ => {}
         }
     }
@@ -427,6 +457,10 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
     app.materials = mats;
     app.meshes = meshes;
     app.scene = scene;
+    app.winp = winp;
+    app.look_through(None);
+    app.cameras = cams;
+    app.set_win_image(&win_image);
     app.scene_sel = None;
     app.sel = Sel::None;
     app.mat_cur = 0;

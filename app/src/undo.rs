@@ -15,6 +15,8 @@ pub struct Snapshot {
     scene: Vec<SceneObj>,
     materials: Vec<Material>,
     meshes: Vec<LeafMesh>,
+    /// Custom cameras (picture 51: Undo takes them back too).
+    cameras: Vec<crate::cameras::ViewCam>,
     sig: String,
     /// What the edit that led to this state was ("Add Big Branches", "Edit Trunk" ...), shown in
     /// the Edit menu as "Undo <what>" like the original (fn 0x1402a93a0).
@@ -43,6 +45,17 @@ fn describe(prev: &Snapshot, app: &App) -> String {
     if app.scene.len() != prev.scene.len() || format!("{:?}", app.scene) != format!("{:?}", prev.scene) {
         return if app.scene.len() > prev.scene.len() { format!("Add {}", app.scene.last().map(|o| o.name.as_str()).unwrap_or("object")) } else { "Edit scene objects".into() };
     }
+    if app.cameras.len() > prev.cameras.len() {
+        return format!("Add {}", app.cameras.last().map(|c| c.name.as_str()).unwrap_or("camera"));
+    }
+    if app.cameras.len() < prev.cameras.len() {
+        return "Delete camera".into();
+    }
+    for (a, b) in app.cameras.iter().zip(&prev.cameras) {
+        if format!("{:?}", a) != format!("{:?}", b) {
+            return if a.pos != b.pos || a.yaw != b.yaw || a.pitch != b.pitch { format!("Move {}", a.name) } else { format!("Edit {}", a.name) };
+        }
+    }
     if app.meshes.len() != prev.meshes.len() {
         return "Meshes".into();
     }
@@ -60,7 +73,7 @@ fn describe(prev: &Snapshot, app: &App) -> String {
 
 /// A text fingerprint of everything Undo keeps (no pictures): equal text, same state.
 fn signature(app: &App) -> String {
-    let mut s = format!("{:?}|{:?}|", app.nodes, app.scene);
+    let mut s = format!("{:?}|{:?}|{:?}|", app.nodes, app.scene, app.cameras);
     for m in &app.materials {
         let _ = write!(
             s,
@@ -166,6 +179,7 @@ impl App {
             scene: self.scene.clone(),
             materials: self.materials.iter().map(light_material).collect(),
             meshes: self.meshes.clone(),
+            cameras: self.cameras.clone(),
             sig,
             what,
         }
@@ -258,6 +272,13 @@ impl App {
         self.next_id = s.next_id;
         self.scene = s.scene.clone();
         self.meshes = s.meshes.clone();
+        self.cameras = s.cameras.clone();
+        if self.looking.map_or(false, |l| l >= self.cameras.len()) {
+            self.look_through(None);
+        } else if self.looking.is_some() {
+            // the view follows the restored camera
+            self.look_cam = None;
+        }
         let mut mats = s.materials.clone();
         for m in &mut mats {
             // pictures back from the current material with the same picture source, else rebuilt
@@ -278,6 +299,7 @@ impl App {
             Sel::Node(id) if !self.nodes.iter().any(|n| n.id == id) => self.sel = Sel::None,
             Sel::Material(k) if k >= self.materials.len() => self.sel = Sel::None,
             Sel::Mesh(k) if k >= self.meshes.len() => self.sel = Sel::None,
+            Sel::Camera(k) if k >= self.cameras.len() => self.sel = Sel::None,
             _ => {}
         }
         if self.scene_sel.map(|k| k >= self.scene.len()).unwrap_or(false) {

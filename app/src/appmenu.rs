@@ -86,7 +86,7 @@ impl App {
                     sep(),
                     leaf("Export mesh...").hot("Ctrl+E"),
                     leaf("Export selected as mesh..."),
-                    leaf("Export material..."),
+                    leaf("Export material...").hot("F10"),
                     leaf("Export world building data..."),
                     leaf("Export image..."),
                     leaf("Export image sequence..."),
@@ -161,7 +161,7 @@ impl App {
                 leaf("Import material asset..."),
                 leaf("Import mesh asset..."),
                 sep(),
-                leaf("Export material..."),
+                leaf("Export material asset..."),
                 sep(),
                 leaf("Remove unused assets"),
             ],
@@ -193,6 +193,11 @@ impl App {
         }
         self.new_tree();
         self.tree_path = None;
+        // a new scene starts with the original's window properties (picture 49)
+        self.winp.clear();
+        self.look_through(None);
+        self.cameras.clear();
+        self.set_win_image("");
         self.regenerate();
         self.undo_reset();
     }
@@ -232,7 +237,10 @@ impl App {
             (_, _, "Save as with assets...") => self.save_with_assets(),
             (_, _, "Export mesh...") => self.export_obj(),
             (_, _, "Export selected as mesh...") => self.export_selected(sel_node),
-            (_, _, "Export material...") => self.export_material(),
+            // File > Export material (F10): the render images window (picture 53); Assets keeps
+            // writing one material as a TreeCraft material file
+            (_, _, "Export material...") => self.open_material_export(),
+            (_, _, "Export material asset...") => self.export_material(),
             (_, _, "Export world building data...") => self.export_world_data(),
             (_, _, "Export image...") => self.export_image(false),
             (_, _, "Render photo...") => self.export_image(true),

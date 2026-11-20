@@ -321,7 +321,8 @@ impl App {
                         Some((id, _, _)) => self.select(Sel::Node(id)),
                         // a click on empty space lets go of the selected generator (picture 26)
                         None => {
-                            if matches!(self.sel, Sel::Node(_)) {
+                            // ... and of a material, mesh or any other panel: back to the default view (picture 48)
+                            if !matches!(self.sel, Sel::None) {
                                 self.select(Sel::None);
                             }
                         }
@@ -525,17 +526,17 @@ impl App {
     /// Which part of the controller is under the mouse: 1 top handle, 2 band, 3 pivot, 0 none.
     fn fh_hit(&self, mat: &Mat4, m: Vec2, c: &FhCtrl) -> u8 {
         let (Some(sp), Some(st)) = (self.to_screen(mat, c.pivot), self.to_screen(mat, c.top)) else { return 0 };
-        if st.distance(m) < 14.0 {
+        if st.distance(m) < 18.0 {
             return 1;
         }
-        if sp.distance(m) < 13.0 {
+        if sp.distance(m) < 17.0 {
             return 3;
         }
         let on_band = c.band.windows(2).any(|w| {
             if let (Some(a), Some(b)) = (self.to_screen(mat, w[0]), self.to_screen(mat, w[1])) {
                 let ab = b - a;
                 let t = ((m - a).dot(ab) / ab.length_squared().max(1e-6)).clamp(0.0, 1.0);
-                (a + ab * t).distance(m) < 8.0
+                (a + ab * t).distance(m) < 11.0
             } else {
                 false
             }
@@ -917,13 +918,15 @@ impl App {
         let mut hover_pt: Option<(usize, f32)> = None;
         for (i, p) in curve.pts.iter().enumerate() {
             // a generous grab radius, nearest point first (picture 36)
+            // (picture 56: wider still, 18 px, so handles are easy to catch)
             let dd = to_s(*p).distance(m);
-            if dd < 12.0 && hover_pt.map_or(true, |(_, best): (usize, f32)| dd < best) {
+            if dd < 18.0 && hover_pt.map_or(true, |(_, best): (usize, f32)| dd < best) {
                 hover_pt = Some((i, dd));
             }
         }
         let hover_pt = hover_pt.map(|h| h.0);
-        let over_graph = g.contains(m) && ui.popup.is_none() && self.curve_win_drag == 0;
+        // a handle on the graph's edge (the end points) can be caught from just outside it
+        let over_graph = (g.contains(m) || (hover_pt.is_some() && r.contains(m))) && ui.popup.is_none() && self.curve_win_drag == 0;
         // keys while the mouse is over the window
         if r.contains(m) && !ui.editing() {
             if ui.inp.key(KeyCode::Delete) {
@@ -1004,10 +1007,14 @@ impl App {
             }
             if let Some(i) = self.curve_drag.filter(|&i| i != usize::MAX) {
                 if ui.inp.l_down {
-                    // the picked points move together; the ends stay at the ends
+                    // the picked points move together; the ends stay at the ends. The grabbed
+                    // point follows the mouse itself (picture 56), so it never lags behind
                     let n = curve.pts.len();
-                    let dx = d.x / g.w;
-                    let dy = -d.y / g.h;
+                    let _ = d;
+                    let want = vec2(((m.x - g.x) / g.w).clamp(0.0, 1.0), (1.0 - (m.y - g.y) / g.h).clamp(-1.0, 2.0));
+                    let cur = curve.pts.get(i).copied().unwrap_or(want);
+                    let dx = want.x - cur.x;
+                    let dy = want.y - cur.y;
                     let mut sel = self.curve_sel.clone();
                     if !sel.contains(&i) {
                         sel = vec![i];

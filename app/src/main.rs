@@ -23,6 +23,10 @@ mod viewnav;
 mod colorwheel;
 mod stcurves;
 mod splash;
+mod wintitle;
+mod winprops;
+mod cameras;
+mod matexport;
 
 use app::{App, Sel};
 use macroquad::prelude::*;
@@ -94,6 +98,10 @@ fn keyboard(app: &mut App, ui: &Ui) {
     let sel_node = if let Sel::Node(id) = app.sel { Some(id) } else { None };
     if i.key(KeyCode::F) {
         app.frame_tree();
+    }
+    // F10: Export material (the original's hot key; picture 53)
+    if i.key(KeyCode::F10) {
+        app.open_material_export();
     }
     if i.key(KeyCode::Key0) || i.key(KeyCode::Kp0) {
         app.cam.set_view(0);
@@ -224,6 +232,14 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     if !scripted_run() {
         app.autosave_tick();
     }
+    // the title bar: the scene's name and path (picture 49), checked twice a second
+    if get_time() - app.title_t > 0.5 {
+        app.title_t = get_time();
+        let t = wintitle::title_for(app.tree_path.as_deref(), app.is_modified());
+        if t != app.title_shown && wintitle::set(&t) {
+            app.title_shown = t;
+        }
+    }
     let scale = ui_scale();
     let f = ui_factor();
     let dpi = screen_dpi_scale().max(0.5);
@@ -234,7 +250,7 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     ui.sh = h;
     ui.begin(inp);
     // a modal dialog takes all input: panels behind it see an idle mouse and no keys
-    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() || app.prefs_open || app.curve_takes_input(ui.inp.mx, ui.inp.my) || app.var_takes_input(ui.inp.mx, ui.inp.my) || app.welcome_takes_input() {
+    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() || app.prefs_open || app.curve_takes_input(ui.inp.mx, ui.inp.my) || app.var_takes_input(ui.inp.mx, ui.inp.my) || app.welcome_takes_input() || app.material_export_takes_input() {
         let real = ui.inp.clone();
         ui.inp = Inp { mx: real.mx, my: real.my, ..Default::default() };
         ui.blocked = true;
@@ -288,6 +304,10 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     // 3D viewport first: background in UI units, scene in physical pixels
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.push_model_matrix(Mat4::from_scale(vec3(f, f, 1.0)));
+    // a looked-through custom camera sets the view (picture 50)
+    app.update_camera_view();
+    // Export material: the next picture, rendered off screen
+    app.run_material_export();
     app.draw_viewport_bg(lay.view);
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.pop_model_matrix();
@@ -325,6 +345,8 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     app.draw_curve_window(ui);
     app.draw_variance_window(ui);
     app.draw_welcome(ui);
+    // File > Export material (F10; picture 53)
+    app.draw_material_export(ui);
     // undo history: keep the state after each finished edit (outside the modal windows)
     let idle = !ui.inp.l_down && ui.active == 0 && app.cutout.is_none() && app.mesh_dialog.is_none() && app.mat_dialog.is_none() && !app.prefs_open && app.curve_drag.is_none() && !app.var_cohesion_drag && app.welcome.is_none();
     app.undo_track(idle);
@@ -539,11 +561,10 @@ impl SelfTest {
                 self.wait = 2;
             }
             39 => {
-                // clear the old name first: the editor starts with it
+                // the editor starts with the whole name selected (picture 48): typing replaces it
                 self.phase = 41;
                 self.wait = 0;
-                let n = "Mesh Copy".chars().count();
-                self.snap.insert("backspaces".into(), n as f32);
+                self.snap.insert("backspaces".into(), 0.0);
             }
             41 => {
                 let left = self.snap["backspaces"];
@@ -684,6 +705,53 @@ async fn main() {
         if s == "light" {
             app.select(Sel::Light);
         }
+        // TM_SEL=matexport: the Export material window open (picture 53); with
+        // TM_MATEXPORT_DIR=<folder> its pictures (512 px) are rendered there at once
+        if s == "matexport" {
+            app.open_material_export();
+            // TM_MATEXPORT_CAM=1: render from a camera added where the view is (picture 55)
+            if std::env::var("TM_MATEXPORT_CAM").as_deref() == Ok("1") {
+                app.add_camera();
+                let name = app.cameras.last().map(|c| c.name.clone()).unwrap_or_default();
+                if let Some(d) = app.mat_export.as_mut() {
+                    d.camera = name;
+                }
+                app.cam.yaw += 1.0;
+            }
+            if let Ok(dir) = std::env::var("TM_MATEXPORT_DIR") {
+                app.test_material_export(std::path::PathBuf::from(dir), 512);
+            }
+        }
+        // TM_SEL=camera: a custom camera added where the view is and selected (picture 50);
+        // TM_SEL=camlook: also looked through
+        if s == "camera" || s == "camlook" {
+            app.add_camera();
+            if let Some(c) = app.cameras.last_mut() {
+                // moved aside so its icon shows in the view
+                c.dof = true;
+            }
+            // the view steps back and turns so the new camera's icon shows
+            if s == "camera" {
+                if let Some(c) = app.cameras.last_mut() {
+                    c.focus_dist = c.dist * 0.8;
+                    app.cam.target = (c.pos + app.cam.target) * 0.5;
+                }
+                app.cam.yaw += 1.3;
+                app.cam.dist *= 1.3;
+            }
+            if s == "camlook" {
+                app.look_through(Some(app.cameras.len() - 1));
+            }
+        }
+        // TM_SEL=window: Window properties (picture 49); TM_SAFEFRAME=1 shows the safe frame
+        if s == "window" {
+            app.select(Sel::Window);
+            if std::env::var("TM_SAFEFRAME").as_deref() == Ok("1") {
+                app.winp.insert("Screenshot Safe Frame:Show".into(), 1.0);
+                app.winp.insert("Screenshot Safe Frame:Width".into(), 1920.0);
+                app.winp.insert("Screenshot Safe Frame:Height".into(), 1080.0);
+            }
+        }
         if std::env::var("TM_HELP").as_deref() == Ok("1") {
             app.help_open = true;
         }
@@ -694,6 +762,21 @@ async fn main() {
         } else if let Some(id) = app.nodes.iter().find(|n| n.name == s).map(|n| n.id) {
             app.select(Sel::Node(id));
         }
+    }
+    // TM_WELD=<node name>: Welding on for that generator, with the spread of picture 57, and the
+    // view close on the trunk (pictures)
+    if let Ok(s) = std::env::var("TM_WELD") {
+        if let Some(n) = app.nodes.iter_mut().find(|n| n.name == s) {
+            for (k, v) in [("Skin:Welding:Enabled", 1.0), ("Skin:Welding:Spread:Amount", 0.27), ("Skin:Welding:Spread:Upper scale", 0.58), ("Skin:Welding:Spread:Lower scale", 0.4)] {
+                n.p.extra.insert(k.into(), v);
+            }
+        }
+        // TM_WELDNEAR=1: closer, on one joint (picture 58)
+        let near = std::env::var("TM_WELDNEAR").as_deref() == Ok("1");
+        app.cam.target = if near { vec3(0.0, 6.5, 0.0) } else { vec3(0.0, 9.0, 0.0) };
+        app.cam.dist = if near { 9.0 } else { 22.0 };
+        app.cam.pitch = 0.1;
+        app.dirty = true;
     }
     // TM_SPINEONLY=<node name>: that generator's Skin:Type set to Spine only (pictures)
     if let Ok(s) = std::env::var("TM_SPINEONLY") {
@@ -838,7 +921,8 @@ async fn main() {
     let mut maximized = !interactive || !app.prefs.window_max;
     // the welcome window over the loaded app (picture 37), and TreeCraft's Start-menu shortcut
     // with its icon. TM_SPLASH=1 with --screenshot: a picture of the welcome window.
-    if interactive {
+    // (TM_NOWELCOME=1: no welcome window, for pictures of the viewport)
+    if interactive && std::env::var("TM_NOWELCOME").is_err() {
         splash::ensure_start_menu_shortcut();
         app.welcome = Some(get_time());
     } else if shot.is_some() && std::env::var("TM_SPLASH").as_deref() == Ok("1") {

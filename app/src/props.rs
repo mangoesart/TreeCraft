@@ -2,7 +2,6 @@
 use crate::app::{App, Sel};
 use crate::model::*;
 use crate::model::Material;
-use crate::render::VIEWS;
 use crate::textures;
 use crate::ui::*;
 use macroquad::prelude::*;
@@ -199,9 +198,12 @@ impl<'a> Rows<'a> {
         }
         out
     }
+    /// A row's name, right-aligned against its control as the original lays them out
+    /// (picture 57); group and section headings keep their own alignment.
     fn label(&mut self, label: &str) -> Rect {
         let lw = self.lw();
-        self.ui.text_fit(label, self.x + 6.0, self.y + 5.0, lw - 10.0, 12.5, C_TEXT_DIM);
+        let tw = self.ui.text_w(label, 12.5).min(lw - 14.0);
+        self.ui.text_fit(label, self.x + lw - 8.0 - tw, self.y + 5.0, lw - 14.0, 12.5, C_TEXT_DIM);
         Rect::new(self.x + lw, self.y + 2.0, self.w - lw, RH - 4.0)
     }
     pub fn f(&mut self, k: &str, label: &str, v: &mut f32, min: f32, max: f32, dec: usize) {
@@ -287,7 +289,8 @@ impl<'a> Rows<'a> {
     }
     fn faint_label(&mut self, label: &str) -> Rect {
         let lw = self.lw();
-        self.ui.text_fit(label, self.x + 6.0, self.y + 5.0, lw - 10.0, 12.5, C_TEXT_FAINT);
+        let tw = self.ui.text_w(label, 12.5).min(lw - 14.0);
+        self.ui.text_fit(label, self.x + lw - 8.0 - tw, self.y + 5.0, lw - 14.0, 12.5, C_TEXT_FAINT);
         Rect::new(self.x + lw, self.y + 2.0, self.w - lw, RH - 4.0)
     }
     /// Rows for settings kept but not used by the tree yet: faint names; return true when changed.
@@ -767,20 +770,8 @@ pub fn node_props(r: &mut Rows, n: &mut Node, on_ground: bool, mat_names: &[Stri
     let kind = n.kind;
     let p = &mut n.p;
     match kind {
-        Kind::Tree => {
-            if r.group("Shape") {
-                r.f("tree_radius", "Radius (trunk spread)", &mut p.tree_radius, 0.0, 60.0, 1);
-            }
-            if r.group("Level of Detail") {
-                r.i("lod_preview", "Preview leaf LOD", &mut p.lod_preview, 0, 3);
-            }
-            if r.group("Statistics") {
-                r.info("Triangles", &stats.0.to_string());
-                r.info("Vertices", &stats.1.to_string());
-                r.info("Branches", &stats.2.to_string());
-                r.info("Leaves", &stats.3.to_string());
-            }
-        }
+        // Global properties: the original's "Properties - Tree" panel (picture 49)
+        Kind::Tree => crate::winprops::tree_rows(r, p, stats),
         // generators: the original's tabs and properties (stpanel.rs), with TreeCraft's own
         // settings at the end of their groups
         Kind::Trunk | Kind::Branch | Kind::Leaf if tab.is_some() => {
@@ -1023,15 +1014,44 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
         },
         Sel::Material(i) => (app.materials.get(i).map(|m| m.name.clone()).unwrap_or_default(), "Material".into()),
         Sel::Mesh(i) => (app.meshes.get(i).map(|m| m.name.clone()).unwrap_or_default(), "Mesh".into()),
-        Sel::Window => ("Window properties".into(), "Viewport and lighting".into()),
+        Sel::Window => ("Window properties".into(), "The scene's viewport, rendering and capture".into()),
         Sel::Light => ("Light".into(), "Lighting (the viewport stays in view)".into()),
+        Sel::Camera(i) => (
+            app.cameras.get(i).map(|c| c.name.clone()).unwrap_or_default(),
+            match app.cameras.get(i) {
+                Some(c) if c.ortho => format!("Orthographic camera ({})", crate::render::VIEWS[c.view.min(6)]),
+                _ => "Perspective camera".to_string(),
+            },
+        ),
     };
     let bw = 62.0;
     let bx = x + w - bw * 3.0;
-    ui.text_fit(&title, x, y + 2.0, bx - x - 8.0, 15.0, WHITE);
-    ui.record(&format!("hdr:{}", title), Rect::new(x, y, bx - x - 8.0, 20.0));
+    // back arrow (picture 48): to the panel shown before, or the default view
+    let mut tx = x;
+    if !matches!(app.sel, Sel::None) {
+        let br = Rect::new(x - 4.0, y, 24.0, 22.0);
+        let hot = ui.hover(br) && ui.popup.is_none();
+        if ui.button_ex("prop.back", br, "", false, true) {
+            if app.sel_back.is_empty() {
+                app.select(Sel::None);
+            } else {
+                app.undo_selection();
+            }
+        }
+        let c = if hot { WHITE } else { C_TEXT };
+        let (cx, cy) = (br.x + br.w * 0.5, br.y + br.h * 0.5);
+        draw_line(cx - 6.0, cy, cx + 6.0, cy, 2.0, c);
+        draw_line(cx - 6.0, cy, cx - 1.0, cy - 5.0, 2.0, c);
+        draw_line(cx - 6.0, cy, cx - 1.0, cy + 5.0, 2.0, c);
+        if hot {
+            ui.tooltip = Some(if app.sel_back.is_empty() { "Back to the default view".into() } else { "Back to the previous panel\nHot key: Alt+Z".into() });
+        }
+        tx = x + 26.0;
+    }
+    ui.text_fit(&title, tx, y + 2.0, bx - tx - 8.0, 15.0, WHITE);
+    ui.record(&format!("hdr:{}", title), Rect::new(tx, y, bx - tx - 8.0, 20.0));
     if !sub.is_empty() {
-        ui.text_fit(&sub, x, y + 21.0, bx - x - 8.0, 11.5, C_TEXT_DIM);
+        ui.text_fit(&sub, tx, y + 21.0, bx - tx - 8.0, 11.5, C_TEXT_DIM);
     }
     let is_node = matches!(app.sel, Sel::Node(_));
     draw_rectangle(bx - 2.0, y - 2.0, bw * 3.0 + 4.0, 26.0, C_BG);
@@ -1109,7 +1129,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
             // which open their Preferences pages), Actions, File
             for (sec, items) in [
                 ("Edit", vec![("Wind", 10), ("Lighting", 11), ("Global properties", 1), ("Window properties", 2)]),
-                ("Actions", vec![("Randomize", 3), ("Frame tree", 4), ("Compute AO", 12), ("Export...", 13)]),
+                // (Actions left out for now, picture 49)
                 ("File", vec![("New tree", 5), ("Open...", 6), ("Save", 7), ("Save As...", 8)]),
             ] {
                 rows.ui.text(sec, x, rows.y + 4.0, 14.0, C_TEXT);
@@ -1132,8 +1152,14 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
             match act {
                 // Preferences pages: 1 Viewport, 2 Wind, 3 Global; Lighting is its own panel here
                 // (picture 43)
-                Some(1) => page(app, 3),
-                Some(2) => page(app, 1),
+                // Global properties: the Tree generator's panel; Window properties: the scene's
+                // (both here in the Properties panel now, picture 49)
+                Some(1) => {
+                    if let Some(t) = app.nodes.iter().find(|n| n.kind == Kind::Tree).map(|n| n.id) {
+                        app.select(Sel::Node(t));
+                    }
+                }
+                Some(2) => app.select(Sel::Window),
                 Some(10) => page(app, 2),
                 Some(11) => app.select(Sel::Light),
                 Some(3) => app.randomize(None),
@@ -1351,35 +1377,18 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                 }
             }
         }
+        Sel::Camera(i) => {
+            rows.prefix = format!("cam{}", i);
+            crate::cameras::camera_rows(&mut rows, app, i);
+        }
         Sel::Light => {
             rows.prefix = "light".into();
             light_rows(&mut rows, app);
         }
         Sel::Window => {
             rows.prefix = "win".into();
-            if rows.group("Camera") {
-                let views: Vec<String> = VIEWS.iter().map(|s| s.to_string()).collect();
-                let mut v = app.cam.view;
-                rows.combo("view", "View", &views, &mut v);
-                if v != app.cam.view {
-                    app.cam.set_view(v);
-                }
-                rows.b("ortho", "Orthographic", &mut app.cam.ortho);
-                rows.f("fov", "Field of view", &mut app.cam.fov, 10.0, 100.0, 0);
-            }
-            if rows.group("Display") {
-                rows.b("grid", "Show grid", &mut app.show_grid);
-                let before = app.highlight;
-                rows.b("hl", "Highlight selected generator", &mut app.highlight);
-                if before != app.highlight {
-                    app.dirty = true;
-                }
-                rows.b("unlit", "Unlit (texture colours only)", &mut app.light.unlit);
-            }
-            if rows.group("Lighting") {
-                rows.f("az", "Sun direction", &mut app.light.azimuth, -180.0, 180.0, 0);
-                rows.f("el", "Sun height", &mut app.light.elevation, 5.0, 90.0, 0);
-            }
+            // the original's "Properties - <scene>" panel (picture 49)
+            crate::winprops::window_rows(&mut rows, app);
         }
     }
     let content_h = rows.y - start_y;

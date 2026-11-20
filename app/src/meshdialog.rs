@@ -18,6 +18,8 @@ pub struct AssetDialog<T: AssetItem> {
     pub selected: Vec<bool>,
     pub current: Option<usize>,
     pub editing: Option<(usize, String)>,
+    /// The whole name being renamed is selected (picture 48): typing or Backspace replaces it.
+    pub edit_all: bool,
     pub pos: Vec2,
     drag: Option<Vec2>,
     caret_t: f64,
@@ -66,6 +68,7 @@ impl<T: AssetItem> AssetDialog<T> {
             selected,
             current: cur,
             editing: None,
+            edit_all: false,
             pos: vec2((sw - W) * 0.5, (sh - H) * 0.4),
             drag: None,
             caret_t: get_time(),
@@ -157,6 +160,7 @@ impl<T: AssetItem> AssetDialog<T> {
     fn start_rename(&mut self) {
         if let Some(c) = self.selected.iter().position(|s| *s).or(self.current) {
             self.editing = Some((c, self.items[c].1.asset_name().to_string()));
+            self.edit_all = true;
             self.caret_t = get_time();
         }
     }
@@ -480,6 +484,11 @@ fn draw_dialog<T: AssetItem>(d: &mut AssetDialog<T>, ui: &mut Ui) -> Outcome {
         // inline name editor
         if let Some((i, mut text)) = d.editing.take() {
             let rr = Rect::new(list.x + 2.0, list.y + 2.0 + i as f32 * rh, list.w - 4.0, rh);
+            // the first key typed over the selected name replaces it (picture 48)
+            if d.edit_all && !ui.inp.chars.is_empty() {
+                text.clear();
+                d.edit_all = false;
+            }
             for c in &ui.inp.chars {
                 if text.chars().count() < 64 {
                     text.push(*c);
@@ -487,8 +496,19 @@ fn draw_dialog<T: AssetItem>(d: &mut AssetDialog<T>, ui: &mut Ui) -> Outcome {
             }
             let mut done = None;
             if ui.inp.key(KeyCode::Backspace) {
-                text.pop();
+                if d.edit_all {
+                    text.clear();
+                    d.edit_all = false;
+                } else {
+                    text.pop();
+                }
                 d.caret_t = get_time();
+            }
+            if ui.inp.key(KeyCode::Left) || ui.inp.key(KeyCode::Right) || ui.inp.key(KeyCode::End) || ui.inp.key(KeyCode::Home) {
+                d.edit_all = false;
+            }
+            if ui.inp.ctrl && ui.inp.key(KeyCode::A) {
+                d.edit_all = true;
             }
             if ui.inp.key(KeyCode::Enter) || ui.inp.key(KeyCode::KpEnter) {
                 done = Some(true);
@@ -498,8 +518,13 @@ fn draw_dialog<T: AssetItem>(d: &mut AssetDialog<T>, ui: &mut Ui) -> Outcome {
             }
             draw_rectangle(rr.x, rr.y, rr.w, rr.h, Color::new(0.12, 0.12, 0.12, 1.0));
             draw_rectangle_lines(rr.x, rr.y, rr.w, rr.h, 1.0, C_ACCENT2);
+            if d.edit_all && !text.is_empty() {
+                // the selected name: highlighted
+                let tw = ui.text_w(&text, 13.0).min(rr.w - 14.0);
+                draw_rectangle(rr.x + 4.0, rr.y + 3.0, tw + 4.0, rr.h - 6.0, C_ACCENT);
+            }
             ui.text_fit(&text, rr.x + 6.0, rr.y + 4.0, rr.w - 14.0, 13.0, WHITE);
-            if ((get_time() - d.caret_t) * 2.0) as i64 % 2 == 0 {
+            if !d.edit_all && ((get_time() - d.caret_t) * 2.0) as i64 % 2 == 0 {
                 let tw = ui.text_w(&text, 13.0).min(rr.w - 14.0);
                 draw_line(rr.x + 7.0 + tw, rr.y + 4.0, rr.x + 7.0 + tw, rr.y + rr.h - 4.0, 1.0, WHITE);
             }

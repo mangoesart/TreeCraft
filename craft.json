@@ -7,10 +7,10 @@
     "path": "C:\\Program Files\\SpeedTree\\SpeedTree Modeler v10.2.0\\win64\\SpeedTree_Modeler.exe"
   },
   "stack": "Rust + macroquad",
-  "status": "ready",
-  "note": "Ready: 4 of 5 checks pass, 3 of 3 claims hold; 1 comparison remains unverified. 1 question about the original is still open.",
+  "status": "building",
+  "note": "Improving the build…",
   "created_ms": 1794110733302,
-  "updated_ms": 1795026260803,
+  "updated_ms": 1795107440164,
   "checks": [
     {
       "round": 1,
@@ -7066,6 +7066,402 @@
       "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
       "artifacts": [],
       "at_ms": 1795026260787
+    },
+    {
+      "round": 56,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795065024585
+    },
+    {
+      "round": 56,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-56\\screenshot.png"
+      ],
+      "at_ms": 1795065027610
+    },
+    {
+      "round": 56,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-56\\self-test.json"
+      ],
+      "at_ms": 1795065031128,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 56,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795065031141,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 56,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795065031142
+    },
+    {
+      "round": 57,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795091645774
+    },
+    {
+      "round": 57,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-57\\screenshot.png"
+      ],
+      "at_ms": 1795091649303
+    },
+    {
+      "round": 57,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-57\\self-test.json"
+      ],
+      "at_ms": 1795091652557,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 57,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795091652569,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 57,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795091652570
+    },
+    {
+      "round": 58,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795094175838
+    },
+    {
+      "round": 58,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-58\\screenshot.png"
+      ],
+      "at_ms": 1795094178881
+    },
+    {
+      "round": 58,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-58\\self-test.json"
+      ],
+      "at_ms": 1795094182159,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 58,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795094182174,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 58,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795094182174
+    },
+    {
+      "round": 59,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795094809940
+    },
+    {
+      "round": 59,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-59\\screenshot.png"
+      ],
+      "at_ms": 1795094813011
+    },
+    {
+      "round": 59,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-59\\self-test.json"
+      ],
+      "at_ms": 1795094816587,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 59,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795094816602,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 59,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795094816602
+    },
+    {
+      "round": 60,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795106905145
+    },
+    {
+      "round": 60,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-60\\screenshot.png"
+      ],
+      "at_ms": 1795106908388
+    },
+    {
+      "round": 60,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-60\\self-test.json"
+      ],
+      "at_ms": 1795106911632,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 60,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795106911645,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 60,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795106911646
+    },
+    {
+      "round": 61,
+      "check": "build",
+      "passed": true,
+      "similarity": null,
+      "note": "Build succeeded.",
+      "artifacts": [],
+      "at_ms": 1795106905145
+    },
+    {
+      "round": 61,
+      "check": "app-screenshot",
+      "passed": true,
+      "similarity": null,
+      "note": "The program starts and draws (1599×900).",
+      "artifacts": [
+        "checks\\round-60\\screenshot.png"
+      ],
+      "at_ms": 1795106908388
+    },
+    {
+      "round": 61,
+      "check": "game-self-test",
+      "passed": true,
+      "similarity": null,
+      "note": "The self-test plays the core loop: move (camera orbited 55 degrees and zoomed in 15.2 units with scripted mouse drag and wheel), act (clicked Branch node (selected: true), dragged Frequency: branches 15 -> 51; Add > Leaf: nodes 4 -> 5; orthographic view: true; 1350 leaves, 18216 triangles generated), hud (properties panel with header: true, triangle/leaf statistics: true, tabs Generation/Materials/Meshes: true, material picker, preview, Settings/Meshes tabs and texture slots: true, material properties shown on click: true, mesh cutout editor: true, Meshes dialog from +/-: opened true, Add new + Duplicate + rename by double-click + move up + OK gave ['Leaf cutout', 'Twig', 'Mesh'], new mesh empty: true).",
+      "artifacts": [
+        "checks\\round-60\\self-test.json"
+      ],
+      "at_ms": 1795106911632,
+      "claims": [
+        {
+          "title": "In play, the player moves",
+          "passed": true
+        },
+        {
+          "title": "In play, the player's main action works",
+          "passed": true
+        },
+        {
+          "title": "In play, the on-screen information is drawn",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "round": 61,
+      "check": "mechanics",
+      "passed": true,
+      "similarity": null,
+      "note": "app/mechanics.json has 114 values (98 with a source, 16 estimated). The sheet is readable; its behavior is unverified. No runtime measurement was compared with these values. A source literal or a core-loop self-test alone cannot establish that the build uses them.",
+      "artifacts": [],
+      "at_ms": 1795106911645,
+      "unknowns": [
+        "Mechanics behavior has not been measured against app/mechanics.json."
+      ]
+    },
+    {
+      "round": 61,
+      "check": "credits",
+      "passed": true,
+      "similarity": null,
+      "note": "app/README.md says the build is for private use and app/CREDITS.md lists the original's files.",
+      "artifacts": [],
+      "at_ms": 1795106911646
     }
   ],
   "agent_session": "2b5bc499-023c-4b03-af39-666182b03b0f",
@@ -7076,7 +7472,7 @@
     "tool:native_window_capture",
     "tool:build_command_run"
   ],
-  "last_reply": "Now making the bend builder apply every kept bend, then the current one.Now the controller: archive the current bend when the band or pivot starts moving, and the new look.Builds. Extending the picture hook with a kept bend so I can see both bends and the new controller.Both bends show (the kept upper bend plus the new lower one) with the new controller. Shortening the hint line so it fits, then the full check.Both changes from your picture are in, and the app builds and passes its checks.\n\n- **Bends are kept:** moving the controller no longer loses a bend. As soon as you start dragging the band or the pink handle, the bend you've made stays where it is and the controller starts a fresh, straight one. You can build up several bends this way.\n  - The Freehand panel shows how many bends are kept, with \"Remove the last kept bend\" and \"Reset all bends\".\n- **New controller look:**\n  - The band glows and shades from cyan at the pivot to green at the top, with small beads along it.\n  - The pivot is a pink hinge shaped like a pill.\n  - The top is a ringed green knob with small arrows showing the ways it bends.\n  - Each part lights up when the mouse is over it or while you drag it, and a small tag by the knob shows the bend angle and how many earlier bends are kept.\n\nI checked a trunk with one kept bend near the top and a new bend lower down in a picture, and both showed with the new controller. I haven't dragged the handles by hand to confirm that moving the band or pink handle keeps the bend.",
+  "last_reply": "The destination already holds a copy of the project with a git repository, so I'm checking how up to date it is.The copy worked: robocopy's exit code 1 means files were copied, and 17 newer files went across. Now checking that the copy at the new location builds on its own.The TreeCraft folder on F: already had a copy of this project from yesterday, so I updated its app folder with today's code (including the new camera picture). It builds on its own there, and nothing in either folder was deleted. I couldn't move Craft Anything's own project records while this build is running, so Craft Anything still works from the old folder, and the records on F: are still yesterday's. To finish the move, wait until no build is running, copy the whole speedtree-modeler folder's contents into TreeCraft (replacing the older files), then open that folder as the project in Craft Anything.",
   "asset_budget_usd": 5.0,
   "generate_assets": false,
   "questions": "ask",

@@ -1,5 +1,5 @@
 {
-  "revision": 71,
+  "revision": 77,
   "brief": {
     "question": "Rebuild the core of the tree modeler: a node graph (Tree/Trunk/Branch/Leaf generators), properties panel on the left, material editor, mesh editor, and a 3D viewport with perspective and orthographic views — no presets.",
     "purpose": "A working first version in Rust + macroquad the person can tweak later.",
@@ -376,6 +376,6 @@
       "confidence": "observed"
     }
   ],
-  "handoff": "Picture 47 done: Freehand bends are kept when the controller is moved (each move after a bend starts a new bend; kept ones applied in order), panel shows kept count with remove-last and reset-all; controller redrawn (glowing cyan-to-green band with beads, pink hinge, ringed knob with arrows, hover highlight, info tag). Build and rebuild_check pass.",
-  "updated": "2026-11-18T18:24:08Z"
+  "handoff": "Pictures 37-52 done. Move request: F:\\PROJECTS\\ARTCRAFT\\GitHub\\TreeCraft already held a copy of the whole project from 2026-11-18 (with .git, app, craft.json and the other records). I brought its app/ up to date with robocopy, copying only newer files (17), skipping target and tmp_crops and deleting nothing, and copied handoff.md. The copy there builds on its own (cargo build --release with --manifest-path; TreeCraft.exe made). Craft Anything's own records (craft.json, feed.json, investigation, checks, conversation) were NOT moved: Auto mode refuses touching them. Those at F: are still yesterday's, and this project keeps running from C:\\Users\\sgv3d\\Documents\\Craft Anything\\speedtree-modeler. To finish the move, the person moves or copies the whole folder while no build is running, then opens F:\\...\\TreeCraft as the project in Craft Anything.",
+  "updated": "2026-11-19T16:56:08Z"
 }

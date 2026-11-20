@@ -16,3 +16,5 @@ from `tree_templates\Games\Broadleaf.spm`, colours from `app_data\style.css`, ge
 names from the program (function 0x1403175a0). Textures (bark, leaf) are drawn by code.
 
 - `render_modes/**/*.fx` (install folder): the viewport render modes' formulas were read from these files and rewritten in TreeCraft's own shader (no file is copied or shipped).
+
+- assets/camera_icon.png: the camera picture the person supplied with their request (picture 52), background removed.

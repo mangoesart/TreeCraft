@@ -17,11 +17,15 @@ pub struct Cam {
     pub ortho: bool,
     pub view: usize,
     pub fov: f32,
+    /// Turn around the view direction (radians): a custom camera's Roll (picture 50).
+    pub roll: f32,
+    /// A custom camera's clip start and end, instead of the automatic ones.
+    pub clip: Option<(f32, f32)>,
 }
 
 impl Cam {
     pub fn new() -> Self {
-        Cam { yaw: 0.6, pitch: 0.18, dist: 70.0, target: vec3(0.0, 14.0, 0.0), ortho: false, view: 0, fov: 45.0 }
+        Cam { yaw: 0.6, pitch: 0.18, dist: 70.0, target: vec3(0.0, 14.0, 0.0), ortho: false, view: 0, fov: 45.0, roll: 0.0, clip: None }
     }
     pub fn set_view(&mut self, v: usize) {
         self.view = v;
@@ -72,7 +76,18 @@ impl Cam {
         self.target += (right * dx + up * dy) * s;
     }
     pub fn zoom(&mut self, steps: f32) {
-        self.dist = (self.dist * 0.88f32.powf(steps)).clamp(1.0, 2000.0);
+        // close in, the view keeps going forward past its centre instead of stopping (picture 57):
+        // under half a unit away the centre itself moves ahead, so the camera can pass through
+        // (and clip into) what's in front of it
+        let nd = self.dist * 0.88f32.powf(steps);
+        const NEAR: f32 = 0.5;
+        if steps > 0.0 && nd < NEAR {
+            let step = (self.dist.max(NEAR) * (1.0 - 0.88f32.powf(steps))).max(0.05);
+            self.target -= self.dir() * step;
+            self.dist = NEAR;
+        } else {
+            self.dist = nd.clamp(NEAR, 2000.0);
+        }
     }
     pub fn view_height(&self) -> f32 {
         2.0 * self.dist * (self.fov.to_radians() * 0.5).tan()
@@ -84,7 +99,21 @@ impl Cam {
     }
     pub fn camera3d(&self, viewport: Option<(i32, i32, i32, i32)>, aspect: f32, rt: Option<RenderTarget>) -> Camera3D {
         let pos = self.position();
-        let up = if self.pitch.abs() > 1.5 { vec3(-self.yaw.sin(), 0.0, -self.yaw.cos()) * self.pitch.signum() } else { Vec3::Y };
+        let mut up = if self.pitch.abs() > 1.5 { vec3(-self.yaw.sin(), 0.0, -self.yaw.cos()) * self.pitch.signum() } else { Vec3::Y };
+        if self.roll != 0.0 {
+            // turned around the view direction (the camera looks along -dir)
+            let fwd = -self.dir();
+            let right = fwd.cross(up).normalize_or_zero();
+            let up0 = right.cross(fwd).normalize_or_zero();
+            up = (up0 * self.roll.cos() + right * self.roll.sin()).normalize_or(Vec3::Y);
+        }
+        let (auto_near, auto_far) = if self.ortho { (1.0, self.dist.max(1.0) * 60.0) } else { ((self.dist * 0.01).max(0.05), self.dist * 40.0 + 500.0) };
+        let (z_near, z_far) = match self.clip {
+            // an orthographic camera sits far back (position()): its planes count from the target's distance
+            Some((n, f)) if self.ortho => ((self.dist.max(1.0) * 20.0 - self.dist + n).max(0.01), self.dist.max(1.0) * 20.0 - self.dist + f.max(n + 0.01)),
+            Some((n, f)) => (n.max(0.001), f.max(n + 0.01)),
+            None => (auto_near, auto_far),
+        };
         Camera3D {
             position: pos,
             target: self.target,
@@ -94,8 +123,8 @@ impl Cam {
             projection: if self.ortho { Projection::Orthographics } else { Projection::Perspective },
             render_target: rt,
             viewport,
-            z_near: if self.ortho { 1.0 } else { (self.dist * 0.01).max(0.05) },
-            z_far: if self.ortho { self.dist.max(1.0) * 60.0 } else { self.dist * 40.0 + 500.0 },
+            z_near,
+            z_far,
         }
     }
 }
@@ -175,9 +204,35 @@ uniform vec4 AOParams;
 uniform float Wrap;
 uniform float FlipBack;
 float grey(float v) { return clamp(v, 0.0, 1.0); }
+float hash3(vec3 p) { return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
+float vnoise(vec3 p) {
+    vec3 i = floor(p);
+    vec3 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = mix(mix(hash3(i), hash3(i + vec3(1.0, 0.0, 0.0)), f.x), mix(hash3(i + vec3(0.0, 1.0, 0.0)), hash3(i + vec3(1.0, 1.0, 0.0)), f.x), f.y);
+    float b = mix(mix(hash3(i + vec3(0.0, 0.0, 1.0)), hash3(i + vec3(1.0, 0.0, 1.0)), f.x), mix(hash3(i + vec3(0.0, 1.0, 1.0)), hash3(i + vec3(1.0, 1.0, 1.0)), f.x), f.y);
+    return mix(a, b, f.z);
+}
 void main() {
     vec4 tex = texture2D(Texture, uv);
     if (tex.a < Cutoff) discard;
+    // Welding's texture blend (picture 58): a welded base dissolves into its parent's bark
+    // through a ragged, bark-like pattern (three octaves of noise in space), so the parent's own
+    // bark shows through and the seam disappears; a thin darker rim follows the edge like a
+    // crease in the bark. The fade arrives in the colour's alpha (gen.rs): unselected 1.0 down to
+    // 0.92, selected 0.5 down to 0.42.
+    float weldShade = 1.0;
+    {
+        float a = color.a;
+        float fade = a < 0.75 ? (0.502 - a) / 0.078 : (1.0 - a) / 0.078;
+        fade = clamp(fade, 0.0, 1.0);
+        if (fade > 0.02) {
+            vec3 q = wp * 2.3;
+            float nz = vnoise(q) * 0.55 + vnoise(q * 2.7 + 11.3) * 0.3 + vnoise(q * 7.9 + 3.7) * 0.15;
+            if (fade > nz) discard;
+            weldShade = mix(0.84, 1.0, smoothstep(0.0, 0.08, nz - fade));
+        }
+    }
     // Roughness (picture 25): the material's Roughness value (Gloss uniform = 1 - roughness)
     // times its Roughness picture, white = rough, black = glossy; Gl is the gloss it gives
     float Rgh = 1.0 - Gloss;
@@ -206,7 +261,7 @@ void main() {
         vec3 b = cross(n, t);
         n = normalize(n - Bump * 6.0 * ((hx - h0) * t + (hy - h0) * b));
     }
-    vec3 base = tex.rgb * Tint.rgb * color.rgb;
+    vec3 base = tex.rgb * Tint.rgb * color.rgb * weldShade;
     // season (Edit > Season): leaves go from fresh green (spring) through summer to autumn
     // orange and winter brown, keeping their brightness
     if (IsLeaf > 0.5 && Season >= 0.0) {

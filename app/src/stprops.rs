@@ -147,7 +147,11 @@ pub const BRANCH_PROPS: &[StProp] = &[
     ("Skin:Light seam reduction", "0", true, 0.0),
     ("Skin:Roll", "0", true, 0.0),
     ("Skin:Smooth", "0", true, 0.0),
-    ("Skin:Welding:Enabled", "true", false, 0.0),
+    // off unless asked (picture 56; the original's template has it on)
+    ("Skin:Welding:Enabled", "false", false, 0.0),
+    // the original's Welding rows (picture 57)
+    ("Skin:Welding:Keep failed", "false", false, 0.0),
+    ("Skin:Welding:Force ray casts", "false", false, 0.0),
     ("Skin:Welding:Offset", "1", true, 0.0),
     ("Skin:Welding:Spread:Amount", "0.1", true, 0.0),
     ("Skin:Welding:Spread:Upper scale", "0.25", true, 0.0),

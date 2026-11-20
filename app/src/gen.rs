@@ -369,6 +369,7 @@ pub fn generate(ctx: &GenCtx) -> TreeGeo {
     let mut anchors: Vec<AnchorFrame> = vec![];
     process(ctx, root.id, &[ParentRef::Ground], &tree, &mut spines, &mut anchors, &mut geo, &cache, &mut leaf_ranges);
     geo.collections = collect(ctx, &spines);
+    place_tree(&mut geo, &tree);
     if geo.bmin.x > geo.bmax.x {
         geo.bmin = vec3(-5.0, 0.0, -5.0);
         geo.bmax = vec3(5.0, 10.0, 5.0);
@@ -390,6 +391,61 @@ pub fn generate(ctx: &GenCtx) -> TreeGeo {
         }
     }
     geo
+}
+
+/// The Tree generator's Generation > Size scalar and Shape > Sink / Roll (picture 49): the whole
+/// tree scaled about its root, turned around the up axis (degrees) and lowered into the ground.
+fn place_tree(geo: &mut TreeGeo, tree: &Params) {
+    let scale = tree.size_scalar.max(0.001);
+    let sink = tree.extra.get("Shape:Sink").copied().unwrap_or(0.0) as f32;
+    let roll = (tree.extra.get("Shape:Roll").copied().unwrap_or(0.0) as f32).to_radians();
+    if (scale - 1.0).abs() < 1e-6 && sink == 0.0 && roll == 0.0 {
+        return;
+    }
+    let rot = Quat::from_rotation_y(roll);
+    let pt = |p: Vec3| rot * p * scale - Vec3::Y * sink;
+    for mg in geo.mats.values_mut() {
+        for ch in &mut mg.chunks {
+            for v in &mut ch.v {
+                v.position = pt(v.position);
+                let n = rot * vec3(v.normal.x, v.normal.y, v.normal.z);
+                v.normal = vec4(n.x, n.y, n.z, v.normal.w);
+            }
+        }
+    }
+    for b in &mut geo.bones {
+        for p in b.iter_mut() {
+            *p = pt(*p);
+        }
+    }
+    for n in &mut geo.nodes {
+        n.2 = pt(n.2);
+        n.3 = pt(n.3);
+    }
+    for h in &mut geo.hits {
+        for p in h.2.iter_mut() {
+            *p = pt(*p);
+        }
+        for r in h.3.iter_mut() {
+            *r *= scale;
+        }
+    }
+    for s in &mut geo.spine_lines {
+        for p in s.1.iter_mut() {
+            *p = pt(*p);
+        }
+    }
+    if geo.bmin.x <= geo.bmax.x {
+        let (a, b) = (geo.bmin, geo.bmax);
+        let (mut lo, mut hi) = (Vec3::splat(f32::MAX), Vec3::splat(f32::MIN));
+        for k in 0..8 {
+            let c = pt(vec3(if k & 1 == 0 { a.x } else { b.x }, if k & 2 == 0 { a.y } else { b.y }, if k & 4 == 0 { a.z } else { b.z }));
+            lo = lo.min(c);
+            hi = hi.max(c);
+        }
+        geo.bmin = lo;
+        geo.bmax = hi;
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -419,10 +475,14 @@ fn process(
         let on_anchors = parents.iter().all(|q| matches!(q, ParentRef::Anchor(_)));
         // each node's number in its generator, counted the same way every time (Node edit mode)
         let mut inst = 0usize;
+        // where this generator's kept children start (Knockout > Proximity)
+        let mut kept: Vec<Vec3> = vec![];
         for (pi, parent) in parents.iter().enumerate() {
             // Generation:Anchors: only the chosen anchor (fns 0x14024b880, 0x1402456e0)
             if let ParentRef::Anchor(ai) = parent {
-                if p.anchor_pick > 0 && anchors[*ai].index != p.anchor_pick {
+                // (the Gen tab's Anchors row, picture 56, when the Leaves tab's choice is All)
+                let pick = if p.anchor_pick > 0 { p.anchor_pick } else { pex(p, "Generation:Anchors", 0.0).max(0.0) as usize };
+                if pick > 0 && anchors[*ai].index != pick {
                     continue;
                 }
                 // fn 0x14026f500: only anchors whose height lies between First and Last
@@ -432,7 +492,7 @@ fn process(
                 }
             }
             let mut rng = Rng::new((p.seed as u64) * 7919 + pi as u64 * 104729 + child.id as u64 * 31);
-            let placements = distribute(p, *parent, spines, tree, &mut rng);
+            let placements = shared_placement(p, *parent, spines, distribute(p, *parent, spines, tree, &mut rng));
             let n_on_parent = placements.len();
             for (k_on_parent, (t, roll, base_pos, azim_dir)) in placements.into_iter().enumerate() {
                 let me = inst;
@@ -460,6 +520,26 @@ fn process(
                 let edit = child.p.node_edits.get(&me);
                 if edit.map_or(false, |e| e.hidden) {
                     continue;
+                }
+                // Generation > Knockout (picture 56): removes that share of the children; with
+                // Proximity > Range, Weight of it goes to those crowding a kept sibling
+                let ko = pex(&child.p, "Generation:Knockout", 0.0).clamp(0.0, 1.0);
+                if ko > 0.0 {
+                    let at = match *parent {
+                        ParentRef::Spine(i) => spines[i].point(t.min(1.0)),
+                        ParentRef::Anchor(ai) => anchors[ai].pos,
+                        ParentRef::Ground => base_pos,
+                    };
+                    let range = pex(&child.p, "Generation:Shared:Knockout:Proximity:Range", 0.0).max(0.0) * child.p.size_scalar;
+                    let w = if range > 0.0 { pex(&child.p, "Generation:Shared:Knockout:Proximity:Weight", 1.0).clamp(0.0, 1.0) } else { 0.0 };
+                    let crowded = range > 0.0 && kept.iter().any(|k| k.distance(at) < range);
+                    // (an estimate: random share (1 - Weight) x Knockout, plus Weight x sqrt(Knockout)
+                    // for children within Range of a kept one)
+                    let chance = (1.0 - w) * ko + if crowded { w * ko.sqrt() } else { 0.0 };
+                    if hash01(child.id as u64, me as u64, 7331) * 0.5 + 0.5 < chance.min(1.0) {
+                        continue;
+                    }
+                    kept.push(at);
                 }
                 let pe = match edit {
                     Some(e) => Some(edited(pc.as_ref().unwrap_or(&child.p), e)),
@@ -521,7 +601,7 @@ fn process(
                                 geo.spine_lines.push((child.id, s.pts.clone()));
                             }
                             if ctx.show_branches && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id)) && skin_type != 3 && visible {
-                                let weld = if let ParentRef::Spine(i) = *parent { Some((spines[i].radius(t), spines[i].frame(t).0)) } else { None };
+                                let weld = if let ParentRef::Spine(i) = *parent { Some((spines[i].radius(t.min(1.0)), spines[i].frame(t.min(1.0)).0, spines[i].point(t.min(1.0)))) } else { None };
                                 skin(&s, p, col, geo, child.kind == Kind::Trunk, weld, child.id, me);
                             }
                             spines.push(s);
@@ -696,6 +776,42 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
 }
 
 
+/// The Gen tab's shared settings on where children go (picture 56; estimated, see MECHANICS.md):
+/// Shared > Position shifts every child along the parent by that share of its length; Shared >
+/// Rotation turns them all around it (turns); Extend parent stretches the spots past the
+/// parent's tip by that share (t x (1 + extend)); Boundaries > Clip drops children within that
+/// share of the parent's tip; Favor splits pulls each child toward the nearest spot where a
+/// sibling generator's child already grows.
+fn shared_placement(p: &Params, parent: ParentRef, spines: &[Spine], mut out: Vec<(f32, f32, Vec3, Vec3)>) -> Vec<(f32, f32, Vec3, Vec3)> {
+    let ParentRef::Spine(i) = parent else { return out };
+    let pos = pex(p, "Generation:Shared:Position", 0.0);
+    let rot = pex(p, "Generation:Shared:Rotation", 0.0) * 2.0 * PI;
+    let ext = pex(p, "Generation:Shared:Extend parent", 0.0).max(0.0);
+    let clip = pex(p, "Generation:Shared:Boundaries:Clip", 0.025).clamp(0.0, 1.0);
+    let favor = match p.gen_mode {
+        MODE_ABSOLUTE => pex(p, "Generation:Absolute:Favor splits", 0.0),
+        MODE_CLASSIC => pex(p, "Generation:Proportional:Favor splits", 0.0),
+        _ => 0.0,
+    }
+    .clamp(0.0, 1.0);
+    // the spots other generators' children already took on this parent
+    let splits: Vec<f32> = if favor > 0.0 { spines.iter().filter(|s| s.parent_spine == Some(i)).map(|s| s.pos_on_parent).collect() } else { vec![] };
+    out.retain_mut(|(t, roll, _, _)| {
+        let mut tt = *t + pos;
+        if let Some(near) = splits.iter().copied().min_by(|a, b| (a - tt).abs().total_cmp(&(b - tt).abs())) {
+            tt += (near - tt) * favor;
+        }
+        tt *= 1.0 + ext;
+        *roll += rot;
+        *t = tt;
+        tt >= -1e-4 && tt <= 1.0 + ext + 1e-4 && (ext > 0.0 || tt <= 1.0 - clip + 1e-4 || clip <= 0.0)
+    });
+    for o in &mut out {
+        o.0 = o.0.max(0.0);
+    }
+    out
+}
+
 /// A random spot between First and Last; a Profile curve on the count property makes children
 /// likelier where it's high (picture 24).
 fn along(p: &Params, count_prop: &str, first: f32, span: f32, rng: &mut Rng) -> f32 {
@@ -735,7 +851,7 @@ fn make_spine(
     };
     let angle = (p.start_angle + p.angle_var * rng.sym() + p.angle_profile * (t - 0.5)).clamp(0.0, 1.0) * PI;
     let mut anc_dir: Option<Vec3> = None;
-    let (start, dir, plen, prad) = match parent {
+    let (mut start, dir, plen, prad) = match parent {
         ParentRef::Ground => {
             // start angle measured up from the ground: 0.5 = straight up
             let d = (Vec3::Y * angle.sin() + ground_dir * angle.cos()).normalize();
@@ -743,7 +859,28 @@ fn make_spine(
         }
         ParentRef::Spine(i) => {
             let ps = &spines[i];
-            let (tn, n, b) = ps.frame(t);
+            let (tn, mut n, mut b) = ps.frame(t);
+            // Generation > Align (picture 56; estimated): on, the children's roll counts from a
+            // fixed reference: Align style 1 the world's up (seen across the parent), 0 the
+            // parent's own frame; off, each child turns by a random extra amount
+            let mode_pre = match p.gen_mode {
+                MODE_ABSOLUTE => "Generation:Absolute",
+                MODE_INTERVAL => "Generation:Interval",
+                MODE_PHYLLOTAXY => "Generation:Phyllotaxy:Arrangement",
+                _ => "Generation:Proportional",
+            };
+            let align_on = pex(p, &format!("{}:Align", mode_pre), 1.0) > 0.5;
+            let style = pex(p, &format!("{}:Align style", mode_pre), 1.0) as i32;
+            let mut roll = roll;
+            if !align_on {
+                roll += rng.next() * 2.0 * PI;
+            } else if style == 1 {
+                let up = Vec3::Y - tn * Vec3::Y.dot(tn);
+                if up.length_squared() > 1e-4 {
+                    n = up.normalize();
+                    b = tn.cross(n);
+                }
+            }
             let perp = n * roll.cos() + b * roll.sin();
             let mut d = (tn * angle.cos() + perp * angle.sin()).normalize();
             // Spine:Orientation:Alignment: 1 = Start angle measured from the parent's direction,
@@ -760,7 +897,13 @@ fn make_spine(
                 d = d.lerp(tn, anc).normalize_or(d);
             }
             anc_dir = Some(tn);
-            (ps.point(t), d, ps.len, ps.radius(t))
+            // Extend parent: spots past the tip continue along the tip's direction
+            let over = (t - 1.0).max(0.0);
+            // Generation > Sink (picture 56): the base pushed back into the parent by that many
+            // times the parent's radius there
+            let sink = pex(p, "Generation:Sink", 0.0).max(0.0);
+            let pr = ps.radius(t);
+            (ps.point(t) + tn * over * ps.len - d * sink * pr, d, ps.len, pr)
         }
         ParentRef::Anchor(_) => return None, // only leaves spawn on anchors
     };
@@ -787,6 +930,12 @@ fn make_spine(
         r0 = r0.min(prad * 0.95);
     }
     r0 = r0.max(0.005);
+    // Generation > Sink on a trunk (picture 57): with no parent branch, the base goes down into
+    // the ground by Sink x the trunk's own radius
+    if matches!(parent, ParentRef::Ground) {
+        let sink = pex(p, "Generation:Sink", 0.0).max(0.0);
+        start -= dir * sink * r0;
+    }
     // Spine:Length:Match one v tile: exactly as long as one repeat of the bark texture along it
     if pex(p, "Spine:Length:Match one v tile", 0.0) > 0.5 {
         let v_style = pex(p, "UV Mapping:V:Style", 1.0) as i32;
@@ -1118,7 +1267,7 @@ struct SkinLook {
     squash_rot: f32,
     seam: f32,
     // welding: where the branch meets its parent (parent radius and direction there)
-    weld: Option<(f32, Vec3)>,
+    weld: Option<(f32, Vec3, Vec3)>,
     weld_offset: f32,
     spread: f32,
     upper: f32,
@@ -1136,10 +1285,11 @@ struct SkinLook {
 }
 
 impl SkinLook {
-    fn new(p: &Params, weld: Option<(f32, Vec3)>) -> Self {
+    fn new(p: &Params, weld: Option<(f32, Vec3, Vec3)>) -> Self {
         let st = pex(p, "Skin:Type", 0.0) as i32;
         let subd = st == 1 || st == 2;
-        let welding = pex(p, "Skin:Welding:Enabled", 1.0) > 0.5;
+        // off by default (picture 56)
+        let welding = pex(p, "Skin:Welding:Enabled", 0.0) > 0.5;
         let blend = pex(p, "Skin:Intersection:Texture Blend:Enabled", 1.0) > 0.5;
         // a SubD skin's Upper / Lower spread widen the weld on each side (2 = as set)
         let (us, ls) = if subd { (pex(p, "Skin:Subdivision:Upper spread", 2.0) * 0.5, pex(p, "Skin:Subdivision:Lower spread", 2.0) * 0.5) } else { (1.0, 1.0) };
@@ -1168,8 +1318,19 @@ impl SkinLook {
 
 /// A branch's bark, with its Skin settings; then any Splits (extra forks) off it.
 #[allow(clippy::too_many_arguments)]
-fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, weld: Option<(f32, Vec3)>, gen: u32, node: usize) {
-    let look = SkinLook::new(p, weld);
+fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, weld: Option<(f32, Vec3, Vec3)>, gen: u32, node: usize) {
+    let mut look = SkinLook::new(p, weld);
+    // Welding (picture 57): a branch running almost along its parent can't be welded unless
+    // Force ray casts; a failed weld drops the branch's bark unless Keep failed
+    if let Some((_, ptan, _)) = look.weld {
+        let d0 = (s.pts[1.min(s.pts.len() - 1)] - s.pts[0]).normalize_or(ptan);
+        if d0.dot(ptan).abs() > 0.985 && pex(p, "Skin:Welding:Force ray casts", 0.0) < 0.5 {
+            look.weld = None;
+            if pex(p, "Skin:Welding:Keep failed", 0.0) < 0.5 {
+                return;
+            }
+        }
+    }
     skin_tube(s, p, col, geo, trunk, &look);
     // Skin:Splits: by Chance (Seed), the branch forks at two thirds of its length: one fork at
     // Spread 1 (x 90 degrees), another at Spread 2; Balance shares the radius between the main
@@ -1216,7 +1377,37 @@ fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, wel
     }
 }
 
-fn skin_tube(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, look: &SkinLook) {
+/// Welding's extra rings (picture 58): the weld zone gets `8 + 6 x Offset` rings (6..32), closer
+/// together toward the parent, so the base can bend smoothly onto it; the rest of the branch
+/// keeps its own points.
+fn densify_base(s: &Spine, zone: f32, offset: f32) -> Spine {
+    let n = ((8.0 + 6.0 * offset).round() as usize).clamp(6, 32);
+    let mut ds: Vec<f32> = (0..=n).map(|i| zone * (i as f32 / n as f32).powf(1.35)).collect();
+    ds.extend(s.cum.iter().copied().filter(|c| *c > zone * 1.0001));
+    let len = s.len.max(1e-6);
+    let mut out = Spine { node: s.node, pts: vec![], rad: vec![], tan: vec![], nrm: vec![], cum: vec![], len: s.len, mat: s.mat, parent_spine: s.parent_spine, pos_on_parent: s.pos_on_parent };
+    for d in ds {
+        let t = (d / len).clamp(0.0, 1.0);
+        let (tn, nn, _) = s.frame(t);
+        out.pts.push(s.point(t));
+        out.rad.push(s.radius(t));
+        out.tan.push(tn);
+        out.nrm.push(nn);
+        out.cum.push(d.min(s.len));
+    }
+    out
+}
+
+fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, look: &SkinLook) {
+    // the weld zone: from the parent's middle out past its surface by Offset x the parent radius
+    let zone = look.weld.map_or(0.0, |(pr, _, _)| pr * (1.0 + look.weld_offset));
+    let dense;
+    let s: &Spine = if zone > 0.0 && s0.len > zone * 0.2 && s0.pts.len() >= 2 {
+        dense = densify_base(s0, zone.min(s0.len), look.weld_offset);
+        &dense
+    } else {
+        s0
+    };
     let mat_key = s.mat;
     // Segments:Radial: Absolute, plus "+ Relative" more for every quarter unit of radius (picture 39)
     let rel = (pex(p, "Segments:Radial: + Relative", 2.0).max(0.0) * s.rad[0] * 4.0).round() as i32;
@@ -1227,7 +1418,13 @@ fn skin_tube(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool
     let m = s.pts.len();
     // Segments:Radial:Absolute's second curve (picture 41): the count around can change along
     // the branch; rings of different counts are stitched together
-    let ring_n: Vec<usize> = (0..m).map(|k| ((radial as f32 * curve_at(p, "Segments:Radial:Absolute", 2, s.cum[k] / s.len.max(1e-6))).round() as usize).clamp(3, 64)).collect();
+    // (welded, the rings in the weld zone go round in twice as many steps, picture 58)
+    let ring_n: Vec<usize> = (0..m)
+        .map(|k| {
+            let n = ((radial as f32 * curve_at(p, "Segments:Radial:Absolute", 2, s.cum[k] / s.len.max(1e-6))).round() as usize).clamp(3, 64);
+            if zone > 0.0 && s.cum[k] < zone { (n * 2).min(64) } else { n }
+        })
+        .collect();
     let need: usize = ring_n.iter().map(|r| r + 1).sum::<usize>() + 2;
     let r0 = s.rad[0].max(0.01);
     // each branch flips its twist (Random flip) by where it starts
@@ -1244,8 +1441,6 @@ fn skin_tube(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool
             }
         }
     }
-    // the weld zone: from the parent's middle out past its surface by Offset x the parent radius
-    let zone = look.weld.map_or(0.0, |(pr, _)| pr * (1.0 + look.weld_offset));
     let mat = geo.mats.entry(mat_key).or_default();
     let ch = mat.chunk_for(need);
     let base = ch.v.len();
@@ -1284,18 +1479,46 @@ fn skin_tube(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool
             let (na, nb) = ((a - squash_rot).cos() * (1.0 - squash), (a - squash_rot).sin());
             let mut nrm = (n * (na * cr - nb * sr) + b * (na * sr + nb * cr)).normalize_or(dir);
             let mut r = rad[k];
+            let mut weld_to: Option<(Vec3, Vec3, f32)> = None;
+            // Welding > Blend's texture fade (picture 58): how far this spot of the base dissolves
+            // into the parent's bark (0 solid .. 1 gone)
+            let mut fade = 0.0f32;
             if w > 0.0 {
-                if let Some((_, ptan)) = look.weld {
-                    // Welding > Spread: the base widens into the parent, more on the side toward
-                    // the parent's tip (Upper scale) or its base (Lower scale)
-                    let side = dir.normalize_or(dir).dot(ptan) * 0.5 + 0.5;
-                    let scale = (look.lower + (look.upper - look.lower) * side) / 0.25;
-                    r *= 1.0 + spread * 5.0 * w * w * scale;
-                    // Welding > Blend: the joint darkens into the parent's bark (Texture), sharper
-                    // with Contrast, ragged with Noise
-                    let jag = 1.0 + look.blend_noise * 0.06 * (a * 7.0 + dist * 13.0).sin();
-                    let wb = (w * jag).clamp(0.0, 1.0).powf(1.0 + look.blend_contrast * 0.2);
-                    ao *= 1.0 - 0.35 * look.blend_tex * wb;
+                if let Some((pr, ptan, pp)) = look.weld {
+                    // Welding > Spread (picture 57): the base widens over the parent, more toward
+                    // the parent's tip (Upper scale) or its base (Lower scale) ...
+                    let side = dir.normalize_or(dir).dot(ptan);
+                    let scale = if side >= 0.0 { look.upper } else { look.lower } * side.abs() + 0.25 * (1.0 - side.abs());
+                    r *= 1.0 + spread * 1.6 * w * w * (scale / 0.25);
+                    // ... and wraps onto the parent's surface there (the parent taken as a cylinder
+                    // along its direction at the joint): near the parent the ring lies on it, so
+                    // the joint never stands out of the parent; further out it eases back into the
+                    // branch's own tube
+                    let tube = s.pts[k] + dir * r;
+                    let v = tube - pp;
+                    let along = v.dot(ptan);
+                    let perp = v - ptan * along;
+                    let out = perp.normalize_or(dir);
+                    let surface = pp + ptan * along + out * (pr * 1.012);
+                    // how much it hugs the parent: fully at the parent's surface, none at the zone's end
+                    let hug = ((zone - dist) / (zone - pr * 0.999).max(1e-4)).clamp(0.0, 1.0);
+                    let hug = hug * hug * (3.0 - 2.0 * hug);
+                    weld_to = Some((surface, out, hug));
+                    // Welding > Blend: the joint's shading turns to the parent's (its surface
+                    // direction) by Texture, sharper with Contrast, ragged with Noise, so the joint
+                    // is hard to see; a faint darkening keeps the crease
+                    let jag = 1.0 + look.blend_noise * 0.05 * (a * 7.0 + dist * 13.0).sin();
+                    let wb = (hug * jag).clamp(0.0, 1.0).powf(1.0 + look.blend_contrast * 0.15);
+                    nrm = nrm.lerp(out, (look.blend_tex * wb).clamp(0.0, 1.0)).normalize_or(nrm);
+                    // the parent's own shading where it hugs it (a trunk's bark is lighter than a
+                    // branch's base), with a faint crease
+                    ao = ao + (0.86 - ao) * hug;
+                    ao *= 1.0 - 0.06 * look.blend_tex * wb;
+                    // the fade: strongest where the base lies on the parent, ending sooner with
+                    // more Contrast; the shader turns it into a ragged, bark-like edge
+                    let c = 1.0 + look.blend_contrast * 0.3;
+                    let h2 = ((hug - 0.5) * c + 0.5).clamp(0.0, 1.0);
+                    fade = (look.blend_tex * h2 * h2 * (3.0 - 2.0 * h2) * jag.min(1.2)).clamp(0.0, 1.0);
                 }
             }
             // Skin:Light seam reduction: near the base the normals lean toward the direction the
@@ -1304,10 +1527,19 @@ fn skin_tube(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool
                 let k2 = seam * (1.0 - sfrac / 0.2);
                 nrm = nrm.lerp(s.tan[0], k2 * 0.8).normalize_or(nrm);
             }
-            let pos = s.pts[k] + dir * r;
+            let mut pos = s.pts[k] + dir * r;
+            if let Some((surface, _, hug)) = weld_to {
+                pos = pos.lerp(surface, hug);
+            }
             bmin = bmin.min(pos);
             bmax = bmax.max(pos);
-            ch.v.push(vtx(pos, uvm.uv(j as f32 / radial as f32, tex_dist), col, nrm, ao));
+            // the fade rides in the colour's alpha, below the selection mark's range: unselected
+            // 255 down to 235, selected 128 down to 108 (render.rs reads it back)
+            let mut vc = col;
+            if fade > 0.0 {
+                vc[3] = col[3].saturating_sub((fade * 20.0).round() as u8);
+            }
+            ch.v.push(vtx(pos, uvm.uv(j as f32 / radial as f32, tex_dist), vc, nrm, ao));
         }
     }
     let mut tris = 0usize;

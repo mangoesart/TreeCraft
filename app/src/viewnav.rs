@@ -446,7 +446,7 @@ impl App {
             ("Viewport", &[("Left-drag", "orbit"), ("Middle / Shift + drag", "pan"), ("Wheel, right-drag", "zoom"), ("F", "frame the tree"), ("Click / double-click", "pick / centre on it"), ("Numpad 1 3 7, 5", "front, right, top; ortho")]),
             ("Generation editor", &[("+ Add", "add under the selected node"), ("Click a node", "edit it in Properties"), ("Shift + drag onto a node", "re-link it"), ("Delete", "remove it"), ("Tab", "Generator / Node mode")]),
             ("Show and hide", &[("1, 3", "leaves, branches"), ("H, I", "hide, isolate"), ("Z", "zoom to the selection")]),
-            ("Light", &[("Bulb, then drag", "move the sun"), ("Wheel on the bulb", "brightness"), ("Right-click the bulb", "light settings")]),
+            ("Light", &[("Hold V + drag", "turn the sun around"), ("Bulb, then drag", "move the sun"), ("Wheel on the bulb", "brightness"), ("Right-click the bulb", "light settings")]),
             ("Files", &[("Ctrl+N, O, S", "new, open, save"), ("Ctrl+Shift+S", "save as"), ("Ctrl+E", "export mesh"), ("Ctrl+Z, Ctrl+Y", "undo, redo")]),
         ];
         let col_w: f32 = 330.0;

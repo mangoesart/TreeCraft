@@ -473,3 +473,92 @@ Orient, SpineStyle, PivotStyle, Collection, MoreLodsMeshID, Scale, Lod_1/Lod_2).
 ## Kept bends, new controller look (picture 47)
 - Starting to move the band or the pivot while the controller holds a bend keeps that bend (copied to Freehand:Kept<i>:..., Freehand:KeptCount) and the controller starts a new straight one; the spine applies the kept bends in the order made, then the controller's. Panel: Kept bends count, Remove the last kept bend, Reset all bends.
 - Controller look: a glowing band shading from cyan (pivot) to green (top) with beads, a pink pill-shaped hinge at the pivot, a ringed green knob with bend arrows at the top, all lighting up under the mouse or while dragged; a tag shows the bend and how many earlier bends are kept.
+
+## Rename select-all, click-away, back arrow (picture 48)
+- Renaming a material or mesh (double-click or Rename) starts with the whole name selected and highlighted: the first typed letter replaces it, Backspace clears it; arrows/Home/End drop the selection, Ctrl+A selects all again.
+- A click on empty viewport space (Generator mode) returns the Properties panel to its default view from any panel (material, mesh, light, window), not only from a generator.
+- Properties header: a back arrow left of the title goes to the panel shown before (the selection history, same as Alt+Z), or to the default view when there is none.
+
+## Global and Window properties in the Properties panel, title bar (picture 49)
+- Global properties = the Tree generator's panel, laid out like the original's "Properties - Tree" (names from the original's strings at 0x141096e30-0x141098a00): Generation (Shared: Size scalar; Geometry: Branches/Caps, Leaves/Fronds/Meshes, Subdivision = Triangles | Quads), Shape (Radius, Sink, Roll), Subdivision (Level 0, Relax 0.25), Dynamic LOD (Enabled, Number 3, Branches/Decorations/Leaves/Fronds, Leaf Settings: Grow scale 2, Jumble 0.1, Seed 15000), SpeedTree SDK (User data), Lightmap (Target resolution 128 of 32..2048, Display multiplier "x1 (Same as target)"), Compute Flags (Vertex colors), Vertex Color (0, 0, 1), Proxy Collision (Automatic, Scale 1, Cull, Restore culled). Working: Size scalar scales the whole tree, Sink lowers it, Roll turns it (degrees), Radius spreads trunks, Dynamic LOD Enabled/Number limit the preview LOD. Faint rows are kept and saved, not used yet.
+- Window properties = the original's "Properties - <scene>" panel (strings at 0x1410b9480-0x1410ba350): Viewport (Layout One | Two (side by side) | Two (over under) | Four; Grid lines color = the theme's grid colour; Grid spacing 10 = 2.5 TreeCraft units; Lightmap view % 0.3; Background Style Ambient light | Solid color | Full frame image | Letterboxed image | Stretched image | Spherical panorama, Color, Image, Panorama Adjustments Brightness / Contrast / Rotation), General Rendering (Transparency Best available (A2C if possible) | Alpha test only | Blending only | Alpha test and blending; Anisotropic filtering x16; 3D icon scale 2.8), Manipulator (Mode Translate | Rotate | Scale, default Rotate; Coordinate system Global | Local; Size scale), Screenshot Safe Frame (Show, Width 1024, Height 1024: drawn as a frame with the outside dimmed), User Shader Constant 1 (1, 0, 0, 0), Capture Camera (Style Disabled | Interactive | Sequence render, Left X/Y, Middle X/Y, Light azimuth / pitch). Saved with the scene ([window] section); New resets them.
+- The home panel's Actions section is left out for now; Preferences no longer lists the Global page (its Viewport page is TreeCraft's own display settings).
+- Title bar: "<name> [<full path>] - TreeCraft <version> Beta" like Blender, "* " in front while unsaved changes exist, "(Unsaved)" before the first save.
+
+## Custom cameras (picture 50)
+- View menu > Add camera: a camera where the view is (same position, direction and zoom). From the perspective view it is a perspective camera; from Front/Back/Left/Right/Top/Bottom it is an orthographic camera locked to that view (no heading/tilt, only roll). The menu then lists "Camera: <name>" to look through each one.
+- Lens: perspective focal length (mm) with sensor width (36 mm default), field of view = 2 atan(sensor / 2 focal) across the width, vertical from the frame aspect; editing the field of view sets the focal length. Orthographic scale = the view's height. Shift X/Y kept (not applied yet). Automatic clipping, or Clip start/end.
+- Transform: Position X/Y/Z, Heading, Tilt, Roll (degrees), Target distance (its orbit point when looking through it).
+- Frame: presets (HD 1080p, 720p, 4K, Square, Portrait, Cinema 2.39:1, Photo 3:2), Resolution X/Y, Resolution %, picture size, Show frame, Passepartout. Looking through it puts its frame at 90% of the viewport's limiting side, with the outside dimmed by Passepartout and a label (name, size, lens).
+- Depth of field: Enabled, Focus distance, F-stop (2.8), Blades (6), Show focus plane; the sharp range uses circle of confusion = sensor / 1500 and scene units as metres: H = f^2/(N c) + f, near = s(H-f)/(H+s-2f), far = s(H-f)/(H-s) (infinite at s >= H). The viewport doesn't blur yet; the focus plane is drawn.
+- Display: Icon size (yellow icon, resizable), Show name, Show limits, Lock camera to view (moving the view while looking through it carries the camera; otherwise moving the view leaves it).
+- In the perspective view the selected camera shows X/Y/Z move arrows (red/green/blue), a yellow turn ring (left/right turns, up/down tilts) and a centre dot (free move across the view); arrow length follows Window properties > Manipulator > Size scale. Click an icon to select it; Name is renamed in the panel (all selected, typing replaces it). Saved with the scene ([camera] sections).
+
+## Cameras: lens kept off the viewport, guides, undo, select while looking (picture 51)
+- Looking through a camera saves the viewport's own view first. Leaving from the menu or "Stop looking through" puts that view back exactly. Leaving by moving the view keeps the new place but restores the viewport's field of view and projection, scaling the distance so the middle stays the same size. The camera's lens never stays on the viewport.
+- Guides on the selected camera (Display > Show guides, on by default): a dashed view line with focal length and horizontal x vertical field of view, plus width and height dimension lines with arrows (pixels, and the sensor's size in mm: width = sensor, height = sensor / aspect). When the icon is small on screen, the numbers move to a card beside it.
+- Undo / Redo keep the cameras (add, delete, move, every setting); edit names read "Add Camera 1", "Move Camera 1", "Edit Camera 1".
+- While looking through a camera, its frame label is a button that selects it, and the view menu has "Select active camera".
+
+## Camera picture icon, guides at full size (picture 52)
+- The camera icon is the camera picture the person supplied (attachments/picture-52.png, white background cut away, assets/camera_icon.png), drawn at the camera's place as wide as Icon size on screen (28-170 px) and flipped so its lens points the way the camera looks. A thin yellow view cone with its up mark stays at the lens to show direction; the selected camera gets a soft yellow ring. Clicking the picture selects it.
+- Guides no longer depend on the icon's size on screen: the view volume is drawn out to the target distance (dashed edges, the picture frame there, a cross at the target). There is a dashed view line with "focal mm | FOV h x v", an arc showing the horizontal field of view near the lens, and width/height dimension lines beside the far frame (pixels, plus the sensor's mm; orthographic cameras show scene units).
+
+## 3D camera, Export material window (picture 53)
+- The camera is now a 3D model drawn with the scene (depth-tested, lit from over the viewer's shoulder). It follows the supplied picture's design in its blue: two film reels with five holes and a hub on each face, a body with a side panel and two buttons, a back knob, a lens collar and an open hood that is darker inside. It is about 1.4 x Icon size long, turned with the camera (lens along its view). The old yellow box in front of it is gone; the selection ring, name, move/turn handles and guides stay.
+- File > Export material (F10) opens the original's Render Images window (CRenderModeImageDialog; strings at 0x141089438-0x141089b40).
+  - Options: Keep aspect ratio (follows the viewport's shape), Width / Height (4096), Override bkgd (on), Shadows (kept, not used), Streak colors (on), Ground, Clip below ground (kept, not used).
+  - Sequence: Use timeline (kept, not used), Include wind (on), Length (s) 10, Frame rate 30, Frames 300 (= length x rate).
+  - Images, defaults as the original: "" Material / Color (background 0.16, 0.25, 0.12); Opacity; Normal (0.5, 0.5, 1); Gloss (0.8); AO (white); Subsurface (0.8, 0.88, 0.38); SubsurfaceAmount (white). Every alpha is None with background alpha 0.
+  - Sources are the install's render_modes names (Standard, Scribed, AO, Albedo Check, Subsurface Check, Lightmap, Lighting / ..., Material / ..., Vertex Colors / ..., Other / ...).
+- OK asks for a folder, then renders each image from the current view off screen, one per frame, and saves <tree>[_suffix].png (sequences add _0001...). Alpha None = opaque where drawn; another source = its brightness. Where nothing is drawn: Override bkgd sets the background colour and alpha. Streak colors fills the colour outward from the drawn pixels (push-pull over halving sizes) so filtering doesn't pick up the background.
+- Assets > Export material asset... still writes one material as a .tcmat file.
+
+## Export material window: moves, resizes, works, presets (picture 54)
+- The window is moved by its title bar and resized from any of its four corners (min 560 x 470); it stays where it was left.
+- Its buttons and drop-downs work: the app blocks the screen behind modal windows, and this window now takes the input itself, as the Preferences window does, while nothing behind it reacts.
+- Add Image opens a menu of the render modes, as the original offers them, grouped like the install's render_modes folder: Standard, Scribed, AO, Albedo Check, Subsurface Check, Lightmap, then Lighting / Material / Vertex Colors / Other submenus. The picked one becomes a new image named after it (suffix without spaces), with a background suited to it (flat normal for Normal, white for AO and Subsurface Amount, black otherwise).
+- Presets: a Preset drop-down lists the saved ones (%APPDATA%\TreeCraft\export_presets\*.tcexport; picking one loads it), Save preset... writes the current settings and images, and Load preset... reads any preset file. Format: "# TreeCraft export material preset 1", key=value lines, and image=suffix|RGB source|Alpha source|r,g,b|alpha.
+
+## Export material: render from a camera, progress and result (picture 55)
+- "Render from" (under Sequence): Current view, or any of the scene's cameras by name (saved in presets as camera=<name>). A camera renders through its own lens with its field of view filling the picture's height; with Keep aspect ratio, picking a camera sets the height from its frame shape. The summary line says which view it renders from.
+- After OK, a progress window shows "Picture k of N: <file>", a bar with the percentage, the folder, and Cancel (stops after the picture in hand; saved files stay).
+- When it ends, a message says "Export finished" with a green tick (all saved) or "Export finished with problems" / "Export cancelled" with an orange mark. It lists how many pictures were saved, the folder, and any that failed, with Open folder (opens it in Explorer) and OK.
+- Camera guides and icons are clipped to the viewport (they no longer run over the panels).
+
+## Gen tab all active, welding off, handles, V + drag light, origin (picture 56)
+- Generation tab rows that were kept but unused now act (estimated behaviour; the original's code for them wasn't traced):
+  - Shared > Position: shifts every child along the parent by that share.
+  - Shared > Rotation: turns them all around the parent (turns).
+  - Extend parent: spots stretched past the tip, t x (1 + extend); a child past the tip starts along the tip's direction.
+  - Boundaries > Clip (0.025): drops children within that share of the parent's tip.
+  - Favor splits (Absolute / Proportional): pulls each child toward the nearest spot where another generator's child grows on the same parent.
+  - Align (on) with Align style 1 (default): children's roll counts from the world's up, seen across the parent; style 0 uses the parent's own frame; Align off adds a random turn to each child.
+  - Sink: the base pushed back into the parent by Sink x the parent's radius there.
+  - Knockout: removes children; chance = (1 - Weight) x Knockout, plus Weight x sqrt(Knockout) for children within Proximity Range of a kept sibling.
+  - Anchors: picks the anchor on a mesh parent when the Leaves tab's choice is All.
+  - With the defaults (Clip 0.025, Align style 1), the demo tree changed slightly: 1350 -> 1323 leaves.
+- Skin > Welding > Enabled is off by default (the original's template has it on); gen.rs reads it with default 0.
+- Curve editor handles: grabbed within 18 px (was 12), also from just outside the graph for the end points on its edge; the grabbed point follows the mouse exactly instead of moving by the mouse's movement, so it can't lag. Wider grabs for the camera arrows and ring (11 / 10 px) and the Freehand controller (18 / 17 / 11 px).
+- Hold V and left-drag in the viewport: the directional light turns around the tree horizontally only (azimuth, the same rate as the light controller: 0.4 deg per pixel); its height stays. Listed in the viewport's tips card.
+- World origin: default colour 0.9, 0.9, 0.6 with alpha 0.2 (pale and faint; an old saved orange default is replaced), no ring around it. Selected (Tree node), it's a little brighter and stronger.
+
+## Trunk sink, zoom through, welding redone, right-aligned labels (picture 57)
+- Generation > Sink on a trunk (no parent branch): the base goes down into the ground by Sink x the trunk's own radius.
+- Mouse-wheel zoom no longer stops near what it looks at: under 0.5 units away the view's centre itself moves ahead (0.12 of the distance per wheel step), so the camera passes through and can clip into the tree; the near clip plane stays at 1% of the distance.
+- Welding (estimated; the original's code wasn't traced), with the original's rows Enabled, Keep failed, Force ray casts, Offset, Spread (Amount, Upper scale, Lower scale) and Blend (Texture, Contrast, Noise). The Blend > Lighting curve isn't there yet.
+  - Base: inside the weld zone (parent radius x (1 + Offset)) it widens by Spread Amount x 1.6, more toward the parent's tip (Upper scale) or base (Lower scale).
+  - Hugging: it eases onto the parent's surface (the parent taken as a cylinder along its direction at the joint, 1.2% outside it), fully at the surface and none at the zone's end (smoothstep), so the joint never stands out of the parent.
+  - Shading: Blend turns the joint's normals to the parent's surface direction (Texture, sharpened by Contrast, ragged by Noise) and its shading to the parent's, with a faint crease.
+  - A branch leaving almost along its parent (|cos| > 0.985) can't be welded unless Force ray casts; a failed weld drops its bark unless Keep failed.
+- Property names in the Properties panel and on the Preferences pages are right-aligned against their controls, as in the original; group and section headings keep their alignment.
+
+## Welding: dissolving texture blend and denser joint (picture 58)
+- Texture blend (TreeCraft's own method):
+  - A welded base dissolves into its parent's bark: every vertex of the weld zone carries a fade, strongest where it lies on the parent, sharpened by Contrast, ragged by Noise, scaled by Texture.
+  - The fade rides in the colour's alpha below the selection mark (unselected 255..235, selected 128..108).
+  - The shader compares it with three octaves of 3D value noise (world position x 2.3, 6.2 and 18.2) and leaves out the pixels where the fade wins. The parent's own bark shows through in an irregular, bark-like pattern, with no blending or sorting.
+  - A thin rim along the edge is shaded down to 84%, like a crease in the bark.
+- Joint segmentation:
+  - With welding on, the weld zone (parent radius x (1 + Offset)) gets 8 + 6 x Offset extra rings (6..32), packed toward the parent (spacing ^1.35), and the rings there go round in twice as many steps (up to 64), joined to the rest by the existing ring zipper.
+  - A bigger Offset gives a longer, smoother weld with more rings.

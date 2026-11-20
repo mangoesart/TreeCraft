@@ -18,6 +18,8 @@ pub enum Sel {
     Window,
     /// The light's settings in the Properties panel (picture 43).
     Light,
+    /// A custom camera (picture 50).
+    Camera(usize),
 }
 
 pub const TABS: [&str; 3] = ["Generation", "Materials", "Meshes"];
@@ -317,6 +319,33 @@ pub struct App {
     pub prefs_open: bool,
     /// The file the tree was opened from or last saved to (File > Save writes there).
     pub tree_path: Option<std::path::PathBuf>,
+    /// The title bar (picture 49): when it was last checked and what it says.
+    pub title_t: f64,
+    pub title_shown: String,
+    /// Window properties (picture 49; the original's "Properties - <scene>" panel), by the
+    /// original's names ("Viewport:Background:Style"...); saved with the scene. Missing = default.
+    pub winp: std::collections::BTreeMap<String, f64>,
+    /// Window properties > Background > Image: its file and picture.
+    pub win_image_path: String,
+    pub win_image: Option<Texture2D>,
+    /// Custom cameras (picture 50), the one looked through, the view it set last frame, the
+    /// handle being dragged (1-3 axes, 4 turn ring, 5 free move) with the mouse last frame, and
+    /// the name being typed (with whether all of it is selected).
+    pub cameras: Vec<crate::cameras::ViewCam>,
+    pub looking: Option<usize>,
+    pub look_cam: Option<Cam>,
+    /// The viewport's own view from before looking through a camera (put back after).
+    pub look_saved: Option<Cam>,
+    pub cam_drag: Option<(u8, Vec2)>,
+    pub cam_rename: Option<(String, bool)>,
+    /// File > Export material (F10; picture 53): its settings (kept between openings), whether
+    /// the window is open, and the pictures still to render.
+    pub mat_export: Option<crate::matexport::MatExport>,
+    pub mat_export_open: bool,
+    /// Hold V and left-drag in the viewport: turning the light (picture 56).
+    pub light_vdrag: bool,
+    pub mat_export_job: Option<crate::matexport::ExportJob>,
+    pub mat_export_result: Option<crate::matexport::ExportResult>,
     /// The Properties panel's tab for branch and for leaf generators (0 = All).
     pub prop_tab: usize,
     pub prop_tab_leaf: usize,
@@ -552,6 +581,22 @@ impl App {
             shot_queue: vec![],
             prefs_open: false,
             tree_path: None,
+            title_t: -1.0,
+            title_shown: String::new(),
+            winp: Default::default(),
+            win_image_path: String::new(),
+            win_image: None,
+            cameras: vec![],
+            looking: None,
+            look_cam: None,
+            look_saved: None,
+            cam_drag: None,
+            cam_rename: None,
+            mat_export: None,
+            mat_export_open: false,
+            light_vdrag: false,
+            mat_export_job: None,
+            mat_export_result: None,
             prop_tab: 0,
             prop_tab_leaf: 0,
             prefs_page: 0,
@@ -877,6 +922,27 @@ impl App {
         let m = ui.mouse();
         let over = r.contains(m) && !ui.blocked && ui.popup.is_none() && !self.vp_ui.iter().any(|b| b.contains(m));
         let inp = ui.inp.clone();
+        // hold V and left-drag (picture 56): the directional light turns around the tree, only
+        // horizontally (its height stays)
+        if is_key_down(KeyCode::V) && over && inp.l_pressed && !ui.editing() && !inp.alt {
+            self.light_vdrag = true;
+            ui.inp.l_pressed = false;
+            self.click_start = None;
+        }
+        if self.light_vdrag {
+            if inp.l_down {
+                let dx = m.x - self.last_mouse.x;
+                if dx != 0.0 {
+                    // the same turn as the light controller's drag
+                    let az = (self.light.azimuth - dx * 0.4 + 540.0).rem_euclid(360.0) - 180.0;
+                    self.light.azimuth = az;
+                    self.set_status(&format!("Light direction {:.0} deg (hold V and drag)", az));
+                }
+                self.last_mouse = m;
+                return;
+            }
+            self.light_vdrag = false;
+        }
         // Preferences > Tree Window > Navigation (picture 45): reversed directions
         let (zs, rs, ps) = (if self.prefs.rev_zoom { -1.0 } else { 1.0 }, if self.prefs.rev_rotate { -1.0 } else { 1.0 }, if self.prefs.rev_pan { -1.0 } else { 1.0 });
         if over && inp.wheel != 0.0 {
@@ -1049,6 +1115,10 @@ impl App {
     }
 
     pub fn draw_viewport_bg(&self, r: Rect) {
+        // Window properties > Background: a solid colour or a picture (picture 49)
+        if self.draw_window_background(r) {
+            return;
+        }
         // the original's viewport (picture 42): sky above the horizon, ground colour below it
         if self.prefs.bg_style == 1 {
             let (sky, hor, gnd) = (self.prefs.color("sky_top"), self.prefs.color("sky_horizon"), self.prefs.color("sky_ground"));
@@ -1103,18 +1173,21 @@ impl App {
         {
             let tree_sel = matches!(self.sel, Sel::Node(id) if self.node(id).map_or(false, |n| n.kind == Kind::Tree));
             let c = self.prefs.color("origin");
-            let (fill, ring, rw) = if tree_sel {
-                (Color::new((c.r * 1.3).min(1.0), (c.g * 1.3).min(1.0), (c.b * 1.3).min(1.0), (c.a + 0.1).min(1.0)), self.prefs.color("picked"), 0.14)
+            // no border around it (picture 56); selected, it's a little brighter and stronger
+            let fill = if tree_sel {
+                Color::new((c.r * 1.2).min(1.0), (c.g * 1.2).min(1.0), (c.b * 1.2).min(1.0), (c.a * 1.8 + 0.1).min(1.0))
             } else {
-                (Color::new(c.r, c.g, c.b, c.a * 0.75), Color::new(c.r * 0.6, c.g * 0.6, c.b * 0.6, c.a), 0.035)
+                c
             };
             let ext = (self.bounds.1 - self.bounds.0).length();
             let rad = (ext * 0.1).clamp(2.5, 40.0);
-            render::draw_disc(rad, (self.cam.dist * 0.0008).max(0.004), fill, ring, rw * rad);
+            render::draw_disc(rad, (self.cam.dist * 0.0008).max(0.004), fill, Color::new(0.0, 0.0, 0.0, 0.0), 0.0);
         }
         if self.show_grid {
             let p = &self.prefs;
-            render::draw_grid(50.0, 2.5, p.color("grid"), p.color("grid_major"), p.color("grid_x"), p.color("grid_z"));
+            // Window properties > Grid spacing (the original's 10 is 2.5 of TreeCraft's units)
+            let step = (self.wp("Viewport:Grid spacing", 10.0) * 0.25).max(0.05);
+            render::draw_grid((step * 20.0).max(50.0).min(step * 400.0), step, p.color("grid"), p.color("grid_major"), p.color("grid_x"), p.color("grid_z"));
         }
         // the toolbar's settings reach the shader through the lighting block
         self.light.wind = if self.wind_on { self.wind_strength } else { 0.0 };
@@ -1315,6 +1388,8 @@ impl App {
             }
         }
         self.draw_scene_objects();
+        // custom cameras as 3D models (picture 53)
+        self.draw_cameras_3d();
         self.draw_edit_3d();
         set_default_camera();
     }
@@ -1367,20 +1442,56 @@ impl App {
         let th = self.viewport_toolbar(ui, r);
         let vb = Rect::new(r.x + 8.0, r.y + th + 6.0, 160.0, 22.0);
         self.vp_ui = vec![Rect::new(r.x, r.y, r.w, th), vb];
-        let label = if self.cam.ortho { format!("{} (ortho)", VIEWS[self.cam.view.min(VIEWS.len() - 1)]) } else { VIEWS[self.cam.view.min(VIEWS.len() - 1)].to_string() };
+        let mut label = if self.cam.ortho { format!("{} (ortho)", VIEWS[self.cam.view.min(VIEWS.len() - 1)]) } else { VIEWS[self.cam.view.min(VIEWS.len() - 1)].to_string() };
+        if let Some(c) = self.looking.and_then(|i| self.cameras.get(i)) {
+            label = c.name.clone();
+        }
         let clicked = ui.button_ex("vp.view", Rect::new(vb.x, vb.y, vb.w, vb.h), &label, ui.popup_open_for("vp.view"), true);
         draw_triangle(vec2(vb.x + vb.w - 14.0, vb.y + 9.0), vec2(vb.x + vb.w - 6.0, vb.y + 9.0), vec2(vb.x + vb.w - 10.0, vb.y + 14.0), C_TEXT_DIM);
+        let looking = self.looking.is_some();
         if clicked {
-            let mut items: Vec<MenuItem> = VIEWS.iter().enumerate().map(|(i, v)| MenuItem::check(v, i == self.cam.view)).collect();
+            let mut items: Vec<MenuItem> = VIEWS.iter().enumerate().map(|(i, v)| MenuItem::check(v, !looking && i == self.cam.view)).collect();
             items.push(MenuItem::sep());
             items.push(MenuItem::check("Orthographic", self.cam.ortho));
+            // custom cameras (picture 50): add one where the view is, or look through one
+            items.push(MenuItem::sep());
+            items.push(MenuItem::leaf("Add camera"));
+            for (i, c) in self.cameras.iter().enumerate() {
+                items.push(MenuItem::check(&format!("Camera: {}", c.name), self.looking == Some(i)));
+            }
+            // while looking through one: show its settings (picture 51)
+            if looking {
+                items.push(MenuItem::leaf("Select active camera"));
+            }
             ui.open_menu(hid("vp.view"), vb, items);
         }
         if let Some(p) = ui.take_menu_result("vp.view") {
+            // (separators take a row each: views, sep, Orthographic, sep, Add camera, cameras)
+            let n = VIEWS.len();
             match p.first().copied() {
-                Some(i) if i < VIEWS.len() => self.cam.set_view(i),
-                Some(_) => self.cam.ortho = !self.cam.ortho,
-                None => {}
+                Some(i) if i < n => {
+                    self.look_through(None);
+                    self.cam.set_view(i);
+                }
+                Some(i) if i == n + 1 => {
+                    self.look_through(None);
+                    self.cam.ortho = !self.cam.ortho;
+                }
+                Some(i) if i == n + 3 => self.add_camera(),
+                Some(i) if i == n + 4 + self.cameras.len() => {
+                    if let Some(l) = self.looking {
+                        self.select(Sel::Camera(l));
+                    }
+                }
+                Some(i) if i >= n + 4 => {
+                    let k = i - n - 4;
+                    if self.looking == Some(k) {
+                        self.look_through(None);
+                    } else {
+                        self.look_through(Some(k));
+                    }
+                }
+                _ => {}
             }
         }
         let s = format!(
@@ -1403,6 +1514,8 @@ impl App {
         // top right (picture 27): the navigation gizmo, then the shading button and its drop-down
         // over it (the gizmo hides while the drop-down is open)
         let gk = self.prefs.gizmo_size.clamp(0.6, 2.0);
+        // Window properties > Screenshot Safe Frame (picture 49)
+        self.draw_safe_frame(r);
         // Show > Height indicator (picture 42), under the corner's controls
         self.draw_height_indicator(ui, r, Rect::new(r.x, vb.y + vb.h + 4.0, r.w, (r.y + r.h - vb.y - vb.h - 4.0).max(10.0)));
         if !self.shading_open && !self.sel_open {
@@ -1424,6 +1537,8 @@ impl App {
         self.vp_ui.extend(wc);
         let sc = self.draw_selection_menu(ui, r, vb.y, wx);
         self.vp_ui.extend(sc);
+        // custom cameras: icons, handles and the looked-through frame (picture 50)
+        self.draw_cameras_overlay(ui, r);
     }
 
     /// The original's viewport toolbar (fn 0x1405325b0; its menus fn 0x140537430): groups View
@@ -2565,7 +2680,7 @@ impl App {
         };
         let m = if m.is_set { m.set_members.first().and_then(|(k, _)| self.materials.get(*k)).unwrap_or(m) } else { m };
         // turned only by the person (drag on the preview), never on its own
-        let cam = Cam { yaw: self.mat_yaw, pitch: self.mat_pitch, dist: (3.6 + self.mat_zoom).clamp(1.4, 12.0), target: Vec3::ZERO, ortho: false, view: 0, fov: 40.0 };
+        let cam = Cam { yaw: self.mat_yaw, pitch: self.mat_pitch, dist: (3.6 + self.mat_zoom).clamp(1.4, 12.0), target: Vec3::ZERO, ortho: false, view: 0, fov: 40.0, roll: 0.0, clip: None };
         let mut c3 = cam.camera3d(None, self.preview_aspect.max(0.2), Some(rt.clone()));
         c3.viewport = None;
         set_camera(&c3);
@@ -3213,6 +3328,8 @@ impl App {
             ortho: false,
             view: 0,
             fov: 40.0,
+            roll: 0.0,
+            clip: None,
         };
         let c3 = cam.camera3d(None, self.mesh_preview_aspect.max(0.2), Some(rt.clone()));
         set_camera(&c3);
@@ -3468,7 +3585,7 @@ fn any_perp3(d: Vec3) -> Vec3 {
     if d.y.abs() < 0.9 { d.cross(Vec3::Y).normalize_or_zero() } else { d.cross(Vec3::X).normalize_or_zero() }
 }
 
-fn draw_gpu(gpu: &GpuTree, mats: &[Material], gm: &macroquad::material::Material, light: &Lighting, cam_pos: Vec3) {
+pub(crate) fn draw_gpu(gpu: &GpuTree, mats: &[Material], gm: &macroquad::material::Material, light: &Lighting, cam_pos: Vec3) {
     gl_use_material(gm);
     for (mi, meshes) in &gpu.parts {
         // no material (NO_MATERIAL or a removed one): plain grey
