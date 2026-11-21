@@ -725,7 +725,8 @@ impl App {
         }
         let (Some(om), Some(rt)) = (&self.outline_mat, &self.sel_rt) else { return };
         let (w, h) = (rt.texture.width(), rt.texture.height());
-        let c = self.prefs.sel_outline;
+        // Node mode (picture 67): the generator is outlined in orange instead
+        let c = if self.edit_mode == 1 { [1.0, 0.55, 0.12, 1.0] } else { self.prefs.sel_outline };
         gl_use_material(om);
         om.set_uniform("OutColor", vec4(c[0], c[1], c[2], c[3]));
         om.set_uniform("Texel", vec2(1.0 / w.max(1.0), 1.0 / h.max(1.0)));

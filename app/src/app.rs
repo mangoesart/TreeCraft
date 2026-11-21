@@ -82,6 +82,8 @@ enum GraphDrag {
     /// A force / collision object's node.
     Scene { idx: usize },
     Pan,
+    /// A selection box from this screen point (picture 67).
+    Marquee { start: Vec2 },
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -205,6 +207,14 @@ pub struct App {
     pub edit_mode: u8,
     /// Node mode: the picked node (generator id, its number in the generator).
     pub node_pick: Option<(u32, usize)>,
+    /// Node mode's gizmo being dragged (picture 65): 1 Move, 2 Rotate, 3 Scale, and the last mouse spot.
+    pub node_drag: Option<(u8, Vec2)>,
+    /// Generators selected together in the Generation tab (box selection or Ctrl+click,
+    /// picture 67); the primary one is sel.
+    pub graph_multi: Vec<u32>,
+    /// The Export tab (picture 68): its settings, and whether the Properties panel shows it.
+    pub export_opts: crate::export::ExportOpts,
+    pub export_tab: bool,
     /// The curve being edited (generator id, property name, kind 0 Parent 1 Distribution 2 Profile).
     pub curve_edit: Option<(u32, String, u8)>,
     pub(crate) curve_drag: Option<usize>,
@@ -517,6 +527,10 @@ impl App {
             prefs_theme_tab: 0,
             edit_mode: 0,
             node_pick: None,
+            node_drag: None,
+            graph_multi: Vec::new(),
+            export_opts: Default::default(),
+            export_tab: false,
             curve_edit: None,
             curve_drag: None,
             curve_win: Rect::new(0.0, 0.0, 0.0, 0.0),
@@ -661,6 +675,30 @@ impl App {
         for m in &mut self.materials {
             textures::refresh_material(m);
         }
+        // picture 72: a material only trunks and branches use draws solid, whatever its texture's
+        // alpha holds (bark pictures often keep height or roughness there); leaf materials, and
+        // materials the meshes cut out with, keep their alpha cutout
+        {
+            let mut bark = std::collections::HashSet::new();
+            let mut leafy = std::collections::HashSet::new();
+            for n in &self.nodes {
+                if n.kind == Kind::Leaf {
+                    leafy.insert(n.p.leaf_material);
+                    leafy.insert(n.p.material);
+                } else if n.kind.makes_spines() {
+                    bark.insert(n.p.material);
+                    for (m, _) in n.p.mat_list.iter().chain(n.p.ext_list.iter()) {
+                        bark.insert(*m);
+                    }
+                }
+            }
+            for me in &self.meshes {
+                leafy.insert(me.ref_material);
+            }
+            for (i, m) in self.materials.iter_mut().enumerate() {
+                m.branch_only = bark.contains(&i) && !leafy.contains(&i);
+            }
+        }
         let mut cut = LeafMesh::card("Leaf cutout");
         if let Some(img) = &self.materials[1].adjusted {
             cut.lods[0].outline = textures::auto_cutout(img, cut.auto_points as usize, cut.threshold, cut.margin);
@@ -730,6 +768,10 @@ impl App {
     }
 
     pub fn select(&mut self, s: Sel) {
+        // a box selection stays while one of its generators is picked
+        if !matches!(s, Sel::Node(id) if self.graph_multi.contains(&id)) {
+            self.graph_multi.clear();
+        }
         // picking anything (again) brings its highlight back (picture 62)
         if self.sel_soft {
             self.sel_soft = false;
@@ -821,7 +863,23 @@ impl App {
         n.name = format!("{} copy", src.name);
         n.pos += vec2(80.0, 0.0);
         n.p.seed += 97;
+        // shown even when the original was hidden
+        n.hidden = false;
         self.nodes.push(n);
+        // the generators under it come along, so the copy grows the same kind of part (picture 65)
+        let mut stack = vec![(id, nid)];
+        while let Some((old_parent, new_parent)) = stack.pop() {
+            let kids: Vec<Node> = self.nodes.iter().filter(|k| k.parent == Some(old_parent)).cloned().collect();
+            for mut k in kids {
+                let old = k.id;
+                k.id = self.next_id;
+                self.next_id += 1;
+                k.parent = Some(new_parent);
+                k.pos += vec2(80.0, 0.0);
+                stack.push((old, k.id));
+                self.nodes.push(k);
+            }
+        }
         self.select(Sel::Node(nid));
         self.dirty = true;
     }
@@ -880,6 +938,30 @@ impl App {
     pub fn regenerate(&mut self) {
         for m in &mut self.materials {
             textures::refresh_material(m);
+        }
+        // picture 72: a material only trunks and branches use draws solid, whatever its texture's
+        // alpha holds (bark pictures often keep height or roughness there); leaf materials, and
+        // materials the meshes cut out with, keep their alpha cutout
+        {
+            let mut bark = std::collections::HashSet::new();
+            let mut leafy = std::collections::HashSet::new();
+            for n in &self.nodes {
+                if n.kind == Kind::Leaf {
+                    leafy.insert(n.p.leaf_material);
+                    leafy.insert(n.p.material);
+                } else if n.kind.makes_spines() {
+                    bark.insert(n.p.material);
+                    for (m, _) in n.p.mat_list.iter().chain(n.p.ext_list.iter()) {
+                        bark.insert(*m);
+                    }
+                }
+            }
+            for me in &self.meshes {
+                leafy.insert(me.ref_material);
+            }
+            for (i, m) in self.materials.iter_mut().enumerate() {
+                m.branch_only = bark.contains(&i) && !leafy.contains(&i);
+            }
         }
         // the toolbar's Show menu: leaves off skips leaf generators; branches off keeps their
         // spines (leaves stay where they grow) but draws no bark
@@ -1259,7 +1341,7 @@ impl App {
                         sm.set_uniform("Radius", 1.0e6f32);
                         for (mi, meshes) in &gpu.parts {
                             let m = self.materials.get(*mi);
-                            sm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha).map_or(0.0, |m| m.cutoff.max(0.01)));
+                            sm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha && !m.branch_only).map_or(0.0, |m| m.cutoff.max(0.01)));
                             for mesh in meshes.iter() {
                                 draw_mesh(mesh);
                             }
@@ -1304,9 +1386,9 @@ impl App {
                         mm.set_uniform("WindDir", vec2(wa.cos(), wa.sin()));
                         for (mi, meshes) in &gpu.parts {
                             let m = self.materials.get(*mi);
-                            let leaf = m.map_or(false, |m| m.opacity_from_alpha);
+                            let leaf = m.map_or(false, |m| m.opacity_from_alpha && !m.branch_only);
                             mm.set_uniform("IsLeaf", if leaf { 1.0f32 } else { 0.0 });
-                            mm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha).map_or(0.0, |m| m.cutoff.max(0.01)));
+                            mm.set_uniform("Cutoff", m.filter(|m| m.opacity_from_alpha && !m.branch_only).map_or(0.0, |m| m.cutoff.max(0.01)));
                             for mesh in meshes.iter() {
                                 draw_mesh(mesh);
                             }
@@ -1328,25 +1410,12 @@ impl App {
                     self.prefs.color("scribed")
                 };
                 if mode == 1.0 && !wire_only {
-                    // Scribed: thin lines as before
-                    let mut n = 0;
-                    'all: for (_, meshes) in &gpu.parts {
-                        for mesh in meshes {
-                            for t in mesh.indices.chunks(3) {
-                                if t.len() < 3 {
-                                    continue;
-                                }
-                                let p = |i: u16| mesh.vertices[i as usize].position;
-                                draw_line_3d(p(t[0]), p(t[1]), c);
-                                draw_line_3d(p(t[1]), p(t[2]), c);
-                                draw_line_3d(p(t[2]), p(t[0]), c);
-                                n += 1;
-                                if n > 60000 {
-                                    break 'all;
-                                }
-                            }
-                        }
-                    }
+                    // Scribed (picture 63): the mesh's edges as thicker dark lines over the plain
+                    // white model (1.6 x Preferences > Viewport > Wire thickness, at least 1.6 px),
+                    // drawn as strips facing the camera like WireShaded's
+                    let px = if self.cam.ortho { self.cam.view_height() / vp.3.max(1) as f32 } else { 2.0 * (self.cam.fov.to_radians() * 0.5).tan() / vp.3.max(1) as f32 };
+                    let wpx = (self.prefs.wire_px.max(1.0) * 1.6).max(1.6);
+                    draw_thick_wires(&gpu.parts, self.cam.position(), self.cam.ortho, px * wpx, c, c);
                 } else {
                     // WireShaded / Wireframe (picture 38): lines of Preferences > Viewport > Wire
                     // thickness, each a thin strip facing the camera; the selected generator's
@@ -1570,6 +1639,7 @@ impl App {
             ]),
             ("Scene", &[
                 ("Forces", "vt.forces", "Access force functions: modeling tools that manipulate growth in world space. (6 toggles forces)"),
+                ("Scene objects", "vt.sceneobj", "The cameras in the scene: hide or unhide each one, or all of them."),
                 ("Collision Objects", "vt.coll", "Access collision object functions: simple primitives for collision at run time. (7 toggles them)"),
                 ("Wind", "vt.wind", "Access high level wind functions. (8 toggles wind)"),
                 ("Light", "vt.light", "Access light properties."),
@@ -1676,7 +1746,7 @@ impl App {
                         self.ao_on = !self.ao_on;
                         self.set_status(if self.ao_on { "Ambient occlusion on" } else { "Ambient occlusion off" });
                     }
-                    "vt.export" => self.export_obj(),
+                    "vt.export" => self.export_tab = true,
                     "vt.collapse" => self.toolbar_collapsed = true,
                     _ => {}
                 }
@@ -1685,7 +1755,7 @@ impl App {
             }
         }
         // what was chosen in an open menu
-        for key in ["vt.render", "vt.show", "vt.zoom", "vt.forces", "vt.coll", "vt.wind", "vt.light", "vt.add", "vt.vis", "vt.gizmo", "vt.lcoll", "vt.season"] {
+        for key in ["vt.render", "vt.show", "vt.zoom", "vt.forces", "vt.sceneobj", "vt.coll", "vt.wind", "vt.light", "vt.add", "vt.vis", "vt.gizmo", "vt.lcoll", "vt.season"] {
             let Some(path) = ui.take_menu_result(key) else { continue };
             self.toolbar_command(key, &path);
         }
@@ -1780,6 +1850,18 @@ impl App {
                 if !list.is_empty() {
                     v.push(MenuItem::sep());
                     v.extend(list);
+                }
+                v
+            }
+            "vt.sceneobj" => {
+                // picture 65: each camera with a tick while it shows; clicking one hides or unhides it
+                let mut v = vec![leaf("Hide all cameras"), leaf("Unhide all cameras")];
+                if self.cameras.is_empty() {
+                    v.push(MenuItem::sep());
+                    v.push(leaf("(no cameras: View > Add camera)"));
+                } else {
+                    v.push(MenuItem::sep());
+                    v.extend(self.cameras.iter().map(|c| chk(&c.name, !c.hidden)));
                 }
                 v
             }
@@ -2027,6 +2109,32 @@ impl App {
                         self.dirty = true;
                     }
                     _ => {}
+                }
+            }
+            "vt.sceneobj" => {
+                let t = pick(&self.toolbar_menu(key));
+                match t.last().map(|s| s.as_str()) {
+                    Some("Hide all cameras") => {
+                        for c in &mut self.cameras {
+                            c.hidden = true;
+                        }
+                        self.set_status("All cameras hidden (Scene objects > Unhide all cameras shows them)");
+                    }
+                    Some("Unhide all cameras") => {
+                        for c in &mut self.cameras {
+                            c.hidden = false;
+                        }
+                        self.set_status("All cameras shown");
+                    }
+                    Some(name) => {
+                        let name = name.to_string();
+                        if let Some(c) = self.cameras.iter_mut().find(|c| c.name == name) {
+                            c.hidden = !c.hidden;
+                            let msg = format!("{} {}", c.name, if c.hidden { "hidden" } else { "shown" });
+                            self.set_status(&msg);
+                        }
+                    }
+                    None => {}
                 }
             }
             "vt.forces" | "vt.coll" => {
@@ -2493,7 +2601,7 @@ impl App {
             let c = self.graph_to_screen(body, n.pos);
             let r = boxr(c);
             let alpha = if n.hidden { 0.45 } else { 1.0 };
-            let selected = sel_node == Some(n.id);
+            let selected = sel_node == Some(n.id) || self.graph_multi.contains(&n.id);
             let outline = if selected { Some((c_sel, 2.0)) } else if hover_node == Some(n.id) { Some((Color::new(1.0, 1.0, 1.0, 0.45), 1.0)) } else { None };
             let sub = if n.kind == Kind::Tree {
                 format!("Tree  •  {} generators", nodes.len() - 1)
@@ -2516,6 +2624,16 @@ impl App {
             let spine_only = n.kind.makes_spines() && crate::gen::pex(&n.p, "Skin:Type", 0.0) as i32 == 3;
             let sub = if spine_only { format!("{} spine only", self.instance_count(n.id)) } else { sub };
             let header = if spine_only { Color::new(0.07, 0.07, 0.07, 1.0) } else { head(n.kind) };
+            {
+                use crate::nodeicons::NodeIcon as I;
+                crate::nodeicons::set_next(match n.kind {
+                    Kind::Tree => I::Tree,
+                    Kind::Trunk => I::Trunk,
+                    Kind::Branch => I::Branch,
+                    Kind::Leaf if crate::gen::pex(&n.p, "Leaves:Frond", 0.0) > 0.5 => I::Frond,
+                    Kind::Leaf => I::Leaf,
+                });
+            }
             draw_box(ui, r, header, alpha, outline, &n.name, &sub);
             if spine_only {
                 let rb = (nh - hh) * 0.36;
@@ -2550,6 +2668,7 @@ impl App {
             let picked = self.scene_sel == Some(k);
             let outline = if picked { Some((c_sel, 2.0)) } else if hover_scene == Some(k) { Some((Color::new(1.0, 1.0, 1.0, 0.45), 1.0)) } else { None };
             let sub = format!("{}  •  {}", o.kind.name(), if o.kind.is_force() { "force" } else { "collision" });
+            crate::nodeicons::set_next(if o.kind.is_force() { crate::nodeicons::NodeIcon::Force } else { crate::nodeicons::NodeIcon::Collision });
             draw_box(ui, r, c_scene, 1.0, outline, &o.name, &sub);
             ui.record(&format!("scene:{}", o.name), r);
         }
@@ -2573,17 +2692,44 @@ impl App {
                     self.graph_drag = if up { GraphDrag::LinkDown { parent: id } } else { GraphDrag::Link { from: id } };
                     ui.active = hid("graph");
                 } else if let Some(id) = hover_node {
-                    self.select(Sel::Node(id));
-                    self.graph_drag = if inp.shift { GraphDrag::Link { from: id } } else { GraphDrag::Node { id, start: m, moved: false } };
-                    ui.active = hid("graph");
+                    if inp.ctrl {
+                        // Ctrl+click adds a generator to the selection, or takes it out
+                        let mut set = self.graph_multi.clone();
+                        if let Sel::Node(p) = self.sel {
+                            if !set.contains(&p) {
+                                set.push(p);
+                            }
+                        }
+                        if let Some(k) = set.iter().position(|x| *x == id) {
+                            set.remove(k);
+                        } else {
+                            set.push(id);
+                        }
+                        match set.last().copied() {
+                            Some(p) => {
+                                self.graph_multi = set.clone();
+                                self.select(Sel::Node(p));
+                                self.graph_multi = if set.len() > 1 { set } else { vec![] };
+                            }
+                            None => self.select(Sel::None),
+                        }
+                    } else {
+                        self.select(Sel::Node(id));
+                        self.graph_drag = if inp.shift { GraphDrag::Link { from: id } } else { GraphDrag::Node { id, start: m, moved: false } };
+                        ui.active = hid("graph");
+                    }
                 } else if let Some(k) = hover_scene {
                     self.select(Sel::None);
                     self.scene_sel = Some(k);
                     self.graph_drag = GraphDrag::Scene { idx: k };
                     ui.active = hid("graph");
                 } else {
-                    self.select(Sel::None);
-                    self.graph_drag = GraphDrag::Pan;
+                    // empty space: a selection box, like a marquee (picture 67); the middle
+                    // button pans. Shift or Ctrl keeps what was already selected
+                    if !(inp.shift || inp.ctrl) {
+                        self.select(Sel::None);
+                    }
+                    self.graph_drag = GraphDrag::Marquee { start: m };
                     ui.active = hid("graph");
                 }
             } else if inp.r_pressed {
@@ -2609,7 +2755,9 @@ impl App {
                 if inp.l_down {
                     let mv = moved || start.distance(m) > 4.0;
                     if mv {
-                        if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                        // the whole selection moves together
+                        let multi = self.graph_multi.clone();
+                        for n in self.nodes.iter_mut().filter(|n| n.id == id || multi.contains(&n.id)) {
                             n.pos += d / self.graph_zoom;
                         }
                     }
@@ -2659,6 +2807,40 @@ impl App {
                     self.graph_off += d / self.graph_zoom;
                 } else {
                     self.graph_drag = GraphDrag::None;
+                }
+            }
+            GraphDrag::Marquee { start } => {
+                let r = Rect::new(start.x.min(m.x), start.y.min(m.y), (m.x - start.x).abs(), (m.y - start.y).abs());
+                if inp.l_down {
+                    draw_rectangle(r.x, r.y, r.w, r.h, Color::new(c_sel.r, c_sel.g, c_sel.b, 0.12));
+                    draw_rectangle_lines(r.x, r.y, r.w, r.h, 1.0, Color::new(c_sel.r, c_sel.g, c_sel.b, 0.9));
+                } else {
+                    self.graph_drag = GraphDrag::None;
+                    if r.w > 3.0 || r.h > 3.0 {
+                        // every generator whose box the selection box touches
+                        let mut set: Vec<u32> = if inp.shift || inp.ctrl {
+                            let mut s = self.graph_multi.clone();
+                            if let Sel::Node(p) = self.sel {
+                                if !s.contains(&p) {
+                                    s.push(p);
+                                }
+                            }
+                            s
+                        } else {
+                            vec![]
+                        };
+                        for n in &self.nodes {
+                            if boxr(self.graph_to_screen(body, n.pos)).overlaps(&r) && !set.contains(&n.id) {
+                                set.push(n.id);
+                            }
+                        }
+                        if let Some(&first) = set.first() {
+                            self.graph_multi = set.clone();
+                            self.select(Sel::Node(first));
+                            self.graph_multi = if set.len() > 1 { set.clone() } else { vec![] };
+                            self.set_status(&format!("{} generator(s) selected: drag one to move them together, Delete removes them", set.len()));
+                        }
+                    }
                 }
             }
             GraphDrag::None => {}
@@ -3522,6 +3704,12 @@ fn toolbar_icon(key: &str, c: Vec2) {
             }
             draw_triangle(vec2(x + 7.0, y - 5.5), vec2(x + 2.0, y - 6.0), vec2(x + 5.0, y - 1.0), col);
         }
+        "vt.sceneobj" => {
+            // a small camera
+            let col = Color::new(1.0, 0.85, 0.3, 1.0);
+            draw_rectangle_lines(x - 7.0, y - 4.0, 10.0, 8.0, 1.4, col);
+            draw_triangle(vec2(x + 3.0, y), vec2(x + 8.0, y - 4.0), vec2(x + 8.0, y + 4.0), col);
+        }
         "vt.coll" => {
             let col = Color::new(1.0, 0.55, 0.5, 1.0);
             draw_circle_lines(x - 3.0, y + 1.0, 4.0, 1.4, col);
@@ -3752,12 +3940,15 @@ pub(crate) fn draw_node_shape(ui: &mut Ui, style: usize, r: Rect, header: Color,
     let fs2 = (10.5 * z.sqrt()).clamp(8.0, 13.0);
     let shadow = Color::new(0.0, 0.0, 0.0, 0.35 * alpha);
     let line = |dflt: f32| outline.unwrap_or((Color::new(0.0, 0.0, 0.0, 0.55 * alpha), dflt));
+    // the node's icon (picture 66), set by the caller just before
+    let icon = crate::nodeicons::take_next();
     match style {
         1 => {
             let rad = r.h * 0.5;
             draw_round_rect(Rect::new(r.x + 3.0, r.y + 4.0, r.w, r.h), rad, shadow);
             draw_round_rect(r, rad, fade(body, alpha));
             draw_circle(r.x + rad, r.y + rad, rad - 3.0 * z, fade(header, alpha));
+            crate::nodeicons::draw(icon, r.x + rad, r.y + rad, rad - 3.0 * z, header, alpha);
             let (c, t) = line(1.0);
             draw_round_rect_lines(r, rad, t, c);
             let tx = r.x + r.h + 2.0 * z;
@@ -3771,9 +3962,13 @@ pub(crate) fn draw_node_shape(ui: &mut Ui, style: usize, r: Rect, header: Color,
             draw_circle(cx, cy, rad * 0.8, fade(header, alpha));
             let (c, t) = line(1.5);
             draw_circle_lines(cx, cy, rad, t, c);
-            // the kind's first letter in the disc
-            let letter: String = title.chars().next().map(|c| c.to_uppercase().to_string()).unwrap_or_default();
-            ui.text_center(&letter, Rect::new(r.x, r.y, r.w, r.h), (rad * 0.9).max(9.0), fade(text, alpha));
+            // the kind's icon in the disc (picture 66), or its first letter when it has none
+            if icon != crate::nodeicons::NodeIcon::None {
+                crate::nodeicons::draw(icon, cx, cy, rad * 0.8, header, alpha);
+            } else {
+                let letter: String = title.chars().next().map(|c| c.to_uppercase().to_string()).unwrap_or_default();
+                ui.text_center(&letter, Rect::new(r.x, r.y, r.w, r.h), (rad * 0.9).max(9.0), fade(text, alpha));
+            }
             // the name and count beside the disc, clear of the sockets and wires
             ui.text(title, r.x + r.w + 6.0 * z, cy - fs - 1.0, fs, fade(text, alpha));
             ui.text(sub, r.x + r.w + 6.0 * z, cy + 1.0, fs2, fade(text, 0.6 * alpha));

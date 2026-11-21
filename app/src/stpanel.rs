@@ -68,7 +68,7 @@ pub fn scale_prop(p: &mut Params, name: &str, m: f32) {
 }
 
 /// A property's default from the original's tables (numbers and true / false).
-fn default_of(name: &str) -> Option<f64> {
+pub(crate) fn default_of(name: &str) -> Option<f64> {
     BRANCH_PROPS.iter().chain(LEAF_PROPS.iter()).find(|t| t.0 == name).and_then(|t| match t.1 {
         "true" => Some(1.0),
         "false" => Some(0.0),

@@ -32,6 +32,8 @@ pub struct Gen {
     pub taper: Option<f32>,
     /// Grows on the template's previous generator instead of the chosen parent.
     pub child: bool,
+    /// A frond: one flat card along each parent (picture 65).
+    pub frond: bool,
 }
 
 pub enum Make {
@@ -63,6 +65,7 @@ fn g(kind: Kind, name: &str) -> Gen {
         tube: false,
         taper: None,
         child: false,
+        frond: false,
     }
 }
 
@@ -97,8 +100,8 @@ pub fn make(trail: &[String]) -> Option<Vec<Make>> {
         // Cap closes the parent's tip: one short piece at the very end, full radius, tapering to
         // a point (estimated shape; the original's cap is its own generator type)
         ("", _, "Cap") => vec![Make::Gen(Gen { taper: Some(0.0), ..spine(Branch, "Cap", 3, 1, 3, 1.0, 1.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1.0) })],
-        // Fronds: classic leaves along the parent (estimated; TreeCraft has no frond ribbons)
-        ("", _, "Fronds") => vec![Make::Gen(Gen { mode: 0, ..leaf("Fronds", 0, 1, 1.6) })],
+        // Fronds: one flat card along each parent, bending with it (picture 65)
+        ("", _, "Fronds") => vec![Make::Gen(Gen { mode: 0, frond: true, ..leaf("Fronds", 0, 1, 1.6) })],
         ("", _, "Leaf Mesh") => vec![Make::Gen(leaf("Leaf Mesh", 3, 1, 1.0))],
         // Decorations: knots and lumps as short stubs, cavities and gashes as cards on the bark,
         // peeling bark as 100 small cards (the template's Absolute number), shell as a tube
@@ -153,6 +156,9 @@ pub fn make(trail: &[String]) -> Option<Vec<Make>> {
 
 /// Put a template generator's values into a generator's parameters.
 pub fn apply(p: &mut Params, t: &Gen) {
+    if t.frond {
+        p.extra.insert("Leaves:Frond".to_string(), 1.0);
+    }
     match t.mode {
         3 | 4 => {
             p.gen_mode = MODE_ABSOLUTE;

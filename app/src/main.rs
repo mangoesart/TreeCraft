@@ -25,6 +25,8 @@ mod stcurves;
 mod splash;
 mod wintitle;
 mod winprops;
+mod nodeicons;
+mod export;
 mod cameras;
 mod matexport;
 
@@ -163,8 +165,9 @@ fn keyboard(app: &mut App, ui: &Ui) {
     if i.ctrl && (i.key(KeyCode::N) || i.key(KeyCode::W)) {
         app.file_new();
     }
+    // Ctrl+E: the Export tab (picture 68: mesh export moved there from the File menu)
     if i.ctrl && i.key(KeyCode::E) {
-        app.export_obj();
+        app.export_tab = true;
     }
     // Edit: Alt+Z / Alt+Y undo and redo the selection
     if i.alt && !i.ctrl && i.key(KeyCode::Z) {
@@ -184,23 +187,59 @@ fn keyboard(app: &mut App, ui: &Ui) {
     if i.ctrl && i.key(KeyCode::Y) {
         app.redo();
     }
-    if i.key(KeyCode::Delete) {
+    // Delete and Ctrl+D act on every generator of a box selection (picture 67)
+    let many: Vec<u32> = {
+        let mut v = app.graph_multi.clone();
         if let Some(id) = sel_node {
-            app.delete_node(id);
+            if !v.contains(&id) {
+                v.push(id);
+            }
         }
+        v
+    };
+    if i.key(KeyCode::Delete) {
+        for id in many.iter().rev() {
+            if app.node(*id).is_some() {
+                app.delete_node(*id);
+            }
+        }
+        app.graph_multi.clear();
     }
     if i.key(KeyCode::D) && i.ctrl {
+        for id in &many {
+            app.duplicate_node(*id);
+        }
+    }
+    // Ctrl+C remembers the selected generator, Ctrl+V adds a copy of it (picture 65)
+    static CLIP: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+    if i.key(KeyCode::C) && i.ctrl && !i.shift && !i.alt {
         if let Some(id) = sel_node {
+            CLIP.store(id, std::sync::atomic::Ordering::Relaxed);
+            app.set_status("Generator copied: Ctrl+V adds a copy");
+        }
+    }
+    if i.key(KeyCode::V) && i.ctrl && !i.shift && !i.alt {
+        let id = CLIP.load(std::sync::atomic::Ordering::Relaxed);
+        if id != 0 && app.node(id).is_some() {
+            app.duplicate_node(id);
+        } else if let Some(id) = sel_node {
             app.duplicate_node(id);
         }
     }
     // Tab: Generator / Node edit mode (the original's hot key)
+    // Tab steps through Generator, Node and Freehand (picture 68), leaving the Export tab
     if i.key(KeyCode::Tab) && !i.ctrl {
-        app.set_edit_mode(if app.edit_mode == 1 { 0 } else { 1 });
+        app.export_tab = false;
+        app.set_edit_mode((app.edit_mode + 1) % 3);
     }
     if i.key(KeyCode::Escape) {
         app.select(Sel::None);
     }
+}
+
+thread_local! {
+    /// Height of the mode strip under the menu bar this frame (0 when the modes sit elsewhere).
+    static MODE_STRIP: std::cell::Cell<f32> = const { std::cell::Cell::new(0.0) };
 }
 
 struct Layout {
@@ -210,7 +249,8 @@ struct Layout {
 }
 
 fn layout(w: f32, h: f32, left_w: Option<f32>, dock_w: Option<f32>) -> Layout {
-    let top = 26.0;
+    // the menu bar, and the mode strip under it when the mode buttons sit at the Top (picture 69)
+    let top = 26.0 + MODE_STRIP.with(|m| m.get());
     // the panels' widths, dragged by their edges (the viewport keeps at least 200)
     let lw = left_w.unwrap_or((w * 0.22).clamp(300.0, 380.0)).clamp(220.0, (w * 0.45).max(220.0));
     let dw = dock_w.unwrap_or((w * 0.30).clamp(380.0, 560.0)).clamp(300.0, (w - lw - 212.0).max(300.0));
@@ -260,7 +300,9 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     };
     // splitters between the panels and the viewport: drag to widen or narrow a panel
     {
-        let lay0 = layout(w, h, app.left_w, app.dock_w);
+        // (picture 70: the Top mode row sits inside the Properties panel, so no strip under the menu bar)
+    MODE_STRIP.with(|m| m.set(0.0));
+    let lay0 = layout(w, h, app.left_w, app.dock_w);
         let (mx, my) = (ui.inp.mx, ui.inp.my);
         let in_y = my > lay0.view.y && my < lay0.view.y + lay0.view.h;
         let on_left = in_y && (mx - (lay0.left.x + lay0.left.w + 2.0)).abs() <= 4.0;
@@ -292,6 +334,9 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     if !bars {
         lay.view = Rect::new(2.0, 26.0, w - 4.0, h - 28.0);
     }
+    // Window properties > Layout (picture 65): the main view and its extra fixed views
+    let (main_view, panes) = winprops::layout_panes(app.wp("Viewport:Layout", 0.0) as usize, lay.view);
+    lay.view = main_view;
     app.viewport = lay.view;
 
     if app.dirty {
@@ -299,6 +344,29 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     }
     app.render_preview();
     app.render_mesh_preview();
+    app.render_camera_preview();
+    // TM_EXPORT=1: the Export tab shown; TM_EXPORT_DIR=<folder>: tree.fbx, tree.obj and tree.xml
+    // written there once the tree is built, with log.txt (picture 68, for checking)
+    {
+        static DONE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+        if !DONE.load(std::sync::atomic::Ordering::Relaxed) && app.geo.is_some() {
+            DONE.store(true, std::sync::atomic::Ordering::Relaxed);
+            if std::env::var("TM_EXPORT").as_deref() == Ok("1") {
+                app.export_tab = true;
+            }
+            if let Ok(dir) = std::env::var("TM_EXPORT_DIR") {
+                let mut o = app.export_opts.clone();
+                let mut log = String::new();
+                for (k, ext) in ["fbx", "obj", "xml"].iter().enumerate() {
+                    o.file_type = k;
+                    o.group_by = 0;
+                    let r = app.write_export(&std::path::Path::new(&dir).join(format!("tree.{}", ext)), &o);
+                    log.push_str(&format!("export {}: {:?}\n", ext, r));
+                }
+                let _ = std::fs::write(std::path::Path::new(&dir).join("log.txt"), log);
+            }
+        }
+    }
 
     clear_background(C_BG);
     // 3D viewport first: background in UI units, scene in physical pixels
@@ -314,9 +382,12 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     app.draw_viewport_3d(lay.view, scale, screen_height() * dpi);
     // Selection > Outline: the ring around the selected generator (picture 30)
     app.draw_selection_outline(lay.view, f);
+    // Window properties > Layout's extra views, drawn off screen (outside the UI's scale)
+    app.render_layout_panes(&panes, scale);
 
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.push_model_matrix(Mat4::from_scale(vec3(f, f, 1.0)));
+    app.draw_layout_panes(ui, &panes);
 
     let quit = menu_bar(app, ui, w);
     if bars {
@@ -348,8 +419,20 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     // File > Export material (F10; picture 53)
     app.draw_material_export(ui);
     // undo history: keep the state after each finished edit (outside the modal windows)
-    let idle = !ui.inp.l_down && ui.active == 0 && app.cutout.is_none() && app.mesh_dialog.is_none() && app.mat_dialog.is_none() && !app.prefs_open && app.curve_drag.is_none() && !app.var_cohesion_drag && app.welcome.is_none();
+    let idle = !ui.inp.l_down && app.node_drag.is_none() && ui.active == 0 && app.cutout.is_none() && app.mesh_dialog.is_none() && app.mat_dialog.is_none() && !app.prefs_open && app.curve_drag.is_none() && !app.var_cohesion_drag && app.welcome.is_none();
     app.undo_track(idle);
+    // TM_ICONS=1: every node icon large, for checking pictures (picture 66)
+    if std::env::var("TM_ICONS").as_deref() == Ok("1") {
+        use nodeicons::NodeIcon as I;
+        draw_rectangle(20.0, 120.0, 820.0, 150.0, Color::new(0.4, 0.4, 0.42, 1.0));
+        let cols = [app.prefs.color("node_tree"), app.prefs.color("node_trunk"), app.prefs.color("node_branch"), app.prefs.color("node_leaf"), app.prefs.color("node_leaf"), app.prefs.color("node_scene"), app.prefs.color("node_scene")];
+        for (k, ic) in [I::Tree, I::Trunk, I::Branch, I::Leaf, I::Frond, I::Force, I::Collision].iter().enumerate() {
+            let (cx, cy) = (80.0 + k as f32 * 112.0, 195.0);
+            draw_circle(cx, cy, 50.0, Color::new(0.04, 0.04, 0.05, 1.0));
+            draw_circle(cx, cy, 40.0, cols[k]);
+            nodeicons::draw(*ic, cx, cy, 40.0, cols[k], 1.0);
+        }
+    }
     ui.end();
 
     let gl = unsafe { get_internal_gl() };
@@ -697,6 +780,10 @@ async fn main() {
         app.load_demo();
     }
     // optional start state for checking pictures: TM_TAB=0..2, TM_SEL=node name | mat:N | mesh:N
+    // TM_MODEBAR=0..3: where the mode buttons sit (picture 69)
+    if let Some(k) = std::env::var("TM_MODEBAR").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.prefs.mode_bar = k.min(3);
+    }
     if let Ok(t) = std::env::var("TM_TAB") {
         app.tab = t.parse().unwrap_or(0).min(2);
     }
@@ -746,6 +833,10 @@ async fn main() {
         // TM_SEL=window: Window properties (picture 49); TM_SAFEFRAME=1 shows the safe frame
         if s == "window" {
             app.select(Sel::Window);
+            // TM_LAYOUT=0..3: Window properties > Layout (picture 65)
+            if let Some(l) = std::env::var("TM_LAYOUT").ok().and_then(|s| s.parse::<f64>().ok()) {
+                app.winp.insert("Viewport:Layout".into(), l);
+            }
             if std::env::var("TM_SAFEFRAME").as_deref() == Ok("1") {
                 app.winp.insert("Screenshot Safe Frame:Show".into(), 1.0);
                 app.winp.insert("Screenshot Safe Frame:Width".into(), 1920.0);
@@ -761,6 +852,13 @@ async fn main() {
             app.select(Sel::Mesh(n.parse().unwrap_or(0)));
         } else if let Some(id) = app.nodes.iter().find(|n| n.name == s).map(|n| n.id) {
             app.select(Sel::Node(id));
+        }
+        // TM_NODEPICK=<n>: Node mode with node n of the selected generator picked (picture 65)
+        if let Some(k) = std::env::var("TM_NODEPICK").ok().and_then(|s| s.parse::<usize>().ok()) {
+            if let Sel::Node(id) = app.sel {
+                app.set_edit_mode(1);
+                app.node_pick = Some((id, k));
+            }
         }
     }
     // TM_WELD=<node name>: Welding on for that generator, with the spread of picture 57, and the

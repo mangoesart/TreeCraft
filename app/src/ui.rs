@@ -344,6 +344,22 @@ impl Ui {
         }
     }
 
+    /// Text turned on its side, reading bottom to top, centred on (cx, cy) (picture 70: the
+    /// mode tabs down a side of the Properties panel).
+    pub fn text_vertical(&mut self, s: &str, cx: f32, cy: f32, size: f32, color: Color) {
+        let fs = (size * self.scale).round() as u16;
+        let tw = self.text_w(s, size);
+        draw_text_ex(
+            s,
+            (cx + size * 0.32).round(),
+            (cy + tw * 0.5).round(),
+            TextParams { font: self.font.as_ref(), font_size: fs.max(1), font_scale: 1.0 / self.scale, color, rotation: -std::f32::consts::FRAC_PI_2, ..Default::default() },
+        );
+        if self.texts.len() < 4000 {
+            self.texts.push(s.to_string());
+        }
+    }
+
     pub fn text_center(&mut self, s: &str, r: Rect, size: f32, color: Color) {
         let w = self.text_w(s, size);
         self.text(s, r.x + (r.w - w) * 0.5, r.y + (r.h - size) * 0.5 - 1.0, size, color);

@@ -655,6 +655,28 @@ fn seed_rows(r: &mut Rows, p: &mut Params) {
     }
 }
 
+/// Node mode with a node picked (picture 65): which node, whether it's hidden, and resetting it;
+/// its properties follow in the same tabs as Generator mode.
+fn node_header_rows(r: &mut Rows, n: &mut Node, i: usize) {
+    let label = if i >= usize::MAX / 2 { format!("Hand-drawn {}", usize::MAX - i + 1) } else { format!("Node {}", i + 1) };
+    let own: Vec<String> = n.p.node_edits.get(&i).map(|e| e.props.keys().map(|k| k.rsplit(':').next().unwrap_or(k).trim_start_matches("extra.").replace('_', " ")).collect()).unwrap_or_default();
+    r.info("Editing", &format!("{} (changes apply to this node only)", label));
+    if !own.is_empty() {
+        r.info("Own values", &own.join(", "));
+    }
+    let mut e = n.p.node_edits.get(&i).cloned().unwrap_or_default();
+    let before = e.hidden;
+    r.b("ne.hide", "Hidden (pruned)", &mut e.hidden);
+    if e.hidden != before {
+        n.p.node_edits.insert(i, e);
+        r.changed = true;
+    }
+    if n.p.node_edits.contains_key(&i) && r.button("ne.reset", "Reset this node") {
+        n.p.node_edits.remove(&i);
+        r.changed = true;
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 /// Node mode: the picked node's offsets (the original: "Property edits in this mode are offsets to
 /// the value computed by the generator and should be used for fine tuning only").
@@ -1005,12 +1027,85 @@ pub fn pick_image() -> Option<String> {
         .map(|p| p.to_string_lossy().to_string())
 }
 
+/// Width of the mode tabs when they sit down a side of the Properties panel.
+const SIDE_TABS: f32 = 34.0;
+
+/// The mode buttons (pictures 24, 68, 69) in the four rectangles given: Generator, Node,
+/// Freehand, Export. Where they sit is Preferences > Themes > Mode buttons; in rectangles taller
+/// than wide (the side tabs) the labels turn on their side.
+pub fn draw_mode_buttons(app: &mut App, ui: &mut Ui, rects: [Rect; 4]) {
+    // edit modes (pictures 24, 68): one row of large buttons, each in its own colour, since
+    // everything else depends on them. Generator edits every node, Node one node, Freehand draws
+    // branches; Tab steps through those three. Export shows the mesh export settings.
+    let mode_cols = [Color::new(0.26, 0.52, 0.93, 1.0), Color::new(0.96, 0.56, 0.14, 1.0), Color::new(0.33, 0.72, 0.42, 1.0), Color::new(0.62, 0.42, 0.92, 1.0)];
+    let modes = [("mode.gen", "Generator"), ("mode.node", "Node"), ("mode.free", "Freehand"), ("mode.export", "Export")];
+    let m = ui.mouse();
+    for (k, (key, label)) in modes.iter().enumerate() {
+        let r = rects[k];
+        let active = if k == 3 { app.export_tab } else { !app.export_tab && app.edit_mode as usize == k };
+        let hot = r.contains(m) && !ui.blocked && ui.popup.is_none();
+        let c = mode_cols[k];
+        if active {
+            draw_round_rect(r, 5.0, c);
+            draw_round_rect_lines(r, 5.0, 1.5, Color::new(1.0, 1.0, 1.0, 0.55));
+        } else {
+            draw_round_rect(r, 5.0, if hot { Color::new(0.24, 0.24, 0.26, 1.0) } else { Color::new(0.17, 0.17, 0.18, 1.0) });
+            let strip = Color::new(c.r, c.g, c.b, if hot { 1.0 } else { 0.75 });
+            if r.h > r.w {
+                // a side tab: the colour runs down its outer edge
+                let sx = if app.prefs.mode_bar == 2 { r.x + r.w - 4.0 } else { r.x + 1.0 };
+                draw_rectangle(sx, r.y + 6.0, 3.0, r.h - 12.0, strip);
+            } else {
+                draw_rectangle(r.x + 6.0, r.y + r.h - 4.0, r.w - 12.0, 3.0, strip);
+            }
+            draw_round_rect_lines(r, 5.0, 1.0, Color::new(c.r, c.g, c.b, 0.45));
+        }
+        let tc = if active { WHITE } else { Color::new(0.55 + c.r * 0.45, 0.55 + c.g * 0.45, 0.55 + c.b * 0.45, 1.0) };
+        if r.h > r.w {
+            ui.text_vertical(label, r.x + r.w * 0.5, r.y + r.h * 0.5, 13.5, tc);
+        } else {
+            let tw = ui.text_w(label, 13.5).min(r.w - 6.0);
+            ui.text_fit(label, r.x + (r.w - tw) * 0.5, r.y + 7.0, r.w - 6.0, 13.5, tc);
+        }
+        ui.record(key, r);
+        if hot {
+            if ui.inp.l_pressed {
+                ui.inp.l_pressed = false;
+                if k == 3 {
+                    app.export_tab = true;
+                } else {
+                    app.export_tab = false;
+                    app.set_edit_mode(k as u8);
+                }
+            }
+            ui.tooltip = Some(
+                match k {
+                    0 => "Generator mode: property edits apply to the selected generator(s).\nHot key: Tab steps Generator > Node > Freehand",
+                    1 => "Node mode: property edits apply to the picked node only.\nHot key: Tab",
+                    2 => "Freehand mode: bend or draw branches by hand in the viewport.\nHot key: Tab",
+                    _ => "Export the tree as a mesh (FBX, OBJ or SpeedTree XML).\nHot key: Ctrl+E",
+                }
+                .into(),
+            );
+        }
+    }
+}
+
 pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     // tab header like the original's "Properties" dock title
     draw_rectangle(panel.x, panel.y, panel.w, panel.h, C_PANEL);
     draw_rectangle(panel.x, panel.y, panel.w, 26.0, C_PANEL2);
     draw_rectangle(panel.x, panel.y, 84.0, 26.0, C_PANEL);
     ui.text("Properties", panel.x + 8.0, panel.y + 6.0, 13.0, C_TEXT);
+    // room for the mode buttons beside or below the panel's content (picture 69)
+    let full = panel;
+    let panel = match app.prefs.mode_bar {
+        1 => Rect::new(panel.x + SIDE_TABS, panel.y, panel.w - SIDE_TABS, panel.h),
+        2 => Rect::new(panel.x, panel.y, panel.w - SIDE_TABS, panel.h),
+        3 => Rect::new(panel.x, panel.y, panel.w, panel.h - 44.0),
+        // Top (picture 70): a row inside the panel, under its "Properties" title
+        _ => Rect::new(panel.x, panel.y + 40.0, panel.w, panel.h - 40.0),
+    };
     let x = panel.x + 12.0;
     let w = panel.w - 24.0;
     let mut y = panel.y + 36.0;
@@ -1035,8 +1130,8 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
             },
         ),
     };
-    let bw = 62.0;
-    let bx = x + w - bw * 3.0;
+    // the title takes the full width; the modes have their own row below it (picture 68)
+    let bx = x + w;
     // back arrow (picture 48): to the panel shown before, or the default view
     let mut tx = x;
     if !matches!(app.sel, Sel::None) {
@@ -1064,29 +1159,37 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     if !sub.is_empty() {
         ui.text_fit(&sub, tx, y + 21.0, bx - tx - 8.0, 11.5, C_TEXT_DIM);
     }
-    let is_node = matches!(app.sel, Sel::Node(_));
-    draw_rectangle(bx - 2.0, y - 2.0, bw * 3.0 + 4.0, 26.0, C_BG);
-    // edit modes (picture 24): Generator edits every node, Node one node (Tab switches), Freehand
-    // draws branches in the viewport
-    let modes = [("mode.gen", "Generator"), ("mode.node", "Node"), ("mode.free", "Freehand")];
-    for (k, (key, label)) in modes.iter().enumerate() {
-        let r = Rect::new(bx + bw * k as f32, y, bw, 22.0);
-        if ui.button_ex(key, r, label, app.edit_mode as usize == k, true) {
-            app.set_edit_mode(k as u8);
+    // the mode buttons (pictures 69, 70): Top a row under the panel's title, Bottom a row at its
+    // foot, Left / Right narrow tabs down that side
+    match app.prefs.mode_bar {
+        3 => {
+            let gap = 4.0;
+            let mw = (w - gap * 3.0) / 4.0;
+            let by = full.y + full.h - 38.0;
+            draw_rectangle(full.x, by - 4.0, full.w, 42.0, C_PANEL2);
+            draw_mode_buttons(app, ui, std::array::from_fn(|k| Rect::new(x + (mw + gap) * k as f32, by, mw, 30.0)));
         }
-        if ui.hover(r) {
-            ui.tooltip = Some(
-                match k {
-                    0 => "All property edits apply to the selected generator(s).\nHot key: Tab",
-                    1 => "Property edits apply to the picked node: offsets to what the generator computes.\nHot key: Tab",
-                    _ => "Draw branches by hand in the viewport into the selected branch generator.",
-                }
-                .into(),
-            );
+        1 | 2 => {
+            // narrow tabs stacked down the side, each as tall as its label (picture 70)
+            let tx = if app.prefs.mode_bar == 1 { full.x + 3.0 } else { full.x + full.w - SIDE_TABS + 3.0 };
+            draw_rectangle(if app.prefs.mode_bar == 1 { full.x } else { full.x + full.w - SIDE_TABS }, full.y + 26.0, SIDE_TABS, full.h - 26.0, C_PANEL2);
+            let labels = ["Generator", "Node", "Freehand", "Export"];
+            let mut ty = full.y + 32.0;
+            let mut rects = [Rect::new(0.0, 0.0, 0.0, 0.0); 4];
+            for (k, l) in labels.iter().enumerate() {
+                let h = (ui.text_w(l, 13.5) + 30.0).max(64.0);
+                rects[k] = Rect::new(tx, ty, SIDE_TABS - 6.0, h);
+                ty += h + 4.0;
+            }
+            draw_mode_buttons(app, ui, rects);
         }
-    }
-    let _ = is_node;
-    y += 44.0;
+        _ => {
+            let gap = 4.0;
+            let (rx, rw) = (full.x + 12.0, full.w - 24.0);
+            let mw = (rw - gap * 3.0) / 4.0;
+            draw_mode_buttons(app, ui, std::array::from_fn(|k| Rect::new(rx + (mw + gap) * k as f32, full.y + 32.0, mw, 30.0)));
+        }
+    }    y += 44.0;
     draw_line(panel.x + 8.0, y - 6.0, panel.x + panel.w - 8.0, y - 6.0, 1.0, C_LINE);
 
     let body = Rect::new(panel.x, y, panel.w, panel.y + panel.h - y);
@@ -1132,6 +1235,11 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
         focus_start: None,
         sub_tabs: std::mem::take(&mut app.prop_sub_tabs),
     };
+    // the Export tab (picture 68) takes the panel whatever is selected
+    if app.export_tab {
+        rows.prefix = "export".into();
+        crate::export::export_rows(&mut rows, app);
+    } else {
     match app.sel {
         Sel::None => {
             rows.note("");
@@ -1213,9 +1321,21 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                     }
                     Some(t)
                 };
-                if app.edit_mode == 1 && n.kind != Kind::Tree {
-                    // Node mode (Tab): one node's offsets from what the generator computes
-                    node_mode_rows(&mut rows, &mut n, app.node_pick.filter(|p| p.0 == id).map(|p| p.1));
+                // Node mode with a node picked (picture 65): the same panel as Generator mode, on
+                // that node's own copy of the properties; what differs is kept as its values
+                let node_pick = if app.edit_mode == 1 && n.kind != Kind::Tree { app.node_pick.filter(|p| p.0 == id).map(|p| p.1) } else { None };
+                let gen_p = node_pick.map(|i| {
+                    let g = n.p.clone();
+                    node_header_rows(&mut rows, &mut n, i);
+                    if let Some(e) = n.p.node_edits.get(&i).cloned() {
+                        crate::treefile::apply_kv(&mut n.p, &e.props);
+                    }
+                    let pre = crate::treefile::params_kv(&n.p);
+                    (i, g, pre)
+                });
+                if app.edit_mode == 1 && n.kind != Kind::Tree && node_pick.is_none() {
+                    // Node mode (Tab), nothing picked yet
+                    node_mode_rows(&mut rows, &mut n, None);
                 } else if app.edit_mode == 2 && n.kind != Kind::Tree {
                     freehand_rows(&mut rows, &mut n);
                 } else {
@@ -1261,6 +1381,32 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                         app.uv_rect = u.rect;
                         app.prop_scroll = (app.prop_scroll + u.scroll_by).max(0.0);
                         app.prop_scroll_target = app.prop_scroll;
+                    }
+                }
+                // back to the generator's own properties, keeping the node's differences: only what
+                // was edited in the panel this time is added (the panel tidies some values by itself,
+                // such as the material, and those don't count), then values equal to the
+                // generator's are dropped
+                if let Some((i, g, pre)) = gen_p {
+                    let edits = n.p.node_edits.clone();
+                    let same = |a: &str, b: &str| a == b || matches!((a.parse::<f64>(), b.parse::<f64>()), (Ok(x), Ok(y)) if (x - y).abs() <= 1e-6 * (1.0 + y.abs()));
+                    let mut props = edits.get(&i).map(|e| e.props.clone()).unwrap_or_default();
+                    if rows.changed {
+                        let post = crate::treefile::params_kv(&n.p);
+                        for (k, v) in post {
+                            if pre.get(&k).map_or(true, |b| !same(&v, b)) {
+                                props.insert(k, v);
+                            }
+                        }
+                        let base = crate::treefile::params_kv(&g);
+                        props.retain(|k, v| base.get(k).map_or(true, |b| !same(v, b)));
+                    }
+                    n.p = g;
+                    n.p.node_edits = edits;
+                    let e = n.p.node_edits.entry(i).or_default();
+                    e.props = props;
+                    if *e == NodeEdit::default() {
+                        n.p.node_edits.remove(&i);
                     }
                 }
                 if let Some((prop, vr)) = rows.var_req.take() {
@@ -1402,6 +1548,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
             // the original's "Properties - <scene>" panel (picture 49)
             crate::winprops::window_rows(&mut rows, app);
         }
+    }
     }
     let content_h = rows.y - start_y;
     rows.finish();

@@ -54,7 +54,7 @@ fn labels(tree: &[MenuItem], path: &[usize]) -> Vec<String> {
 /// written "_%03d"; otherwise "_001" is added. "name_007.tctree" -> "name_008.tctree".
 pub fn next_incremental(p: &Path) -> PathBuf {
     let stem = p.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tree".into());
-    let ext = p.extension().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tctree".into());
+    let ext = p.extension().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tcm".into());
     let name = match stem.rsplit_once('_') {
         Some((b, d)) if d.chars().all(|c| c.is_ascii_digit()) => format!("{}_{:03}", b, d.parse::<u32>().unwrap_or(0) + 1),
         _ => format!("{}_001", stem),
@@ -84,8 +84,7 @@ impl App {
                     leaf("Save as...").hot("Ctrl+Shift+S"),
                     leaf("Save as with assets...").hot("Ctrl+Alt+Shift+S"),
                     sep(),
-                    leaf("Export mesh...").hot("Ctrl+E"),
-                    leaf("Export selected as mesh..."),
+                    // (mesh export moved to the Properties panel's Export tab, picture 68)
                     leaf("Export material...").hot("F10"),
                     leaf("Export world building data..."),
                     leaf("Export image..."),
@@ -367,7 +366,7 @@ impl App {
     /// File > Save as with assets: copy every picture and mesh file the tree uses into
     /// "<name>_assets" beside the tree file, point the tree at the copies, then save.
     pub(crate) fn save_with_assets(&mut self) {
-        let Some(path) = crate::prefs::file_dialog().set_title("Save tree with assets").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Save tree with assets").add_filter("TreeCraft model", &["tcm"]).set_file_name("tree.tcm").save_file() else { return };
         let stem = path.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tree".into());
         let dir = path.with_file_name(format!("{}_assets", stem));
         if let Err(e) = std::fs::create_dir_all(&dir) {

@@ -115,3 +115,33 @@ gen.rs freehand_bend (in make_spine before resample). editmodes.rs FhCtrl, fh_co
 
 ## Picture 47
 gen.rs freehand_bend -> bend_once for each Freehand:Kept<i>: then Freehand:. editmodes.rs: fh_hit (hover + press), archive on band / pivot drag start, draw_freehand_controller redrawn; App.fh_hover. props.rs freehand_rows: kept count, remove last kept, reset all. TM_FHKEPT=1 (with TM_FHBEND) for pictures.
+
+## Picture 65
+gen.rs: leaf mesh fallback to card (make_leaf), make_frond + Kind::Leaf if Leaves:Frond, edited() applies NodeEdit.props, slide added to t for spine parents; test leaf_on_trunk_tests. templates.rs Gen.frond. stprops Leaves:Frond. app.rs duplicate_node copies subtree; Scene objects toolbar (vt.sceneobj). main.rs Ctrl+C/V (static CLIP), layout panes (winprops::layout_panes, render_layout_panes outside the UI scale matrix, draw_layout_panes inside), hooks TM_LAYOUT, TM_NODEPICK. cameras.rs ViewCam.hidden, centre on double-click (editmodes centre_on), PREVIEW render target + draw_camera_preview, icon_scale(). model.rs NodeEdit.slide/props; treefile params_kv/apply_kv, editp lines. props.rs node mode: node_header_rows + generic panel on a per-node copy; only keys changed while rows.changed are stored. editmodes.rs NodeGizmo, node_pivot, node_gizmo_drag, draw_node_gizmo; mode 1 input no longer eats every click.
+Not done or not tested by hand: gizmo dragging (only drawn in pictures), Ctrl+C/V by hand, Anisotropic filtering, Lightmap view %, Capture Camera, User Shader Constant.
+
+## Picture 66
+nodeicons.rs: NodeIcon, set_next/take_next (thread-local, set just before draw_box), draw(). app.rs draw_node_shape styles 1 and 2 draw it. Test hook TM_ICONS=1 draws all icons large (main.rs, end of frame). shot66.ps1's MoveWindow doesn't reflow the app; the node graph is off screen in captures at 160% scaling.
+
+## Picture 67
+viewnav.rs draw_selection_outline orange in edit_mode 1. editmodes.rs draw_edit_3d draws nothing; NodeGizmo has rings[3] + axes, hit 4/5/6, node_gizmo_drag 4..=6 (5 writes props extra.Skin:Roll), node_dir(). app.rs GraphDrag::Marquee, App.graph_multi (cleared by select() unless the id is in it), Ctrl+click toggle, group move. main.rs Delete/Ctrl+D loop over graph_multi + sel.
+Not tested by hand: dragging the rings, box selection (no scripted mouse test for the graph).
+
+## Picture 68
+Extension .tcm (treefile.rs, appmenu.rs). props.rs mode row (4 coloured buttons) and body wrapped in `if app.export_tab`. export.rs: ExportOpts, export_rows, export_mesh/write_export/export_groups (generate_with(only) per piece), obj/mtl/xml, fbx_binary (+tests). main.rs Tab cycles 3 modes, Ctrl+E opens the tab, hooks TM_EXPORT=1 and TM_EXPORT_DIR. Blender 4.4 imports the FBX and OBJ (%TEMP%\tc_scan\fbxcheck.py).
+Not done: bones/skeleton, leaf references, wind animation, texture format conversion.
+
+## Picture 69
+prefs.mode_bar (0 Top, 1 Left, 2 Right, 3 Bottom) + MODE_BAR_PLACES, row on the Property Bar page. props.rs draw_mode_buttons(app, ui, [Rect; 4]) and SIDE_TABS; draw_panel shrinks `panel` (keeps `full`) and places them. main.rs MODE_STRIP thread-local pushes layout() down 40 px for Top and draws the strip; hook TM_MODEBAR=0..3. The Bottom row wasn't seen in captures (the window is taller than the screen).
+
+## Picture 70
+Mode setting on the Themes page (prefs.rs, above Presets), removed from Property Bar. props.rs: Top = row inside the panel (panel shrinks 40 px from the top), SIDE_TABS 34 with vertical labels (ui.text_vertical, rotation -90 degrees). main.rs MODE_STRIP always 0 (strip removed).
+
+## Picture 71
+gen.rs skin_tube: the tip cap is always drawn (when the tip radius > 1e-4); cap_ends only does the base. Test tip_tests::tip_edges (position-keyed open-edge count near the tip). render.rs FS: the weld-fade discard block removed (weldShade stays 1.0).
+
+## Picture 72
+Material.branch_only (runtime) set in App::regenerate; Cutoff and IsLeaf in render.rs apply_material and app.rs shadow/mask passes skip alpha for it. gen.rs weld tuple: parent radius x cos(pi/parent seg_radial) x 0.97. The person's own tree wasn't loaded to check; the demo's weld close-up shows no crease.
+
+## Picture 73
+gen.rs skin_tube weld block rewritten: per-column fillet (C, T1, T2, cubic with K = 0.55), weld_fillet() helper for the size, the zone formula uses it, the widen closure is gone. Test fillet_tests::weld_profile_is_a_smooth_fillet. Not compared on the person's own tree (front ortho view of a slanted trunk) since that file isn't available here.

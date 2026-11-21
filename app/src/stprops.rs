@@ -346,6 +346,7 @@ pub const LEAF_PROPS: &[StProp] = &[
     ("Leaves:Use actual size", "false", false, 0.0),
     ("Leaves:Flip", "true", false, 0.0),
     ("Leaves:Weld", "false", false, 0.0),
+    ("Leaves:Frond", "false", false, 0.0),
     ("Leaves:Cross", "false", false, 0.0),
     ("Leaves:Fix winding", "true", false, 0.0),
     ("Leaves:Resolution:Mesh LOD offset", "0", true, 0.0),

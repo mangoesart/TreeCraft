@@ -291,6 +291,29 @@ impl App {
         None
     }
 
+    /// Turn the view to look at `p` and orbit around it from then on (picture 63): the camera
+    /// stays where it is; an orthographic view keeps its direction and zoom and slides `p` to
+    /// the middle. Double-clicks on generators and on cameras (picture 65) both use it.
+    pub fn centre_on(&mut self, p: Vec3) {
+        let eye = self.cam.position();
+        let to_eye = eye - p;
+        let d = to_eye.length();
+        if d > 1e-4 && !self.cam.ortho {
+            let n = to_eye / d;
+            self.cam.pitch = n.y.clamp(-1.0, 1.0).asin().clamp(-1.55, 1.55);
+            self.cam.yaw = n.x.atan2(n.z);
+            self.cam.target = p;
+            self.cam.dist = d;
+            if self.cam.view != 0 {
+                self.cam.view = 0;
+            }
+        } else {
+            let off = p - self.cam.target;
+            let dir = self.cam.dir();
+            self.cam.target += off - dir * off.dot(dir);
+        }
+    }
+
     /// Generator mode (picture 25): a click (without dragging) on a branch or leaf selects its
     /// generator; a double-click also centres the camera on that spot and zooms in, so the view
     /// turns around it from then on.
@@ -306,9 +329,8 @@ impl App {
                 let mat = self.view_matrix();
                 if let Some((id, _, p)) = self.node_under(&mat, m) {
                     self.select(Sel::Node(id));
-                    self.cam.target = p;
-                    self.cam.dist = (self.cam.dist * 0.5).max(1.0);
-                    self.set_status("Centred the view on that spot");
+                    self.centre_on(p);
+                    self.set_status("Centred on that spot; the view turns around it");
                 }
                 self.click_start = None;
             }
@@ -350,18 +372,40 @@ impl App {
         let mat = self.view_matrix();
         match self.edit_mode {
             1 => {
-                if !(over && ui.inp.l_pressed && !ui.inp.alt) {
+                // picture 65: the gizmo's handles take the mouse; anything else orbits, pans and
+                // zooms as in Generator mode, and a click (no drag) picks a node
+                if let Some((h, last)) = self.node_drag {
+                    if !ui.inp.l_down {
+                        self.node_drag = None;
+                        return false;
+                    }
+                    self.node_gizmo_drag(&mat, h, last, m);
+                    self.node_drag = Some((h, m));
+                    return true;
+                }
+                if over && ui.inp.l_pressed && !ui.inp.alt {
+                    if let Some(h) = self.node_gizmo(&mat).and_then(|g| g.hit(m)) {
+                        self.node_drag = Some((h, m));
+                        return true;
+                    }
+                    self.click_start = Some(m);
                     return false;
                 }
-                // the node under the mouse (its tube or leaf, picture 26)
-                match self.node_under(&mat, m) {
-                    Some((id, i, _)) => {
-                        self.select(Sel::Node(id));
-                        self.node_pick = Some((id, i));
+                if !ui.inp.l_down {
+                    if let Some(s) = self.click_start.take() {
+                        if over && s.distance(m) < 4.0 {
+                            // the node under the mouse (its tube or leaf, picture 26)
+                            match self.node_under(&mat, m) {
+                                Some((id, i, _)) => {
+                                    self.select(Sel::Node(id));
+                                    self.node_pick = Some((id, i));
+                                }
+                                None => self.node_pick = None,
+                            }
+                        }
                     }
-                    None => self.node_pick = None,
                 }
-                true
+                false
             }
             _ => {
                 if self.free_stroke.is_empty() {
@@ -696,16 +740,8 @@ impl App {
         if self.edit_mode != 1 {
             return;
         }
-        let (Some((id, i)), Some(g)) = (self.node_pick, &self.geo) else { return };
-        let c = self.prefs.color("picked");
-        for (nid, ni, a, b) in &g.nodes {
-            if *nid == id && *ni == i {
-                let r = (a.distance(*b) * 0.03).clamp(0.03, 0.4);
-                draw_sphere(*a, r, None, c);
-                draw_sphere(*b, r * 0.7, None, c);
-                draw_line_3d(*a, *b, c);
-            }
-        }
+        // picture 67: no yellow balls at the picked node's base and tip any more; the gizmo marks it
+        let _ = (self.node_pick, &self.geo);
     }
 
     /// Over the viewport: the stroke being drawn (Freehand).
@@ -721,9 +757,10 @@ impl App {
             draw_rectangle(v.x + 38.0, v.y + v.h - 46.0, 600.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
             draw_text(t, v.x + 44.0, v.y + v.h - 31.0, 16.0, c);
         } else if self.edit_mode == 1 {
+            self.draw_node_gizmo();
             let v = self.viewport;
-            let t = "Node mode: click a branch or leaf to fine-tune it (Tab: Generator mode)";
-            draw_rectangle(v.x + 8.0, v.y + v.h - 46.0, 470.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
+            let t = "Node mode: click a node; drag the arrow (move), ring (rotate) or square (scale)";
+            draw_rectangle(v.x + 8.0, v.y + v.h - 46.0, 590.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
             draw_text(t, v.x + 14.0, v.y + v.h - 31.0, 16.0, self.prefs.color("picked"));
         }
     }
@@ -1296,5 +1333,233 @@ mod tests {
         // a leaf: a single point
         let (d, s, _) = ray_segment(vec3(0.0, 0.2, 5.0), vec3(0.0, 0.0, -1.0), vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0));
         assert!((d - 0.2).abs() < 1e-4 && (s - 5.0).abs() < 1e-4);
+    }
+}
+
+/// Node mode's gizmo on the screen (pictures 65, 67): the pivot, one Move arrow along the parent,
+/// the Rotate rings (red, green and blue around the node's own X, Y and Z, lined up with the
+/// generator's angle, plus an outer white ring facing the viewer) and the Scale handle.
+pub struct NodeGizmo {
+    pub o: Vec2,
+    pub arrow: Vec2,
+    /// The outer white ring's radius on the screen.
+    pub ring: f32,
+    pub scale: Vec2,
+    /// Each axis ring's outline on the screen with, per point, whether it's on the near side.
+    pub rings: [Vec<(Vec2, bool)>; 3],
+    /// The node's own axes in tree space: X (tilt), Y (along the node), Z.
+    pub axes: [Vec3; 3],
+}
+
+impl NodeGizmo {
+    /// Which handle is under `m`: 1 Move, 2 Rotate (white ring), 3 Scale, 4/5/6 Rotate around X/Y/Z.
+    pub fn hit(&self, m: Vec2) -> Option<u8> {
+        if m.distance(self.scale) < 10.0 {
+            return Some(3);
+        }
+        let ab = self.arrow - self.o;
+        let t = ((m - self.o).dot(ab) / ab.length_squared().max(1e-4)).clamp(0.0, 1.0);
+        if t > 0.2 && (self.o + ab * t).distance(m) < 10.0 {
+            return Some(1);
+        }
+        // the axis rings, near side first
+        let mut best: Option<(f32, u8)> = None;
+        for (k, ring) in self.rings.iter().enumerate() {
+            for w in ring.windows(2) {
+                let (a, b) = (w[0].0, w[1].0);
+                let ab = b - a;
+                let t = ((m - a).dot(ab) / ab.length_squared().max(1e-4)).clamp(0.0, 1.0);
+                let d = (a + ab * t).distance(m) - if w[0].1 { 1.5 } else { 0.0 };
+                if d < 7.0 && best.map_or(true, |x| d < x.0) {
+                    best = Some((d, 4 + k as u8));
+                }
+            }
+        }
+        if let Some((_, h)) = best {
+            return Some(h);
+        }
+        if (m.distance(self.o) - self.ring).abs() < 7.0 {
+            return Some(2);
+        }
+        None
+    }
+}
+impl App {
+    /// The picked node's pivot (where it sits on its parent), the parent's direction there and
+    /// the parent's length (1 for trunks on the ground).
+    fn node_pivot(&self) -> Option<(u32, usize, Vec3, Vec3, f32)> {
+        let (id, i) = self.node_pick?;
+        let g = self.geo.as_ref()?;
+        let &(_, _, a, b) = g.nodes.iter().find(|n| n.0 == id && n.1 == i)?;
+        let parent = self.node(id).and_then(|n| n.parent);
+        let mut best: Option<(f32, Vec3, f32)> = None;
+        for (gid, _, pts, _) in &g.hits {
+            if Some(*gid) != parent || pts.len() < 2 {
+                continue;
+            }
+            for k in 0..pts.len() {
+                let d = pts[k].distance(a);
+                if best.map_or(true, |x| d < x.0) {
+                    let (p0, p1) = (pts[k.saturating_sub(1)], pts[(k + 1).min(pts.len() - 1)]);
+                    let len: f32 = pts.windows(2).map(|w| w[0].distance(w[1])).sum();
+                    best = Some((d, (p1 - p0).normalize_or_zero(), len));
+                }
+            }
+        }
+        let (tan, len) = match best {
+            Some((_, t, l)) if t.length_squared() > 0.5 => (t, l.max(0.01)),
+            _ => ((b - a).normalize_or(Vec3::Y), 1.0),
+        };
+        Some((id, i, a, tan, len))
+    }
+
+    pub fn node_gizmo(&self, mat: &Mat4) -> Option<NodeGizmo> {
+        let (_, _, a, tan, _) = self.node_pivot()?;
+        let o = self.to_screen(mat, a)?;
+        let hs = 70.0 * self.prefs.manip_size.clamp(0.25, 4.0);
+        let unit = (self.cam.dist * 0.02).max(0.05);
+        let dir = self.to_screen(mat, a + tan * unit).map(|e| e - o).filter(|d| d.length() > 0.3).map(|d| d.normalize()).unwrap_or(vec2(0.0, -1.0));
+        let perp = vec2(-dir.y, dir.x);
+        // the node's own axes: Y along it, X across the plane it shares with its parent, Z the third
+        let y = self.node_dir().unwrap_or(Vec3::Y);
+        let mut x = tan.cross(y);
+        if x.length_squared() < 1e-6 {
+            x = y.cross(Vec3::Z);
+            if x.length_squared() < 1e-6 {
+                x = Vec3::X;
+            }
+        }
+        let x = x.normalize();
+        let z = x.cross(y).normalize_or_zero();
+        // world size of the rings so they come out hs x 0.6 across on the screen
+        let toward = (self.cam.position() - a).normalize_or(Vec3::Z);
+        let cam_right = Vec3::Y.cross(toward).normalize_or(Vec3::X);
+        let px_per_unit = self.to_screen(mat, a + cam_right).map(|q| q.distance(o)).unwrap_or(1.0).max(1e-3);
+        let rr = hs * 0.6 / px_per_unit;
+        let mut rings: [Vec<(Vec2, bool)>; 3] = [vec![], vec![], vec![]];
+        for (k, ax) in [x, y, z].iter().enumerate() {
+            let u = if k == 0 { y } else { x };
+            let v = ax.cross(u).normalize_or_zero();
+            for s in 0..=48 {
+                let th = s as f32 / 48.0 * std::f32::consts::TAU;
+                let off = (u * th.cos() + v * th.sin()) * rr;
+                if let Some(q) = self.to_screen(mat, a + off) {
+                    rings[k].push((q, off.dot(toward) >= -1e-4));
+                }
+            }
+        }
+        Some(NodeGizmo { o, arrow: o + dir * hs, ring: hs * 0.74, scale: o + perp * hs * 0.85, rings, axes: [x, y, z] })
+    }
+
+    /// The picked node's own direction (base to tip).
+    fn node_dir(&self) -> Option<Vec3> {
+        let (id, i) = self.node_pick?;
+        let g = self.geo.as_ref()?;
+        let &(_, _, a, b) = g.nodes.iter().find(|n| n.0 == id && n.1 == i)?;
+        let d = b - a;
+        (d.length_squared() > 1e-8).then(|| d.normalize())
+    }
+
+    /// One step of a gizmo drag from `last` to `m`: Move slides the node along its parent (it
+    /// stays on the parent's surface), Rotate turns it around the parent, Scale grows or shrinks
+    /// its length and radius.
+    fn node_gizmo_drag(&mut self, mat: &Mat4, h: u8, last: Vec2, m: Vec2) {
+        let Some((id, i, a, tan, plen)) = self.node_pivot() else { return };
+        let Some(g) = self.node_gizmo(mat) else { return };
+        let Some(idx) = self.nodes.iter().position(|n| n.id == id) else { return };
+        let mut e = self.nodes[idx].p.node_edits.get(&i).cloned().unwrap_or_default();
+        match h {
+            1 => {
+                let ab = g.arrow - g.o;
+                let px_per_unit = self.to_screen(mat, a + tan).map(|q| q.distance(g.o)).unwrap_or(1.0).max(0.01);
+                let along = (m - last).dot(ab.normalize_or_zero()) / px_per_unit;
+                e.slide = (e.slide + along / plen).clamp(-1.0, 1.0);
+            }
+            2 => {
+                let (u, v) = (last - g.o, m - g.o);
+                if u.length() > 3.0 && v.length() > 3.0 {
+                    let d = v.y.atan2(v.x) - u.y.atan2(u.x);
+                    let d = (d + std::f32::consts::PI).rem_euclid(std::f32::consts::TAU) - std::f32::consts::PI;
+                    e.roll = (e.roll - d / std::f32::consts::TAU).clamp(-2.0, 2.0);
+                }
+            }
+            4..=6 => {
+                // turning around one of the node's own axes: the screen angle swept around the
+                // pivot, turned the right way for the side of the ring facing the viewer.
+                // X tilts it (its angle from the parent, 1 = 180 degrees), Y spins it on its own
+                // axis (Skin roll, in turns), Z swings it around the parent (roll, in turns)
+                let (u, v) = (last - g.o, m - g.o);
+                if u.length() > 3.0 && v.length() > 3.0 {
+                    let d = v.y.atan2(v.x) - u.y.atan2(u.x);
+                    let d = (d + std::f32::consts::PI).rem_euclid(std::f32::consts::TAU) - std::f32::consts::PI;
+                    let ax = g.axes[(h - 4) as usize];
+                    let toward = (self.cam.position() - a).normalize_or(Vec3::Z);
+                    let amt = -d * if ax.dot(toward) >= 0.0 { 1.0 } else { -1.0 };
+                    match h {
+                        4 => e.angle = (e.angle + amt / std::f32::consts::PI).clamp(-1.0, 1.0),
+                        5 => {
+                            let key = "extra.Skin:Roll".to_string();
+                            let base = self.nodes[idx].p.extra.get("Skin:Roll").copied().unwrap_or(0.0) as f32;
+                            let cur = e.props.get(&key).and_then(|s| s.parse::<f32>().ok()).unwrap_or(base);
+                            let nv = cur + amt / std::f32::consts::TAU;
+                            if (nv - base).abs() < 1e-5 {
+                                e.props.remove(&key);
+                            } else {
+                                e.props.insert(key, nv.to_string());
+                            }
+                        }
+                        _ => e.roll = (e.roll + amt / std::f32::consts::TAU).clamp(-2.0, 2.0),
+                    }
+                }
+            }
+            _ => {
+                let (u, v) = (last.distance(g.o), m.distance(g.o));
+                if u > 3.0 {
+                    let f = (v / u).clamp(0.8, 1.25);
+                    e.length = (e.length * f).clamp(0.05, 10.0);
+                    e.radius = (e.radius * f).clamp(0.05, 10.0);
+                }
+            }
+        }
+        if e == crate::model::NodeEdit::default() {
+            self.nodes[idx].p.node_edits.remove(&i);
+        } else {
+            self.nodes[idx].p.node_edits.insert(i, e);
+        }
+        self.dirty = true;
+    }
+
+    /// Draws the gizmo over the viewport (Node mode, a node picked).
+    pub fn draw_node_gizmo(&self) {
+        let mat = self.view_matrix();
+        let Some(g) = self.node_gizmo(&mat) else { return };
+        let hot = self.node_drag.map(|d| d.0);
+        let w = |k: u8| if hot == Some(k) { 3.0 } else { 2.0 };
+        // Rotate: the outer white ring, then the red, green and blue axis rings (far halves faint)
+        draw_circle_lines(g.o.x, g.o.y, g.ring, w(2), Color::new(1.0, 1.0, 1.0, 0.9));
+        let cols = [self.prefs.color("axis_x"), self.prefs.color("axis_y"), self.prefs.color("axis_z")];
+        for (k, ring) in g.rings.iter().enumerate() {
+            let c = cols[k];
+            for pair in ring.windows(2) {
+                let near = pair[0].1 && pair[1].1;
+                let col = if near { Color::new(c.r, c.g, c.b, 1.0) } else { Color::new(c.r, c.g, c.b, 0.3) };
+                let th = if hot == Some(4 + k as u8) { 3.0 } else if near { 2.0 } else { 1.2 };
+                draw_line(pair[0].0.x, pair[0].0.y, pair[1].0.x, pair[1].0.y, th, col);
+            }
+        }
+        // Move: one arrow along the parent
+        let mc = Color::new(1.0, 0.85, 0.25, 1.0);
+        draw_line(g.o.x, g.o.y, g.arrow.x, g.arrow.y, w(1), mc);
+        let d = (g.arrow - g.o).normalize_or_zero();
+        let p = vec2(-d.y, d.x);
+        draw_triangle(g.arrow + d * 10.0, g.arrow + p * 6.0, g.arrow - p * 6.0, mc);
+        // Scale: a square on a stalk
+        let sc = Color::new(0.95, 0.4, 0.4, 1.0);
+        draw_line(g.o.x, g.o.y, g.scale.x, g.scale.y, 1.0, Color::new(sc.r, sc.g, sc.b, 0.6));
+        draw_rectangle(g.scale.x - 6.0, g.scale.y - 6.0, 12.0, 12.0, sc);
+        if hot == Some(3) {
+            draw_rectangle_lines(g.scale.x - 8.0, g.scale.y - 8.0, 16.0, 16.0, 1.5, WHITE);
+        }
+        draw_circle(g.o.x, g.o.y, 4.0, WHITE);
     }
 }

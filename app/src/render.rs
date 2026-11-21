@@ -221,18 +221,9 @@ void main() {
     // bark shows through and the seam disappears; a thin darker rim follows the edge like a
     // crease in the bark. The fade arrives in the colour's alpha (gen.rs): unselected 1.0 down to
     // 0.92, selected 0.5 down to 0.42.
+    // (picture 71: switched off here too. gen.rs no longer writes the fade (TEXTURE_FADE), and
+    // reading any vertex alpha just under 1.0 as a fade punched see-through specks in the bark)
     float weldShade = 1.0;
-    {
-        float a = color.a;
-        float fade = a < 0.75 ? (0.502 - a) / 0.078 : (1.0 - a) / 0.078;
-        fade = clamp(fade, 0.0, 1.0);
-        if (fade > 0.02) {
-            vec3 q = wp * 2.3;
-            float nz = vnoise(q) * 0.55 + vnoise(q * 2.7 + 11.3) * 0.3 + vnoise(q * 7.9 + 3.7) * 0.15;
-            if (fade > nz) discard;
-            weldShade = mix(0.84, 1.0, smoothstep(0.0, 0.08, nz - fade));
-        }
-    }
     // Roughness (picture 25): the material's Roughness value (Gloss uniform = 1 - roughness)
     // times its Roughness picture, white = rough, black = glossy; Gl is the gloss it gives
     float Rgh = 1.0 - Gloss;
@@ -362,9 +353,10 @@ void main() {
         gl_FragColor = vec4(o, 1.0); return;
     }
     if (Mode > 0.5 && Mode < 1.5) {
-        // Scribed: plain white, pinker where see-through, darker toward grazing angles
-        float lit = dot(normalize(vn), V);
-        vec3 o = mix(vec3(0.8, 0.7, 0.7), vec3(1.0), tex.a) * mix(1.0, 0.8, 1.0 - lit * lit);
+        // Scribed (picture 63): plain white with no texture, a little darker toward grazing angles
+        // so the shape reads; the edges are drawn over it as lines
+        float lit = abs(dot(normalize(vn), V));
+        vec3 o = vec3(0.97) * mix(1.0, 0.82, 1.0 - lit * lit);
         gl_FragColor = vec4(o, 1.0); return;
     }
     if (Mode > 39.5 && Mode < 44.5) {
@@ -789,7 +781,7 @@ pub fn apply_material(gm: &macroquad::material::Material, m: &Material, light: &
     gm.set_uniform("Tint", vec4(m.color[0], m.color[1], m.color[2], 1.0));
     gm.set_uniform("LightDir", light.dir());
     gm.set_uniform("CamPos", cam_pos);
-    gm.set_uniform("Cutoff", if m.opacity_from_alpha && !light.no_alpha_test { m.cutoff.max(0.01) } else { 0.0 });
+    gm.set_uniform("Cutoff", if m.opacity_from_alpha && !m.branch_only && !light.no_alpha_test { m.cutoff.max(0.01) } else { 0.0 });
     let wa = light.wind_dir.to_radians();
     gm.set_uniform("WindDir", vec2(wa.cos(), wa.sin()));
     gm.set_uniform("Gloss", m.gloss);
@@ -800,7 +792,7 @@ pub fn apply_material(gm: &macroquad::material::Material, m: &Material, light: &
     gm.set_uniform("AOAmount", if light.ao_on { 1.0f32 } else { m.ao });
     gm.set_uniform("Mode", light.mode);
     gm.set_uniform("Season", light.season);
-    gm.set_uniform("IsLeaf", if m.opacity_from_alpha { 1.0f32 } else { 0.0f32 });
+    gm.set_uniform("IsLeaf", if m.opacity_from_alpha && !m.branch_only { 1.0f32 } else { 0.0f32 });
     gm.set_uniform("OneSided", if light.one_sided { 1.0f32 } else { 0.0f32 });
     gm.set_uniform("Overdraw", if light.overdraw { 1.0f32 } else { 0.0f32 });
     gm.set_uniform("Time", light.time);

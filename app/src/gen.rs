@@ -294,6 +294,8 @@ fn varied(p: &Params, t: f32, gen: u32, node: usize, parent: usize) -> Option<Pa
 /// A node's own offsets (Node edit mode) on top of its generator's values.
 fn edited(p: &Params, e: &NodeEdit) -> Params {
     let mut q = p.clone();
+    // the node's own values (Node mode, picture 65) first, then the gizmo's scale and turn
+    crate::treefile::apply_kv(&mut q, &e.props);
     q.len_abs *= e.length;
     q.len_pct *= e.length;
     q.leaf_size *= e.length;
@@ -547,6 +549,11 @@ fn process(
                 };
                 let p = pe.as_ref().unwrap_or(&child.p);
                 let roll = roll + edit.map_or(0.0, |e| e.roll) * 2.0 * PI;
+                // Node mode's Move (picture 65): slid along the parent, staying on its surface
+                let t = match *parent {
+                    ParentRef::Spine(_) => (t + edit.map_or(0.0, |e| e.slide)).clamp(0.0, 1.0),
+                    _ => t,
+                };
                 match child.kind {
                     Kind::Trunk | Kind::Branch => {
                         let roll = roll + pex(p, "Spine:Orientation:Roll", 0.0) * 2.0 * PI;
@@ -601,7 +608,16 @@ fn process(
                                 geo.spine_lines.push((child.id, s.pts.clone()));
                             }
                             if ctx.show_branches && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id)) && skin_type != 3 && visible {
-                                let weld = if let ParentRef::Spine(i) = *parent { Some((spines[i].radius(t.min(1.0)), spines[i].frame(t.min(1.0)).0, spines[i].point(t.min(1.0)))) } else { None };
+                                // picture 72: the parent is drawn with flat facets, which lie inside its
+                                // round radius by r x (1 - cos(pi / sides)); the weld fits the base to
+                                // that inner surface, 3% further in, so no crease opens between them
+                                let weld = if let ParentRef::Spine(i) = *parent {
+                                    let sides = parent_gen.map_or(8, |g| g.p.seg_radial.max(3)) as f32;
+                                    let inner = (PI / sides).cos() * 0.97;
+                                    Some((spines[i].radius(t.min(1.0)) * inner, spines[i].frame(t.min(1.0)).0, spines[i].point(t.min(1.0))))
+                                } else {
+                                    None
+                                };
                                 skin(&s, p, col, geo, child.kind == Kind::Trunk, weld, child.id, me);
                             }
                             spines.push(s);
@@ -610,6 +626,22 @@ fn process(
                         }
                     }
                     Kind::Leaf if ctx.only.as_ref().map_or(false, |o| !o.contains(&child.id)) => {}
+                    Kind::Leaf if pex(p, "Leaves:Frond", 0.0) > 0.5 => {
+                        // a frond (picture 65): one flat card per parent, from First to Last along
+                        // its spine, bending with it
+                        if k_on_parent == 0 {
+                            if let ParentRef::Spine(i) = *parent {
+                                let s = &spines[i];
+                                let (a, b) = (p.first.min(p.last).clamp(0.0, 1.0), p.first.max(p.last).clamp(0.0, 1.0));
+                                let b = if b - a < 0.02 { 1.0 } else { b };
+                                make_frond(s, a, b, p, col, geo);
+                                let at = s.point(a);
+                                geo.nodes.push((child.id, me, at, s.point(b)));
+                                geo.hits.push((child.id, me, (0..=8).map(|k| s.point(a + (b - a) * k as f32 / 8.0)).collect(), vec![(p.leaf_size * p.size_scalar).max(0.1) * 0.5; 9]));
+                                count += 1;
+                            }
+                        }
+                    }
                     Kind::Leaf => {
                         let frames = make_leaf(ctx, p, *parent, t, roll, base_pos, spines, anchors, &mut rng, col, geo, cache, leaf_ranges);
                         let at = match *parent {
@@ -1411,6 +1443,13 @@ fn densify_base(s: &Spine, zone: f32, offset: f32, rings: usize, bias: f32) -> S
     out
 }
 
+/// The weld fillet's size along the branch and along the parent (picture 73): Spread x the side's
+/// scale (Upper toward the parent's tip, Lower toward its base) decides how far the rounded joint
+/// reaches, Offset scales it all; at least a fifth of the branch's radius.
+fn weld_fillet(r0: f32, spread: f32, scale: f32, offset: f32) -> f32 {
+    (r0 * (0.2 + spread.max(0.0) * 6.0 * scale.max(0.0)) * (0.5 + 0.5 * offset.max(0.0))).max(r0 * 0.05).max(1e-3)
+}
+
 fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, look: &SkinLook) {
     // the weld zone (picture 59): from the parent's middle to where the branch's lowest side
     // leaves the parent (further for a branch leaving at a shallow angle), plus Offset x the
@@ -1419,7 +1458,9 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
         let d0 = if s0.pts.len() > 1 { (s0.pts[1] - s0.pts[0]).normalize_or(Vec3::Y) } else { Vec3::Y };
         let c = d0.dot(ptan.normalize_or(Vec3::Y)).abs();
         let sn = (1.0 - c * c).sqrt().max(0.25);
-        (pr + s0.rad[0] * c) / sn + pr * look.weld_offset
+        // (picture 73) as far as the furthest column leaves the parent, plus its fillet
+        let biggest = weld_fillet(s0.rad[0], look.spread * 1.5, look.upper.max(look.lower), look.weld_offset);
+        (pr + s0.rad[0] * c) / sn + biggest * 1.1
     });
     let dense;
     let s: &Spine = if zone > 0.0 && s0.len > zone * 0.2 && s0.pts.len() >= 2 {
@@ -1521,26 +1562,33 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
                     let perp = v - ptan * v.dot(ptan);
                     (perp.length(), perp.normalize_or(dir))
                 };
-                let side = dir.normalize_or(dir).dot(ptan);
-                let scale = if side >= 0.0 { look.upper } else { look.lower } * side.abs() + 0.25 * (1.0 - side.abs());
-                let widen = |d: f32| -> f32 {
-                    let w = (1.0 - d / zone).clamp(0.0, 1.0);
-                    1.0 + spread * 1.6 * w * w * (scale / 0.25)
-                };
-                // a point of this column at distance d along the spine
-                let col_at = |d: f32| -> Vec3 {
+                // which side of the branch this column faces: toward the parent's tip (Upper scale)
+                // or its base (Lower scale), measured against the most a column can lean that way
+                let d_axis = (s.pts[1.min(s.pts.len() - 1)] - s.pts[0]).normalize_or(Vec3::Y);
+                let lean_max = (1.0 - d_axis.dot(ptan).powi(2)).max(0.0).sqrt().max(0.05);
+                let side = (dir.normalize_or(dir).dot(ptan) / lean_max).clamp(-1.0, 1.0);
+                let mid = (look.upper + look.lower) * 0.5;
+                let scale = mid + ((if side >= 0.0 { look.upper } else { look.lower }) - mid) * side.abs();
+                // the fillet's size (picture 73): Spread x the side's scale, times Offset
+                let fsize = weld_fillet(s.rad[0], spread, scale, look.weld_offset);
+                // a point of this column (the branch's own surface, not widened) at distance d
+                let frame_dir = |d: f32| -> (Vec3, Vec3) {
                     let t = (d / s.len.max(1e-6)).clamp(0.0, 1.0);
                     let (tn2, n2, _) = s.frame(t);
                     let b2 = tn2.cross(n2);
-                    let dir2 = n2 * (ca * cr - sa * sr) + b2 * (ca * sr + sa * cr);
-                    s.point(t) + dir2 * s.radius(t) * widen(d)
+                    (s.point(t), n2 * (ca * cr - sa * sr) + b2 * (ca * sr + sa * cr))
+                };
+                let col_at = |d: f32| -> Vec3 {
+                    let (p0, d2) = frame_dir(d);
+                    let t = (d / s.len.max(1e-6)).clamp(0.0, 1.0);
+                    p0 + d2 * s.radius(t)
                 };
                 // where the column leaves the parent: march out, then halve the step
                 let key = (radial, j);
                 let cut = match cross_cache.get(&key) {
                     Some(c) => *c,
                     None => {
-                        let steps = 40;
+                        let steps = 48;
                         let mut prev = 0.0f32;
                         let mut found = zone;
                         if radial_of(col_at(0.0)).0 >= pr {
@@ -1550,7 +1598,7 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
                                 let d = zone * i as f32 / steps as f32;
                                 if radial_of(col_at(d)).0 >= pr {
                                     let (mut lo, mut hi) = (prev, d);
-                                    for _ in 0..10 {
+                                    for _ in 0..12 {
                                         let mid = (lo + hi) * 0.5;
                                         if radial_of(col_at(mid)).0 >= pr { hi = mid } else { lo = mid }
                                     }
@@ -1564,24 +1612,45 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
                         found
                     }
                 };
-                let fillet = (pr * (0.35 + look.weld_offset * 0.6)).max(1e-3);
-                let (hug, out) = if dist <= cut {
-                    // before the cut: at the cut point, on the surface
-                    let q = col_at(cut);
-                    let (_, o) = radial_of(q);
+                // TreeCraft's weld fillet (picture 73): each column runs from the parent's surface
+                // to the branch's side along one smooth curve, tangent to both, like a rounded
+                // corner. C is where the column meets the parent; T1 is fsize further up the branch,
+                // T2 fsize along the parent's surface away from the branch. The curve is a cubic
+                // from T2 to T1 whose handles reach 55% of the way to C, close to a circular arc,
+                // so it fills the corner inward on both sides: a gentle flare where the branch
+                // leans away from the parent, a round fillet in the tight crotch. Nothing bulges out.
+                let surf = |q: Vec3| -> Vec3 {
                     let v = q - pp;
-                    pos = pp + ptan * v.dot(ptan) + o * (pr * 1.003);
-                    (1.0, o)
+                    let (_, o) = radial_of(q);
+                    pp + ptan * v.dot(ptan) + o * (pr * 1.003)
+                };
+                let corner = surf(col_at(cut));
+                let t1 = col_at(cut + fsize);
+                let (_, oc) = radial_of(corner);
+                let (_, dir_c) = frame_dir(cut);
+                let mut away = dir_c - oc * dir_c.dot(oc);
+                if away.length_squared() < 1e-8 {
+                    let db = (col_at(cut + zone * 0.01) - col_at(cut)).normalize_or(Vec3::Y);
+                    away = -db - oc * (-db).dot(oc);
+                }
+                let away = away.normalize_or(dir_c);
+                let t2 = surf(corner + away * fsize);
+                let end = cut + fsize;
+                let (hug, out) = if dist < end {
+                    let u = (dist / end.max(1e-6)).clamp(0.0, 1.0);
+                    const K: f32 = 0.55;
+                    let (p0, p1, p2, p3) = (t2, t2 + (corner - t2) * K, t1 + (corner - t1) * K, t1);
+                    let v = 1.0 - u;
+                    pos = p0 * (v * v * v) + p1 * (3.0 * v * v * u) + p2 * (3.0 * v * u * u) + p3 * (u * u * u);
+                    // the curve's normal turns from the parent's to the branch's along it
+                    let (_, o) = radial_of(pos);
+                    let w = u * u * (3.0 - 2.0 * u);
+                    nrm = (o * (1.0 - w) + dir * w).normalize_or(nrm);
+                    (1.0 - w, o)
                 } else {
-                    r *= widen(dist);
                     pos = s.pts[k] + dir * r;
-                    let (rd, o) = radial_of(pos);
-                    // the fillet: settles toward the surface near the cut, eases out after it
-                    let u = ((dist - cut) / fillet).clamp(0.0, 1.0);
-                    let h = (1.0 - u) * (1.0 - u) * (1.0 + 2.0 * u);
-                    let excess = (rd - pr * 1.003).max(0.0);
-                    pos -= o * excess * h * 0.9;
-                    (h, o)
+                    let (_, o) = radial_of(pos);
+                    (0.0, o)
                 };
                 // never inside the parent
                 let (rd, o) = radial_of(pos);
@@ -1664,8 +1733,10 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
         }
     }
     let _ = base;
-    // ends: open by default (picture 34); Skin > Cap ends closes the tip and the base
-    if p.cap_ends {
+    // ends (picture 71): the tip is always closed, a low dome half its radius past the last ring,
+    // so no branch ends in a hole; Skin > Cap ends also closes the base (open by default, picture
+    // 34, since it sits in the parent)
+    if rad[m - 1] > 1e-4 || s.rad[m - 1] > 1e-4 {
         let tip = s.pts[m - 1] + s.tan[m - 1] * s.rad[m - 1] * 0.5;
         let ci = ch.v.len() as u16;
         ch.v.push(vtx(tip, uvm.uv(0.5, s.cum[m - 1]), col, s.tan[m - 1], 1.0));
@@ -1673,18 +1744,57 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
         for j in 0..ring_n[m - 1] as u16 {
             ch.i.extend_from_slice(&[last + j, last + j + 1, ci]);
         }
+        geo.tris += ring_n[m - 1];
+    }
+    if p.cap_ends {
         let bi = ch.v.len() as u16;
         ch.v.push(vtx(s.pts[0], uvm.uv(0.5, 0.0), col, -s.tan[0], 1.0));
         let first = ring_start[0] as u16;
         for j in 0..ring_n[0] as u16 {
             ch.i.extend_from_slice(&[first + j + 1, first + j, bi]);
         }
-        geo.tris += ring_n[0] + ring_n[m - 1];
+        geo.tris += ring_n[0];
     }
     geo.tris += tris;
     geo.verts += need;
     geo.grow(bmin);
     geo.grow(bmax);
+}
+
+/// A frond (picture 65): a flat card laid along the parent's spine from `a` to `b`, in the plane of
+/// the spine and its side direction, so it bends wherever the parent bends. Width = Leaves > Size x
+/// Size scalar, widest in the middle and 35% of that at both ends (an estimate). Texture: U across,
+/// V along the card.
+fn make_frond(s: &Spine, a: f32, b: f32, p: &Params, col: [u8; 4], geo: &mut TreeGeo) {
+    let steps = ((s.pts.len() as f32 * (b - a)).ceil() as usize).clamp(6, 64);
+    let half = (p.leaf_size * p.size_scalar).max(0.02) * 0.5;
+    let mat_idx = p.leaf_material;
+    let mg = geo.mats.entry(mat_idx).or_default();
+    let ch = mg.chunk_for((steps + 1) * 2);
+    let start = ch.v.len();
+    let mut pts = Vec::with_capacity((steps + 1) * 2);
+    for k in 0..=steps {
+        let f = k as f32 / steps as f32;
+        let t = a + (b - a) * f;
+        let (_tn, side, nrm) = s.frame(t);
+        let c = s.point(t);
+        let w = half * (0.35 + 0.65 * (PI * f).sin()) * p.scale_x.max(0.01);
+        let l = c - side * w;
+        let r = c + side * w;
+        ch.v.push(vtx(l, vec2(0.0, 1.0 - f), col, nrm, 1.0));
+        ch.v.push(vtx(r, vec2(1.0, 1.0 - f), col, nrm, 1.0));
+        pts.push(l);
+        pts.push(r);
+    }
+    for k in 0..steps {
+        let i0 = (start + k * 2) as u16;
+        ch.i.extend_from_slice(&[i0, i0 + 1, i0 + 3, i0, i0 + 3, i0 + 2]);
+    }
+    geo.tris += steps * 2;
+    geo.verts += pts.len();
+    for q in pts {
+        geo.grow(q);
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1773,7 +1883,12 @@ fn make_leaf(
     }
 
     // the mesh, already processed (Orient, Flip, Scale, Fix winding, Flip normals)
-    let mi = if p.leaf_mesh <= ctx.meshes.len() { p.leaf_mesh } else { 0 };
+    let mut mi = if p.leaf_mesh <= ctx.meshes.len() { p.leaf_mesh } else { 0 };
+    // a chosen mesh with no shape yet (no cutout, no loaded file) falls back to the plain card,
+    // so a new leaf generator always shows something (picture 65)
+    if !cache.get(mi).and_then(|g| g.as_ref()).map_or(false, |g| !g.is_empty()) {
+        mi = 0;
+    }
     let g = match cache.get(mi).and_then(|g| g.as_ref()) {
         Some(g) if !g.is_empty() => g,
         _ => return vec![],
@@ -1984,5 +2099,177 @@ mod weld_tests {
             }
         }
         assert!(upper < pr * 0.9 && lower < pr * 0.9, "pushed edge: upper {:.3}, lower {:.3}", upper, lower);
+    }
+}
+
+#[cfg(test)]
+mod dup_tests {
+    use super::*;
+
+    fn node(id: u32, kind: Kind, parent: Option<u32>, name: &str) -> Node {
+        Node { id, kind, name: name.into(), parent, pos: Vec2::ZERO, p: Params::new(kind), hidden: false }
+    }
+
+    /// A duplicated generator (picture 64) grows like the original on the same parent.
+    #[test]
+    fn duplicate_generator_grows() {
+        let mut nodes = vec![node(1, Kind::Tree, None, "Tree"), node(2, Kind::Trunk, Some(1), "Trunk"), node(3, Kind::Branch, Some(2), "Branch")];
+        let mut copy = nodes[2].clone();
+        copy.id = 4;
+        copy.name = "Branch copy".into();
+        copy.p.seed += 97;
+        nodes.push(copy);
+        let ctx = GenCtx { nodes: &nodes, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+        let geo = generate(&ctx);
+        let a = geo.per_node.get(&3).copied().unwrap_or(0);
+        let b = geo.per_node.get(&4).copied().unwrap_or(0);
+        assert!(a > 0, "the original made no branches");
+        assert!(b > 0, "the copy made no branches (original {})", a);
+    }
+}
+
+#[cfg(test)]
+mod leaf_on_trunk_tests {
+    use super::*;
+
+    /// Leaves straight on a trunk (picture 65) make geometry, not only a count.
+    #[test]
+    fn leaves_on_a_trunk_draw() {
+        let mk = |id: u32, kind: Kind, parent: Option<u32>| Node { id, kind, name: format!("{:?}", kind), parent, pos: Vec2::ZERO, p: Params::new(kind), hidden: false };
+        let nodes = vec![mk(1, Kind::Tree, None), mk(2, Kind::Trunk, Some(1)), mk(3, Kind::Leaf, Some(2))];
+        let ctx = GenCtx { nodes: &nodes, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+        let geo = generate(&ctx);
+        let leaves = geo.per_node.get(&3).copied().unwrap_or(0);
+        let verts: usize = geo.mats.values().flat_map(|m| m.chunks.iter()).map(|c| c.v.len()).sum();
+        let trunk_only = {
+            let n2 = vec![mk(1, Kind::Tree, None), mk(2, Kind::Trunk, Some(1))];
+            let c2 = GenCtx { nodes: &n2, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+            generate(&c2).mats.values().flat_map(|m| m.chunks.iter()).map(|c| c.v.len()).sum::<usize>()
+        };
+        assert!(leaves > 0, "no leaves counted");
+        assert!(verts > trunk_only, "leaves counted ({}) but no leaf geometry: {} vs trunk {}", leaves, verts, trunk_only);
+        // and they sit on the trunk, not far off
+        let leaf_pts: Vec<Vec3> = geo.nodes.iter().filter(|n| n.0 == 3).map(|n| n.2).collect();
+        let far = leaf_pts.iter().map(|p| (p.x * p.x + p.z * p.z).sqrt()).fold(0.0f32, f32::max);
+        assert!(far < 20.0, "leaves {:.1} units off the trunk", far);
+        eprintln!("leaves {}, verts {} (trunk {}), first leaf at {:?}", leaves, verts, trunk_only, leaf_pts.first());
+    }
+}
+
+#[cfg(test)]
+mod tip_tests {
+    use super::*;
+
+    /// Open edges near the tip of a welded and an unwelded branch (picture 71).
+    fn tip_open_edges(weld: bool, cap: bool) -> (usize, usize) {
+        let mut p = Params::new(Kind::Branch);
+        p.cap_ends = cap;
+        if weld {
+            p.extra.insert("Skin:Welding:Enabled".into(), 1.0);
+        }
+        let dir = vec3(0.8, 0.6, 0.0).normalize();
+        let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, 5.0, 0.0) + dir * (i as f32 * 0.5)).collect();
+        let s = build_spine(1, pts, 0.6, &p);
+        let mut geo = TreeGeo::default();
+        skin(&s, &p, [255; 4], &mut geo, false, Some((1.0, Vec3::Y, vec3(0.0, 5.0, 0.0))), 1, 0);
+        let tip = s.pts[s.pts.len() - 1];
+        let mut open_tip = 0;
+        let mut tris = 0;
+        for mg in geo.mats.values() {
+            for ch in &mg.chunks {
+                // edges keyed by position (the texture seam doubles its points, which isn't a hole)
+                let key = |v: Vec3| ((v.x * 1000.0).round() as i64, (v.y * 1000.0).round() as i64, (v.z * 1000.0).round() as i64);
+                let mut count: HashMap<((i64, i64, i64), (i64, i64, i64)), u32> = HashMap::new();
+                let mut at: HashMap<((i64, i64, i64), (i64, i64, i64)), (Vec3, Vec3)> = HashMap::new();
+                for t in ch.i.chunks(3) {
+                    tris += 1;
+                    for (a, b) in [(t[0], t[1]), (t[1], t[2]), (t[2], t[0])] {
+                        let (pa, pb) = (ch.v[a as usize].position, ch.v[b as usize].position);
+                        let (ka, kb) = (key(pa), key(pb));
+                        if ka == kb {
+                            continue;
+                        }
+                        let k = if ka < kb { (ka, kb) } else { (kb, ka) };
+                        *count.entry(k).or_default() += 1;
+                        at.insert(k, (pa, pb));
+                    }
+                }
+                for (k, c) in count {
+                    if c == 1 {
+                        let (pa, pb) = at[&k];
+                        if pa.distance(tip) < 1.5 && pb.distance(tip) < 1.5 {
+                            open_tip += 1;
+                        }
+                    }
+                }
+            }
+        }
+        (open_tip, tris)
+    }
+
+    #[test]
+    fn tip_edges() {
+        for (w, c) in [(false, false), (true, false), (false, true), (true, true)] {
+            let (o, t) = tip_open_edges(w, c);
+            eprintln!("weld {} cap {}: open tip edges {}, tris {}", w, c, o, t);
+            assert_eq!(o, 0, "the tip of a branch (weld {}, cap ends {}) is open", w, c);
+        }
+    }
+}
+
+#[cfg(test)]
+mod fillet_tests {
+    use super::*;
+
+    /// Picture 73: along every column of a welded base, the distance from the branch's own axis
+    /// shrinks steadily from the parent to the branch's radius: no bulge (it would grow again) and
+    /// no fold (it would dip under the branch's radius).
+    #[test]
+    fn weld_profile_is_a_smooth_fillet() {
+        for &angle_deg in &[90.0f32, 60.0, 45.0] {
+            let mut p = Params::new(Kind::Branch);
+            // a branch of even thickness, so "the branch's radius" is one number
+            p.neutralize();
+            p.extra.insert("Skin:Welding:Enabled".into(), 1.0);
+            p.extra.insert("Skin:Welding:Spread:Amount".into(), 0.13);
+            p.extra.insert("Skin:Welding:Spread:Upper scale".into(), 0.46);
+            p.extra.insert("Skin:Welding:Spread:Lower scale".into(), 1.45);
+            p.extra.insert("Skin:Welding:Offset".into(), 1.2);
+            let a = angle_deg.to_radians();
+            let dir = vec3(a.sin(), a.cos(), 0.0);
+            let r0 = 0.6;
+            let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, 5.0, 0.0) + dir * (i as f32 * 0.5)).collect();
+            let s = build_spine(1, pts, r0, &p);
+            let mut geo = TreeGeo::default();
+            skin(&s, &p, [255; 4], &mut geo, false, Some((1.0, Vec3::Y, vec3(0.0, 5.0, 0.0))), 1, 0);
+            let ch = &geo.mats.values().next().unwrap().chunks[0];
+            // rings: consecutive runs of radial + 1 vertices; columns by index within a ring
+            let mut rings: Vec<Vec<Vec3>> = vec![];
+            let mut cur: Vec<Vec3> = vec![];
+            let mut last_len = 0usize;
+            for v in &ch.v {
+                cur.push(v.position);
+                let _ = last_len;
+                // a ring closes when its last point meets its first again (the seam doubles it)
+                if cur.len() > 3 && cur.last().unwrap().distance(cur[0]) < 1e-4 {
+                    last_len = cur.len();
+                    rings.push(std::mem::take(&mut cur));
+                }
+            }
+            let n = rings[0].len();
+            let axis_dist = |q: Vec3| -> f32 {
+                let v = q - vec3(0.0, 5.0, 0.0);
+                (v - dir * v.dot(dir)).length()
+            };
+            for j in 0..n - 1 {
+                let col: Vec<f32> = rings.iter().filter(|r| r.len() == n).map(|r| axis_dist(r[j])).collect();
+
+                for w in col.windows(2) {
+                    assert!(w[1] <= w[0] + r0 * 0.02, "{} deg, column {}: the base bulges ({:.3} after {:.3})", angle_deg, j, w[1], w[0]);
+                }
+                let least = col.iter().cloned().fold(f32::MAX, f32::min);
+                assert!(least >= r0 * 0.97, "{} deg, column {}: the base folds in to {:.3} (radius {})", angle_deg, j, least, r0);
+            }
+        }
     }
 }

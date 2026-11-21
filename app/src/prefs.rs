@@ -158,6 +158,9 @@ pub struct Prefs {
     pub use_sliders: bool,
     pub group_stacking: bool,
     pub animate_scroll: bool,
+    /// Where the mode buttons (Generator, Node, Freehand, Export) sit (picture 69): 0 Top (under
+    /// the menu bar), 1 Left, 2 Right or 3 Bottom of the Properties panel.
+    pub mode_bar: usize,
     pub group_click: usize,
     // Render
     pub msaa: usize,
@@ -242,6 +245,7 @@ impl Prefs {
             use_sliders: true,
             group_stacking: false,
             animate_scroll: true,
+            mode_bar: 0,
             group_click: 1,
             msaa: 2,
             shadow_aa: 2,
@@ -359,6 +363,7 @@ impl Prefs {
                 "use_sliders" => p.use_sliders = b,
                 "group_stacking" => p.group_stacking = b,
                 "animate_scroll" => p.animate_scroll = b,
+                "mode_bar" => p.mode_bar = v.parse::<usize>().unwrap_or(0).min(3),
                 "group_click" => p.group_click = v.parse::<usize>().unwrap_or(1).min(1),
                 "msaa" => p.msaa = v.parse::<usize>().unwrap_or(2).min(3),
                 "shadow_aa" => p.shadow_aa = v.parse::<usize>().unwrap_or(2).min(4),
@@ -415,7 +420,7 @@ impl Prefs {
             "hide_sel_on_edit={}\nshow_fan={}\nheight_size={}\nnav_scheme={}\nrev_zoom={}\nrev_rotate={}\nrev_pan={}\n",
             self.hide_sel_on_edit, self.show_fan, self.height_size, self.nav_scheme, self.rev_zoom, self.rev_rotate, self.rev_pan
         ));
-        s.push_str(&format!("use_sliders={}\ngroup_stacking={}\nanimate_scroll={}\ngroup_click={}\n", self.use_sliders, self.group_stacking, self.animate_scroll, self.group_click));
+        s.push_str(&format!("use_sliders={}\ngroup_stacking={}\nanimate_scroll={}\ngroup_click={}\nmode_bar={}\n", self.use_sliders, self.group_stacking, self.animate_scroll, self.group_click, self.mode_bar));
         s.push_str(&format!("msaa={}\nshadow_aa={}\nmax_tex={}\nflip_back={}\n", self.msaa, self.shadow_aa, self.max_tex, self.flip_back));
         for c in &self.recent_colors {
             s.push_str(&format!("recent_color={},{},{}\n", c[0], c[1], c[2]));
@@ -741,6 +746,14 @@ impl App {
             }
             y += 158.0;
         }
+        // where the mode buttons sit (picture 70: here under Themes)
+        ui.text("Mode buttons", page.x + 4.0, y + 3.0, 13.0, C_TEXT);
+        let mr = Rect::new(page.x + 230.0, y, 220.0, 22.0);
+        combo_of(ui, "prefs.modebar", mr, &MODE_BAR_PLACES, &mut self.prefs.mode_bar);
+        if mr.contains(ui.mouse()) {
+            ui.tooltip = Some("Where Generator, Node, Freehand and Export sit in the Properties panel: a row along its Top or Bottom, or tabs down its Left or Right side".into());
+        }
+        y += 32.0;
         // presets: save the current colours under a name; load or delete saved ones
         ui.text("Presets", page.x + 4.0, y + 3.0, 13.0, C_TEXT);
         y += 24.0;
@@ -903,6 +916,7 @@ impl App {
             // the Circle style writes its name beside the disc: start it further left
             let c = vec2(cell.x + cell.w * if k == 2 { 0.3 } else { 0.5 }, cell.y + 14.0 + (sh - 34.0) * 0.5);
             let r = Rect::new(c.x - size.x * 0.5, c.y - size.y * 0.5, size.x, size.y);
+            crate::nodeicons::set_next(crate::nodeicons::NodeIcon::Trunk);
             draw_node_shape(ui, k, r, head, bodyc, text, 1.0, if on { Some((self.prefs.color("node_selected"), 2.0)) } else { None }, "Trunk", "1 trunk", z);
             ui.text_center(name, Rect::new(cell.x, cell.y + cell.h - 20.0, cell.w, 16.0), 12.0, if on { WHITE } else { C_TEXT_DIM });
             ui.record(&format!("prefs.nodestyle.{}", name), cell);
@@ -979,14 +993,17 @@ impl App {
     }
 }
 
+/// Places for the mode buttons (Preferences > Property Bar > Mode buttons, picture 69).
+pub const MODE_BAR_PLACES: [&str; 4] = ["Top", "Left", "Right", "Bottom"];
+
 impl Prefs {
     /// The original's own tabs' settings in one string, to notice changes (and save them).
     pub fn app_sig(&self) -> String {
         format!(
-            "{}{}{}{}{}{}{}|{}{}{}{}{}{}{}|{}{}{}{}|{}{}{}{}",
+            "{}{}{}{}{}{}{}|{}{}{}{}{}{}{}|{}{}{}{}{}|{}{}{}{}",
             self.display_scaling, self.warn_node_edits, self.multi_proc, self.native_dialogs, self.autosave, self.autosave_notify, self.autosave_min,
             self.hide_sel_on_edit, self.show_fan, self.height_size, self.nav_scheme, self.rev_zoom, self.rev_rotate, self.rev_pan,
-            self.use_sliders, self.group_stacking, self.animate_scroll, self.group_click,
+            self.use_sliders, self.group_stacking, self.animate_scroll, self.group_click, self.mode_bar,
             self.msaa, self.shadow_aa, self.max_tex, self.flip_back
         )
     }
@@ -1096,6 +1113,7 @@ impl App {
         ui.checkbox("pp.anim", r, &mut p.animate_scroll);
         let r = pref_row(ui, page, &mut y, "Group click", "Opening a group: Slams to top scrolls it to the top of the panel; Reveals scrolls just enough to show all of it");
         combo_of(ui, "pp.click", r, &GROUP_CLICKS, &mut p.group_click);
+
         y += 10.0;
         if ui.button("pp.reset", Rect::new(page.x + 4.0, y, 230.0, 24.0), "Reset Property Bar Preferences") {
             let d = Prefs::defaults();

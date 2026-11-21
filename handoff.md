@@ -45,3 +45,6 @@ matpanel.rs slot 4 and props.rs material rows: Specular as one value. gen.rs Ski
 
 ## Picture 62
 gen.rs: Push applied after the never-inside step (o2 x push x pr x hug); tests in weld_tests. stpanel.rs draw(): sub-tabs for any tab != All with >= 3 entries; Rows.sub_tabs HashMap <-> App.prop_sub_tabs; Intersection merged into Welding. app.rs draw_dock tabs and matpanel SUBTABS restyled. App.sel_soft: editmodes viewport_pick (first empty click), GenCtx.highlight and the outline gate skip it, select() clears it; props subtitle hint.
+
+## Picture 63
+render.rs FS Scribed branch: plain white. app.rs Scribed edges: draw_thick_wires. editmodes.rs viewport_pick double-click: target = hit point, dist = |eye - point|, yaw/pitch from the eye direction (eye unchanged); orthographic: pan to the spot.

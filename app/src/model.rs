@@ -257,11 +257,16 @@ pub struct NodeEdit {
     /// Added turn around the parent (1 = a full turn).
     pub roll: f32,
     pub hidden: bool,
+    /// Moved along the parent (share of the parent's length; Node mode's Move gizmo, picture 65).
+    pub slide: f32,
+    /// This node's own values for generator properties (picture 65: Node mode shows the same
+    /// panel as Generator mode, per node): tree-file field name (or "extra.<property>") -> value.
+    pub props: std::collections::BTreeMap<String, String>,
 }
 
 impl Default for NodeEdit {
     fn default() -> Self {
-        NodeEdit { length: 1.0, radius: 1.0, angle: 0.0, roll: 0.0, hidden: false }
+        NodeEdit { length: 1.0, radius: 1.0, angle: 0.0, roll: 0.0, hidden: false, slide: 0.0, props: std::collections::BTreeMap::new() }
     }
 }
 
@@ -515,6 +520,9 @@ pub struct Material {
     pub tex: Option<Texture2D>,
     pub dirty_base: bool,
     pub dirty_tex: bool,
+    /// Used only on trunks and branches this time (worked out at each rebuild, not saved): its
+    /// texture's alpha doesn't cut holes in the bark (picture 72).
+    pub branch_only: bool,
 }
 
 impl Material {
@@ -563,6 +571,7 @@ impl Material {
             tex: None,
             dirty_base: true,
             dirty_tex: true,
+            branch_only: false,
         }
     }
     pub fn bark() -> Self {

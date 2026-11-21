@@ -198,6 +198,8 @@ pub struct ViewCam {
     /// Helper lines on the selected camera (picture 51): focal length / field of view along its
     /// view line, the frame's width and height beside its frame.
     pub show_guides: bool,
+    /// Hidden from the viewport (Scene objects menu, picture 65); still usable for rendering.
+    pub hidden: bool,
 }
 
 impl ViewCam {
@@ -238,6 +240,7 @@ impl ViewCam {
             show_limits: false,
             lock_to_view: false,
             show_guides: true,
+            hidden: false,
         };
         // a perspective view that was made orthographic by hand stays a perspective camera
         if cam.ortho && cam.view == 0 {
@@ -337,7 +340,7 @@ pub fn write(cams: &[ViewCam], s: &mut String) {
         for (k, v) in [("res_x", c.res_x), ("res_y", c.res_y), ("blades", c.blades)] {
             kv(s, k, v);
         }
-        for (k, v) in [("auto_clip", c.auto_clip), ("show_frame", c.show_frame), ("dof", c.dof), ("show_focus", c.show_focus), ("show_name", c.show_name), ("show_limits", c.show_limits), ("lock_to_view", c.lock_to_view), ("show_guides", c.show_guides)] {
+        for (k, v) in [("auto_clip", c.auto_clip), ("show_frame", c.show_frame), ("dof", c.dof), ("show_focus", c.show_focus), ("show_name", c.show_name), ("show_limits", c.show_limits), ("lock_to_view", c.lock_to_view), ("show_guides", c.show_guides), ("hidden", c.hidden)] {
             kv(s, k, v);
         }
     }
@@ -385,6 +388,7 @@ pub fn read_line(c: &mut ViewCam, k: &str, v: &str) {
         "show_limits" => c.show_limits = b(),
         "lock_to_view" => c.lock_to_view = b(),
         "show_guides" => c.show_guides = b(),
+        "hidden" => c.hidden = b(),
         _ => {}
     }
 }
@@ -520,11 +524,11 @@ impl App {
         let vr = Vec3::Y.cross(vd).normalize_or(Vec3::X);
         let l = (vd + Vec3::Y * 0.7 - vr * 0.35).normalize_or(Vec3::Y);
         for (i, c) in self.cameras.iter().enumerate() {
-            if Some(i) == self.looking {
+            if Some(i) == self.looking || c.hidden {
                 continue;
             }
             let (fwd, right, up) = c.basis();
-            let k = c.icon_size.max(0.01);
+            let k = (c.icon_size * self.icon_scale()).max(0.01);
             let verts: Vec<macroquad::models::Vertex> = m
                 .pos
                 .iter()
@@ -544,6 +548,11 @@ impl App {
         }
     }
 
+    /// Window properties > General Rendering > 3D icon scale (2.8 = each camera's own Icon size).
+    pub fn icon_scale(&self) -> f32 {
+        (self.wp("General Rendering:3D icon scale", 2.8) / 2.8).clamp(0.02, 10.0)
+    }
+
     fn cam_matrix(&self, r: Rect) -> Mat4 {
         self.cam.camera3d(None, r.w / r.h.max(1.0), None).matrix()
     }
@@ -560,6 +569,7 @@ impl App {
 
     fn draw_cameras_overlay_in(&mut self, ui: &mut Ui, r: Rect) {
         let m = ui.mouse();
+        let isc = self.icon_scale();
         let mat = self.cam_matrix(r);
         // points closer than this (in front of the viewer) are left out; lines are cut there
         const NEAR: f32 = 0.05;
@@ -623,7 +633,7 @@ impl App {
         // the selected camera's handles: 1..3 move along X / Y / Z, 4 turn (ring), 5 move freely
         let mut handles: Vec<(u8, Vec2, Vec2)> = vec![];
         let mut centre = None;
-        if let Some(i) = sel.filter(|i| Some(*i) != self.looking && *i < self.cameras.len()) {
+        if let Some(i) = sel.filter(|i| Some(*i) != self.looking && *i < self.cameras.len() && !self.cameras[*i].hidden) {
             if perspective {
                 let c = &self.cameras[i];
                 if let Some(o) = proj(c.pos) {
@@ -695,7 +705,15 @@ impl App {
                 self.cam_drag = Some((h, m));
             }
         } else if ui.inp.l_pressed && !blocked && !ui.inp.alt {
-            if hover != 0 {
+            if hover == 5 && ui.inp.l_double {
+                // a double-click on the selected camera's centre also centres the view on it
+                if let Some(i) = sel.filter(|i| *i < self.cameras.len()) {
+                    let p = self.cameras[i].pos;
+                    self.centre_on(p);
+                    self.set_status("Centred on the camera; the view turns around it");
+                }
+                ui.inp.l_pressed = false;
+            } else if hover != 0 {
                 self.cam_drag = Some((hover, m));
                 ui.inp.l_pressed = false;
             } else {
@@ -703,20 +721,20 @@ impl App {
                 let mut best: Option<(usize, f32)> = None;
                 let view_right = Vec3::Y.cross(self.cam.dir()).normalize_or(Vec3::X);
                 for (i, c) in self.cameras.iter().enumerate() {
-                    if Some(i) == self.looking {
+                    if Some(i) == self.looking || c.hidden {
                         continue;
                     }
                     let (fwd, _, _) = c.basis();
                     // on the 3D camera (within its selection ring)
                     if let Some(o) = proj(c.pos) {
-                        let px = proj(c.pos + view_right * c.icon_size.max(0.01)).map(|q| q.distance(o)).unwrap_or(30.0);
+                        let px = proj(c.pos + view_right * (c.icon_size * isc).max(0.01)).map(|q| q.distance(o)).unwrap_or(30.0);
                         let half = (px * 0.95).max(14.0);
                         let d = o.distance(m);
                         if d < half && best.map_or(true, |x| d < x.1) {
                             best = Some((i, d));
                         }
                     }
-                    if let (Some(a), Some(b)) = (proj(c.pos), proj(c.pos + fwd * c.icon_size * 0.6)) {
+                    if let (Some(a), Some(b)) = (proj(c.pos), proj(c.pos + fwd * c.icon_size * isc * 0.6)) {
                         let ab = b - a;
                         let t = ((m - a).dot(ab) / ab.length_squared().max(1e-4)).clamp(0.0, 1.0);
                         let d = (a + ab * t).distance(m);
@@ -728,6 +746,12 @@ impl App {
                 }
                 if let Some((i, _)) = best {
                     self.select(Sel::Camera(i));
+                    // a double-click centres the view on the camera, like on a generator (picture 65)
+                    if ui.inp.l_double {
+                        let p = self.cameras[i].pos;
+                        self.centre_on(p);
+                        self.set_status("Centred on the camera; the view turns around it");
+                    }
                     ui.inp.l_pressed = false;
                 }
             }
@@ -736,14 +760,14 @@ impl App {
         // camera looks, with a thin yellow view cone from its lens
         let view_right = Vec3::Y.cross(self.cam.dir()).normalize_or(Vec3::X);
         for (i, c) in self.cameras.iter().enumerate() {
-            if Some(i) == self.looking {
+            if Some(i) == self.looking || c.hidden {
                 continue;
             }
             let on = sel == Some(i);
             let col = if on { Color::new(1.0, 0.93, 0.45, 1.0) } else { CAM_YELLOW };
             let th = if on { 1.6 } else { 1.0 };
             let (fwd, right, up) = c.basis();
-            let s = c.icon_size.max(0.01);
+            let s = (c.icon_size * isc).max(0.01);
             let line = |a: Vec3, b: Vec3, t: f32, cl: Color| {
                 if let Some((p, q)) = seg(a, b) {
                     draw_line(p.x, p.y, q.x, q.y, t, cl);
@@ -918,12 +942,85 @@ impl App {
     }
 }
 
+thread_local! {
+    /// The selected camera's live preview for the left panel (picture 65).
+    static PREVIEW: std::cell::RefCell<Option<RenderTarget>> = const { std::cell::RefCell::new(None) };
+}
+
+/// Width of the camera preview picture, in pixels.
+const PREVIEW_W: u32 = 480;
+
+impl App {
+    /// Each frame: while a camera is selected in the perspective view (and not looked through),
+    /// draw what it sees, with its own lens, into the preview picture the camera panel shows.
+    pub fn render_camera_preview(&mut self) {
+        let Sel::Camera(i) = self.sel else { return };
+        if self.cam.ortho || self.looking == Some(i) || i >= self.cameras.len() {
+            return;
+        }
+        let (Some(gm), Some(gpu)) = (self.gm.clone(), self.gpu.as_ref()) else { return };
+        let c = self.cameras[i].clone();
+        let w = PREVIEW_W;
+        let h = ((w as f32 / c.aspect().clamp(0.2, 5.0)).round() as u32).clamp(32, 1200);
+        let rt = PREVIEW.with(|p| {
+            let mut p = p.borrow_mut();
+            let fresh = match p.as_ref() {
+                Some(t) => t.texture.width() as u32 != w || t.texture.height() as u32 != h,
+                None => true,
+            };
+            if fresh {
+                let t = render_target_ex(w, h, RenderTargetParams { depth: true, ..Default::default() });
+                t.texture.set_filter(FilterMode::Linear);
+                *p = Some(t);
+            }
+            p.clone().unwrap()
+        });
+        let cam = c.to_cam(1.0);
+        let mut c3 = cam.camera3d(None, w as f32 / h as f32, Some(rt.clone()));
+        c3.viewport = None;
+        set_camera(&c3);
+        let (bt, bb) = (self.prefs.color("bg_top"), self.prefs.color("bg_bottom"));
+        let bg = Color::new((bt.r + bb.r) * 0.5, (bt.g + bb.g) * 0.5, (bt.b + bb.b) * 0.5, 1.0);
+        clear_background(Color::new(bg.r, bg.g, bg.b, 1.0));
+        if self.prefs.show_ground {
+            let ext = (self.bounds.1 - self.bounds.0).length();
+            crate::render::draw_ground((ext * 0.9).clamp(12.0, 400.0), -(cam.dist * 0.004).max(0.02), self.prefs.color("ground"));
+        }
+        let mut light = self.light.clone();
+        light.sel_fill = [0.0; 4];
+        light.overdraw = false;
+        crate::app::draw_gpu(gpu, &self.materials, &gm, &light, cam.position());
+        unsafe { get_internal_gl() }.flush();
+        gl_use_default_material();
+        set_default_camera();
+    }
+}
+
+/// The camera preview picture (when there is one this frame) at `x, y`, `w` wide; returns the
+/// height used.
+fn draw_camera_preview(r: &mut Rows, aspect: f32) -> f32 {
+    let Some(t) = PREVIEW.with(|p| p.borrow().clone()) else { return 0.0 };
+    let w = r.w - 12.0;
+    let h = (w / aspect.clamp(0.2, 5.0)).min(320.0);
+    let w2 = h * aspect.clamp(0.2, 5.0);
+    let x = r.x + 6.0 + (w - w2) * 0.5;
+    draw_texture_ex(&t.texture, x, r.y + 4.0, WHITE, DrawTextureParams { dest_size: Some(vec2(w2, h)), flip_y: true, ..Default::default() });
+    draw_rectangle_lines(x, r.y + 4.0, w2, h, 1.5, CAM_YELLOW);
+    h + 10.0
+}
+
 /// The camera's panel (picture 50).
 pub fn camera_rows(r: &mut Rows, app: &mut App, i: usize) {
     if i >= app.cameras.len() {
         return;
     }
     let looking = app.looking == Some(i);
+    // picture 65: what the camera sees, live, while it's selected in the perspective view
+    if !app.cam.ortho && !looking {
+        let a = app.cameras[i].aspect();
+        let used = draw_camera_preview(r, a);
+        r.y += used;
+    }
     if r.group("Camera") {
         // Name: click to rename (the whole name selected, typing replaces it)
         let lw = (r.w * 0.46).floor();
@@ -1110,6 +1207,7 @@ pub fn camera_rows(r: &mut Rows, app: &mut App, i: usize) {
     if r.group("Display") {
         r.f("icon", "Icon size", &mut c.icon_size, 0.1, 30.0, 2);
         c.icon_size = c.icon_size.max(0.01);
+        r.b("hidden", "Hide in viewport", &mut c.hidden);
         r.b("showname", "Show name", &mut c.show_name);
         r.b("limits", "Show limits", &mut c.show_limits);
         r.b("guides", "Show guides", &mut c.show_guides);

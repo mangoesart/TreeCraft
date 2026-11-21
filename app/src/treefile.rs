@@ -1,4 +1,4 @@
-//! File > Save / Save As / Open (picture-21): the whole tree in a readable text file (.tctree):
+//! File > Save / Save As / Open (picture-21): the whole tree in a readable text file (.tcm, "TreeCraft model", picture 68; older .tctree files open too):
 //! the generators with all their settings (and the original's extra properties), materials (their
 //! settings and picture files; pictures are read again from those files), leaf meshes (cutouts
 //! with levels, anchors, colours and inner points, and geometry), and scene objects.
@@ -143,7 +143,10 @@ pub fn write(app: &App) -> String {
             let _ = writeln!(s, "variance.{}={},{},{},{},{}", k, v.amount, v.gaussian as u8, v.cohesion, v.scale, v.offset);
         }
         for (i, e) in &n.p.node_edits {
-            let _ = writeln!(s, "edit.{}={},{},{},{},{}", i, e.length, e.radius, e.angle, e.roll, e.hidden as u8);
+            let _ = writeln!(s, "edit.{}={},{},{},{},{},{}", i, e.length, e.radius, e.angle, e.roll, e.hidden as u8, e.slide);
+            for (k, v) in &e.props {
+                let _ = writeln!(s, "editp.{}.{}={}", i, k, v);
+            }
         }
         for (key, list) in [("mats", &n.p.mat_list), ("exts", &n.p.ext_list)] {
             if !list.is_empty() {
@@ -352,8 +355,12 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                         } else if let Some(i) = k.strip_prefix("edit.").and_then(|i| i.parse::<usize>().ok()) {
                             let x = nums(v);
                             if x.len() >= 5 {
-                                n.p.node_edits.insert(i, NodeEdit { length: x[0], radius: x[1], angle: x[2], roll: x[3], hidden: x[4] > 0.5 });
+                                let e = n.p.node_edits.entry(i).or_default();
+                                (e.length, e.radius, e.angle, e.roll, e.hidden) = (x[0], x[1], x[2], x[3], x[4] > 0.5);
+                                e.slide = x.get(5).copied().unwrap_or(0.0);
                             }
+                        } else if let Some((i, key)) = k.strip_prefix("editp.").and_then(|r| r.split_once('.')).and_then(|(i, key)| Some((i.parse::<usize>().ok()?, key))) {
+                            n.p.node_edits.entry(i).or_default().props.insert(key.to_string(), v.to_string());
                         } else if k == "mats" || k == "exts" {
                             let list: Vec<(usize, f32)> = v.split(',').filter_map(|x| { let (a, b) = x.split_once(':')?; Some((a.parse().ok()?, b.parse().ok()?)) }).collect();
                             if k == "mats" { n.p.mat_list = list } else { n.p.ext_list = list }
@@ -498,7 +505,7 @@ impl App {
     pub fn save_tree(&mut self, ask: bool) -> bool {
         let path = match (&self.tree_path, ask) {
             (Some(p), false) => Some(p.clone()),
-            _ => crate::prefs::file_dialog().set_title("Save tree").add_filter("TreeCraft tree", &["tctree"]).set_file_name("tree.tctree").save_file(),
+            _ => crate::prefs::file_dialog().set_title("Save tree").add_filter("TreeCraft model", &["tcm"]).set_file_name("tree.tcm").save_file(),
         };
         let Some(path) = path else { return false };
         self.save_tree_to(path)
@@ -551,7 +558,7 @@ impl App {
         if !self.confirm_discard() {
             return;
         }
-        let Some(path) = crate::prefs::file_dialog().set_title("Open tree").add_filter("TreeCraft tree", &["tctree"]).pick_file() else { return };
+        let Some(path) = crate::prefs::file_dialog().set_title("Open tree").add_filter("TreeCraft model", &["tcm", "tctree"]).pick_file() else { return };
         self.open_path(path);
     }
 
@@ -652,6 +659,31 @@ impl App {
                 self.set_status("Recovered the last session");
             }
             Err(e) => self.set_status(&format!("Couldn't recover the last session: {}", e)),
+        }
+    }
+}
+
+/// A generator's properties as tree-file field name (or "extra.<property>") -> value text, for
+/// per-node values (picture 65).
+pub fn params_kv(p: &Params) -> std::collections::BTreeMap<String, String> {
+    let mut s = String::new();
+    put_params(p, &mut s, "");
+    let mut m: std::collections::BTreeMap<String, String> = s.lines().filter_map(|l| l.split_once('=')).map(|(a, b)| (a.to_string(), b.to_string())).collect();
+    for (k, v) in &p.extra {
+        m.insert(format!("extra.{}", k), v.to_string());
+    }
+    m
+}
+
+/// Set the properties listed in `kv` (as params_kv names them) on `p`.
+pub fn apply_kv(p: &mut Params, kv: &std::collections::BTreeMap<String, String>) {
+    for (k, v) in kv {
+        if let Some(e) = k.strip_prefix("extra.") {
+            if let Ok(x) = v.parse() {
+                p.extra.insert(e.to_string(), x);
+            }
+        } else {
+            get_params(p, k, v);
         }
     }
 }
