@@ -726,6 +726,8 @@ pub struct Lighting {
     pub wrap: f32,
     /// Preferences > Render > Flip normals on backsides (picture 45).
     pub flip_back: bool,
+    /// Texel density view (picture 75): the checker picture replaces every material's colour.
+    pub checker: bool,
 }
 
 /// Shadow looks (picture 44), styles after well-known games (TreeCraft's own settings, not taken
@@ -778,10 +780,13 @@ impl Lighting {
 }
 
 pub fn apply_material(gm: &macroquad::material::Material, m: &Material, light: &Lighting, cam_pos: Vec3) {
-    gm.set_uniform("Tint", vec4(m.color[0], m.color[1], m.color[2], 1.0));
+    // a gradient Color rides in the branch's vertex colours (picture 74), so the tint is white
+    let grad = m.grad_on && (m.file.is_empty() || m.source != 4);
+    let tint = if grad || light.checker { [1.0, 1.0, 1.0] } else { m.color };
+    gm.set_uniform("Tint", vec4(tint[0], tint[1], tint[2], 1.0));
     gm.set_uniform("LightDir", light.dir());
     gm.set_uniform("CamPos", cam_pos);
-    gm.set_uniform("Cutoff", if m.opacity_from_alpha && !m.branch_only && !light.no_alpha_test { m.cutoff.max(0.01) } else { 0.0 });
+    gm.set_uniform("Cutoff", if m.opacity_from_alpha && !m.branch_only && !light.no_alpha_test && !light.checker { m.cutoff.max(0.01) } else { 0.0 });
     let wa = light.wind_dir.to_radians();
     gm.set_uniform("WindDir", vec2(wa.cos(), wa.sin()));
     gm.set_uniform("Gloss", m.gloss);
@@ -793,15 +798,17 @@ pub fn apply_material(gm: &macroquad::material::Material, m: &Material, light: &
     gm.set_uniform("Mode", light.mode);
     gm.set_uniform("Season", light.season);
     gm.set_uniform("IsLeaf", if m.opacity_from_alpha && !m.branch_only { 1.0f32 } else { 0.0f32 });
-    gm.set_uniform("OneSided", if light.one_sided { 1.0f32 } else { 0.0f32 });
+    // picture 74: a material with Two-sided off shows only its front faces
+    gm.set_uniform("OneSided", if light.one_sided || !m.two_sided { 1.0f32 } else { 0.0f32 });
     gm.set_uniform("Overdraw", if light.overdraw { 1.0f32 } else { 0.0f32 });
     gm.set_uniform("Time", light.time);
     gm.set_uniform("Wind", light.wind);
     gm.set_uniform("TwoSided", if m.two_sided { 1.0f32 } else { 0.0f32 });
-    gm.set_uniform("Bump", m.normal_strength);
+    // (picture 76: the checker view shows colour only, no bumps from the picture)
+    gm.set_uniform("Bump", if light.checker { 0.0 } else { m.normal_strength });
     gm.set_uniform("Unlit", if light.unlit { 1.0f32 } else { 0.0f32 });
     // Normal slot: use its picture when one is loaded and the slot is on
-    let nmap = m.slots.get(2).filter(|s| s.enabled).and_then(|s| s.tex.clone());
+    let nmap = m.slots.get(2).filter(|s| s.enabled && !light.checker).and_then(|s| s.tex.clone());
     gm.set_uniform("HasNormalMap", if nmap.is_some() { 1.0f32 } else { 0.0f32 });
     let t = nmap.unwrap_or_else(flat_normal);
     gm.set_texture("NormalMap", t);
@@ -1061,4 +1068,89 @@ pub fn card_mesh(s: f32) -> Vec<(Vec<Vertex>, Vec<u16>)> {
         Vertex { position: vec3(-s, -s, 0.0), uv: vec2(0.0, 1.0), color: [255; 4], normal: n },
     ];
     vec![(v, vec![0, 2, 1, 0, 3, 2])]
+}
+
+/// The material preview's ring (pictures 77, 79, TreeCraft's own design; only the ring now): a white ring standing
+/// upright around the sample, facing the viewer (major radius 1.38, tube 0.14), a short neck under it and a round
+/// base (radius 0.62, 0.12 thick) at the bottom.
+pub fn preview_stand_mesh() -> Vec<(Vec<Vertex>, Vec<u16>)> {
+    let mut out = vec![];
+    // the ring, in the XY plane
+    {
+        // (picture 79: thicker, and tight around the ball: inner edge at 1.2)
+        // (picture 80: from 1.2 to 1.56: tight on the ball, a little thinner)
+        let (big, small, nu, nv) = (1.38f32, 0.18f32, 96usize, 24usize);
+        let mut v = vec![];
+        let mut idx = vec![];
+        for i in 0..=nu {
+            let a = i as f32 / nu as f32 * 2.0 * PI;
+            let c = vec3(a.cos(), a.sin(), 0.0);
+            for j in 0..=nv {
+                let b = j as f32 / nv as f32 * 2.0 * PI;
+                let n = (c * b.cos() + Vec3::Z * b.sin()).normalize();
+                v.push(Vertex { position: c * big + n * small, uv: vec2(i as f32 / nu as f32, j as f32 / nv as f32), color: [255; 4], normal: vec4(n.x, n.y, n.z, 1.0) });
+            }
+        }
+        for i in 0..nu {
+            for j in 0..nv {
+                let a = (i * (nv + 1) + j) as u16;
+                let b = a + 1;
+                let c = a + (nv + 1) as u16;
+                let d = c + 1;
+                // (picture 78: wound so the outside faces out)
+                idx.extend_from_slice(&[a, c, b, b, c, d]);
+            }
+        }
+        out.push((v, idx));
+    }
+    // (picture 79: only the ring; the neck and base are gone)
+    if out.len() == 1 {
+        return out;
+    }
+    // the neck and the base: capped cylinders along Y
+    for (y0, y1, r) in [(-1.88f32, -1.48f32, 0.12f32), (-2.0, -1.88, 0.62)] {
+        let nu = 40usize;
+        let mut v = vec![];
+        let mut idx: Vec<u16> = vec![];
+        for i in 0..=nu {
+            let a = i as f32 / nu as f32 * 2.0 * PI;
+            let n = vec3(a.cos(), 0.0, a.sin());
+            v.push(Vertex { position: vec3(n.x * r, y0, n.z * r), uv: vec2(i as f32 / nu as f32, 0.0), color: [255; 4], normal: vec4(n.x, 0.0, n.z, 1.0) });
+            v.push(Vertex { position: vec3(n.x * r, y1, n.z * r), uv: vec2(i as f32 / nu as f32, 1.0), color: [255; 4], normal: vec4(n.x, 0.0, n.z, 1.0) });
+        }
+        for i in 0..nu as u16 {
+            let a = i * 2;
+            idx.extend_from_slice(&[a, a + 1, a + 2, a + 1, a + 3, a + 2]);
+        }
+        // the top cap
+        let c = v.len() as u16;
+        v.push(Vertex { position: vec3(0.0, y1, 0.0), uv: vec2(0.5, 0.5), color: [255; 4], normal: vec4(0.0, 1.0, 0.0, 1.0) });
+        for i in 0..=nu {
+            let a = i as f32 / nu as f32 * 2.0 * PI;
+            v.push(Vertex { position: vec3(a.cos() * r, y1, a.sin() * r), uv: vec2(0.5, 0.5), color: [255; 4], normal: vec4(0.0, 1.0, 0.0, 1.0) });
+        }
+        for i in 0..nu as u16 {
+            idx.extend_from_slice(&[c, c + 2 + i, c + 1 + i]);
+        }
+        out.push((v, idx));
+    }
+    out
+}
+
+/// Two crossed cards (each 2 x 2, two-sided) for a leaf material's preview inside the stand.
+pub fn preview_cards_mesh() -> Vec<(Vec<Vertex>, Vec<u16>)> {
+    let mut v = vec![];
+    let mut idx: Vec<u16> = vec![];
+    for (k, ang) in [0.35f32, 0.35 + PI * 0.5].iter().enumerate() {
+        let side = vec3(ang.cos(), 0.0, ang.sin());
+        let n = Vec3::Y.cross(side).normalize();
+        let base = v.len() as u16;
+        for (u, y) in [(0.0f32, 0.0f32), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)] {
+            let p = side * (u * 2.0 - 1.0) * 1.05 + Vec3::Y * (y * 2.1 - 1.05);
+            v.push(Vertex { position: p, uv: vec2(u, 1.0 - y), color: [255; 4], normal: vec4(n.x, n.y, n.z, 1.0) });
+        }
+        idx.extend_from_slice(&[base, base + 1, base + 2, base, base + 2, base + 3]);
+        let _ = k;
+    }
+    vec![(v, idx)]
 }

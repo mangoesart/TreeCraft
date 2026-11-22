@@ -94,6 +94,13 @@ enum VpDrag {
     Zoom,
 }
 
+thread_local! {
+    /// The material preview's ring stand (picture 77), made once.
+    static PREVIEW_STAND: std::cell::RefCell<Option<Vec<Mesh>>> = const { std::cell::RefCell::new(None) };
+    /// The ring's picture with "TreeCraft" on it (picture 80), made once.
+    static RING_TEX: std::cell::RefCell<Option<Texture2D>> = const { std::cell::RefCell::new(None) };
+}
+
 pub struct App {
     pub nodes: Vec<Node>,
     pub next_id: u32,
@@ -444,6 +451,7 @@ impl App {
                 // a little light round onto the shadow side, so it isn't too dark (picture 44)
                 wrap: 0.3,
                 flip_back: true,
+                checker: false,
             },
             show_grid: true,
             highlight: true,
@@ -464,7 +472,7 @@ impl App {
             mesh_drag: None,
             mat_cur: 0,
             preview_shape: 0,
-            mat_yaw: 0.6,
+            mat_yaw: 0.3,
             mat_pitch: 0.25,
             mat_orbit: None,
             mesh_show_material: false,
@@ -676,15 +684,16 @@ impl App {
             textures::refresh_material(m);
         }
         // picture 72: a material only trunks and branches use draws solid, whatever its texture's
-        // alpha holds (bark pictures often keep height or roughness there); leaf materials, and
-        // materials the meshes cut out with, keep their alpha cutout
+        // alpha holds (bark pictures often keep height or roughness there); leaf materials keep
+        // their alpha cutout
         {
             let mut bark = std::collections::HashSet::new();
             let mut leafy = std::collections::HashSet::new();
             for n in &self.nodes {
                 if n.kind == Kind::Leaf {
+                    // (only its leaf material: a leaf generator's branch material is unused,
+                    // and points at the bark by default; picture 78)
                     leafy.insert(n.p.leaf_material);
-                    leafy.insert(n.p.material);
                 } else if n.kind.makes_spines() {
                     bark.insert(n.p.material);
                     for (m, _) in n.p.mat_list.iter().chain(n.p.ext_list.iter()) {
@@ -692,11 +701,11 @@ impl App {
                     }
                 }
             }
-            for me in &self.meshes {
-                leafy.insert(me.ref_material);
-            }
+            // (a mesh's reference material only gives its cutout shape; picture 74: counting it made
+            // the bark that a leaf mesh was traced from look like a leaf material)
             for (i, m) in self.materials.iter_mut().enumerate() {
                 m.branch_only = bark.contains(&i) && !leafy.contains(&i);
+                m.leaf_use = leafy.contains(&i);
             }
         }
         let mut cut = LeafMesh::card("Leaf cutout");
@@ -940,15 +949,16 @@ impl App {
             textures::refresh_material(m);
         }
         // picture 72: a material only trunks and branches use draws solid, whatever its texture's
-        // alpha holds (bark pictures often keep height or roughness there); leaf materials, and
-        // materials the meshes cut out with, keep their alpha cutout
+        // alpha holds (bark pictures often keep height or roughness there); leaf materials keep
+        // their alpha cutout
         {
             let mut bark = std::collections::HashSet::new();
             let mut leafy = std::collections::HashSet::new();
             for n in &self.nodes {
                 if n.kind == Kind::Leaf {
+                    // (only its leaf material: a leaf generator's branch material is unused,
+                    // and points at the bark by default; picture 78)
                     leafy.insert(n.p.leaf_material);
-                    leafy.insert(n.p.material);
                 } else if n.kind.makes_spines() {
                     bark.insert(n.p.material);
                     for (m, _) in n.p.mat_list.iter().chain(n.p.ext_list.iter()) {
@@ -956,11 +966,11 @@ impl App {
                     }
                 }
             }
-            for me in &self.meshes {
-                leafy.insert(me.ref_material);
-            }
+            // (a mesh's reference material only gives its cutout shape; picture 74: counting it made
+            // the bark that a leaf mesh was traced from look like a leaf material)
             for (i, m) in self.materials.iter_mut().enumerate() {
                 m.branch_only = bark.contains(&i) && !leafy.contains(&i);
+                m.leaf_use = leafy.contains(&i);
             }
         }
         // the toolbar's Show menu: leaves off skips leaf generators; branches off keeps their
@@ -1303,8 +1313,11 @@ impl App {
         self.light.flip_back = self.prefs.flip_back;
         let gm = if self.light.overdraw { self.gm_over.as_ref().or(self.gm.as_ref()) } else { self.gm.as_ref() };
         if let (Some(gpu), Some(gm)) = (&mut self.gpu, gm) {
+            // the texel density view (picture 75): the checker on everything
+            self.light.checker = crate::texel::on();
+            let checker = if self.light.checker { crate::texel::texture() } else { None };
             for (mi, meshes) in &mut gpu.parts {
-                let tex = self.materials.get(*mi).and_then(|m| if self.prefs.textures { m.tex.clone() } else { None });
+                let tex = if checker.is_some() { checker.clone() } else { self.materials.get(*mi).and_then(|m| if self.prefs.textures { m.tex.clone() } else { None }) };
                 for mesh in meshes.iter_mut() {
                     // Preferences > Viewport > Texture mapping off, or no material: plain colour
                     mesh.texture = tex.clone();
@@ -2882,21 +2895,98 @@ impl App {
         };
         let m = if m.is_set { m.set_members.first().and_then(|(k, _)| self.materials.get(*k)).unwrap_or(m) } else { m };
         // turned only by the person (drag on the preview), never on its own
-        let cam = Cam { yaw: self.mat_yaw, pitch: self.mat_pitch, dist: (3.6 + self.mat_zoom).clamp(1.4, 12.0), target: Vec3::ZERO, ortho: false, view: 0, fov: 40.0, roll: 0.0, clip: None };
+        // picture 80: the ring's picture, white with "TreeCraft" in light grey bold letters across
+        // the front of the ring's lower arc (u 0.75 of the way round, v 0.25 round the tube)
+        let ring_tex = RING_TEX.with(|r| r.borrow().clone()).unwrap_or_else(|| {
+            let (w, h) = (2048u32, 256u32);
+            let rtt = render_target(w, h);
+            rtt.texture.set_filter(FilterMode::Linear);
+            let mut c2 = Camera2D::from_display_rect(Rect::new(0.0, 0.0, w as f32, h as f32));
+            c2.render_target = Some(rtt.clone());
+            set_camera(&c2);
+            clear_background(WHITE);
+            let font = load_ttf_font_from_bytes(include_bytes!("../assets/fonts/InterVariable.ttf")).ok();
+            let size = 44u16;
+            let text = "TreeCraft";
+            let dims = measure_text(text, font.as_ref(), size, 1.0);
+            // (drawn at 0.75 down: reading the picture back turns it upside down, which puts the
+            // letters at 0.25 round the tube, the right way up on the ring's lower arc)
+            let (cx, cy) = (0.75 * w as f32, 0.75 * h as f32);
+            let grey = Color::new(0.6, 0.6, 0.62, 1.0);
+            // bold: the letters drawn a few times, a pixel apart
+            for (dx, dy) in [(0.0f32, 0.0f32), (1.0, 0.0), (2.0, 0.0), (0.0, 1.0), (1.0, 1.0), (2.0, 1.0)] {
+                draw_text_ex(text, cx - dims.width * 0.5 + dx, cy + dims.offset_y * 0.5 + dy, TextParams { font: font.as_ref(), font_size: size, color: grey, ..Default::default() });
+            }
+            unsafe { get_internal_gl() }.flush();
+            set_default_camera();
+            // read back into a plain texture (the render target's own texture stays bound to it)
+            let img = rtt.texture.get_texture_data();
+            if let Ok(p) = std::env::var("TM_RING_PNG") {
+                let _ = image::save_buffer(p, &img.bytes, img.width as u32, img.height as u32, image::ColorType::Rgba8);
+            }
+            let t = Texture2D::from_rgba8(img.width, img.height, &img.bytes);
+            t.set_filter(FilterMode::Linear);
+            RING_TEX.with(|r| *r.borrow_mut() = Some(t.clone()));
+            t
+        });
+        // picture 77: the sample sits in a ring stand, seen a little from above, a bit further
+        // back to fit the stand
+        let cam = Cam { yaw: self.mat_yaw, pitch: self.mat_pitch, dist: (4.4 + self.mat_zoom).clamp(2.0, 14.0), target: Vec3::ZERO, ortho: false, view: 0, fov: 40.0, roll: 0.0, clip: None };
         let mut c3 = cam.camera3d(None, self.preview_aspect.max(0.2), Some(rt.clone()));
         c3.viewport = None;
         set_camera(&c3);
         clear_background(Color::new(0.0, 0.0, 0.0, 0.0));
         gl_use_material(gm);
-        render::apply_material(gm, m, &self.light, cam.position());
-        let src = match self.preview_shape {
-            1 => &self.card,
-            2 => &self.cylinder,
-            3 if !self.custom_preview.is_empty() => &self.custom_preview,
-            _ => &self.sphere,
+        // the light stays at the viewer's upper right whichever way the sample is turned (as the
+        // original's preview does): its direction is set from the camera, not the scene's sun
+        let eye = cam.position();
+        let fwd = (cam.target - eye).normalize_or(Vec3::Z);
+        let right = fwd.cross(Vec3::Y).normalize_or(Vec3::X);
+        let up = right.cross(fwd).normalize_or(Vec3::Y);
+        let to_light = (right * 0.6 + up * 0.75 - fwd * 0.45).normalize();
+        let mut light = self.light.clone();
+        light.wind = 0.0;
+        light.checker = false;
+        light.sel_fill = [0.0; 4];
+        // the stand: plain white, lit the same way
+        let mut stand_mat = Material::new("stand", 0);
+        stand_mat.color = [0.93, 0.93, 0.91];
+        stand_mat.gloss = 0.55;
+        stand_mat.specular_color = [0.35, 0.35, 0.35];
+        stand_mat.opacity_from_alpha = false;
+        render::apply_material(gm, &stand_mat, &light, eye);
+        gm.set_uniform("LightDir", to_light);
+        let stand = PREVIEW_STAND.with(|s| s.borrow_mut().get_or_insert_with(|| render::preview_stand_mesh().into_iter().map(|(v, i)| Mesh { vertices: v, indices: i, texture: None }).collect::<Vec<_>>()).iter().map(|m| Mesh { vertices: m.vertices.clone(), indices: m.indices.clone(), texture: None }).collect::<Vec<_>>());
+        for mesh in &stand {
+            draw_mesh(&Mesh { vertices: mesh.vertices.clone(), indices: mesh.indices.clone(), texture: Some(ring_tex.clone()) });
+        }
+        // the sample: a ball, or crossed cards for a leaf material (texture alpha), so its
+        // cutout and both sides show
+        render::apply_material(gm, m, &light, eye);
+        gm.set_uniform("LightDir", to_light);
+        // (picture 78: cards only for a real leaf material: used by a leaf generator, a procedural
+        // leaf, or one with a cutout mesh; new materials have texture alpha on, so that alone isn't enough)
+        // (picture 79: always the ball, for leaves too: the alpha cutout makes it see-through, so
+        // one- and two-sided show the difference)
+        let leaf = false;
+        let src: Vec<Mesh> = if leaf {
+            render::preview_cards_mesh().into_iter().map(|(v, i)| Mesh { vertices: v, indices: i, texture: None }).collect()
+        } else {
+            // picture 78: the ball fills the ring (radius 1.2 against the ring's inner 1.24), and
+            // its triangles are turned to face outward (the shared sphere faces inward, which made
+            // a one-sided material look lit from inside and a two-sided one lit from the wrong side)
+            self.sphere
+                .iter()
+                .map(|s| {
+                    // slightly flattened toward the viewer (picture 79), so it sits snug in the ring
+                    let vertices = s.vertices.iter().map(|v| { let p = v.position * 1.2; let n = vec3(v.normal.x, v.normal.y, v.normal.z / 0.8).normalize_or_zero(); macroquad::models::Vertex { position: vec3(p.x, p.y, p.z * 0.8), normal: vec4(n.x, n.y, n.z, v.normal.w), ..*v } }).collect();
+                    let indices = s.indices.chunks(3).flat_map(|t| [t[0], t[2], t[1]]).collect();
+                    Mesh { vertices, indices, texture: None }
+                })
+                .collect()
         };
         for mesh in src {
-            let tmp = Mesh { vertices: mesh.vertices.clone(), indices: mesh.indices.clone(), texture: m.tex.clone() };
+            let tmp = Mesh { vertices: mesh.vertices, indices: mesh.indices, texture: m.tex.clone() };
             draw_mesh(&tmp);
         }
         unsafe { get_internal_gl() }.flush();

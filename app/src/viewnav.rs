@@ -353,7 +353,8 @@ impl App {
             return (covered, b.x);
         }
         let pw = 268.0;
-        let p = Rect::new(r.x + r.w - pw - 8.0, b.y + b.h + 4.0, pw, 136.0);
+        // (picture 75: the Texel density choices sit under the lighting ones)
+        let p = Rect::new(r.x + r.w - pw - 8.0, b.y + b.h + 4.0, pw, 136.0 + crate::texel::MENU_H);
         draw_rectangle(p.x + 3.0, p.y + 4.0, p.w, p.h, Color::new(0.0, 0.0, 0.0, 0.35));
         draw_round_rect(p, 6.0, C_PANEL);
         draw_round_rect_lines(p, 6.0, 1.0, C_LINE);
@@ -365,7 +366,7 @@ impl App {
                 self.shading = k as u8;
             }
         }
-        let body = Rect::new(p.x + 10.0, p.y + 56.0, p.w - 20.0, p.h - 64.0);
+        let body = Rect::new(p.x + 10.0, p.y + 56.0, p.w - 20.0, 136.0 - 64.0);
         match self.shading {
             1 => {
                 // pick a MatCap
@@ -411,6 +412,7 @@ impl App {
                 }
             }
         }
+        crate::texel::menu(ui, Rect::new(p.x + 10.0, p.y + 136.0 - 4.0, p.w - 20.0, crate::texel::MENU_H));
         covered.push(p);
         // a click anywhere else closes it
         if ui.inp.l_pressed && !p.contains(ui.mouse()) && !b.contains(ui.mouse()) {

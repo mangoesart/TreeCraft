@@ -242,17 +242,11 @@ impl<'a> Rows<'a> {
         self.y += RH;
     }
     pub fn color(&mut self, k: &str, label: &str, c: &mut [f32; 3]) {
+        // picture 74: a swatch only (no numbers); clicking it opens the colour wheel
         let r = self.label(label);
-        draw_rectangle(r.x, r.y, 26.0, r.h, Color::new(c[0], c[1], c[2], 1.0));
-        draw_rectangle_lines(r.x, r.y, 26.0, r.h, 1.0, C_LINE);
-        let sw = (r.w - 32.0) / 3.0;
-        let names = ["r", "g", "b"];
-        for i in 0..3 {
-            let rr = Rect::new(r.x + 30.0 + i as f32 * (sw + 1.0), r.y, sw - 1.0, r.h);
-            let key = self.key(&format!("{}.{}", k, names[i]));
-            if self.ui.slider(&key, rr, &mut c[i], 0.0, 1.0, 2) {
-                self.changed = true;
-            }
+        let key = self.key(k);
+        if crate::colorwheel::swatch(self.ui, &key, Rect::new(r.x, r.y, r.w, r.h), c) {
+            self.changed = true;
         }
         self.y += RH;
     }

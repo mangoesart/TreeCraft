@@ -523,6 +523,19 @@ pub struct Material {
     /// Used only on trunks and branches this time (worked out at each rebuild, not saved): its
     /// texture's alpha doesn't cut holes in the bark (picture 72).
     pub branch_only: bool,
+    /// Used by a leaf generator this time (worked out at each rebuild, not saved; picture 78:
+    /// the material preview shows it on crossed cards).
+    pub leaf_use: bool,
+    /// The Color's gradient (picture 74): on, a branch's colour runs from Color at its base to
+    /// grad_color at its tip (Flip reverses it); ignored while a picture is in the Color slot.
+    pub grad_on: bool,
+    /// The gradient's base colour (picture 75: its own, so the plain Color comes back when the
+    /// gradient is turned off).
+    pub grad_base: [f32; 3],
+    pub grad_color: [f32; 3],
+    pub grad_flip: bool,
+    /// Where along the branch base and tip meet half way (picture 77; 0.5 the middle).
+    pub grad_mid: f32,
 }
 
 impl Material {
@@ -572,6 +585,12 @@ impl Material {
             dirty_base: true,
             dirty_tex: true,
             branch_only: false,
+            leaf_use: false,
+            grad_on: false,
+            grad_base: [1.0, 1.0, 1.0],
+            grad_color: [0.35, 0.25, 0.15],
+            grad_flip: false,
+            grad_mid: 0.5,
         }
     }
     pub fn bark() -> Self {
@@ -601,6 +620,45 @@ impl Material {
     }
 }
 
+/// The Edit Map window's adjustments for one texture slot (picture 74): applied to the slot's
+/// picture before the material uses it, and saved with it.
+#[derive(Clone, Debug, PartialEq)]
+pub struct MapAdjust {
+    /// Treat the picture as sRGB colour (colour maps); off reads its values as they are.
+    pub srgb: bool,
+    /// Normal maps: rescale each texel to unit length.
+    pub normalize: bool,
+    /// Invert the whole picture (1 - value).
+    pub invert: bool,
+    /// Invert single channels (a normal map's green flips its up/down).
+    pub invert_rgb: [bool; 3],
+    /// Value maps: which channel holds the value (0 luminance, 1 red, 2 green, 3 blue, 4 alpha).
+    pub channel: usize,
+    /// -1..1 each (0 = as loaded).
+    pub brightness: f32,
+    pub contrast: f32,
+    pub saturation: f32,
+    pub red: f32,
+    pub green: f32,
+    pub blue: f32,
+    /// The output range: values are mapped into Minimum..Maximum.
+    pub min: f32,
+    pub max: f32,
+}
+
+impl Default for MapAdjust {
+    fn default() -> Self {
+        MapAdjust { srgb: true, normalize: false, invert: false, invert_rgb: [false; 3], channel: 0, brightness: 0.0, contrast: 0.0, saturation: 0.0, red: 0.0, green: 0.0, blue: 0.0, min: 0.0, max: 1.0 }
+    }
+}
+
+impl MapAdjust {
+    pub fn is_plain(&self) -> bool {
+        let d = MapAdjust::default();
+        MapAdjust { srgb: d.srgb, ..self.clone() } == d
+    }
+}
+
 /// One texture slot of a material: on/off, the picture loaded into it, and its GPU copy.
 #[derive(Clone, Default)]
 pub struct MatSlot {
@@ -608,6 +666,8 @@ pub struct MatSlot {
     pub file: String,
     pub image: Option<ImageBuf>,
     pub tex: Option<Texture2D>,
+    /// Edit Map adjustments (picture 74).
+    pub adjust: MapAdjust,
 }
 
 /// The original's ten texture slots, in its panel order (fn 0x14006e3c0 / person's screenshot).

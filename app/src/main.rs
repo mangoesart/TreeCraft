@@ -27,6 +27,8 @@ mod wintitle;
 mod winprops;
 mod nodeicons;
 mod export;
+mod mapedit;
+mod texel;
 mod cameras;
 mod matexport;
 
@@ -290,7 +292,7 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     ui.sh = h;
     ui.begin(inp);
     // a modal dialog takes all input: panels behind it see an idle mouse and no keys
-    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() || app.prefs_open || app.curve_takes_input(ui.inp.mx, ui.inp.my) || app.var_takes_input(ui.inp.mx, ui.inp.my) || app.welcome_takes_input() || app.material_export_takes_input() {
+    let dialog_input = if app.mesh_dialog.is_some() || app.mat_dialog.is_some() || app.cutout.is_some() || app.prefs_open || app.curve_takes_input(ui.inp.mx, ui.inp.my) || app.var_takes_input(ui.inp.mx, ui.inp.my) || app.welcome_takes_input() || app.material_export_takes_input() || colorwheel::takes_input(ui.inp.mx, ui.inp.my) || app.map_edit_takes_input(ui.inp.mx, ui.inp.my) {
         let real = ui.inp.clone();
         ui.inp = Inp { mx: real.mx, my: real.my, ..Default::default() };
         ui.blocked = true;
@@ -343,7 +345,25 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
         app.regenerate();
     }
     app.render_preview();
-    app.render_mesh_preview();
+    // TM_PREVIEW_PNG=<file>: the material preview saved as a picture after a few frames (picture
+    // 78, for checking; the Materials tab must be shown, TM_TAB=1)
+    {
+        static FRAMES: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+        if let Ok(path) = std::env::var("TM_PREVIEW_PNG") {
+            let n = FRAMES.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            if n == 30 {
+                if let Some(rt) = &app.preview_rt {
+                    let img = rt.texture.get_texture_data();
+                    let (w, h) = (img.width as usize, img.height as usize);
+                    let mut out = vec![0u8; w * h * 4];
+                    for y in 0..h {
+                        out[y * w * 4..(y + 1) * w * 4].copy_from_slice(&img.bytes[(h - 1 - y) * w * 4..(h - y) * w * 4]);
+                    }
+                    let _ = image::save_buffer(path, &out, w as u32, h as u32, image::ColorType::Rgba8);
+                }
+            }
+        }
+    }    app.render_mesh_preview();
     app.render_camera_preview();
     // TM_EXPORT=1: the Export tab shown; TM_EXPORT_DIR=<folder>: tree.fbx, tree.obj and tree.xml
     // written there once the tree is built, with log.txt (picture 68, for checking)
@@ -415,6 +435,9 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     app.draw_prefs_window(ui);
     app.draw_curve_window(ui);
     app.draw_variance_window(ui);
+    // Edit Map (picture 74), then the colour wheel a swatch opened, over everything
+    app.draw_map_edit(ui);
+    colorwheel::draw_open(ui, &mut app.prefs.recent_colors);
     app.draw_welcome(ui);
     // File > Export material (F10; picture 53)
     app.draw_material_export(ui);
@@ -780,6 +803,16 @@ async fn main() {
         app.load_demo();
     }
     // optional start state for checking pictures: TM_TAB=0..2, TM_SEL=node name | mat:N | mesh:N
+    // TM_TEXEL=<size 0..4>,<pattern 0..3>: the texel density view on (picture 75)
+    if let Ok(v) = std::env::var("TM_TEXEL") {
+        let n: Vec<usize> = v.split(',').filter_map(|s| s.parse().ok()).collect();
+        texel::set_choice(n.first().copied().unwrap_or(2), n.get(1).copied().unwrap_or(1));
+        texel::set_on(true);
+    }
+    // TM_MAPEDIT=<slot>: Edit Map open on material 0's slot (picture 74)
+    if let Some(s) = std::env::var("TM_MAPEDIT").ok().and_then(|s| s.parse::<usize>().ok()) {
+        app.open_map_edit(0, s.min(9));
+    }
     // TM_MODEBAR=0..3: where the mode buttons sit (picture 69)
     if let Some(k) = std::env::var("TM_MODEBAR").ok().and_then(|s| s.parse::<usize>().ok()) {
         app.prefs.mode_bar = k.min(3);

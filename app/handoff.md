@@ -145,3 +145,27 @@ Material.branch_only (runtime) set in App::regenerate; Cutoff and IsLeaf in rend
 
 ## Picture 73
 gen.rs skin_tube weld block rewritten: per-column fillet (C, T1, T2, cubic with K = 0.55), weld_fillet() helper for the size, the zone formula uses it, the widen closure is gone. Test fillet_tests::weld_profile_is_a_smooth_fillet. Not compared on the person's own tree (front ortho view of a slanted trunk) since that file isn't available here.
+
+## Picture 74
+gen.rs: trunk Spine roll rotates the spine about Y at its base; onto_parent() clamps First/Last spots; TreeGeo.grad filled from materials, written into skin vertex colours. render.rs: OneSided per material (!two_sided), Tint white for gradients. app.rs branch_only no longer counts mesh ref materials. colorwheel.rs: swatch/swatch_ex/Gradient, draw_open (called in main after the windows), takes_input in the dialog_input rule. props.rs Rows::color = swatch. matpanel.rs: slot colours = swatches (Color with gradient), loaded slot click opens Edit Map, load_slot pub(crate). model.rs MapAdjust (MatSlot.adjust), Material grad_*; treefile saves both. textures.rs adjust_image/map_kind/refresh_slot. mapedit.rs: the window (thread-local state), hook TM_MAPEDIT=<slot>.
+Not tested by hand: dragging in the wheel's gradient controls, Edit Map sliders on a real picture, the trunk roll on the person's tree.
+
+## Picture 75
+colorwheel.rs swatch section rewritten: Gradient {on, c1, c2, flip}, Clip copy/paste, title strip drag (Open.title/drag). model.rs Material.grad_base (saved); gen.rs uses it, grad_col() for the caps; test gradient_tests. matpanel.rs: Color change sets self.dirty. mapedit.rs: State.resize, corner_at(), grips. texel.rs: settings, checker_image (3x5 font), menu() in viewnav's shading drop-down (p height + MENU_H); Lighting.checker; app.rs draw_viewport_3d swaps textures; hook TM_TEXEL=<size>,<pattern>.
+Not tested by hand: dragging the wheel's title strip, copy/paste between two materials, the corner resize.
+
+## Picture 76
+render.rs Bump 0 when light.checker. texel.rs: checker_image patterns redone; menu() redone (segmented sizes, thumbs() tiles, CUSTOM_THUMB), MENU_H 132. colorwheel.rs Open.plain: turning the gradient off restores it. The drop-down itself wasn't captured (it sits beyond the screen's right edge at this display scaling).
+
+## Picture 77
+texel.rs menu: line and Choose... removed (MENU_H 112), right-click on the Custom tile. colorwheel.rs: Gradient.mid + grad_t(), Blend point slider, X on the title strip, gradient wheels don't close on outside clicks. model/treefile grad_mid; gen.rs TreeGeo.grad holds mid. render.rs preview_stand_mesh / preview_cards_mesh; app.rs render_preview draws the stand (PREVIEW_STAND thread-local) and the sample with a camera-relative LightDir; matpanel.rs shape combo removed (PREVIEW_SHAPES, load_custom_preview now unused).
+Not seen in a capture: the material preview (the Materials dock is past the screen's right edge here), the blend point slider.
+
+## Picture 78
+texel.rs label scale fits each cell. render.rs stand winding reversed (torus, neck/base walls); app.rs render_preview reverses the sphere's triangles and scales it 1.2; Material.leaf_use (runtime) and the cards rule; leaf generators' p.material no longer counted as leafy; mat_yaw default 0.3. main.rs hook TM_PREVIEW_PNG=<file> (with TM_TAB=1) saves the preview picture: it's square there while the panel shows it stretched, so stretch it ~2.4x wide to judge shapes. Bark and leaf previews checked that way.
+
+## Picture 79
+render.rs preview_stand_mesh returns only the torus (big 1.46, small 0.26); app.rs render_preview: leaf = false (always the ball), ball scaled 1.2 and flattened 0.8 in Z with normals fixed, camera dist 5.4 target origin. preview_cards_mesh now unused.
+
+## Picture 80
+render.rs torus big 1.38 small 0.18; app.rs render_preview: camera 4.4, RING_TEX made once by drawing text into a render target then reading it back into a plain texture (binding the render target's own texture gave a blue ring); the read-back flips rows, so the text is drawn at 0.75 of the height to land at v 0.25. Hook TM_RING_PNG=<file> dumps that picture.

@@ -101,6 +101,7 @@ fields!(put_material, get_material, Material, {
     opacity_from_alpha: b, cutoff: f, normal_strength: f, gloss: f, specular_color: c, metallic: f,
     sss_color: c, sss_amount: f, ao: f, variation: f, cutout_mesh: u, opacity: f, custom_color: c,
     season_color: c, atlas_scale: f, atlas_mode: u, max_res: u, user_data: s, unwrap: u, is_set: b,
+    grad_on: b, grad_base: c, grad_color: c, grad_flip: b, grad_mid: f,
 });
 
 fields!(put_mesh, get_mesh, LeafMesh, {
@@ -205,6 +206,16 @@ fn write_material(m: &Material, s: &mut String) {
     let _ = writeln!(s, "set_members={}", m.set_members.iter().map(|(k, w)| format!("{}:{}", k, w)).collect::<Vec<_>>().join(","));
     for (i, sl) in m.slots.iter().enumerate() {
         let _ = writeln!(s, "slot{}={}|{}", i, sl.enabled, esc(&sl.file));
+        // Edit Map adjustments (picture 74), only when changed
+        let a = &sl.adjust;
+        if *a != crate::model::MapAdjust::default() {
+            let b = |v: bool| if v { 1 } else { 0 };
+            let _ = writeln!(
+                s,
+                "slotadj{}={},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
+                i, b(a.srgb), b(a.normalize), b(a.invert), b(a.invert_rgb[0]), b(a.invert_rgb[1]), b(a.invert_rgb[2]), a.channel, a.brightness, a.contrast, a.saturation, a.red, a.green, a.blue, a.min, a.max
+            );
+        }
     }
 }
 
@@ -222,7 +233,16 @@ fn material_line(m: &mut Material, k: &str, v: &str) {
         "mesh_rows" => m.mesh_rows = v.split(',').filter_map(|x| x.parse().ok()).collect(),
         "set_members" => m.set_members = v.split(',').filter_map(|x| { let (a, b) = x.split_once(':')?; Some((a.parse().ok()?, b.parse().ok()?)) }).collect(),
         _ => {
-            if let Some(i) = k.strip_prefix("slot").and_then(|x| x.parse::<usize>().ok()) {
+            if let Some(i) = k.strip_prefix("slotadj").and_then(|x| x.parse::<usize>().ok()) {
+                let x = nums(v);
+                if let (Some(sl), true) = (m.slots.get_mut(i), x.len() >= 15) {
+                    let a = &mut sl.adjust;
+                    (a.srgb, a.normalize, a.invert) = (x[0] > 0.5, x[1] > 0.5, x[2] > 0.5);
+                    a.invert_rgb = [x[3] > 0.5, x[4] > 0.5, x[5] > 0.5];
+                    a.channel = x[6] as usize;
+                    (a.brightness, a.contrast, a.saturation, a.red, a.green, a.blue, a.min, a.max) = (x[7], x[8], x[9], x[10], x[11], x[12], x[13], x[14]);
+                }
+            } else if let Some(i) = k.strip_prefix("slot").and_then(|x| x.parse::<usize>().ok()) {
                 if let (Some(sl), Some((en, f))) = (m.slots.get_mut(i), v.split_once('|')) {
                     sl.enabled = en == "true";
                     sl.file = unesc(f);
@@ -451,11 +471,8 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                 continue;
             }
             if let Ok(img) = crate::textures::load_image_file(&sl.file) {
-                let t = Texture2D::from_rgba8(img.w as u16, img.h as u16, &img.px);
-                t.set_filter(FilterMode::Linear);
-                crate::textures::set_repeat(&t);
-                sl.tex = Some(t);
                 sl.image = Some(img);
+                crate::textures::refresh_slot(sl, s);
             }
         }
     }

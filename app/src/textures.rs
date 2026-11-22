@@ -259,6 +259,12 @@ pub fn refresh_material(m: &mut Material) {
     if m.dirty_tex {
         let base = m.base.as_ref().unwrap();
         let mut out = base.clone();
+        // the Color slot's Edit Map adjustments (picture 74) come first
+        if let Some(a) = m.slots.first().map(|s| s.adjust.clone()) {
+            if a != crate::model::MapAdjust::default() {
+                out = adjust_image(&out, &a, map_kind(0));
+            }
+        }
         let br = m.brightness;
         let ct = 1.0 + m.contrast;
         let sat = 1.0 + m.saturation;
@@ -284,7 +290,7 @@ pub fn refresh_material(m: &mut Material) {
         }
         // Opacity slot: a loaded opacity picture (its brightness) replaces the colour picture's alpha;
         // the Opacity value multiplies it
-        let op_img = m.slots.get(1).filter(|s| s.enabled).and_then(|s| s.image.clone());
+        let op_img = m.slots.get(1).filter(|s| s.enabled).and_then(|s| s.image.as_ref().map(|i| adjust_image(i, &s.adjust, map_kind(1))));
         if op_img.is_some() || (m.opacity - 1.0).abs() > 1e-4 {
             let (w, h) = (out.w, out.h);
             for y in 0..h {
@@ -307,6 +313,105 @@ pub fn refresh_material(m: &mut Material) {
         m.tex = Some(tex);
         m.adjusted = Some(out);
         m.dirty_tex = false;
+    }
+}
+
+/// What a texture slot holds, for its Edit Map adjustments (picture 74): 0 a colour (Color,
+/// Subsurface, Custom), 1 a normal map, 2 a single value (Opacity, Roughness, Specular, Metallic,
+/// Subsurface%, AO).
+pub fn map_kind(slot: usize) -> u8 {
+    match slot {
+        0 | 6 | 9 => 0,
+        2 => 1,
+        _ => 2,
+    }
+}
+
+/// A slot's picture with its Edit Map adjustments applied (picture 74).
+/// - Colour maps: sRGB to Linear off takes the picture as linear values and shows them as sRGB
+///   (power 1/2.2); Invert / Invert R, G, B; Brightness adds; Contrast scales around the middle by
+///   (1 + Contrast); Saturation scales it by (1 + Saturation); Red, Green and Blue add to their
+///   channel; then the result is laid into Minimum..Maximum.
+/// - Normal maps: Invert R / G / B flip that axis (green: up and down), Invert flips all three,
+///   Normalize rescales each texel to unit length.
+/// - Value maps: the value is read from Channel (luminance, red, green, blue or alpha), inverted,
+///   brightened, contrasted, laid into Minimum..Maximum and written to red, green and blue.
+pub fn adjust_image(img: &ImageBuf, a: &crate::model::MapAdjust, kind: u8) -> ImageBuf {
+    let mut out = img.clone();
+    let range = |v: f32| (a.min + v.clamp(0.0, 1.0) * (a.max - a.min)).clamp(0.0, 1.0);
+    let tone = |v: f32| ((v - 0.5) * (1.0 + a.contrast) + 0.5 + a.brightness).clamp(0.0, 1.0);
+    for p in out.px.chunks_mut(4) {
+        let mut c = [p[0] as f32 / 255.0, p[1] as f32 / 255.0, p[2] as f32 / 255.0];
+        match kind {
+            0 => {
+                if !a.srgb {
+                    for v in &mut c {
+                        *v = v.powf(1.0 / 2.2);
+                    }
+                }
+                for k in 0..3 {
+                    if a.invert ^ a.invert_rgb[k] {
+                        c[k] = 1.0 - c[k];
+                    }
+                    c[k] = tone(c[k]);
+                }
+                if a.saturation != 0.0 {
+                    let (h, s, v) = rgb_to_hsv(c[0], c[1], c[2]);
+                    let (r, g, b) = hsv_to_rgb(h, (s * (1.0 + a.saturation)).clamp(0.0, 1.0), v);
+                    c = [r, g, b];
+                }
+                c[0] += a.red;
+                c[1] += a.green;
+                c[2] += a.blue;
+                for v in &mut c {
+                    *v = range(*v);
+                }
+            }
+            1 => {
+                for k in 0..3 {
+                    if a.invert ^ a.invert_rgb[k] {
+                        c[k] = 1.0 - c[k];
+                    }
+                }
+                if a.normalize {
+                    let v = vec3(c[0] * 2.0 - 1.0, c[1] * 2.0 - 1.0, c[2] * 2.0 - 1.0).normalize_or(Vec3::Z);
+                    c = [v.x * 0.5 + 0.5, v.y * 0.5 + 0.5, v.z * 0.5 + 0.5];
+                }
+            }
+            _ => {
+                let mut v = match a.channel {
+                    1 => c[0],
+                    2 => c[1],
+                    3 => c[2],
+                    4 => p[3] as f32 / 255.0,
+                    _ => c[0] * 0.2126 + c[1] * 0.7152 + c[2] * 0.0722,
+                };
+                if a.invert {
+                    v = 1.0 - v;
+                }
+                v = range(tone(v));
+                c = [v, v, v];
+            }
+        }
+        for k in 0..3 {
+            p[k] = (c[k].clamp(0.0, 1.0) * 255.0).round() as u8;
+        }
+    }
+    out
+}
+
+/// Rebuild one slot's GPU picture from its loaded picture and adjustments (not the Color slot,
+/// which the material builds).
+pub fn refresh_slot(sl: &mut crate::model::MatSlot, slot: usize) {
+    if slot == 0 {
+        return;
+    }
+    if let Some(img) = &sl.image {
+        let out = adjust_image(img, &sl.adjust, map_kind(slot));
+        let t = Texture2D::from_rgba8(out.w as u16, out.h as u16, &out.px);
+        t.set_filter(FilterMode::Linear);
+        set_repeat(&t);
+        sl.tex = Some(t);
     }
 }
 

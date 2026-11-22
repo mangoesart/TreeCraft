@@ -43,26 +43,8 @@ impl App {
             if let Some(rt) = &self.preview_rt {
                 draw_texture_ex(&rt.texture, pr.x, pr.y, WHITE, DrawTextureParams { dest_size: Some(vec2(pr.w, pr.h)), flip_y: true, ..Default::default() });
             }
-            // preview shape: Sphere, Plane, Cylinder or a mesh file of the person's choosing
-            let custom = self.preview_shape == 3;
-            let sr = Rect::new(pr.x + pr.w - 112.0 - if custom { 28.0 } else { 0.0 }, pr.y + 4.0, 108.0, 20.0);
-            let shapes: Vec<String> = PREVIEW_SHAPES.iter().map(|s| s.to_string()).collect();
-            let prev = self.preview_shape;
-            if ui.combo("mat.shape", sr, &shapes, &mut self.preview_shape) && self.preview_shape == 3 && !self.load_custom_preview() && self.custom_preview_name.is_empty() {
-                self.preview_shape = prev;
-            }
-            let mut controls = sr;
-            if self.preview_shape == 3 {
-                let lr = Rect::new(sr.x + sr.w + 4.0, sr.y, 24.0, 20.0);
-                if ui.button("mat.shapeload", lr, "...") {
-                    self.load_custom_preview();
-                }
-                if ui.hover(lr) {
-                    ui.tooltip = Some(format!("Load another mesh for the preview ({})", self.custom_preview_name));
-                }
-                controls.w += 28.0;
-                ui.text_fit(&self.custom_preview_name.clone(), pr.x + 6.0, pr.y + 6.0, (sr.x - pr.x - 12.0).max(0.0), 11.0, C_TEXT_DIM);
-            }
+            // (picture 77: one preview, the sample in its ring stand; the shape choices are gone)
+            let controls = Rect::new(0.0, 0.0, 0.0, 0.0);
             ui.text("drag to turn • double-click to reset", pr.x + 6.0, pr.y + pr.h - 16.0, 10.5, C_TEXT_FAINT);
             // it turns only when the person drags it; a click also shows the material in Properties
             let m = ui.mouse();
@@ -70,7 +52,7 @@ impl App {
             if over && ui.active == 0 && ui.inp.l_pressed {
                 if ui.inp.l_double {
                     // fn 0x1402ecdd0: the view and zoom go back to their start
-                    self.mat_yaw = 0.6;
+                    self.mat_yaw = 0.3;
                     self.mat_pitch = 0.25;
                     self.mat_zoom = 0.0;
                 } else {
@@ -503,8 +485,24 @@ impl App {
                 m.specular_color = [v, v, v];
             }
             c
+        } else if s == 0 {
+            // the Color (picture 74): a swatch whose wheel also offers a gradient along the
+            // branch; with a picture in the slot the gradient is off and the colour tints it
+            let mut g = crate::colorwheel::Gradient { on: m.grad_on, c1: m.grad_base, c2: m.grad_color, flip: m.grad_flip, mid: m.grad_mid };
+            let has_pic = !m.file.is_empty() && m.source == 4;
+            let mut col = m.color;
+            let ch = if has_pic {
+                crate::colorwheel::swatch(ui, &format!("mat{}.slot{}", c, s), vr, &mut col)
+            } else {
+                crate::colorwheel::swatch_ex(ui, &format!("mat{}.slot{}", c, s), vr, &mut col, Some(&mut g))
+            };
+            m.color = col;
+            if !has_pic {
+                (m.grad_on, m.grad_base, m.grad_color, m.grad_flip, m.grad_mid) = (g.on, g.c1, g.c2, g.flip, g.mid);
+            }
+            ch
         } else if let Some(col) = m.slot_color(s) {
-            color_field(ui, &mut self.color_edit, (0, s), vr, col)
+            crate::colorwheel::swatch(ui, &format!("mat{}.slot{}", c, s), vr, col)
         } else if let Some(v) = m.slot_value(s) {
             let max = if s == 2 { 2.0 } else { 1.0 };
             if s == 3 {
@@ -521,6 +519,11 @@ impl App {
         };
         if changed && (s == 1) {
             m.dirty_tex = true;
+        }
+        // picture 75: a gradient lives in the branches' vertex colours, so a Color change rebuilds
+        // them at once and the viewport shows it while the wheel is dragged
+        if changed && s == 0 {
+            self.dirty = true;
         }
         let tr = Rect::new(r.x + 6.0, r.y + 44.0, r.w - 12.0, thumb);
         ui.record(&format!("matslot:{}", SLOT_NAMES[s]), tr);
@@ -546,13 +549,18 @@ impl App {
         }
         if ui.hover(tr) && !ui.hover(cb) {
             let file = &self.materials[c].slots[s].file;
-            ui.tooltip = Some(if file.is_empty() {
+            let has = !file.is_empty() || (s == 0 && self.materials[c].source != 0);
+            ui.tooltip = Some(if !has {
                 format!("Click to load a {} texture.", SLOT_NAMES[s])
             } else {
-                format!("{}\nClick to change, right-click to clear.", file)
+                format!("{}\nClick to edit the map (Edit Map), right-click to clear.", file)
             });
             if ui.inp.l_pressed && ui.popup.is_none() && !ui.blocked {
-                if let Some(f) = crate::props::pick_image() {
+                ui.inp.l_pressed = false;
+                // picture 74: a loaded picture opens Edit Map; an empty slot asks for a picture
+                if has {
+                    self.open_map_edit(c, s);
+                } else if let Some(f) = crate::props::pick_image() {
                     self.load_slot(c, s, Some(f));
                 }
             } else if ui.inp.r_pressed {
@@ -563,7 +571,7 @@ impl App {
 
     /// Put a picture in a slot (None clears it). The Color slot drives the material's picture,
     /// Opacity its alpha and Normal the shader's normal map; the others are kept with the material.
-    fn load_slot(&mut self, c: usize, s: usize, file: Option<String>) {
+    pub(crate) fn load_slot(&mut self, c: usize, s: usize, file: Option<String>) {
         let m = &mut self.materials[c];
         match file {
             Some(f) => match textures::load_image_file(&f) {

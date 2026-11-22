@@ -121,6 +121,9 @@ pub struct TreeGeo {
     pub leaf_grid: HashMap<(i32, i32, i32), Vec<Vec3>>,
     /// Leaves removed by leaf collision.
     pub leaves_removed: usize,
+    /// Materials whose Color runs as a gradient along each branch (picture 74): base and tip
+    /// colours by material.
+    pub grad: HashMap<usize, ([f32; 3], [f32; 3], f32)>,
     /// Every node made (for Node edit mode picking): generator, its number in the generator,
     /// where it starts and ends.
     pub nodes: Vec<(u32, usize, Vec3, Vec3)>,
@@ -355,6 +358,15 @@ pub struct GenCtx<'a> {
 
 pub fn generate(ctx: &GenCtx) -> TreeGeo {
     let mut geo = TreeGeo { bmin: Vec3::splat(f32::MAX), bmax: Vec3::splat(f32::MIN), ..Default::default() };
+    // gradient colours (picture 74): only while no picture is in the material's Color slot
+    for (i, m) in ctx.materials.iter().enumerate() {
+        if m.grad_on && (m.file.is_empty() || m.source != 4) {
+            let (a, b) = if m.grad_flip { (m.grad_color, m.grad_base) } else { (m.grad_base, m.grad_color) };
+            // (flipped, the blend point is measured from the other end)
+            let mid = if m.grad_flip { 1.0 - m.grad_mid } else { m.grad_mid };
+            geo.grad.insert(i, (a, b, mid));
+        }
+    }
     let mut spines: Vec<Spine> = vec![];
     let root = match ctx.nodes.iter().find(|n| n.kind == Kind::Tree) {
         Some(r) => r,
@@ -571,6 +583,22 @@ fn process(
                             _ => None,
                         };
                         if let Some(mut s) = make_spine(child, p, *parent, t, roll, base_pos, azim_dir, spines, ctx.forces, &mut rng, shape) {
+                            // Spine > Orientation > Roll (picture 74) on a trunk standing on the
+                            // ground: the whole trunk turns around the upright through its base
+                            // (with a node's own roll from Node mode), bends and all
+                            if matches!(*parent, ParentRef::Ground) {
+                                let turn = (pex(p, "Spine:Orientation:Roll", 0.0) + edit.map_or(0.0, |e| e.roll)) * 2.0 * PI;
+                                if turn != 0.0 {
+                                    let q = Quat::from_rotation_y(-turn);
+                                    let base = s.pts[0];
+                                    for v in &mut s.pts {
+                                        *v = base + q * (*v - base);
+                                    }
+                                    for v in s.tan.iter_mut().chain(s.nrm.iter_mut()) {
+                                        *v = q * *v;
+                                    }
+                                }
+                            }
                             // Prune and Break (picture 36): drop or shorten this branch
                             if pruned(p, &s, child.id, me) {
                                 continue;
@@ -762,10 +790,9 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
             }
             for r in rolls {
                 let t = along(p, "Generation:Absolute:Number", first, span, rng);
-                // First / Last may lie below 0 or above 1 (picture 38): spots off the parent are skipped
-                if (-1e-4..=1.0001).contains(&t) {
-                    out.push((t.clamp(0.0, 1.0), r * TURN, Vec3::ZERO, Vec3::X));
-                }
+                // First / Last below 0 or above 1 (picture 74): spots off the parent stay at its
+                // base or tip instead of disappearing
+                out.push((onto_parent(p, t), r * TURN, Vec3::ZERO, Vec3::X));
             }
         }
         MODE_INTERVAL | MODE_PHYLLOTAXY => {
@@ -773,6 +800,8 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
             let spacing_units = if p.gen_mode == MODE_INTERVAL { 10.0 / p.interval.max(0.01) } else { p.interval.max(0.05) };
             let step = spacing_units / plen.max(0.001);
             let per = p.per_node.max(1) as usize;
+            // (picture 74: the walk keeps to the parent)
+            let (first, last) = (first.clamp(0.0, 1.0), last.clamp(0.0, 1.0));
             let mut t = last;
             let mut node = 0i32;
             let mut spiral_turns = 0.0f32;
@@ -798,9 +827,7 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
                 let base = if p.balanced { i as f32 / n.max(1) as f32 } else { rng.next() };
                 let turns = (base + rng.sym() * p.offset * 0.5) * p.sweep + p.roll;
                 let t = along(p, "Generation:Frequency", first, span, rng);
-                if (-1e-4..=1.0001).contains(&t) {
-                    out.push((t.clamp(0.0, 1.0), turns * TURN, Vec3::ZERO, Vec3::X));
-                }
+                out.push((onto_parent(p, t), turns * TURN, Vec3::ZERO, Vec3::X));
             }
         }
     }
@@ -842,6 +869,21 @@ fn shared_placement(p: &Params, parent: ParentRef, spines: &[Spine], mut out: Ve
         o.0 = o.0.max(0.0);
     }
     out
+}
+
+/// A spot along the parent for a child (picture 74): First / Last beyond the parent's ends put
+/// it at the base (below 0) or as close to the tip as Boundaries > Clip lets children grow (above
+/// 1), so it stays on the parent instead of disappearing.
+fn onto_parent(p: &Params, t: f32) -> f32 {
+    if t < 0.0 {
+        0.0
+    } else if t > 1.0 {
+        let clip = pex(p, "Generation:Shared:Boundaries:Clip", 0.025).clamp(0.0, 1.0);
+        let ext = pex(p, "Generation:Shared:Extend parent", 0.0).max(0.0);
+        if ext > 0.0 { 1.0 } else { (1.0 - clip).max(0.0) }
+    } else {
+        t
+    }
 }
 
 /// A random spot between First and Last; a Profile curve on the count property makes children
@@ -1694,6 +1736,13 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
             // the fade rides in the colour's alpha, below the selection mark's range: unselected
             // 255 down to 235, selected 128 down to 108 (render.rs reads it back)
             let mut vc = col;
+            // the material's gradient (picture 74): base colour to tip colour along the branch
+            if let Some((ga, gb, gm)) = geo.grad.get(&mat_key) {
+                let f = crate::colorwheel::grad_t(sfrac, *gm);
+                for q in 0..3 {
+                    vc[q] = ((ga[q] + (gb[q] - ga[q]) * f).clamp(0.0, 1.0) * col[q] as f32).round() as u8;
+                }
+            }
             if fade > 0.0 {
                 vc[3] = col[3].saturating_sub((fade * 20.0).round() as u8);
             }
@@ -1733,13 +1782,24 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
         }
     }
     let _ = base;
-    // ends (picture 71): the tip is always closed, a low dome half its radius past the last ring,
+    // the caps take the gradient's colours too (picture 75)
+    let grad = geo.grad.get(&mat_key).copied();
+    let grad_col = |f: f32| -> [u8; 4] {
+        let mut vc = col;
+        if let Some((ga, gb, gm)) = grad {
+            let f = crate::colorwheel::grad_t(f, gm);
+            for q in 0..3 {
+                vc[q] = ((ga[q] + (gb[q] - ga[q]) * f).clamp(0.0, 1.0) * col[q] as f32).round() as u8;
+            }
+        }
+        vc
+    };    // ends (picture 71): the tip is always closed, a low dome half its radius past the last ring,
     // so no branch ends in a hole; Skin > Cap ends also closes the base (open by default, picture
     // 34, since it sits in the parent)
     if rad[m - 1] > 1e-4 || s.rad[m - 1] > 1e-4 {
         let tip = s.pts[m - 1] + s.tan[m - 1] * s.rad[m - 1] * 0.5;
         let ci = ch.v.len() as u16;
-        ch.v.push(vtx(tip, uvm.uv(0.5, s.cum[m - 1]), col, s.tan[m - 1], 1.0));
+        ch.v.push(vtx(tip, uvm.uv(0.5, s.cum[m - 1]), grad_col(1.0), s.tan[m - 1], 1.0));
         let last = ring_start[m - 1] as u16;
         for j in 0..ring_n[m - 1] as u16 {
             ch.i.extend_from_slice(&[last + j, last + j + 1, ci]);
@@ -1748,7 +1808,7 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
     }
     if p.cap_ends {
         let bi = ch.v.len() as u16;
-        ch.v.push(vtx(s.pts[0], uvm.uv(0.5, 0.0), col, -s.tan[0], 1.0));
+        ch.v.push(vtx(s.pts[0], uvm.uv(0.5, 0.0), grad_col(0.0), -s.tan[0], 1.0));
         let first = ring_start[0] as u16;
         for j in 0..ring_n[0] as u16 {
             ch.i.extend_from_slice(&[first + j + 1, first + j, bi]);
@@ -2271,5 +2331,31 @@ mod fillet_tests {
                 assert!(least >= r0 * 0.97, "{} deg, column {}: the base folds in to {:.3} (radius {})", angle_deg, j, least, r0);
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod gradient_tests {
+    use super::*;
+
+    /// Picture 75: a material's gradient shows on the branch, base colour at its start and tip
+    /// colour at its end.
+    #[test]
+    fn gradient_runs_base_to_tip() {
+        let mk = |id: u32, kind: Kind, parent: Option<u32>| Node { id, kind, name: format!("{:?}", kind), parent, pos: Vec2::ZERO, p: Params::new(kind), hidden: false };
+        let mut nodes = vec![mk(1, Kind::Tree, None), mk(2, Kind::Trunk, Some(1))];
+        nodes[1].p.material = 0;
+        let mut m = Material::new("Grad", 0);
+        m.grad_on = true;
+        m.grad_base = [1.0, 0.0, 0.0];
+        m.grad_color = [0.0, 0.0, 1.0];
+        let mats = vec![m];
+        let ctx = GenCtx { nodes: &nodes, materials: &mats, meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+        let geo = generate(&ctx);
+        let vs: Vec<&Vertex> = geo.mats.get(&0).expect("trunk drawn with the material").chunks.iter().flat_map(|c| c.v.iter()).collect();
+        let low = vs.iter().min_by(|a, b| a.position.y.total_cmp(&b.position.y)).unwrap();
+        let high = vs.iter().max_by(|a, b| a.position.y.total_cmp(&b.position.y)).unwrap();
+        assert!(low.color[0] > 200 && low.color[2] < 60, "base colour {:?}", low.color);
+        assert!(high.color[2] > 200 && high.color[0] < 60, "tip colour {:?}", high.color);
     }
 }
