@@ -171,12 +171,43 @@ impl App {
         p
     }
 
+    /// The height indicator's button under the light controls (picture 87): a small person, lit
+    /// while the indicator shows; clicking it shows or hides the indicator, its scale and person.
+    pub fn draw_height_button(&mut self, ui: &mut Ui, x: f32, y: f32) -> Rect {
+        let w = 34.0;
+        let p = Rect::new(x - w * 0.5, y, w, 48.0);
+        draw_round_rect(p, 6.0, Color::new(0.15, 0.16, 0.18, 0.85));
+        let b = Rect::new(p.x + 2.0, p.y + 2.0, w - 4.0, 44.0);
+        let m = ui.mouse();
+        let on = self.show_height;
+        if on {
+            draw_round_rect(b, 5.0, Color::new(0.30, 0.47, 0.78, 1.0));
+        } else if b.contains(m) {
+            draw_round_rect(b, 5.0, Color::new(1.0, 1.0, 1.0, 0.1));
+        }
+        person(vec2(b.x + b.w * 0.5, b.y + b.h - 3.0), b.h - 6.0, WHITE);
+        if !on {
+            // dimmed while hidden
+            draw_round_rect(b, 5.0, Color::new(0.15, 0.16, 0.18, 0.55));
+        }
+        ui.record("btn:vp.height", b);
+        if b.contains(m) && !ui.blocked && ui.popup.is_none() {
+            ui.tooltip = Some(if on { "Height indicator: shown (click to hide)".into() } else { "Height indicator: hidden (click to show)".into() });
+            if ui.inp.l_pressed {
+                self.show_height = !on;
+                self.set_status(if !on { "Height indicator shown" } else { "Height indicator hidden" });
+                ui.inp.l_pressed = false;
+            }
+        }
+        p
+    }
+
     /// Show > Height indicator (pictures 42, 43; TreeCraft's own design): a soft, thin line
     /// standing beside the tree with a tick at every round step and the heights beside them, the
     /// full height on a small tag at the top, and a person 1.8 units tall at its foot for a sense of
     /// scale. Only once the tree has a generator.
     pub fn draw_height_indicator(&self, ui: &mut Ui, r: Rect, area: Rect) {
-        if !self.show_height || !self.nodes.iter().any(|n| n.kind != crate::model::Kind::Tree) || self.geo_stats.0 == 0 {
+        if !self.show_height || self.opacity_view() || !self.nodes.iter().any(|n| n.kind != crate::model::Kind::Tree) || self.geo_stats.0 == 0 {
             return;
         }
         let (bmin, bmax) = self.bounds;

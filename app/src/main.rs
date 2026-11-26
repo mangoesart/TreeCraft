@@ -29,6 +29,7 @@ mod nodeicons;
 mod export;
 mod mapedit;
 mod texel;
+mod pivotpainter;
 mod cameras;
 mod matexport;
 
@@ -86,7 +87,8 @@ fn window_conf() -> macroquad::conf::Conf {
             ..Default::default()
         },
         draw_call_vertex_capacity: 32000,
-        draw_call_index_capacity: 120000,
+        // room for a whole piece of the tree in one draw (gen.rs CHUNK_INDICES, picture 93)
+        draw_call_index_capacity: 256_000,
         ..Default::default()
     }
 }
@@ -95,7 +97,7 @@ use appmenu::menu_bar;
 
 fn keyboard(app: &mut App, ui: &Ui) {
     // no shortcuts while a menu is open or a name/text is being typed
-    if ui.popup.is_some() || app.mat_text_focus || app.mesh_editing || ui.editing() {
+    if ui.popup.is_some() || app.mat_text_focus || app.mesh_editing || ui.editing() || app::renaming_node() || props::typing() {
         return;
     }
     let i = &ui.inp;
@@ -337,7 +339,13 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
         lay.view = Rect::new(2.0, 26.0, w - 4.0, h - 28.0);
     }
     // Window properties > Layout (picture 65): the main view and its extra fixed views
-    let (main_view, panes) = winprops::layout_panes(app.wp("Viewport:Layout", 0.0) as usize, lay.view);
+    let (main_view, mut panes) = winprops::layout_panes(app.wp("Viewport:Layout", 0.0) as usize, lay.view);
+    // each extra view's own choice (picture 81: chosen from the list in its corner)
+    for (k, p) in panes.iter_mut().enumerate() {
+        if let Some(v) = app.winp.get(&format!("Viewport:Pane{}", k)) {
+            p.1 = (*v as usize).min(6);
+        }
+    }
     lay.view = main_view;
     app.viewport = lay.view;
 
@@ -402,12 +410,12 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
     app.draw_viewport_3d(lay.view, scale, screen_height() * dpi);
     // Selection > Outline: the ring around the selected generator (picture 30)
     app.draw_selection_outline(lay.view, f);
-    // Window properties > Layout's extra views, drawn off screen (outside the UI's scale)
-    app.render_layout_panes(&panes, scale);
+    // Window properties > Layout's extra views, drawn like the main view (picture 83)
+    app.draw_panes_3d(&panes, scale, screen_height() * dpi, f);
 
     let gl = unsafe { get_internal_gl() };
     gl.quad_gl.push_model_matrix(Mat4::from_scale(vec3(f, f, 1.0)));
-    app.draw_layout_panes(ui, &panes);
+    app.draw_panes_overlay(ui, &panes);
 
     let quit = menu_bar(app, ui, w);
     if bars {
@@ -424,8 +432,14 @@ fn frame(app: &mut App, ui: &mut Ui, inp: Inp) -> bool {
         ui.inp.l_down = false;
     }
     app.draw_edit_overlay();
-    app.viewport_pick(ui, lay.view);
-    app.viewport_input(ui, lay.view);
+    // (a click that started in an extra view is theirs to finish, picture 84)
+    if !winprops::pane_active() {
+        app.viewport_pick(ui, lay.view);
+    }
+    // the extra views take the mouse first when it's over them (picture 82)
+    if !app.pane_input(ui, &panes) {
+        app.viewport_input(ui, lay.view);
+    }
     keyboard(app, ui);
     if let Some(real) = dialog_input {
         ui.inp = real;
@@ -802,6 +816,31 @@ async fn main() {
     if test.is_some() || std::env::var("TM_DEMO").as_deref() == Ok("1") || std::env::var("TM_EXTRAS").as_deref() == Ok("1") {
         app.load_demo();
     }
+    // TM_OPEN=<tree file>, TM_HIDE=<generator name>: open a tree and hide one generator (picture 93)
+    if let Ok(path) = std::env::var("TM_OPEN") {
+        if let Ok(text) = std::fs::read_to_string(&path) {
+            let _ = treefile::read(&mut app, &text);
+            app.dirty = true;
+        }
+    }
+    // TM_GRAPHDEMO=1: a group around the first two generators and a re-director on the last one's
+    // wire (picture 94 pictures)
+    if std::env::var("TM_GRAPHDEMO").as_deref() == Ok("1") {
+        let ids: Vec<(u32, Vec2)> = app.nodes.iter().filter(|n| n.kind != model::Kind::Tree).map(|n| (n.id, n.pos)).collect();
+        if ids.len() >= 2 {
+            let (a, b) = (ids[0].1, ids[1].1);
+            app.groups.push(app::NodeGroup { name: "Trunk and branches".into(), comment: "the main frame".into(), color: [1.0, 1.0, 1.0, 0.5], min: a.min(b) - vec2(60.0, 80.0), max: a.max(b) + vec2(170.0, 40.0) });
+        }
+        if let (Some(last), Some(p)) = (ids.last(), ids.last().and_then(|l| app.node(l.0)).and_then(|n| n.parent).and_then(|pid| app.node(pid))) {
+            app.reroutes.insert(last.0, (last.1 + p.pos) * 0.5 + vec2(90.0, 0.0));
+        }
+    }
+    if let Ok(name) = std::env::var("TM_HIDE") {
+        if let Some(n) = app.nodes.iter_mut().find(|n| n.name == name) {
+            n.hidden = true;
+            app.dirty = true;
+        }
+    }
     // optional start state for checking pictures: TM_TAB=0..2, TM_SEL=node name | mat:N | mesh:N
     // TM_TEXEL=<size 0..4>,<pattern 0..3>: the texel density view on (picture 75)
     if let Ok(v) = std::env::var("TM_TEXEL") {
@@ -812,6 +851,10 @@ async fn main() {
     // TM_MAPEDIT=<slot>: Edit Map open on material 0's slot (picture 74)
     if let Some(s) = std::env::var("TM_MAPEDIT").ok().and_then(|s| s.parse::<usize>().ok()) {
         app.open_map_edit(0, s.min(9));
+    }
+    // TM_PP2=1: the PivotPainter2 panel open (for pictures)
+    if std::env::var("TM_PP2").as_deref() == Ok("1") {
+        app.pp2_open = true;
     }
     // TM_MODEBAR=0..3: where the mode buttons sit (picture 69)
     if let Some(k) = std::env::var("TM_MODEBAR").ok().and_then(|s| s.parse::<usize>().ok()) {
@@ -869,6 +912,27 @@ async fn main() {
             // TM_LAYOUT=0..3: Window properties > Layout (picture 65)
             if let Some(l) = std::env::var("TM_LAYOUT").ok().and_then(|s| s.parse::<f64>().ok()) {
                 app.winp.insert("Viewport:Layout".into(), l);
+            }
+            // TM_PANE0=<view>: the first extra view's type (picture 81)
+            if let Some(v) = std::env::var("TM_PANE0").ok().and_then(|s| s.parse::<f64>().ok()) {
+                app.winp.insert("Viewport:Pane0".into(), v);
+            }
+            // TM_CAMLOOK=1: a custom camera added in front of the tree and looked through by the
+            // main view, so the extra views show it as a model (picture 83)
+            // (3: not looked through, and selected, so its handles show; picture 84)
+            if matches!(std::env::var("TM_CAMLOOK").as_deref(), Ok("1") | Ok("2") | Ok("3")) {
+                app.cam.yaw += 0.9;
+                app.add_camera();
+                app.cam.yaw -= 0.9;
+                let n = app.cameras.len() - 1;
+                app.cameras[n].icon_size = 2.5;
+                // beside the tree, in sight of every view
+                app.cameras[n].pos = vec3(12.0, 6.0, 10.0);
+                let mode = std::env::var("TM_CAMLOOK").unwrap_or_default();
+                if mode == "1" {
+                    app.look_through(Some(n));
+                }
+                app.select(if mode == "3" { Sel::Camera(n) } else { Sel::Window });
             }
             if std::env::var("TM_SAFEFRAME").as_deref() == Ok("1") {
                 app.winp.insert("Screenshot Safe Frame:Show".into(), 1.0);

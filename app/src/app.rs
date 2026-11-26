@@ -9,6 +9,33 @@ use crate::ui::*;
 use macroquad::prelude::*;
 use std::collections::{HashMap, HashSet};
 
+thread_local! {
+    /// The generator being renamed in the node graph (picture 87): its id and the name typed so far.
+    static RENAME: std::cell::RefCell<Option<(u32, String)>> = const { std::cell::RefCell::new(None) };
+    /// The picked link in the node graph (picture 88): the child generator whose wire it is.
+    static LINK_SEL: std::cell::RefCell<Vec<u32>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// The picked re-director (the child whose wire it's on) and the wire a right-click was on,
+    /// with the point in graph units (picture 94).
+    static REROUTE_SEL: std::cell::RefCell<Option<u32>> = const { std::cell::RefCell::new(None) };
+    static WIRE_CTX: std::cell::RefCell<Option<(u32, Vec2)>> = const { std::cell::RefCell::new(None) };
+    /// The nodes (and re-directors) a group drag carries (picture 94).
+    static GROUP_DRAG: std::cell::RefCell<(Vec<u32>, Vec<u32>)> = const { std::cell::RefCell::new((Vec::new(), Vec::new())) };
+    /// A group heading being typed in the graph: (group, text, first key replaces it).
+    static GROUP_RENAME: std::cell::RefCell<Option<(usize, String, bool)>> = const { std::cell::RefCell::new(None) };
+    /// Preferences > Node Editor > Node shadow, for draw_node_shape (picture 88).
+    static NODE_SHADOW: std::cell::RefCell<f32> = const { std::cell::RefCell::new(0.6) };
+}
+
+/// Set how dark node shadows are drawn from now on (Preferences > Node Editor > Node shadow).
+pub fn set_node_shadow(v: f32) {
+    NODE_SHADOW.with(|s| *s.borrow_mut() = v);
+}
+
+/// Whether a generator's name (or a group heading) is being typed (keyboard shortcuts wait meanwhile).
+pub fn renaming_node() -> bool {
+    RENAME.with(|r| r.borrow().is_some()) || GROUP_RENAME.with(|r| r.borrow().is_some())
+}
+
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub enum Sel {
     None,
@@ -84,6 +111,23 @@ enum GraphDrag {
     Pan,
     /// A selection box from this screen point (picture 67).
     Marquee { start: Vec2 },
+    /// A group box by its header, its nodes coming along (picture 94; GROUP_DRAG holds them).
+    Group { idx: usize },
+    /// A group box's bottom-right corner (resizing).
+    GroupSize { idx: usize },
+    /// A re-director on the wire to this child (picture 94).
+    Reroute { child: u32 },
+}
+
+/// A group box in the node graph (picture 94, like Unreal Engine's comment boxes): a heading, a
+/// comment, a colour, and the area it covers in graph units; moving it moves the nodes inside.
+#[derive(Clone, Debug, PartialEq)]
+pub struct NodeGroup {
+    pub name: String,
+    pub comment: String,
+    pub color: [f32; 4],
+    pub min: Vec2,
+    pub max: Vec2,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -222,6 +266,14 @@ pub struct App {
     /// The Export tab (picture 68): its settings, and whether the Properties panel shows it.
     pub export_opts: crate::export::ExportOpts,
     pub export_tab: bool,
+    /// PivotPainter2 (TreeCraft's own tool): its settings, and whether its panel is open.
+    pub pp2: crate::pivotpainter::PP2,
+    pub pp2_open: bool,
+    /// The node graph's group boxes and the picked one (picture 94).
+    pub groups: Vec<NodeGroup>,
+    pub group_sel: Option<usize>,
+    /// Re-directors: a point the wire from a generator's parent passes through, by the child's id.
+    pub reroutes: HashMap<u32, Vec2>,
     /// The curve being edited (generator id, property name, kind 0 Parent 1 Distribution 2 Profile).
     pub curve_edit: Option<(u32, String, u8)>,
     pub(crate) curve_drag: Option<usize>,
@@ -539,6 +591,11 @@ impl App {
             graph_multi: Vec::new(),
             export_opts: Default::default(),
             export_tab: false,
+            pp2: Default::default(),
+            pp2_open: false,
+            groups: vec![],
+            group_sel: None,
+            reroutes: HashMap::new(),
             curve_edit: None,
             curve_drag: None,
             curve_win: Rect::new(0.0, 0.0, 0.0, 0.0),
@@ -754,6 +811,9 @@ impl App {
 
     pub fn new_tree(&mut self) {
         self.nodes.clear();
+        self.groups.clear();
+        self.group_sel = None;
+        self.reroutes.clear();
         self.next_id = 1;
         let id = self.next_id;
         self.next_id += 1;
@@ -777,6 +837,11 @@ impl App {
     }
 
     pub fn select(&mut self, s: Sel) {
+        // picking anything closes the PivotPainter2 panel
+        if !matches!(s, Sel::None) {
+            self.pp2_open = false;
+            self.group_sel = None;
+        }
         // a box selection stays while one of its generators is picked
         if !matches!(s, Sel::Node(id) if self.graph_multi.contains(&id)) {
             self.graph_multi.clear();
@@ -818,8 +883,8 @@ impl App {
         let siblings = self.nodes.iter().filter(|n| n.parent == Some(parent)).count();
         let id = self.next_id;
         self.next_id += 1;
-        let same = self.nodes.iter().filter(|n| n.kind == kind).count();
-        let name = if same == 0 { kind.label().to_string() } else { format!("{} {}", kind.label(), same + 1) };
+        // a name already used gets _2, _3 ... (picture 87)
+        let name = self.unique_node_name(kind.label(), id);
         let mut p = Params::new(kind);
         p.seed += id as i32 * 13;
         if kind == Kind::Leaf && self.node(parent).map(|n| n.kind == Kind::Leaf).unwrap_or(false) {
@@ -832,6 +897,36 @@ impl App {
         self.select(Sel::Node(id));
         self.dirty = true;
         id
+    }
+
+    /// A generator name no other generator has (picture 87): `base` when free, otherwise base_2,
+    /// base_3 ... (a trailing _number on `base` is replaced). Names typed by hand aren't changed.
+    pub fn unique_node_name(&self, base: &str, me: u32) -> String {
+        let taken = |s: &str| self.nodes.iter().any(|n| n.id != me && n.name == s);
+        let base = base.trim();
+        if !taken(base) {
+            return base.to_string();
+        }
+        let stem = match base.rsplit_once('_') {
+            Some((a, b)) if !a.is_empty() && !b.is_empty() && b.chars().all(|c| c.is_ascii_digit()) => a,
+            _ => base,
+        };
+        (2..100000).map(|k| format!("{}_{}", stem, k)).find(|s| !taken(s)).unwrap_or_else(|| base.to_string())
+    }
+
+    /// Take a generator off its parent (picture 88): it and the generators under it stop growing
+    /// until it's linked again (drag from a socket onto a node).
+    pub fn disconnect_node(&mut self, id: u32) {
+        LINK_SEL.with(|l| l.borrow_mut().retain(|c| *c != id));
+        let name = match self.nodes.iter_mut().find(|n| n.id == id && n.kind != Kind::Tree) {
+            Some(n) if n.parent.is_some() => {
+                n.parent = None;
+                n.name.clone()
+            }
+            _ => return,
+        };
+        self.dirty = true;
+        self.set_status(&format!("Disconnected {}: it grows again once linked to a parent", name));
     }
 
     fn descendants(&self, id: u32) -> Vec<u32> {
@@ -869,7 +964,8 @@ impl App {
         self.next_id += 1;
         let mut n = src.clone();
         n.id = nid;
-        n.name = format!("{} copy", src.name);
+        // the copy's name gets _2, _3 ... (picture 87)
+        n.name = self.unique_node_name(&src.name, nid);
         n.pos += vec2(80.0, 0.0);
         n.p.seed += 97;
         // shown even when the original was hidden
@@ -885,6 +981,7 @@ impl App {
                 self.next_id += 1;
                 k.parent = Some(new_parent);
                 k.pos += vec2(80.0, 0.0);
+                k.name = self.unique_node_name(&k.name, k.id);
                 stack.push((old, k.id));
                 self.nodes.push(k);
             }
@@ -1219,7 +1316,36 @@ impl App {
         self.last_mouse = m;
     }
 
+    /// The solid background a Render > Material view stands on (picture 90): Color, Opacity and
+    /// Metallic pure black, Normal flat-up blue (128, 128, 255), Specular light grey, Subsurface
+    /// white. None for the other views.
+    pub fn channel_bg(&self) -> Option<Color> {
+        let m = self.light.mode;
+        let is = |k: f32| (m - k).abs() < 0.25;
+        if is(20.0) || is(21.0) || is(25.0) {
+            Some(BLACK)
+        } else if is(23.0) {
+            Some(Color::from_rgba(128, 128, 255, 255))
+        } else if is(24.0) || is(22.0) {
+            // Specular, and Roughness (picture 91), on light grey
+            Some(Color::from_rgba(191, 191, 191, 255))
+        } else if is(26.0) {
+            Some(WHITE)
+        } else {
+            None
+        }
+    }
+
+    /// Render > Material > Opacity (picture 90): only the generators, white on black.
+    pub fn opacity_view(&self) -> bool {
+        (self.light.mode - 21.0).abs() < 0.25
+    }
+
     pub fn draw_viewport_bg(&self, r: Rect) {
+        if let Some(c) = self.channel_bg() {
+            draw_rectangle(r.x, r.y, r.w, r.h, c);
+            return;
+        }
         // Window properties > Background: a solid colour or a picture (picture 49)
         if self.draw_window_background(r) {
             return;
@@ -1267,15 +1393,17 @@ impl App {
         let vp = ((r.x * scale) as i32, (sh - (r.y + r.h) * scale) as i32, (r.w * scale) as i32, (r.h * scale) as i32);
         let cam3 = self.cam.camera3d(Some(vp), r.w / r.h.max(1.0), None);
         set_camera(&cam3);
+        // (picture 90: the Opacity view shows the generators alone)
+        let pure = self.opacity_view();
         // the ground under the tree (Preferences > Viewport > Ground; picture 42)
-        if self.prefs.show_ground {
+        if self.prefs.show_ground && !pure {
             let ext = (self.bounds.1 - self.bounds.0).length();
             // below the grid by a share of the camera distance, so they never fight (picture 43)
             render::draw_ground((ext * 0.9).clamp(12.0, 400.0), -(self.cam.dist * 0.004).max(0.02), self.prefs.color("ground"));
         }
         // the world origin (picture 46): a filled disc in its own colour, lit up while the Tree
-        // node is selected
-        {
+        // node is selected (picture 91: not in the Render > Material views)
+        if !pure && !(self.light.mode > 19.5 && self.light.mode < 29.5) {
             let tree_sel = matches!(self.sel, Sel::Node(id) if self.node(id).map_or(false, |n| n.kind == Kind::Tree));
             let c = self.prefs.color("origin");
             // no border around it (picture 56); selected, it's a little brighter and stronger
@@ -1288,7 +1416,7 @@ impl App {
             let rad = (ext * 0.1).clamp(2.5, 40.0);
             render::draw_disc(rad, (self.cam.dist * 0.0008).max(0.004), fill, Color::new(0.0, 0.0, 0.0, 0.0), 0.0);
         }
-        if self.show_grid {
+        if self.show_grid && !pure {
             let p = &self.prefs;
             // Window properties > Grid spacing (the original's 10 is 2.5 of TreeCraft's units)
             let step = (self.wp("Viewport:Grid spacing", 10.0) * 0.25).max(0.05);
@@ -1333,7 +1461,7 @@ impl App {
             // its edges come out smooth), then laid over the ground once as a dark see-through
             // layer before the tree is drawn - one hard shadow that can't flicker against the
             // grid or itself; the tree covers it where it stands in front
-            if self.prefs.show_ground && self.light.shadow_quality > 0 && self.light.elevation > 3.0 && !wire_only {
+            if self.prefs.show_ground && !pure && self.light.shadow_quality > 0 && self.light.elevation > 3.0 && !wire_only {
                 if let Some(sm) = &self.shadow_mat {
                     let ss = [1.0f32, 1.5, 2.0, 2.5, 3.0][self.prefs.shadow_aa.min(4)];
                     let (w, h) = (((vp.2.max(1) as f32 * ss) as u32).min(4096), ((vp.3.max(1) as f32 * ss) as u32).min(4096));
@@ -1622,6 +1750,9 @@ impl App {
         // the light controller and the fan at the upper left, under the view menu (picture 43)
         let lc = self.draw_light_controls(ui, vb.x + 17.0, vb.y + vb.h + 8.0);
         self.vp_ui.push(lc);
+        // the height indicator's button under them (picture 87)
+        let hb = self.draw_height_button(ui, vb.x + 17.0, lc.y + lc.h + 6.0);
+        self.vp_ui.push(hb);
         // the "?" tips card at the bottom left (picture 43)
         let hc = self.draw_help_card(ui, r);
         self.vp_ui.extend(hc);
@@ -1632,8 +1763,9 @@ impl App {
         self.vp_ui.extend(wc);
         let sc = self.draw_selection_menu(ui, r, vb.y, wx);
         self.vp_ui.extend(sc);
-        // custom cameras: icons, handles and the looked-through frame (picture 50)
-        self.draw_cameras_overlay(ui, r);
+        // custom cameras: icons, handles and the looked-through frame (picture 50); a camera drag
+        // started in one of the extra views stays theirs (picture 83)
+        crate::winprops::cameras_overlay_for(self, ui, r, None);
     }
 
     /// The original's viewport toolbar (fn 0x1405325b0; its menus fn 0x140537430): groups View
@@ -2095,14 +2227,9 @@ impl App {
                             }
                             self.dirty = true;
                         } else if let Some(id) = sel {
-                            // only the selected generator, the ones it grows on and those under it
-                            let mut keep = self.descendants(id);
-                            keep.push(id);
-                            let mut p = self.node(id).and_then(|n| n.parent);
-                            while let Some(pid) = p {
-                                keep.push(pid);
-                                p = self.node(pid).and_then(|n| n.parent);
-                            }
+                            // only the selected generator is drawn (picture 91); the ones it grows
+                            // on are still grown, hidden, so it stays exactly where it was
+                            let keep = vec![id];
                             self.isolation = Some(self.nodes.iter().filter(|n| n.hidden).map(|n| n.id).collect());
                             for n in &mut self.nodes {
                                 if !keep.contains(&n.id) {
@@ -2250,17 +2377,21 @@ impl App {
     fn toolbar(&mut self, ui: &mut Ui, tb: Rect, key: &str, add_tree: Vec<MenuItem>, act_items: &[&str], randomize: bool) -> (Option<Vec<usize>>, Option<usize>, bool) {
         let addk = format!("{}.add", key);
         let actk = format!("{}.actions", key);
-        let ar = Rect::new(tb.x + 6.0, tb.y + 4.0, 52.0, 22.0);
-        if ui.tool_button(&addk, ar, "+ Add", ui.popup_open_for(&addk)) {
+        // rounded buttons with small icons (picture 94)
+        let bw = |ui: &Ui, s: &str| ui.text_w(s, 12.5) + 44.0;
+        let ar = Rect::new(tb.x + 6.0, tb.y + 3.0, bw(ui, "Add"), 24.0);
+        let ao = ui.popup_open_for(&addk);
+        if pill_button(ui, &addk, ar, "Add", 0, ao) {
             ui.open_menu(hid(&addk), ar, add_tree);
         }
-        let cr = Rect::new(tb.x + 62.0, tb.y + 4.0, 68.0, 22.0);
-        if ui.tool_button(&actk, cr, "Actions", ui.popup_open_for(&actk)) {
+        let cr = Rect::new(ar.x + ar.w + 5.0, tb.y + 3.0, bw(ui, "Actions"), 24.0);
+        let co = ui.popup_open_for(&actk);
+        if pill_button(ui, &actk, cr, "Actions", 1, co) {
             ui.open_popup(hid(&actk), cr, act_items.iter().map(|s| s.to_string()).collect(), None);
         }
         let mut rnd = false;
         if randomize {
-            rnd = ui.tool_button(&format!("{}.rand", key), Rect::new(tb.x + 134.0, tb.y + 4.0, 80.0, 22.0), "Randomize", false);
+            rnd = pill_button(ui, &format!("{}.rand", key), Rect::new(cr.x + cr.w + 5.0, tb.y + 3.0, bw(ui, "Randomize"), 24.0), "Randomize", 2, false);
         }
         draw_line(tb.x, tb.y + tb.h, tb.x + tb.w, tb.y + tb.h, 1.0, C_LINE);
         (ui.take_menu_result(&addk), ui.take_popup_result(&actk), rnd)
@@ -2352,6 +2483,10 @@ impl App {
                     if trail.first().map(|s| s != "Default generator").unwrap_or(false) {
                         n.name = label.clone();
                     }
+                }
+                let un = self.node(id).map(|n| self.unique_node_name(&n.name, id));
+                if let (Some(un), Some(n)) = (un, self.nodes.iter_mut().find(|n| n.id == id)) {
+                    n.name = un;
                     // new generators start neutral and without a material (picture-22)
                     n.p.neutralize();
                 }
@@ -2383,8 +2518,9 @@ impl App {
                         }),
                     };
                     let id = self.add_node(t.kind, parent);
+                    let un = self.unique_node_name(&t.name, id);
                     if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
-                        n.name = t.name.clone();
+                        n.name = un;
                         crate::templates::apply(&mut n.p, &t);
                         // the template's layout (mode, length, angle, radius) with neutral
                         // shape and no material (picture-22)
@@ -2545,9 +2681,43 @@ impl App {
                 gx += step;
             }
         }
+        // group boxes (picture 94), behind the wires and nodes: the colour (white at half opacity
+        // by default), a heading band with the name, the comment under it
+        let gz = self.graph_zoom * self.prefs.node_scale;
+        let ghh = (22.0 * gz.sqrt()).max(16.0);
+        let mut group_rects: Vec<Rect> = vec![];
+        for (gi, g) in self.groups.iter().enumerate() {
+            let a = self.graph_to_screen(body, g.min);
+            let b = self.graph_to_screen(body, g.max);
+            let r = Rect::new(a.x.min(b.x), a.y.min(b.y), (b.x - a.x).abs(), (b.y - a.y).abs());
+            group_rects.push(r);
+            let c = g.color;
+            draw_round_rect(r, 6.0, Color::new(c[0], c[1], c[2], c[3] * 0.55));
+            let head = Rect::new(r.x, r.y, r.w, ghh);
+            draw_round_rect(head, 6.0, Color::new(c[0] * 0.8, c[1] * 0.8, c[2] * 0.8, (c[3] + 0.3).min(1.0)));
+            let lum = c[0] * 0.3 + c[1] * 0.59 + c[2] * 0.11;
+            let tc = if lum > 0.55 && c[3] > 0.25 { Color::new(0.08, 0.08, 0.1, 1.0) } else { WHITE };
+            let editing = GROUP_RENAME.with(|r| r.borrow().as_ref().map_or(false, |e| e.0 == gi));
+            if !editing {
+                ui.text_fit(&g.name, r.x + 8.0, r.y + (ghh - 13.0) * 0.5, r.w - 16.0, 13.0, tc);
+            }
+            if !g.comment.is_empty() {
+                ui.text_fit(&g.comment, r.x + 8.0, r.y + ghh + 4.0, r.w - 16.0, 11.5, Color::new(tc.r, tc.g, tc.b, 0.8));
+            }
+            let picked = self.group_sel == Some(gi);
+            draw_round_rect_lines(r, 6.0, if picked { 2.0 } else { 1.0 }, if picked { c_sel } else { Color::new(0.0, 0.0, 0.0, 0.25) });
+            // the resize grip at the bottom right
+            let gp = vec2(r.x + r.w - 4.0, r.y + r.h - 4.0);
+            for k in 1..=3 {
+                let o = k as f32 * 4.0;
+                draw_line(gp.x - o, gp.y, gp.x, gp.y - o, 1.0, Color::new(tc.r, tc.g, tc.b, 0.45));
+            }
+            ui.record(&format!("group:{}", g.name), r);
+        }
         // node boxes: a coloured header with the name, a body with the kind and count, a socket
         // below (from the parent) and above (to the children)
         let style = self.prefs.node_style.min(NODE_STYLES.len() - 1);
+        set_node_shadow(self.prefs.node_shadow);
         let nsz = node_size(style);
         let (nw, nh, hh) = (nsz.x * z, nsz.y * z, 20.0 * z);
         let pr = 4.5 * z.sqrt();
@@ -2556,15 +2726,50 @@ impl App {
         let bottom = |c: Vec2| c + vec2(0.0, nh * 0.5);
         let ww = (self.prefs.node_wire_px * z.sqrt()).max(0.8);
         let wire_style = self.prefs.node_wire_style;
-        // wires (blue), brighter on the picked generator's
+        // wires (blue), brighter on the picked generator's; each has a small circle halfway (the
+        // middle of every wire style), the link (picture 88)
+        let link_sel = LINK_SEL.with(|l| l.borrow().clone());
+        let lr = (5.0 * z.sqrt()).max(3.5);
+        let mut links: Vec<(u32, Vec2, Color, f32)> = vec![];
+        // re-directors (picture 94): the wire runs parent -> the point -> child
+        let mut reroute_pts: Vec<(u32, Vec2, Color)> = vec![];
+        let mut wire_paths: Vec<(u32, Vec<Vec2>)> = vec![];
         for n in &self.nodes {
             if let Some(p) = n.parent.and_then(|pid| self.node(pid)) {
                 let a = top(self.graph_to_screen(body, p.pos));
                 let b = bottom(self.graph_to_screen(body, n.pos));
-                let on = sel_node == Some(n.id) || sel_node == Some(p.id);
+                let on = sel_node == Some(n.id) || sel_node == Some(p.id) || link_sel.contains(&n.id);
                 let col = if on { Color::new((c_wire.r + 0.35).min(1.0), (c_wire.g + 0.3).min(1.0), (c_wire.b + 0.1).min(1.0), 1.0) } else { fade(c_wire, if n.hidden { 0.4 } else { 0.9 }) };
-                draw_wire(a, b, if on { ww * 1.3 } else { ww }, col, wire_style);
+                let w = if on { ww * 1.3 } else { ww };
+                match self.reroutes.get(&n.id).copied() {
+                    Some(rp) => {
+                        let rs = self.graph_to_screen(body, rp);
+                        draw_wire(a, rs, w, col, wire_style);
+                        draw_wire(rs, b, w, col, wire_style);
+                        let mut path = wire_points(a, rs, wire_style);
+                        path.extend(wire_points(rs, b, wire_style));
+                        wire_paths.push((n.id, path));
+                        reroute_pts.push((n.id, rs, col));
+                        links.push((n.id, (rs + b) * 0.5, col, if n.hidden { 0.45 } else { 1.0 }));
+                    }
+                    None => {
+                        draw_wire(a, b, w, col, wire_style);
+                        wire_paths.push((n.id, wire_points(a, b, wire_style)));
+                        links.push((n.id, (a + b) * 0.5, col, if n.hidden { 0.45 } else { 1.0 }));
+                    }
+                }
             }
+        }
+        // the re-directors: small squares on their wires
+        let rsz = (5.0 * z.sqrt()).max(3.5);
+        for (child, rs, col) in &reroute_pts {
+            let picked = REROUTE_SEL.with(|r| *r.borrow()) == Some(*child);
+            draw_rectangle(rs.x - rsz - 1.0, rs.y - rsz - 1.0, rsz * 2.0 + 2.0, rsz * 2.0 + 2.0, Color::new(0.05, 0.05, 0.06, 1.0));
+            draw_rectangle(rs.x - rsz, rs.y - rsz, rsz * 2.0, rsz * 2.0, *col);
+            if picked {
+                draw_rectangle_lines(rs.x - rsz - 3.0, rs.y - rsz - 3.0, rsz * 2.0 + 6.0, rsz * 2.0 + 6.0, 2.0, c_sel);
+            }
+            ui.record(&format!("reroute:{}", child), Rect::new(rs.x - rsz, rs.y - rsz, rsz * 2.0, rsz * 2.0));
         }
         // forces and collision objects: their own nodes, beside the tree's
         self.scene_gpos.resize(self.scene.len(), None);
@@ -2576,6 +2781,11 @@ impl App {
         let mut hover_node = None;
         let mut hover_port: Option<(u32, bool)> = None;
         let mut hover_scene = None;
+        let mut hover_link: Option<u32> = None;
+        let mut hover_reroute: Option<u32> = None;
+        let mut hover_group: Option<usize> = None;
+        let mut hover_corner: Option<usize> = None;
+        let mut hover_wire: Option<u32> = None;
         if can_hover {
             for n in self.nodes.iter() {
                 let c = self.graph_to_screen(body, n.pos);
@@ -2586,6 +2796,30 @@ impl App {
                 }
                 if boxr(c).contains(m) {
                     hover_node = Some(n.id);
+                }
+            }
+            for l in &links {
+                if hover_node.is_none() && hover_port.is_none() && l.1.distance(m) <= lr + 3.0 {
+                    hover_link = Some(l.0);
+                }
+            }
+            // re-directors, then group headings and corners, then bare wires (picture 94)
+            if hover_node.is_none() && hover_port.is_none() && hover_link.is_none() {
+                hover_reroute = reroute_pts.iter().find(|r| (r.1 - m).abs().max_element() <= rsz + 3.0).map(|r| r.0);
+                if hover_reroute.is_none() {
+                    for (gi, r) in group_rects.iter().enumerate().rev() {
+                        if vec2(r.x + r.w, r.y + r.h).distance(m) <= 12.0 {
+                            hover_corner = Some(gi);
+                            break;
+                        }
+                        if Rect::new(r.x, r.y, r.w, ghh).contains(m) {
+                            hover_group = Some(gi);
+                            break;
+                        }
+                    }
+                    if hover_group.is_none() && hover_corner.is_none() {
+                        hover_wire = wire_paths.iter().map(|w| (w.0, dist_to_path(m, &w.1))).filter(|w| w.1 <= 6.0).min_by(|a, b| a.1.total_cmp(&b.1)).map(|w| w.0);
+                    }
                 }
             }
             for (k, p) in spos.iter().enumerate() {
@@ -2609,6 +2843,8 @@ impl App {
             }
         };
         // generators
+        let circle = style == 2;
+        let mut labels: Vec<(Option<u32>, Rect, String, String, f32)> = vec![];
         let nodes = self.nodes.clone();
         for n in &nodes {
             let c = self.graph_to_screen(body, n.pos);
@@ -2647,7 +2883,16 @@ impl App {
                     Kind::Leaf => I::Leaf,
                 });
             }
-            draw_box(ui, r, header, alpha, outline, &n.name, &sub);
+            // Circle nodes (picture 87): the name goes on in a pass after every node, so no node
+            // covers it
+            // (picture 88: no count under the name; the count is on the wire's circle)
+            let _ = &sub;
+            if circle {
+                draw_box(ui, r, header, alpha, outline, "", "");
+                labels.push((Some(n.id), r, n.name.clone(), String::new(), alpha));
+            } else {
+                draw_box(ui, r, header, alpha, outline, &n.name, "");
+            }
             if spine_only {
                 let rb = (nh - hh) * 0.36;
                 let bc = vec2(r.x + r.w - rb - 7.0 * z, r.y + hh + (nh - hh) * 0.5);
@@ -2682,8 +2927,355 @@ impl App {
             let outline = if picked { Some((c_sel, 2.0)) } else if hover_scene == Some(k) { Some((Color::new(1.0, 1.0, 1.0, 0.45), 1.0)) } else { None };
             let sub = format!("{}  •  {}", o.kind.name(), if o.kind.is_force() { "force" } else { "collision" });
             crate::nodeicons::set_next(if o.kind.is_force() { crate::nodeicons::NodeIcon::Force } else { crate::nodeicons::NodeIcon::Collision });
-            draw_box(ui, r, c_scene, 1.0, outline, &o.name, &sub);
+            if circle {
+                draw_box(ui, r, c_scene, 1.0, outline, "", "");
+                labels.push((None, r, o.name.clone(), sub.clone(), 1.0));
+            } else {
+                draw_box(ui, r, c_scene, 1.0, outline, &o.name, &sub);
+            }
             ui.record(&format!("scene:{}", o.name), r);
+        }
+        // the names of Circle nodes (picture 87), on top of every node on a dark tag: beside the
+        // disc on the right, or else the left, below or above, whichever side no other node or
+        // name takes
+        // the links' circles (picture 88): picked one ringed in the selection colour, the child's
+        // count beside it (Preferences > Node Editor > Show counts)
+        let mut link_tags: Vec<Rect> = vec![];
+        for (child, c, col, alpha) in &links {
+            let picked = link_sel.contains(child);
+            let hot = hover_link == Some(*child);
+            draw_circle(c.x, c.y, lr + 1.5, fade(Color::new(0.05, 0.05, 0.06, 1.0), *alpha));
+            draw_circle(c.x, c.y, lr, fade(if picked || hot { *col } else { c_body }, *alpha));
+            draw_circle_lines(c.x, c.y, lr, 1.2, fade(*col, *alpha));
+            if picked {
+                draw_circle_lines(c.x, c.y, lr + 3.0, 2.0, c_sel);
+            }
+            let mut tag = Rect::new(c.x - lr - 2.0, c.y - lr - 2.0, lr * 2.0 + 4.0, lr * 2.0 + 4.0);
+            if counts {
+                let s = self.instance_count(*child).to_string();
+                let fsn = (fs2 * 0.95).max(8.0);
+                ui.text(&s, c.x + lr + 4.0, c.y - fsn * 0.55, fsn, fade(c_text, 0.85 * alpha));
+                tag.w += ui.text_w(&s, fsn) + 6.0;
+            }
+            link_tags.push(tag);
+            ui.record(&format!("link:{}", child), Rect::new(c.x - lr, c.y - lr, lr * 2.0, lr * 2.0));
+        }
+        let mut label_at: std::collections::HashMap<u32, Rect> = Default::default();
+        if circle {
+            let discs: Vec<Rect> = labels.iter().map(|l| Rect::new(l.1.x, l.1.y - pr * 2.0, l.1.w, l.1.h + pr * 4.0)).collect();
+            let mut placed: Vec<Rect> = link_tags.clone();
+            for (k, (id, r, title, sub, alpha)) in labels.iter().enumerate() {
+                let sub = if counts { sub.as_str() } else { "" };
+                let lw = ui.text_w(title, fs).max(ui.text_w(sub, fs2)) + 10.0;
+                let lh = fs + if sub.is_empty() { 0.0 } else { fs2 + 2.0 } + 6.0;
+                let cy = r.y + r.h * 0.5;
+                let gap = 6.0 * z;
+                let cands = [
+                    Rect::new(r.x + r.w + gap, cy - lh * 0.5, lw, lh),
+                    Rect::new(r.x - gap - lw, cy - lh * 0.5, lw, lh),
+                    Rect::new(r.x + r.w * 0.5 - lw * 0.5, r.y + r.h + pr * 2.0 + 3.0, lw, lh),
+                    Rect::new(r.x + r.w * 0.5 - lw * 0.5, r.y - pr * 2.0 - 3.0 - lh, lw, lh),
+                ];
+                let clear = |c: &Rect| !discs.iter().enumerate().any(|(j, d)| j != k && c.overlaps(d)) && !placed.iter().any(|p| c.overlaps(p));
+                let lr = cands.iter().copied().find(|c| clear(c)).unwrap_or(cands[0]);
+                placed.push(lr);
+                draw_round_rect(lr, 4.0, Color::new(0.0, 0.0, 0.0, 0.45 * alpha));
+                ui.text(title, lr.x + 5.0, lr.y + 3.0, fs, fade(c_text, *alpha));
+                if !sub.is_empty() {
+                    ui.text(sub, lr.x + 5.0, lr.y + 3.0 + fs + 2.0, fs2, fade(c_text, 0.6 * alpha));
+                }
+                if let Some(id) = id {
+                    label_at.insert(*id, lr);
+                }
+            }
+        }
+        // renaming (picture 87): F2 on the picked generator or a double-click on one shows a box
+        // over its name; Enter or a click elsewhere keeps the new name, Escape keeps the old one
+        let mut just_started = false;
+        if RENAME.with(|r| r.borrow().is_none()) && ui.popup.is_none() && !ui.editing() {
+            let start = if ui.inp.key(KeyCode::F2) {
+                sel_node
+            } else if ui.inp.l_double && body.contains(m) && !ui.blocked {
+                hover_node
+            } else {
+                None
+            };
+            if let Some(n) = start.and_then(|id| self.node(id)) {
+                let v = (n.id, n.name.clone());
+                RENAME.with(|r| *r.borrow_mut() = Some(v));
+                just_started = true;
+            }
+        }
+        if let Some((id, mut buf)) = RENAME.with(|r| r.borrow().clone()) {
+            match self.node(id).map(|n| n.pos) {
+                None => RENAME.with(|r| *r.borrow_mut() = None),
+                Some(pos) => {
+                    let nr = boxr(self.graph_to_screen(body, pos));
+                    let eh = fs + 10.0;
+                    let er = match label_at.get(&id) {
+                        Some(l) => Rect::new(l.x, l.y, l.w.max(150.0), eh),
+                        None => Rect::new(nr.x, nr.y + 2.0, nr.w.max(150.0), eh),
+                    };
+                    for ch in ui.inp.chars.clone() {
+                        if !ch.is_control() {
+                            buf.push(ch);
+                        }
+                    }
+                    if ui.inp.key(KeyCode::Backspace) {
+                        buf.pop();
+                    }
+                    let enter = ui.inp.key(KeyCode::Enter) || ui.inp.key(KeyCode::KpEnter);
+                    let outside = !just_started && ui.inp.l_pressed && !er.contains(m);
+                    if ui.inp.key(KeyCode::Escape) {
+                        RENAME.with(|r| *r.borrow_mut() = None);
+                    } else if enter || outside {
+                        RENAME.with(|r| *r.borrow_mut() = None);
+                        let name = buf.trim().to_string();
+                        if !name.is_empty() && self.node(id).map(|n| n.name != name).unwrap_or(false) {
+                            if let Some(n) = self.nodes.iter_mut().find(|n| n.id == id) {
+                                n.name = name.clone();
+                            }
+                            self.dirty = true;
+                            self.set_status(&format!("Renamed to {}", name));
+                        }
+                    } else {
+                        RENAME.with(|r| *r.borrow_mut() = Some((id, buf.clone())));
+                    }
+                    if er.contains(m) && ui.inp.l_pressed {
+                        ui.inp.l_pressed = false;
+                    }
+                    ui.inp.chars.clear();
+                    ui.inp.keys.clear();
+                    // the box
+                    draw_round_rect(er, 4.0, Color::new(0.08, 0.09, 0.11, 0.97));
+                    draw_round_rect_lines(er, 4.0, 1.5, C_ACCENT);
+                    ui.text_fit(&buf, er.x + 5.0, er.y + 5.0, er.w - 12.0, fs, WHITE);
+                    if (get_time() * 2.0) as i64 % 2 == 0 {
+                        let cx = er.x + 5.0 + ui.text_w(&buf, fs).min(er.w - 12.0) + 1.0;
+                        draw_line(cx, er.y + 4.0, cx, er.y + er.h - 4.0, 1.2, WHITE);
+                    }
+                    ui.record("edit:node.rename", er);
+                }
+            }
+        }
+
+        // groups and re-directors (picture 94)
+        let gorigin = vec2(body.x + body.w * 0.5, body.y + body.h - 70.0);
+        let to_graph = |s: Vec2, off: Vec2, zoom: f32| (s - gorigin) / zoom - off;
+        let typing_now = ui.editing() || renaming_node() || crate::props::typing();
+        let in_graph0 = body.contains(m) && !ui.blocked && ui.popup.is_none();
+        // C: a group around the picked generators (like Unreal Engine's comment boxes)
+        if in_graph0 && !typing_now && ui.inp.key(KeyCode::C) && !ui.inp.ctrl {
+            let mut ids = self.graph_multi.clone();
+            if let Some(s) = sel_node {
+                if !ids.contains(&s) {
+                    ids.push(s);
+                }
+            }
+            if !ids.is_empty() {
+                let half = node_size(style) * self.prefs.node_scale * 0.5;
+                let (mut lo, mut hi) = (Vec2::splat(f32::MAX), Vec2::splat(f32::MIN));
+                for id in &ids {
+                    if let Some(n) = self.node(*id) {
+                        lo = lo.min(n.pos - half);
+                        hi = hi.max(n.pos + half + vec2(if style == 2 { 110.0 } else { 0.0 }, 0.0));
+                    }
+                }
+                let pad = 24.0;
+                self.groups.push(NodeGroup { name: "Group".into(), comment: String::new(), color: [1.0, 1.0, 1.0, 0.5], min: lo - vec2(pad, pad + 30.0), max: hi + vec2(pad, pad) });
+                self.group_sel = Some(self.groups.len() - 1);
+                self.set_status("Grouped: drag the heading to move the group, double-click it to rename; its settings are in the left panel");
+                ui.inp.keys.clear();
+            }
+        }
+        // Delete with a group or a re-director picked removes it (the nodes stay)
+        if in_graph0 && !typing_now && self.sel == Sel::None && (ui.inp.key(KeyCode::Delete) || ui.inp.key(KeyCode::Backspace)) {
+            if let Some(gi) = self.group_sel.take() {
+                if gi < self.groups.len() {
+                    self.groups.remove(gi);
+                }
+            } else if let Some(c) = REROUTE_SEL.with(|r| r.borrow_mut().take()) {
+                self.reroutes.remove(&c);
+            }
+        }
+        if let Some(path) = ui.take_menu_result("gen.ctx.wire") {
+            if let Some((child, at)) = WIRE_CTX.with(|w| w.borrow_mut().take()) {
+                match path.first().copied() {
+                    Some(0) => {
+                        self.reroutes.insert(child, at);
+                        REROUTE_SEL.with(|r| *r.borrow_mut() = Some(child));
+                    }
+                    Some(1) => self.disconnect_node(child),
+                    _ => {}
+                }
+            }
+        }
+        if let Some(path) = ui.take_menu_result("gen.ctx.reroute") {
+            if let (Some(0), Some(c)) = (path.first().copied(), REROUTE_SEL.with(|r| *r.borrow())) {
+                self.reroutes.remove(&c);
+                REROUTE_SEL.with(|r| *r.borrow_mut() = None);
+            }
+        }
+        if let Some(path) = ui.take_menu_result("gen.ctx.group") {
+            if let Some(gi) = self.group_sel.filter(|&g| g < self.groups.len()) {
+                match path.first().copied() {
+                    Some(0) => GROUP_RENAME.with(|r| *r.borrow_mut() = Some((gi, self.groups[gi].name.clone(), true))),
+                    Some(1) => {
+                        self.groups.remove(gi);
+                        self.group_sel = None;
+                    }
+                    _ => {}
+                }
+            }
+        }
+        if in_graph0 && ui.inp.l_pressed && self.graph_drag == GraphDrag::None {
+            if let Some(c) = hover_reroute {
+                self.select(Sel::None);
+                REROUTE_SEL.with(|r| *r.borrow_mut() = Some(c));
+                self.group_sel = None;
+                self.graph_drag = GraphDrag::Reroute { child: c };
+                ui.active = hid("graph");
+                ui.inp.l_pressed = false;
+            } else if let Some(gi) = hover_corner {
+                self.select(Sel::None);
+                self.group_sel = Some(gi);
+                self.graph_drag = GraphDrag::GroupSize { idx: gi };
+                ui.active = hid("graph");
+                ui.inp.l_pressed = false;
+            } else if let Some(gi) = hover_group {
+                self.select(Sel::None);
+                self.group_sel = Some(gi);
+                REROUTE_SEL.with(|r| *r.borrow_mut() = None);
+                if ui.inp.l_double {
+                    // the heading's text picked: typing replaces it
+                    GROUP_RENAME.with(|r| *r.borrow_mut() = Some((gi, self.groups[gi].name.clone(), true)));
+                } else {
+                    // what comes along: the nodes and re-directors inside the box
+                    let g = self.groups[gi].clone();
+                    let inside = |p: Vec2| p.x >= g.min.x && p.x <= g.max.x && p.y >= g.min.y && p.y <= g.max.y;
+                    let nodes_in: Vec<u32> = self.nodes.iter().filter(|n| inside(n.pos)).map(|n| n.id).collect();
+                    let rr_in: Vec<u32> = self.reroutes.iter().filter(|(_, p)| inside(**p)).map(|(k, _)| *k).collect();
+                    GROUP_DRAG.with(|d| *d.borrow_mut() = (nodes_in, rr_in));
+                    self.graph_drag = GraphDrag::Group { idx: gi };
+                    ui.active = hid("graph");
+                }
+                ui.inp.l_pressed = false;
+            } else if hover_node.is_some() || hover_port.is_some() || hover_link.is_some() || !(ui.inp.shift || ui.inp.ctrl) {
+                self.group_sel = None;
+                REROUTE_SEL.with(|r| *r.borrow_mut() = None);
+            }
+        }
+        if in_graph0 && ui.inp.r_pressed {
+            if let Some(c) = hover_reroute {
+                REROUTE_SEL.with(|r| *r.borrow_mut() = Some(c));
+                ui.open_menu(hid("gen.ctx.reroute"), Rect::new(m.x, m.y, 10.0, 0.0), vec![MenuItem::leaf("Remove re-director")]);
+                ui.inp.r_pressed = false;
+            } else if let Some(gi) = hover_group {
+                self.group_sel = Some(gi);
+                ui.open_menu(hid("gen.ctx.group"), Rect::new(m.x, m.y, 10.0, 0.0), vec![MenuItem::leaf("Rename"), MenuItem::leaf("Delete group")]);
+                ui.inp.r_pressed = false;
+            } else if let Some(c) = hover_wire {
+                let at = to_graph(m, self.graph_off, self.graph_zoom);
+                WIRE_CTX.with(|w| *w.borrow_mut() = Some((c, at)));
+                ui.open_menu(hid("gen.ctx.wire"), Rect::new(m.x, m.y, 10.0, 0.0), vec![MenuItem::leaf("Re-Director"), MenuItem::leaf("Disconnect")]);
+                ui.inp.r_pressed = false;
+            }
+        }
+        if hover_wire.is_some() && hover_link.is_none() {
+            ui.tooltip = Some("Right-click the wire to add a Re-Director (a point it runs through) or disconnect it".into());
+        }
+        // a group heading being typed (double-click or Rename): Enter or a click elsewhere keeps it
+        if let Some((gi, mut buf, mut all)) = GROUP_RENAME.with(|r| r.borrow().clone()) {
+            if gi >= self.groups.len() {
+                GROUP_RENAME.with(|r| *r.borrow_mut() = None);
+            } else {
+                let r = group_rects.get(gi).copied().unwrap_or(Rect::new(body.x, body.y, 160.0, ghh));
+                let er = Rect::new(r.x + 4.0, r.y + 2.0, (r.w - 8.0).max(120.0), ghh - 4.0);
+                for ch in ui.inp.chars.clone() {
+                    if !ch.is_control() {
+                        if all {
+                            buf.clear();
+                            all = false;
+                        }
+                        buf.push(ch);
+                    }
+                }
+                if ui.inp.key(KeyCode::Backspace) {
+                    if all {
+                        buf.clear();
+                        all = false;
+                    } else {
+                        buf.pop();
+                    }
+                }
+                let done = ui.inp.key(KeyCode::Enter) || ui.inp.key(KeyCode::KpEnter) || (ui.inp.l_pressed && !er.contains(m));
+                if ui.inp.key(KeyCode::Escape) {
+                    GROUP_RENAME.with(|r| *r.borrow_mut() = None);
+                } else if done {
+                    GROUP_RENAME.with(|r| *r.borrow_mut() = None);
+                    if !buf.trim().is_empty() {
+                        self.groups[gi].name = buf.trim().to_string();
+                    }
+                } else {
+                    GROUP_RENAME.with(|r| *r.borrow_mut() = Some((gi, buf.clone(), all)));
+                }
+                ui.inp.chars.clear();
+                ui.inp.keys.clear();
+                draw_round_rect(er, 4.0, Color::new(0.08, 0.09, 0.11, 0.97));
+                draw_round_rect_lines(er, 4.0, 1.5, C_ACCENT);
+                let fsz = 13.0;
+                if all {
+                    let tw = ui.text_w(&buf, fsz);
+                    draw_rectangle(er.x + 4.0, er.y + 2.0, tw.min(er.w - 8.0), er.h - 4.0, Color::new(0.30, 0.47, 0.78, 0.9));
+                }
+                ui.text_fit(&buf, er.x + 5.0, er.y + (er.h - fsz) * 0.5, er.w - 12.0, fsz, WHITE);
+                if !all && (get_time() * 2.0) as i64 % 2 == 0 {
+                    let cx = er.x + 5.0 + ui.text_w(&buf, fsz).min(er.w - 12.0) + 1.0;
+                    draw_line(cx, er.y + 3.0, cx, er.y + er.h - 3.0, 1.2, WHITE);
+                }
+            }
+        }
+
+        // links (picture 88): a click on a wire's circle picks the link; Delete (or Disconnect on
+        // its right-click menu) takes the child generator off its parent
+        if let Some(path) = ui.take_menu_result("gen.ctx.link") {
+            if path.first() == Some(&0) {
+                for c in link_sel.clone() {
+                    self.disconnect_node(c);
+                }
+            }
+        }
+        let in_graph = body.contains(m) && !ui.blocked && ui.popup.is_none();
+        if in_graph && ui.inp.l_pressed {
+            if let Some(c) = hover_link {
+                self.select(Sel::None);
+                self.scene_sel = None;
+                LINK_SEL.with(|l| *l.borrow_mut() = vec![c]);
+                ui.inp.l_pressed = false;
+            } else if !(ui.inp.shift || ui.inp.ctrl) {
+                LINK_SEL.with(|l| l.borrow_mut().clear());
+            }
+        }
+        if in_graph && ui.inp.r_pressed {
+            if let Some(c) = hover_link {
+                self.select(Sel::None);
+                self.scene_sel = None;
+                if !link_sel.contains(&c) {
+                    LINK_SEL.with(|l| *l.borrow_mut() = vec![c]);
+                }
+                let label = if link_sel.len() > 1 && link_sel.contains(&c) { format!("Disconnect {} links", link_sel.len()) } else { "Disconnect".to_string() };
+                ui.open_menu(hid("gen.ctx.link"), Rect::new(m.x, m.y, 10.0, 0.0), vec![MenuItem::leaf(&label)]);
+                ui.inp.r_pressed = false;
+            }
+        }
+        let picked_links = LINK_SEL.with(|l| l.borrow().clone());
+        if !picked_links.is_empty() && self.sel == Sel::None && ui.popup.is_none() && !ui.editing() && !renaming_node() && (ui.inp.key(KeyCode::Delete) || ui.inp.key(KeyCode::Backspace)) {
+            for c in picked_links {
+                self.disconnect_node(c);
+            }
+        }
+        if let Some(c) = hover_link {
+            ui.tooltip = Some(format!("{}: click to pick this link, then Delete (or right-click > Disconnect) to take it off its parent", self.node(c).map(|n| n.name.clone()).unwrap_or_default()));
         }
 
         // interaction
@@ -2765,18 +3357,50 @@ impl App {
         let d = m - self.last_graph_mouse();
         match self.graph_drag {
             GraphDrag::Node { id, start, moved } => {
+                // what moves: the picked generators and every generator under them, so a
+                // parent carries its children while a child moves alone (picture 89)
+                let mut all: Vec<u32> = vec![];
+                for s in std::iter::once(id).chain(self.graph_multi.clone()) {
+                    for k in self.descendants(s) {
+                        if !all.contains(&k) {
+                            all.push(k);
+                        }
+                    }
+                }
                 if inp.l_down {
                     let mv = moved || start.distance(m) > 4.0;
                     if mv {
-                        // the whole selection moves together
-                        let multi = self.graph_multi.clone();
-                        for n in self.nodes.iter_mut().filter(|n| n.id == id || multi.contains(&n.id)) {
+                        for n in self.nodes.iter_mut().filter(|n| all.contains(&n.id)) {
                             n.pos += d / self.graph_zoom;
                         }
                     }
                     self.graph_drag = GraphDrag::Node { id, start, moved: mv };
                 } else {
                     self.graph_drag = GraphDrag::None;
+                    // dropped onto another generator: that one becomes its parent, and the node
+                    // (with what's under it) settles just above it (picture 89)
+                    let target = if moved {
+                        self.nodes.iter().rev().find(|n| !all.contains(&n.id) && boxr(self.graph_to_screen(body, n.pos)).contains(m)).map(|n| n.id)
+                    } else {
+                        None
+                    };
+                    if let Some(t) = target {
+                        if self.node(id).map(|n| n.parent != Some(t)).unwrap_or(false) {
+                            self.reparent(id, t);
+                            if self.node(id).and_then(|n| n.parent) == Some(t) {
+                                let tp = self.node(t).map(|n| n.pos).unwrap_or(Vec2::ZERO);
+                                let np = self.node(id).map(|n| n.pos).unwrap_or(Vec2::ZERO);
+                                let k = self.nodes.iter().filter(|n| n.parent == Some(t) && n.id != id).count();
+                                let dx = if k == 0 { 0.0 } else { (k as f32 + 1.0) / 2.0 * 150.0 * if k % 2 == 1 { 1.0 } else { -1.0 } };
+                                let delta = vec2(tp.x + dx - np.x, tp.y - 100.0 - np.y);
+                                for n in self.nodes.iter_mut().filter(|n| all.contains(&n.id)) {
+                                    n.pos += delta;
+                                }
+                                let (a, b) = (self.node(id).map(|n| n.name.clone()).unwrap_or_default(), self.node(t).map(|n| n.name.clone()).unwrap_or_default());
+                                self.set_status(&format!("Linked {} to {}", a, b));
+                            }
+                        }
+                    }
                 }
             }
             GraphDrag::Link { from } => {
@@ -2847,13 +3471,61 @@ impl App {
                                 set.push(n.id);
                             }
                         }
+                        // the wires' circles inside the box are picked too (picture 89)
+                        let mut ls: Vec<u32> = if inp.shift || inp.ctrl { LINK_SEL.with(|l| l.borrow().clone()) } else { vec![] };
+                        for l in &links {
+                            if r.contains(l.1) && !ls.contains(&l.0) {
+                                ls.push(l.0);
+                            }
+                        }
+                        let n_links = ls.len();
+                        LINK_SEL.with(|l| *l.borrow_mut() = ls);
                         if let Some(&first) = set.first() {
                             self.graph_multi = set.clone();
                             self.select(Sel::Node(first));
                             self.graph_multi = if set.len() > 1 { set.clone() } else { vec![] };
                             self.set_status(&format!("{} generator(s) selected: drag one to move them together, Delete removes them", set.len()));
+                        } else if n_links > 0 {
+                            self.set_status(&format!("{} link(s) picked: Delete (or right-click > Disconnect) takes them off their parents", n_links));
                         }
                     }
+                }
+            }
+            GraphDrag::Group { idx } => {
+                if inp.l_down && idx < self.groups.len() {
+                    // the box and everything that was inside it when picked up
+                    let dd = d / self.graph_zoom;
+                    self.groups[idx].min += dd;
+                    self.groups[idx].max += dd;
+                    let (ns, rs) = GROUP_DRAG.with(|g| g.borrow().clone());
+                    for n in self.nodes.iter_mut().filter(|n| ns.contains(&n.id)) {
+                        n.pos += dd;
+                    }
+                    for k in rs {
+                        if let Some(p) = self.reroutes.get_mut(&k) {
+                            *p += dd;
+                        }
+                    }
+                } else {
+                    self.graph_drag = GraphDrag::None;
+                }
+            }
+            GraphDrag::GroupSize { idx } => {
+                if inp.l_down && idx < self.groups.len() {
+                    let g = &mut self.groups[idx];
+                    g.max += d / self.graph_zoom;
+                    g.max = g.max.max(g.min + vec2(80.0, 50.0));
+                } else {
+                    self.graph_drag = GraphDrag::None;
+                }
+            }
+            GraphDrag::Reroute { child } => {
+                if inp.l_down {
+                    if let Some(p) = self.reroutes.get_mut(&child) {
+                        *p += d / self.graph_zoom;
+                    }
+                } else {
+                    self.graph_drag = GraphDrag::None;
                 }
             }
             GraphDrag::None => {}
@@ -4007,6 +4679,41 @@ fn draw_spine_lines(lines: &[(u32, Vec<Vec3>)], cam: Vec3, ortho: bool, px: f32,
     }
 }
 
+/// A rounded toolbar button with a small icon before its word (picture 94): 0 Add (a green
+/// disc with a plus), 1 Actions (an amber disc with three dots), 2 Randomize (a die).
+pub(crate) fn pill_button(ui: &mut Ui, key: &str, r: Rect, label: &str, icon: u8, on: bool) -> bool {
+    ui.record(&format!("btn:{}", key), r);
+    let hot = ui.hover(r);
+    let rad = r.h * 0.5;
+    draw_round_rect(Rect::new(r.x, r.y + 1.0, r.w, r.h), rad, Color::new(0.0, 0.0, 0.0, 0.25));
+    draw_round_rect(r, rad, if on { Color::new(0.30, 0.47, 0.78, 1.0) } else if hot { C_BTN_HOT } else { C_BTN });
+    draw_round_rect_lines(r, rad, 1.0, Color::new(1.0, 1.0, 1.0, if hot || on { 0.22 } else { 0.10 }));
+    let (cx, cy, s) = (r.x + rad + 2.0, r.y + r.h * 0.5, r.h * 0.32);
+    match icon {
+        0 => {
+            draw_circle(cx, cy, s, Color::new(0.30, 0.72, 0.36, 1.0));
+            draw_line(cx - s * 0.55, cy, cx + s * 0.55, cy, 1.8, WHITE);
+            draw_line(cx, cy - s * 0.55, cx, cy + s * 0.55, 1.8, WHITE);
+        }
+        1 => {
+            draw_circle(cx, cy, s, Color::new(0.92, 0.58, 0.20, 1.0));
+            for k in -1..=1 {
+                draw_circle(cx + k as f32 * s * 0.48, cy, s * 0.16, WHITE);
+            }
+        }
+        _ => {
+            let d = Rect::new(cx - s, cy - s, s * 2.0, s * 2.0);
+            draw_round_rect(d, s * 0.35, Color::new(0.93, 0.93, 0.95, 1.0));
+            for (dx, dy) in [(-0.45, -0.45), (0.45, 0.45), (0.0, 0.0), (0.45, -0.45), (-0.45, 0.45)] {
+                draw_circle(cx + dx * s, cy + dy * s, s * 0.17, Color::new(0.15, 0.15, 0.18, 1.0));
+            }
+        }
+    }
+    let tx = cx + s + 6.0;
+    ui.text_fit(label, tx, r.y + (r.h - 12.5) * 0.5 - 1.0, r.x + r.w - tx - 6.0, 12.5, if on || hot { WHITE } else { C_TEXT });
+    hot && ui.inp.l_pressed
+}
+
 /// The Generation editor's node styles (Preferences > Node Editor, picture 41).
 pub const NODE_STYLES: [&str; 5] = ["Rectangle", "Rounded", "Circle", "Ellipse", "Hexagon"];
 
@@ -4028,7 +4735,28 @@ pub(crate) fn draw_node_shape(ui: &mut Ui, style: usize, r: Rect, header: Color,
     let fade = |c: Color, a: f32| Color::new(c.r, c.g, c.b, c.a * a);
     let fs = (12.0 * z.sqrt()).clamp(9.0, 15.0);
     let fs2 = (10.5 * z.sqrt()).clamp(8.0, 13.0);
-    let shadow = Color::new(0.0, 0.0, 0.0, 0.35 * alpha);
+    // a very soft drop shadow (picture 88): layers growing outward and fading, a little below
+    // the node, as dark as Preferences > Node Editor > Node shadow
+    let strength = NODE_SHADOW.with(|s| *s.borrow());
+    if strength > 0.0 {
+        let layers = 7;
+        for i in (0..layers).rev() {
+            let g = (i as f32 + 1.0) * 1.6 * z.sqrt();
+            let a = strength * alpha * 0.07;
+            let c = Color::new(0.0, 0.0, 0.0, a);
+            let (dx, dy) = (0.0, 3.0 * z.sqrt());
+            match style {
+                2 => draw_circle(r.x + r.w * 0.5 + dx, r.y + r.h * 0.5 + dy, r.w.min(r.h) * 0.5 + g, c),
+                3 => draw_ellipse(r.x + r.w * 0.5 + dx, r.y + r.h * 0.5 + dy, r.w * 0.5 + g, r.h * 0.5 + g, 0.0, c),
+                _ => {
+                    let rr = Rect::new(r.x - g + dx, r.y - g + dy, r.w + 2.0 * g, r.h + 2.0 * g);
+                    let rad = if style == 1 { rr.h * 0.5 } else { (5.0 * z + g).min(rr.h * 0.5) };
+                    draw_round_rect(rr, rad, c);
+                }
+            }
+        }
+    }
+    let shadow = Color::new(0.0, 0.0, 0.0, 0.0);
     let line = |dflt: f32| outline.unwrap_or((Color::new(0.0, 0.0, 0.0, 0.55 * alpha), dflt));
     // the node's icon (picture 66), set by the caller just before
     let icon = crate::nodeicons::take_next();
@@ -4116,6 +4844,39 @@ pub(crate) fn draw_node_shape(ui: &mut Ui, style: usize, r: Rect, header: Color,
 
 /// A node-graph wire: a vertical S-curve from  (a parent's top socket) up to  (a child's
 /// bottom socket).
+/// The points a wire passes through, as draw_wire draws it (for finding a click on a wire,
+/// picture 94).
+fn wire_points(a: Vec2, b: Vec2, style: usize) -> Vec<Vec2> {
+    if style == 1 {
+        return vec![a, b];
+    }
+    if style == 2 {
+        let my = (a.y + b.y) * 0.5;
+        return vec![a, vec2(a.x, my), vec2(b.x, my), b];
+    }
+    let k = ((b.y - a.y).abs() * 0.5).max(30.0);
+    let (c1, c2) = (a - vec2(0.0, k), b + vec2(0.0, k));
+    (0..=28)
+        .map(|i| {
+            let t = i as f32 / 28.0;
+            let u = 1.0 - t;
+            a * (u * u * u) + c1 * (3.0 * u * u * t) + c2 * (3.0 * u * t * t) + b * (t * t * t)
+        })
+        .collect()
+}
+
+/// How far a point is from a wire's points (as a polyline).
+fn dist_to_path(m: Vec2, pts: &[Vec2]) -> f32 {
+    let mut best = f32::MAX;
+    for w in pts.windows(2) {
+        let (a, b) = (w[0], w[1]);
+        let ab = b - a;
+        let t = ((m - a).dot(ab) / ab.length_squared().max(1e-6)).clamp(0.0, 1.0);
+        best = best.min(m.distance(a + ab * t));
+    }
+    best
+}
+
 fn draw_wire(a: Vec2, b: Vec2, w: f32, col: Color, style: usize) {
     // Preferences > Node Editor > Wire style (picture 41): 1 Straight, 2 Angled
     if style == 1 {

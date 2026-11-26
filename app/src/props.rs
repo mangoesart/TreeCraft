@@ -250,6 +250,52 @@ impl<'a> Rows<'a> {
         }
         self.y += RH;
     }
+    /// A line of text to type into (picture 94): click it, type, Enter or a click elsewhere ends.
+    pub fn text(&mut self, k: &str, label: &str, s: &mut String) {
+        let r = self.label(label);
+        let key = self.key(k);
+        self.ui.record(&key, r);
+        let m = self.ui.mouse();
+        let mut focus = TEXT_FOCUS.with(|f| f.borrow().0 == key);
+        if self.ui.inp.l_pressed && self.ui.popup.is_none() {
+            if r.contains(m) && !self.ui.blocked {
+                focus = true;
+                self.ui.inp.l_pressed = false;
+            } else {
+                focus = false;
+            }
+        }
+        draw_rectangle(r.x, r.y, r.w, r.h, C_FIELD);
+        if focus {
+            draw_rectangle_lines(r.x, r.y, r.w, r.h, 1.0, C_ACCENT2);
+            for ch in self.ui.inp.chars.clone() {
+                if !ch.is_control() {
+                    s.push(ch);
+                    self.changed = true;
+                }
+            }
+            if self.ui.inp.key(KeyCode::Backspace) {
+                s.pop();
+                self.changed = true;
+            }
+            if self.ui.inp.key(KeyCode::Enter) || self.ui.inp.key(KeyCode::KpEnter) || self.ui.inp.key(KeyCode::Escape) {
+                focus = false;
+            }
+            self.ui.inp.chars.clear();
+            self.ui.inp.keys.clear();
+        }
+        TEXT_FOCUS.with(|f| {
+            let mut f = f.borrow_mut();
+            if focus {
+                *f = (key.clone(), get_time());
+            } else if f.0 == key {
+                f.0.clear();
+            }
+        });
+        let shown = if focus && (get_time() * 2.0) as i64 % 2 == 0 { format!("{}|", s) } else { s.clone() };
+        self.ui.text_fit(&shown, r.x + 4.0, r.y + 3.0, r.w - 8.0, 12.5, C_TEXT);
+        self.y += RH;
+    }
     pub fn button(&mut self, k: &str, label: &str) -> bool {
         let r = Rect::new(self.x + self.lw(), self.y + 2.0, self.w - self.lw(), RH - 4.0);
         let key = self.key(k);
@@ -1106,7 +1152,11 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
 
     // header row: what's selected + edit modes
     let (title, sub): (String, String) = match app.sel {
-        Sel::None => ("Nothing selected".to_string(), String::new()),
+        Sel::None => match app.group_sel.and_then(|g| app.groups.get(g)) {
+            // a group box picked in the node graph (picture 94)
+            Some(g) => (g.name.clone(), "Group (node graph)".into()),
+            None => ("Nothing selected".to_string(), String::new()),
+        },
         Sel::Node(id) => match app.node(id) {
             // (picture 62: unhighlighted after one click on empty space, still editable)
             Some(n) => (n.name.clone(), if app.sel_soft { format!("{}  -  not highlighted (click empty space again to deselect)", n.kind.type_label()) } else { n.kind.type_label().to_string() }),
@@ -1233,6 +1283,33 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
     if app.export_tab {
         rows.prefix = "export".into();
         crate::export::export_rows(&mut rows, app);
+    } else if app.group_sel.map_or(false, |g| g < app.groups.len()) && matches!(app.sel, Sel::None) {
+        // a group box (picture 94): its heading, comment, colour and transparency
+        rows.prefix = "group".into();
+        let gi = app.group_sel.unwrap_or(0);
+        let mut g = app.groups[gi].clone();
+        if rows.group("Group") {
+            rows.text("name", "Heading", &mut g.name);
+            rows.text("comment", "Comment", &mut g.comment);
+            let mut rgb = [g.color[0], g.color[1], g.color[2]];
+            rows.color("color", "Color", &mut rgb);
+            g.color = [rgb[0], rgb[1], rgb[2], g.color[3]];
+            let mut tr = 1.0 - g.color[3];
+            rows.f("transparency", "Transparency", &mut tr, 0.0, 1.0, 2);
+            g.color[3] = 1.0 - tr.clamp(0.0, 1.0);
+            rows.note("Drag the heading to move the group and the nodes inside it; drag its corner to resize. Double-click the heading to rename it.");
+            if rows.button("delete", "Delete group") {
+                app.groups.remove(gi);
+                app.group_sel = None;
+            }
+        }
+        if gi < app.groups.len() && app.groups[gi] != g {
+            app.groups[gi] = g;
+        }
+    } else if app.pp2_open && matches!(app.sel, Sel::None) {
+        // PivotPainter2 (TreeCraft's own tool), opened from the default panel
+        rows.prefix = "pp2".into();
+        crate::pivotpainter::pp2_rows(&mut rows, app);
     } else {
     match app.sel {
         Sel::None => {
@@ -1242,7 +1319,8 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
             // the original's default panel: Edit (Wind, Lighting, Global and Window properties,
             // which open their Preferences pages), Actions, File
             for (sec, items) in [
-                ("Edit", vec![("Wind", 10), ("Lighting", 11), ("Global properties", 1), ("Window properties", 2)]),
+                // PivotPainter2 sits under Window properties (an empty slot keeps it in that column)
+                ("Edit", vec![("Wind", 10), ("Lighting", 11), ("Global properties", 1), ("Window properties", 2), ("", 0), ("PivotPainter2", 12)]),
                 // (Actions left out for now, picture 49)
                 ("File", vec![("New tree", 5), ("Open...", 6), ("Save", 7), ("Save As...", 8)]),
             ] {
@@ -1250,6 +1328,9 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                 rows.y += 28.0;
                 let bw2 = (w - 8.0) / 2.0;
                 for (k, (label, id)) in items.iter().enumerate() {
+                    if *id == 0 {
+                        continue;
+                    }
                     let r = Rect::new(x + 4.0 + (k % 2) as f32 * (bw2 + 6.0) - 4.0, rows.y + (k / 2) as f32 * 32.0, bw2 - 2.0, 27.0);
                     if rows.ui.button(&format!("home.{}", label), r, label) {
                         act = Some(*id);
@@ -1274,6 +1355,7 @@ pub fn draw_panel(app: &mut App, ui: &mut Ui, panel: Rect) {
                     }
                 }
                 Some(2) => app.select(Sel::Window),
+                Some(12) => app.pp2_open = true,
                 Some(10) => page(app, 2),
                 Some(11) => app.select(Sel::Light),
                 Some(3) => app.randomize(None),
@@ -1676,4 +1758,17 @@ fn light_rows(r: &mut Rows, app: &mut App) {
     l.ao_max = l.ao_max.clamp(0.0, 1.0);
     l.ground_weight = l.ground_weight.clamp(0.0, 1.0);
     l.wrap = l.wrap.clamp(0.0, 1.0);
+}
+
+thread_local! {
+    /// The text row being typed into and when it was last drawn (picture 94).
+    static TEXT_FOCUS: std::cell::RefCell<(String, f64)> = const { std::cell::RefCell::new((String::new(), 0.0)) };
+}
+
+/// Whether a text row in the properties panel is being typed into (shortcuts wait meanwhile).
+pub fn typing() -> bool {
+    TEXT_FOCUS.with(|f| {
+        let f = f.borrow();
+        !f.0.is_empty() && get_time() - f.1 < 0.3
+    })
 }

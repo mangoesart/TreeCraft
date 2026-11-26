@@ -42,6 +42,15 @@ pub(crate) struct FhCtrl {
     band: Vec<Vec3>,
 }
 
+thread_local! {
+    /// The curve window's view (picture 91): the curve it shows, the value at the graph's foot
+    /// and how much it spans.
+    static CURVE_VIEW: std::cell::RefCell<(String, f32, f32)> = const { std::cell::RefCell::new((String::new(), -0.1, 1.2)) };
+}
+
+/// How far below 0 or above 1 a curve point may go (picture 91).
+const YLIM: f32 = 10.0;
+
 impl App {
     /// The curve editor keeps the mouse while it is over it (or dragging); elsewhere the app
     /// works as usual, the editor staying open beside it (picture 34).
@@ -934,22 +943,64 @@ impl App {
             }
             ui.text("Y", xr.x + xr.w + 6.0, ty + 3.0, 12.0, C_TEXT);
             let yr = Rect::new(xr.x + xr.w + 18.0, ty, fw, 20.0);
-            if ui.slider("curve.y", yr, &mut py, 0.0, 1.0, 3) {
-                curve.pts[si].y = py.clamp(0.0, 1.0);
+            let (vy0, vspan) = CURVE_VIEW.with(|v| { let v = v.borrow(); if v.0 == key { (v.1, v.2) } else { (-0.1, 1.2) } });
+            if ui.slider("curve.y", yr, &mut py, vy0.min(0.0), (vy0 + vspan).max(1.0), 3) {
+                curve.pts[si].y = py.clamp(-YLIM, YLIM);
                 changed = true;
             }
         }
         // the graph
         let g = Rect::new(r.x + 30.0, r.y + 60.0, r.w - 44.0, r.h - 92.0);
+        // the view (picture 91): it pans up and down (middle-drag or the wheel; Ctrl+wheel zooms)
+        // so points can go below 0 and above 1; each curve keeps its own view while open
+        let (mut vy0, mut vspan) = CURVE_VIEW.with(|v| { let v = v.borrow(); if v.0 == key { (v.1, v.2) } else { (-0.1, 1.2) } });
+        if g.contains(m) && ui.popup.is_none() {
+            if ui.inp.m_down {
+                vy0 += d.y / g.h * vspan;
+            }
+            if ui.inp.wheel != 0.0 {
+                if ui.inp.ctrl {
+                    let mid = vy0 + vspan * 0.5;
+                    vspan = (vspan * 0.9f32.powf(ui.inp.wheel)).clamp(0.25, 2.0 * YLIM);
+                    vy0 = mid - vspan * 0.5;
+                } else {
+                    vy0 += ui.inp.wheel.signum() * vspan * 0.08;
+                }
+                ui.inp.wheel = 0.0;
+            }
+            vy0 = vy0.clamp(-YLIM, YLIM - vspan);
+        }
+        CURVE_VIEW.with(|v| *v.borrow_mut() = (key.clone(), vy0, vspan));
         draw_rectangle(g.x, g.y, g.w, g.h, Color::new(0.33, 0.33, 0.34, 1.0));
+        ui.set_clip(Some(g));
+        let ys = |y: f32| g.y + (1.0 - (y - vy0) / vspan) * g.h;
         for k in 0..=10 {
             let f = k as f32 / 10.0;
             let a = if k % 5 == 0 { 0.16 } else { 0.07 };
             draw_line(g.x + g.w * f, g.y, g.x + g.w * f, g.y + g.h, 1.0, Color::new(1.0, 1.0, 1.0, a));
-            draw_line(g.x, g.y + g.h * f, g.x + g.w, g.y + g.h * f, 1.0, Color::new(1.0, 1.0, 1.0, a));
         }
-        ui.text("1", g.x - 14.0, g.y - 6.0, 11.0, C_TEXT_DIM);
-        ui.text("0", g.x - 14.0, g.y + g.h - 8.0, 11.0, C_TEXT_DIM);
+        let step = if vspan <= 1.5 { 0.1 } else if vspan <= 4.0 { 0.25 } else { 1.0 };
+        let mut yk = (vy0 / step).floor() * step;
+        let mut labels = vec![];
+        while yk <= vy0 + vspan + 1e-4 {
+            let whole = (yk - yk.round()).abs() < 1e-3;
+            let half = (yk * 2.0 - (yk * 2.0).round()).abs() < 1e-3;
+            // 0 and 1, the usual limits, stand out
+            let a = if whole && (yk.round() == 0.0 || yk.round() == 1.0) { 0.32 } else if half { 0.16 } else { 0.07 };
+            draw_line(g.x, ys(yk), g.x + g.w, ys(yk), 1.0, Color::new(1.0, 1.0, 1.0, a));
+            if half {
+                labels.push(yk);
+            }
+            yk += step;
+        }
+        ui.set_clip(None);
+        for y in labels {
+            let s = if (y - y.round()).abs() < 1e-3 { format!("{}", y.round() as i32) } else { format!("{:.1}", y) };
+            let py = ys(y);
+            if py >= g.y - 2.0 && py <= g.y + g.h + 2.0 {
+                ui.text(&s, g.x - 4.0 - ui.text_w(&s, 11.0), py - 6.0, 11.0, C_TEXT_DIM);
+            }
+        }
         let axis = match kind {
             0 => "where the child sits on its parent: base  ->  tip",
             1 => "the children on one parent: first  ->  last",
@@ -957,8 +1008,8 @@ impl App {
         };
         ui.text_fit(axis, g.x, g.y + g.h + 4.0, g.w * 0.6, 11.0, C_TEXT_DIM);
         ui.text_fit("Right-click for more  -  Del, Ctrl-A, Ctrl-C, Ctrl-V", g.x + g.w * 0.55, g.y + g.h + 4.0, g.w * 0.45, 11.0, C_TEXT_FAINT);
-        let to_s = |p: Vec2| vec2(g.x + p.x * g.w, g.y + (1.0 - p.y) * g.h);
-        let from_s = |s: Vec2| vec2(((s.x - g.x) / g.w).clamp(0.0, 1.0), (1.0 - (s.y - g.y) / g.h).clamp(0.0, 1.0));
+        let to_s = |p: Vec2| vec2(g.x + p.x * g.w, g.y + (1.0 - (p.y - vy0) / vspan) * g.h);
+        let from_s = |s: Vec2| vec2(((s.x - g.x) / g.w).clamp(0.0, 1.0), (vy0 + (1.0 - (s.y - g.y) / g.h) * vspan).clamp(-YLIM, YLIM));
         let mut hover_pt: Option<(usize, f32)> = None;
         for (i, p) in curve.pts.iter().enumerate() {
             // a generous grab radius, nearest point first (picture 36)
@@ -1055,7 +1106,7 @@ impl App {
                     // point follows the mouse itself (picture 56), so it never lags behind
                     let n = curve.pts.len();
                     let _ = d;
-                    let want = vec2(((m.x - g.x) / g.w).clamp(0.0, 1.0), (1.0 - (m.y - g.y) / g.h).clamp(-1.0, 2.0));
+                    let want = from_s(m);
                     let cur = curve.pts.get(i).copied().unwrap_or(want);
                     let dx = want.x - cur.x;
                     let dy = want.y - cur.y;
@@ -1075,7 +1126,7 @@ impl App {
                         } else {
                             q.x = q.x.clamp(curve.pts[s - 1].x + 0.001, curve.pts[s + 1].x - 0.001);
                         }
-                        q.y = q.y.clamp(0.0, 1.0);
+                        q.y = q.y.clamp(-YLIM, YLIM);
                         if curve.pts[s] != q {
                             curve.pts[s] = q;
                             changed = true;
@@ -1130,7 +1181,7 @@ impl App {
                         _ => ys.iter().cloned().fold(1.0, f32::min),
                     };
                     for p in &mut curve.pts {
-                        p.y = (pivot + (p.y - pivot) * 1.25).clamp(0.0, 1.0);
+                        p.y = (pivot + (p.y - pivot) * 1.25).clamp(-YLIM, YLIM);
                     }
                     changed = true;
                 }
@@ -1166,6 +1217,7 @@ impl App {
             }
         }
         // the curve and its points
+        ui.set_clip(Some(Rect::new(g.x - 8.0, g.y - 8.0, g.w + 16.0, g.h + 16.0)));
         for k in 0..160 {
             let (x0, x1) = (k as f32 / 160.0, (k + 1) as f32 / 160.0);
             let (a, b) = (to_s(vec2(x0, curve.eval(x0))), to_s(vec2(x1, curve.eval(x1))));
@@ -1185,6 +1237,7 @@ impl App {
                 draw_circle_lines(s.x, s.y, rad + 2.0, 1.0, WHITE);
             }
         }
+        ui.set_clip(None);
         // the level choice
         if lv != lv_before {
             if lv == 0 {
@@ -1205,9 +1258,8 @@ impl App {
         let own_list_was_open = self.curve_popup_open;
         self.curve_popup_open = ui.popup_open_for("curve.presets") || ui.popup_open_for("curve.level") || ui.popup_open_for("curve.ctx");
         let outside = ui.inp.l_pressed && !r.contains(m) && zone == 0 && ui.popup.is_none() && !own_list_was_open;
-        if outside && !self.curve_pin && !self.curve_just_opened {
-            close = true;
-        }
+        // (picture 91: a click outside no longer closes it; the X at its top right does)
+        let _ = outside;
         self.curve_just_opened = false;
         if close {
             self.curve_edit = None;

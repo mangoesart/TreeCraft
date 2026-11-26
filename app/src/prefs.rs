@@ -35,7 +35,7 @@ pub const VIEWPORT_COLORS: [(&str, &str, [f32; 4]); 34] = [
     ("axis_z", "Axes: Z", [0.4, 0.55, 1.0, 1.0]),
     // Node Editor (picture 23): muted colours per kind, blue wires
     ("node_bg", "Background", [0.12, 0.12, 0.13, 1.0]),
-    ("node_grid", "Grid dots", [1.0, 1.0, 1.0, 0.06]),
+    ("node_grid", "Grid", [1.0, 1.0, 1.0, 0.05]),
     ("node_body", "Node body", [0.19, 0.19, 0.2, 1.0]),
     ("node_tree", "Header: Tree", [0.30, 0.34, 0.42, 1.0]),
     ("node_trunk", "Header: Trunk", [0.42, 0.33, 0.26, 1.0]),
@@ -135,6 +135,8 @@ pub struct Prefs {
     pub node_wire_px: f32,
     pub node_scale: f32,
     pub node_counts: bool,
+    /// How dark the soft shadow under each node is, 0 = none (picture 88).
+    pub node_shadow: f32,
     /// The viewport's background (BG_STYLES) and whether the ground is drawn (picture 42).
     pub bg_style: usize,
     pub show_ground: bool,
@@ -220,12 +222,14 @@ impl Prefs {
             wire_px: 1.8,
             wire_sel_boost: 0.35,
             node_style: 0,
-            node_grid: 0,
+            // very faint grid lines (picture 88)
+            node_grid: 1,
             node_grid_step: 40.0,
             node_wire_style: 0,
             node_wire_px: 2.4,
             node_scale: 1.0,
             node_counts: true,
+            node_shadow: 0.6,
             bg_style: 1,
             show_ground: true,
             display_scaling: 1.0,
@@ -338,7 +342,10 @@ impl Prefs {
                 "wire_px" => p.wire_px = f.unwrap_or(1.8).clamp(0.5, 8.0),
                 "wire_sel_boost" => p.wire_sel_boost = f.unwrap_or(0.35).clamp(0.0, 1.0),
                 "node_style" => p.node_style = v.parse::<usize>().unwrap_or(0).min(crate::app::NODE_STYLES.len() - 1),
-                "node_grid" => p.node_grid = v.parse::<usize>().unwrap_or(0).min(NODE_GRIDS.len() - 1),
+                // (picture 88: grid lines by default, so a grid saved before is read again under
+                // a new key and the old dots setting is left behind)
+                "node_grid2" => p.node_grid = v.parse::<usize>().unwrap_or(1).min(NODE_GRIDS.len() - 1),
+                "node_shadow" => p.node_shadow = f.unwrap_or(0.6).clamp(0.0, 1.0),
                 "node_grid_step" => p.node_grid_step = f.unwrap_or(40.0).clamp(10.0, 200.0),
                 "node_wire_style" => p.node_wire_style = v.parse::<usize>().unwrap_or(0).min(NODE_WIRES.len() - 1),
                 "node_wire_px" => p.node_wire_px = f.unwrap_or(2.4).clamp(0.5, 8.0),
@@ -408,8 +415,8 @@ impl Prefs {
         s.push_str(&format!("sel_mode={}\nsel_fill={}\nsel_outline={}\nsel_thickness={}\n", self.sel_mode, c4(&self.sel_fill), c4(&self.sel_outline), self.sel_thickness));
         s.push_str(&format!("wire_px={}\nwire_sel_boost={}\n", self.wire_px, self.wire_sel_boost));
         s.push_str(&format!(
-            "node_style={}\nnode_grid={}\nnode_grid_step={}\nnode_wire_style={}\nnode_wire_px={}\nnode_scale={}\nnode_counts={}\n",
-            self.node_style, self.node_grid, self.node_grid_step, self.node_wire_style, self.node_wire_px, self.node_scale, self.node_counts
+            "node_style={}\nnode_grid2={}\nnode_grid_step={}\nnode_wire_style={}\nnode_wire_px={}\nnode_scale={}\nnode_counts={}\nnode_shadow={}\n",
+            self.node_style, self.node_grid, self.node_grid_step, self.node_wire_style, self.node_wire_px, self.node_scale, self.node_counts, self.node_shadow
         ));
         s.push_str(&format!("bg_style={}\nshow_ground={}\n", self.bg_style, self.show_ground));
         s.push_str(&format!(
@@ -905,6 +912,7 @@ impl App {
         let sw = ((page.w - 16.0) / n as f32).min(170.0);
         let sh = 96.0;
         let (head, bodyc, text) = (self.prefs.color("node_trunk"), self.prefs.color("node_body"), self.prefs.color("node_text"));
+        crate::app::set_node_shadow(self.prefs.node_shadow);
         for (k, name) in NODE_STYLES.iter().enumerate() {
             let cell = Rect::new(page.x + 8.0 + k as f32 * sw, page.y + 50.0, sw - 8.0, sh);
             let on = self.prefs.node_style == k;
@@ -953,8 +961,11 @@ impl App {
         let r = row(ui, &mut y, "Node size", "How big the nodes are drawn");
         ui.slider("pn.scale", r, &mut self.prefs.node_scale, 0.5, 2.0, 2);
         self.prefs.node_scale = self.prefs.node_scale.clamp(0.5, 2.0);
-        let r = row(ui, &mut y, "Show counts", "Each node's count of trunks, branches or leaves");
+        let r = row(ui, &mut y, "Show counts", "The count of trunks, branches or leaves beside each wire's circle");
         ui.checkbox("pn.counts", r, &mut self.prefs.node_counts);
+        let r = row(ui, &mut y, "Node shadow", "How dark the soft shadow under each node is (0 = none)");
+        ui.slider("pn.shadow", r, &mut self.prefs.node_shadow, 0.0, 1.0, 2);
+        self.prefs.node_shadow = self.prefs.node_shadow.clamp(0.0, 1.0);
         y
     }
 

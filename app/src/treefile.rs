@@ -93,7 +93,7 @@ fields!(put_params, get_params, Params, {
     radius_pct: f, radius_var: f, taper: f, flare: f, clamp_parent: b, seg_len: i, seg_radial: i,
     material: u, u_tile: f, v_tile: f, leaf_size: f, leaf_size_pct: f, leaf_size_var: f, leaf_mesh: u,
     leaf_material: u, face_sky: f, droop: f, fold: f, curl: f, leaf_twist: f, scale_x: f, scale_y: f,
-    tree_radius: f, lod_preview: i, collect: b, cap_ends: b,
+    tree_radius: f, lod_preview: i, collect: b, cap_ends: b, cap_tip: b,
 });
 
 fields!(put_material, get_material, Material, {
@@ -188,6 +188,21 @@ pub fn write(app: &App) -> String {
     }
     // custom cameras (picture 50)
     crate::cameras::write(&app.cameras, &mut s);
+    // the node graph's group boxes and re-directors (picture 94)
+    for g in &app.groups {
+        let _ = writeln!(s, "\n[group]\nname={}\ncomment={}\ncolor={},{},{},{}\nrect={},{},{},{}", esc(&g.name), esc(&g.comment), g.color[0], g.color[1], g.color[2], g.color[3], g.min.x, g.min.y, g.max.x, g.max.y);
+    }
+    if !app.reroutes.is_empty() {
+        s.push_str("\n[graph]\n");
+        let mut ks: Vec<_> = app.reroutes.iter().collect();
+        ks.sort_by_key(|k| *k.0);
+        for (id, p) in ks {
+            let _ = writeln!(s, "reroute={},{},{}", id, p.x, p.y);
+        }
+    }
+    // what the viewport showed when saved (picture 87): the height indicator stays hidden on
+    // opening if it was hidden
+    let _ = writeln!(s, "\n[view]\nshow_height={}", app.show_height);
     // Window properties (picture 49)
     if !app.winp.is_empty() || !app.win_image_path.is_empty() {
         s.push_str("\n[window]\n");
@@ -282,6 +297,88 @@ fn s2v3(s: &str) -> Vec<Vec3> {
     s.split(';').filter(|x| !x.is_empty()).map(|x| { let n = nums(x); vec3(n.first().copied().unwrap_or(0.0), n.get(1).copied().unwrap_or(0.0), n.get(2).copied().unwrap_or(0.0)) }).collect()
 }
 
+/// One line of a [node] section (picture 93: shared by the reader and the tests).
+fn node_line(n: &mut Node, k: &str, v: &str) {
+    match k {
+        "id" => n.id = v.parse().unwrap_or(0),
+        "kind" => {
+            n.kind = match v {
+                "Trunk" => Kind::Trunk,
+                "Branch" => Kind::Branch,
+                "Leaf" => Kind::Leaf,
+                _ => Kind::Tree,
+            };
+            n.p = Params::new(n.kind);
+        }
+        "name" => n.name = unesc(v),
+        "parent" => n.parent = v.parse().ok(),
+        "pos" => {
+            let x = nums(v);
+            if x.len() >= 2 {
+                n.pos = vec2(x[0], x[1]);
+            }
+        }
+        "hidden" => n.hidden = v == "true",
+        _ => {
+            if let Some(f) = k.strip_prefix("p.") {
+                get_params(&mut n.p, f, v);
+            } else if let Some(e) = k.strip_prefix("extra.") {
+                if let Ok(x) = v.parse() {
+                    n.p.extra.insert(e.to_string(), x);
+                }
+            } else if let Some(c) = k.strip_prefix("curve.") {
+                n.p.curves.entry(c.to_string()).or_insert_with(Curve::flat).pts = s2v(v);
+            } else if let Some(c) = k.strip_prefix("curvekind.") {
+                n.p.curves.entry(c.to_string()).or_insert_with(Curve::flat).kinds = v.split(',').filter_map(|x| x.parse().ok()).collect();
+            } else if let Some(c) = k.strip_prefix("variance.") {
+                let x = nums(v);
+                if x.len() >= 5 {
+                    n.p.variances.insert(c.to_string(), Variance { amount: x[0], gaussian: x[1] > 0.5, cohesion: x[2], scale: x[3], offset: x[4] });
+                }
+            } else if let Some(c) = k.strip_prefix("curvelevel.") {
+                if let Ok(l) = v.parse::<u8>() {
+                    n.p.curve_levels.insert(c.to_string(), l);
+                }
+            } else if let Some(i) = k.strip_prefix("edit.").and_then(|i| i.parse::<usize>().ok()) {
+                let x = nums(v);
+                if x.len() >= 5 {
+                    let e = n.p.node_edits.entry(i).or_default();
+                    (e.length, e.radius, e.angle, e.roll, e.hidden) = (x[0], x[1], x[2], x[3], x[4] > 0.5);
+                    e.slide = x.get(5).copied().unwrap_or(0.0);
+                }
+            } else if let Some((i, key)) = k.strip_prefix("editp.").and_then(|r| r.split_once('.')).and_then(|(i, key)| Some((i.parse::<usize>().ok()?, key))) {
+                n.p.node_edits.entry(i).or_default().props.insert(key.to_string(), v.to_string());
+            } else if k == "mats" || k == "exts" {
+                let list: Vec<(usize, f32)> = v.split(',').filter_map(|x| { let (a, b) = x.split_once(':')?; Some((a.parse().ok()?, b.parse().ok()?)) }).collect();
+                if k == "mats" { n.p.mat_list = list } else { n.p.ext_list = list }
+            } else if k == "drawn" {
+                n.p.drawn.push(s2v3(v));
+            }
+        }
+    }
+}
+
+/// Only the generators of a tree file (the tests load a person's tree with this).
+#[allow(dead_code)]
+pub fn parse_nodes(text: &str) -> Vec<Node> {
+    let mut nodes: Vec<Node> = vec![];
+    let mut in_node = false;
+    for line in text.lines() {
+        let line = line.trim_end_matches('\r');
+        if line.starts_with('[') {
+            in_node = line == "[node]";
+            if in_node {
+                nodes.push(Node { id: 0, kind: Kind::Tree, name: String::new(), parent: None, pos: Vec2::ZERO, p: Params::new(Kind::Tree), hidden: false });
+            }
+            continue;
+        }
+        if let (true, Some((k, v)), Some(n)) = (in_node, line.split_once('='), nodes.last_mut()) {
+            node_line(n, k, v);
+        }
+    }
+    nodes
+}
+
 /// Read a tree file into the app (replacing the current tree).
 pub fn read(app: &mut App, text: &str) -> Result<(), String> {
     let mut lines = text.lines();
@@ -295,6 +392,10 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
     let mut winp: std::collections::BTreeMap<String, f64> = Default::default();
     let mut win_image = String::new();
     let mut cams: Vec<crate::cameras::ViewCam> = vec![];
+    // files from before picture 87 show it
+    let mut show_height = true;
+    let mut groups: Vec<crate::app::NodeGroup> = vec![];
+    let mut reroutes: std::collections::HashMap<u32, Vec2> = Default::default();
     let mut section = "";
     for line in lines {
         let line = line.trim_end_matches('\r');
@@ -320,6 +421,12 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                     "scene"
                 }
                 "[window]" => "window",
+                "[view]" => "view",
+                "[group]" => {
+                    groups.push(crate::app::NodeGroup { name: "Group".into(), comment: String::new(), color: [1.0, 1.0, 1.0, 0.5], min: Vec2::ZERO, max: vec2(200.0, 150.0) });
+                    "group"
+                }
+                "[graph]" => "graph",
                 "[camera]" => {
                     cams.push(crate::cameras::blank());
                     "camera"
@@ -332,63 +439,7 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
         match section {
             "node" => {
                 let Some(n) = nodes.last_mut() else { continue };
-                match k {
-                    "id" => n.id = v.parse().unwrap_or(0),
-                    "kind" => {
-                        n.kind = match v {
-                            "Trunk" => Kind::Trunk,
-                            "Branch" => Kind::Branch,
-                            "Leaf" => Kind::Leaf,
-                            _ => Kind::Tree,
-                        };
-                        n.p = Params::new(n.kind);
-                    }
-                    "name" => n.name = unesc(v),
-                    "parent" => n.parent = v.parse().ok(),
-                    "pos" => {
-                        let x = nums(v);
-                        if x.len() >= 2 {
-                            n.pos = vec2(x[0], x[1]);
-                        }
-                    }
-                    "hidden" => n.hidden = v == "true",
-                    _ => {
-                        if let Some(f) = k.strip_prefix("p.") {
-                            get_params(&mut n.p, f, v);
-                        } else if let Some(e) = k.strip_prefix("extra.") {
-                            if let Ok(x) = v.parse() {
-                                n.p.extra.insert(e.to_string(), x);
-                            }
-                        } else if let Some(c) = k.strip_prefix("curve.") {
-                            n.p.curves.entry(c.to_string()).or_insert_with(Curve::flat).pts = s2v(v);
-                        } else if let Some(c) = k.strip_prefix("curvekind.") {
-                            n.p.curves.entry(c.to_string()).or_insert_with(Curve::flat).kinds = v.split(',').filter_map(|x| x.parse().ok()).collect();
-                        } else if let Some(c) = k.strip_prefix("variance.") {
-                            let x = nums(v);
-                            if x.len() >= 5 {
-                                n.p.variances.insert(c.to_string(), Variance { amount: x[0], gaussian: x[1] > 0.5, cohesion: x[2], scale: x[3], offset: x[4] });
-                            }
-                        } else if let Some(c) = k.strip_prefix("curvelevel.") {
-                            if let Ok(l) = v.parse::<u8>() {
-                                n.p.curve_levels.insert(c.to_string(), l);
-                            }
-                        } else if let Some(i) = k.strip_prefix("edit.").and_then(|i| i.parse::<usize>().ok()) {
-                            let x = nums(v);
-                            if x.len() >= 5 {
-                                let e = n.p.node_edits.entry(i).or_default();
-                                (e.length, e.radius, e.angle, e.roll, e.hidden) = (x[0], x[1], x[2], x[3], x[4] > 0.5);
-                                e.slide = x.get(5).copied().unwrap_or(0.0);
-                            }
-                        } else if let Some((i, key)) = k.strip_prefix("editp.").and_then(|r| r.split_once('.')).and_then(|(i, key)| Some((i.parse::<usize>().ok()?, key))) {
-                            n.p.node_edits.entry(i).or_default().props.insert(key.to_string(), v.to_string());
-                        } else if k == "mats" || k == "exts" {
-                            let list: Vec<(usize, f32)> = v.split(',').filter_map(|x| { let (a, b) = x.split_once(':')?; Some((a.parse().ok()?, b.parse().ok()?)) }).collect();
-                            if k == "mats" { n.p.mat_list = list } else { n.p.ext_list = list }
-                        } else if k == "drawn" {
-                            n.p.drawn.push(s2v3(v));
-                        }
-                    }
-                }
+                node_line(n, k, v);
             }
             "material" => {
                 let Some(m) = mats.last_mut() else { continue };
@@ -448,6 +499,32 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
                     crate::cameras::read_line(c, k, v);
                 }
             }
+            "group" => {
+                if let Some(g) = groups.last_mut() {
+                    let x = nums(v);
+                    match k {
+                        "name" => g.name = unesc(v),
+                        "comment" => g.comment = unesc(v),
+                        "color" if x.len() >= 4 => g.color = [x[0], x[1], x[2], x[3]],
+                        "rect" if x.len() >= 4 => {
+                            g.min = vec2(x[0], x[1]);
+                            g.max = vec2(x[2], x[3]);
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            "graph" => {
+                let x = nums(v);
+                if k == "reroute" && x.len() >= 3 {
+                    reroutes.insert(x[0] as u32, vec2(x[1], x[2]));
+                }
+            }
+            "view" => {
+                if k == "show_height" {
+                    show_height = v != "false";
+                }
+            }
             "window" => {
                 if k == "image" {
                     win_image = unesc(v);
@@ -482,6 +559,10 @@ pub fn read(app: &mut App, text: &str) -> Result<(), String> {
     app.meshes = meshes;
     app.scene = scene;
     app.winp = winp;
+    app.show_height = show_height;
+    app.groups = groups;
+    app.group_sel = None;
+    app.reroutes = reroutes;
     app.look_through(None);
     app.cameras = cams;
     app.set_win_image(&win_image);

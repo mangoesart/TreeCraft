@@ -623,28 +623,11 @@ impl Material {
 }
 
 /// A colour swatch; clicking it opens three sliders (red, green, blue) in its place.
+/// A colour as a swatch only (picture 90): no numbers; a click opens the colour wheel beside it,
+/// like every other colour in TreeCraft.
 fn color_field(ui: &mut Ui, open: &mut Option<(usize, usize)>, key: (usize, usize), r: Rect, c: &mut [f32; 3]) -> bool {
-    let is_open = *open == Some(key);
-    let sw = if is_open { Rect::new(r.x, r.y, 18.0, r.h) } else { r };
-    draw_rectangle(sw.x, sw.y, sw.w, sw.h, Color::new(c[0], c[1], c[2], 1.0));
-    draw_rectangle_lines(sw.x, sw.y, sw.w, sw.h, 1.0, C_LINE);
-    let k = format!("color.{}.{}", key.0, key.1);
-    ui.record(&k, sw);
-    if ui.hover(sw) {
-        ui.tooltip = Some(if is_open { "Click to close".into() } else { "Click to edit the colour".into() });
-    }
-    if ui.clicked(sw) {
-        *open = if is_open { None } else { Some(key) };
-    }
-    let mut changed = false;
-    if is_open {
-        let w = (r.w - 22.0) / 3.0;
-        for i in 0..3 {
-            let rr = Rect::new(r.x + 22.0 + i as f32 * w, r.y, w - 2.0, r.h);
-            changed |= ui.slider(&format!("{}.{}", k, i), rr, &mut c[i], 0.0, 1.0, 2);
-        }
-    }
-    changed
+    *open = None;
+    crate::colorwheel::swatch(ui, &format!("color.{}.{}", key.0, key.1), r, c)
 }
 
 /// A one-line text box: click to type, Enter or a click elsewhere to finish.

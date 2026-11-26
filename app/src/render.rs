@@ -203,6 +203,7 @@ uniform vec3 AmbGround;
 uniform vec4 AOParams;
 uniform float Wrap;
 uniform float FlipBack;
+uniform float GradOn;
 float grey(float v) { return clamp(v, 0.0, 1.0); }
 float hash3(vec3 p) { return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
 float vnoise(vec3 p) {
@@ -299,8 +300,10 @@ void main() {
     if (Mode > 19.5 && Mode < 29.5) {
         // Material: Color, Opacity (white at its opacity on black), Gloss, Normal (screen space),
         // Specular colour, Metallic, Subsurface colour, Subsurface Amount, Custom
-        vec3 o = albedo;
-        if (Mode > 20.5 && Mode < 21.5) o = vec3(tex.a);
+        // Color (picture 90): with the gradient a material's Color rides in the vertex colours
+        vec3 o = albedo * color.rgb;
+        // Opacity (picture 90): pure white wherever a generator draws (cut-out parts are gone)
+        if (Mode > 20.5 && Mode < 21.5) o = vec3(1.0);
         else if (Mode > 21.5 && Mode < 22.5) o = vec3(grey(Rgh));
         else if (Mode > 22.5 && Mode < 23.5) {
             vec3 rt = normalize(cross(vec3(0.0, 1.0, 0.0), V));
@@ -316,7 +319,8 @@ void main() {
     }
     if (Mode > 29.5 && Mode < 34.5) {
         // Vertex Colors: Color, then each channel in its own colour
-        vec3 vc = color.rgb;
+        // (picture 90: the tree's own vertex colours, without a material's gradient riding in them)
+        vec3 vc = GradOn > 0.5 ? vec3(1.0) : color.rgb;
         if (Mode > 30.5 && Mode < 31.5) vc = vec3(vc.r, 0.0, 0.0);
         else if (Mode > 31.5 && Mode < 32.5) vc = vec3(0.0, vc.g, 0.0);
         else if (Mode > 32.5) vc = vec3(0.0, 0.0, vc.b);
@@ -455,6 +459,7 @@ pub fn make_material() -> Result<macroquad::material::Material, String> {
         UniformDesc::new("AOParams", UniformType::Float4),
         UniformDesc::new("Wrap", UniformType::Float1),
         UniformDesc::new("FlipBack", UniformType::Float1),
+        UniformDesc::new("GradOn", UniformType::Float1),
     ];
     let _ = BlendState::new(Equation::Add, BlendFactor::Value(BlendValue::SourceAlpha), BlendFactor::OneMinusValue(BlendValue::SourceAlpha));
     load_material(
@@ -655,7 +660,7 @@ pub fn draw_disc(radius: f32, y: f32, fill: Color, ring: Color, ring_w: f32) {
 pub fn make_overdraw_material() -> Result<macroquad::material::Material, String> {
     let uniforms = [
         "Tint", "LightDir", "CamPos", "Cutoff", "Gloss", "Specular", "Metallic", "SubColor", "AOAmount", "TwoSided", "Bump", "Unlit", "HasNormalMap", "HasRoughMap", "Shading", "SelColor", "Mode", "Season", "IsLeaf",
-        "OneSided", "Overdraw", "Time", "Wind", "WindDir", "SunColor", "AmbSky", "AmbHorizon", "AmbGround", "AOParams", "Wrap", "FlipBack",
+        "OneSided", "Overdraw", "Time", "Wind", "WindDir", "SunColor", "AmbSky", "AmbHorizon", "AmbGround", "AOParams", "Wrap", "FlipBack", "GradOn",
     ]
     .iter()
     .map(|n| {
@@ -830,6 +835,7 @@ pub fn apply_material(gm: &macroquad::material::Material, m: &Material, light: &
     gm.set_uniform("AOParams", vec4(light.ao_brightness, light.ao_contrast, light.ao_min, light.ao_max));
     gm.set_uniform("Wrap", light.wrap);
     gm.set_uniform("FlipBack", if light.flip_back { 1.0f32 } else { 0.0 });
+    gm.set_uniform("GradOn", if grad { 1.0f32 } else { 0.0 });
 }
 
 thread_local! {
@@ -918,12 +924,18 @@ pub fn upload(geo: &TreeGeo) -> GpuTree {
     keys.sort();
     for k in keys {
         let mg = &geo.mats[&k];
-        let meshes = mg
-            .chunks
-            .iter()
-            .filter(|c| !c.i.is_empty())
-            .map(|c| Mesh { vertices: c.v.clone(), indices: c.i.clone(), texture: None })
-            .collect();
+        // (picture 93: a piece never holds more triangle corners than one draw takes; should one
+        // ever, its triangles are split over several draws instead of being cut off)
+        let mut meshes = vec![];
+        for c in mg.chunks.iter().filter(|c| !c.i.is_empty()) {
+            if c.i.len() <= crate::gen::CHUNK_INDICES {
+                meshes.push(Mesh { vertices: c.v.clone(), indices: c.i.clone(), texture: None });
+            } else {
+                for part in c.i.chunks(crate::gen::CHUNK_INDICES / 3 * 3) {
+                    meshes.push(Mesh { vertices: c.v.clone(), indices: part.to_vec(), texture: None });
+                }
+            }
+        }
         parts.push((k, meshes));
     }
     GpuTree { parts }

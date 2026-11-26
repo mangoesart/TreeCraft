@@ -94,6 +94,8 @@ fn choices(name: &str) -> Option<&'static [&'static str]> {
         "Growth:Timing:Style" => &["In place", "Parent", "Parent's start and end"],
         "Vertex Color:Red:Style" | "Vertex Color:Green:Style" | "Vertex Color:Blue:Style" => &["Set", "Offset from parent"],
         "Generation:Phyllotaxy:Arrangement:Style" => &["Opposite (distichous)", "Opposite (decussate)", "Opposite", "Alternating (distichous)", "Alternating", "Whorled"],
+        // the original's list (fn 0x140247820, picture 86)
+        "Generation:Shared:Extend parent" => &["None", "Any", "Split 1", "Split 2", "Skinny", "Fat", "Breaks only", "Bottom"],
         _ => return None,
     })
 }
@@ -127,7 +129,19 @@ fn used_extra(name: &str) -> Option<(f32, f32)> {
         "Generation:Proportional:Align style" | "Generation:Proportional Steps:Align style" | "Generation:Absolute:Align style" | "Generation:Absolute Steps:Align style" | "Generation:Phyllotaxy:Arrangement:Align style" | "Generation:Interval:Align style" => (0.0, 1.0),
         "Generation:Proportional:Align" | "Generation:Proportional Steps:Align" | "Generation:Absolute:Align" | "Generation:Absolute Steps:Align" | "Generation:Phyllotaxy:Arrangement:Align" | "Generation:Interval:Align" => (0.0, 1.0),
         "Generation:Anchors" => (0.0, 5.0),
-        "Generation:Shared:Boundaries:Clip" | "Generation:Shared:Extend parent" | "Generation:Knockout" | "Generation:Shared:Knockout:Proximity:Weight" => (0.0, 1.0),
+        // every mode's rows (picture 86)
+        "Generation:Steps:Enabled" | "Generation:Steps:Per step frequency" => (0.0, 1.0),
+        "Generation:Steps:Number" | "Generation:Proportional Steps:Steps" | "Generation:Absolute Steps:Steps" => (1.0, 50.0),
+        "Generation:Steps:Spread" | "Generation:Proportional Steps:Per Step:Offset" | "Generation:Absolute Steps:Per Step:Spread" => (0.0, 1.0),
+        "Generation:Steps:Roll" | "Generation:Proportional Steps:Per Step:Roll" | "Generation:Absolute Steps:Per Step:Roll" => (-1.0, 1.0),
+        "Generation:Proportional:Number" => (0.0, 100.0),
+        "Generation:Proportional Steps:Per Step:Number" | "Generation:Absolute Steps:Per Step:Number" => (0.0, 20.0),
+        "Generation:Proportional:Jumble" | "Generation:Proportional Steps:Jumble" | "Generation:Absolute Steps:Jumble" => (0.0, 1.0),
+        "Generation:Proportional:Sweep" | "Generation:Proportional Steps:Sweep" | "Generation:Absolute Steps:Sweep" => (0.0, 1.0),
+        "Generation:Proportional:Roll" | "Generation:Proportional Steps:Roll" | "Generation:Absolute Steps:Roll" => (-1.0, 1.0),
+        "Generation:Bifurcation:Threshold" | "Generation:Bifurcation:Balance" | "Generation:Bifurcation:Align" => (0.0, 1.0),
+        "Generation:Bifurcation:Spacing" => (0.01, 1.0),
+        "Generation:Shared:Boundaries:Clip" | "Generation:Knockout" | "Generation:Shared:Knockout:Proximity:Weight" => (0.0, 1.0),
         "Generation:Shared:Rotation" | "Generation:Shared:Position" => (-1.0, 1.0),
         "Generation:Sink" => (0.0, 2.0),
         "Generation:Shared:Knockout:Proximity:Range" => (0.0, 20.0),
@@ -242,7 +256,7 @@ pub(crate) fn wire_var<'a>(p: &'a mut Params, name: &str) -> Option<&'a mut f32>
 }
 
 /// The original's mode number for a generator.
-fn orig_mode(p: &Params) -> usize {
+pub(crate) fn orig_mode(p: &Params) -> usize {
     if let Some(m) = p.extra.get("Generation:Mode") {
         return *m as usize;
     }
@@ -454,8 +468,11 @@ pub fn draw(r: &mut Rows, p: &mut Params, kind: Kind, tab: usize, extra_rows: &m
                     p.extra.remove("Generation:Mode");
                 } else {
                     p.extra.insert("Generation:Mode".into(), m as f64);
-                    r.note("This mode isn't built yet: the generator grows as Classic.");
                 }
+            }
+            // tubes stay open at the tip unless asked (picture 85)
+            if kind != Kind::Leaf && matches!(sub_filter.as_deref(), None | Some("General")) {
+                r.b("cap_tip", "Cap tip", &mut p.cap_tip);
             }
         }
         let mode = orig_mode(p);

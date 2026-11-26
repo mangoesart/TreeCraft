@@ -681,4 +681,135 @@ Orient, SpineStyle, PivotStyle, Collection, MoreLodsMeshID, Scale, Lod_1/Lod_2).
 - The ball fills the ring (radius 1.2 against the ring's inner edge at 1.24). The view starts a little turned (0.3 radians; double-click goes back to it).
 - Picture 79: the preview object is only the ring and the ball (neck and base gone). The ring is thicker (tube 0.26, centre radius 1.46, so its inner edge sits at 1.2, tight on the ball). The ball is slightly flattened toward the viewer (radius 1.2, depth x 0.8, normals adjusted). Leaf materials use the same ball (no cards): their alpha cutout makes it see-through, so one-sided and two-sided look different. The camera sits 5.4 back aimed at the ring's centre, so ring and ball fill the preview's height.
 - Picture 80: the ring is a little thinner (from 1.2 to 1.56: centre radius 1.38, tube 0.18) and the camera starts 4.4 back, so the ring fills the preview's height. "TreeCraft" is written on the front of the ring's lower arc in light grey bold letters (Inter at 44 px, drawn six times a pixel apart for bold, colour 0.6 grey on the white ring), from a 2048 x 256 picture wrapped round the ring (letters centred 3/4 of the way round, on the tube's front); it turns with the ring.
+- Picture 81 (Window properties > Layout): each extra view has a drop-down in its top left corner choosing what it shows: Perspective, Front, Back, Left, Right, Top or Bottom, in any layout. The choice is kept with the window properties (Viewport:Pane0..2) and saved with the tree; without one a view starts as before (Front, Right, Top). A Perspective view uses the viewport's default angle with the whole tree framed (field of view 40); the side views fit the tree's height and Top/Bottom its footprint, with a 15% margin.
+- Picture 82: every extra view has its own camera and turns, pans and zooms with the mouse exactly like the main view (same buttons, navigation scheme and reversed directions). A drag belongs to the view it started in until the buttons are let go; the wheel zooms the view under the mouse. A view's camera is framed on the tree when it first appears or when another type is picked from its list, and kept after that (not saved with the tree). Turning an orthographic side view makes it a perspective view, as in the main view.
+- Picture 83: the extra views are drawn exactly like the main view, straight to the screen (no off-screen picture): the same background (sky, gradient, colour or picture), ground with the tree's shadow, grid, origin disc, selection outline and custom cameras as 3D models with their names. Nothing is looked through in them, so a camera the main view looks through shows there as a model; its icon and handles work there too (click to pick, drag the arrows or ring to move or turn it). A camera drag stays with the view it started in. A view's first framing covers the tree and the visible custom cameras; a Perspective view that is taller than wide steps back so the sides fit.
 - (Picture 78, replaced by 79:) Crossed cards are used only for a real leaf material (used by a leaf generator's leaf material, a procedural leaf, or one with a cutout mesh); a leaf generator's unused branch material (the bark by default) no longer counts, so bark shows on the ball.
+
+## PivotPainter2 (TreeCraft's own tool; not in SpeedTree)
+- Opened from the default panel, under Window properties. It turns the tree into Pivot Painter 2 data for Unreal Engine's wind materials: each branch (trunk, branch, hand-drawn branch) and each leaf or frond is one element, recorded during generation with its pivot (where it starts), X axis (along it, base to tip), Y axis (the spine's side direction, or the parent's direction for a leaf, made square to X), length, width (branch base diameter, or leaf size) and parent element (the spine it grows on; a root is its own parent). Elements are keyed by (generator, node number), so every generation of the same tree numbers them the same.
+- Layout: one pixel per element, row by row from the top left of a W x H texture, W = ceil(sqrt(n)), H = ceil(n / W) (the demo tree: 374 elements, 20 x 19). Every vertex of an element gets its pixel centre in UV channel 2 (FBX layer "PivotPainter").
+- Textures (TreeCraft's own writers): Pivot Position (16-bit) in an uncompressed half-float OpenEXR, RGB = pivot in centimetres in Unreal's space, alpha Parent Index (Int as Float: the half whose bits are index + 1024), Parent Index (Float: index + 0.5), Random 0-1 or Hierarchy position 0-1 (depth / deepest). X, Y or Z Vector (8-bit) in a Targa, RGB = (axis + 1) / 2, alpha X/Y/Z extent (ceil(cm / 8), 1..256, / 256), Random or Hierarchy. Defaults: Texture 1 = Pivot Position + Parent Index (Int), Texture 2 = X Vector + X Extent (what Unreal's foliage wind shader reads). Files: T_<name>_PivotPos16bit_<alpha>_UV2.exr and T_<name>_<axis>Vector8bit_<alpha>_UV2.tga.
+- Space: the export's own transform, then the FBX axis setting (Y-up: X, Z, Y; Z-up: X, -Y, Z), metres x 100 = centimetres. Estimated from how Unreal converts FBX axes; not yet checked inside Unreal.
+- FBX export: with "Bake with every FBX export" on (default), the FBX gets the second UV set and the textures are written beside it, named after it. "Bake textures only..." writes them to a chosen folder. Checked in Blender 4.4: every mesh has UVMap and PivotPainter; each element's vertices share one pixel centre (trunk 1, branches 14, leaves 359); the EXR (20 x 19, float) and TGA load.
+- Written from the Pivot Painter 2 data layout (the Blender add-on in the person's library was read for the format only; none of its code is used).
+
+## Picking and camera handles in every view (picture 84)
+- The extra views of Window properties > Layout now take clicks like the main view: a click picks a generator, a click on empty space lets go of it (first its highlight, then the selection, as in the main view), a double-click centres that view on the spot. The frame the button is let go in belongs to the view the click started in, so the main view no longer swallows it.
+- A selected custom camera's move arrows, turn ring and free-move centre now show and work in orthographic views too (main or extra); the axis pointing straight at the viewer drops out. Free move in an orthographic view moves by the view's height / its height in pixels per pixel.
+
+## Tube tips open by default (picture 85)
+- Trunk and branch tubes are no longer capped at the tip unless asked. Gen tab > General (right under Mode): **Cap tip** (off by default; saved as cap_tip) closes the tip with the picture-71 dome (a point half the tip radius past the last ring). Skin > Cap ends still closes both the base and the tip. Tests: tip_edges (capped tips have no open edges) and tip_open_by_default (Cap tip adds the dome).
+
+
+## Every generation mode works; Extend parent is a list (picture 86)
+Estimated from the property names; the original's placement code for these modes wasn't read. The Extend parent list was read from the original (fn 0x140247820).
+- Phyllotaxy: the nodes now spread evenly from Last down to First. There are (span length / Internode length) + 1 of them, capped by Limit, so the first and last nodes sit exactly on First and Last with no gap. Styles:
+  - Opposite (distichous): 2 a node, all in one plane.
+  - Opposite (decussate): 2 a node, turning 1/4 turn each node.
+  - Opposite: 2 a node, turning the golden angle (0.382 turn).
+  - Alternating (distichous): 1 a node, turning 1/2 turn.
+  - Alternating: 1 a node, turning the golden angle.
+  - Whorled: Children per node a node, every other whorl turned half a gap.
+  - Spiral adds 0.1 turn per node. Spread scatters children by that share of the gap.
+- Classic > Steps (Enabled):
+  - Number steps, evenly from First to Last.
+  - Per step frequency on: Frequency children at every step. Off: Frequency shared out (child i at step i mod steps).
+  - Spread: share of the step gap to scatter. Roll: added turns per step.
+- Proportional: Number children on the generator's longest parent, round(Number x length / longest) on the others. Roll = (i/n + Jumble jitter) x Sweep + Roll.
+- Proportional Steps: Steps on the longest parent, fewer on shorter ones (at least 1). Per Step Number children each. Per Step Offset scatters along the parent; Per Step Roll turns each step; Jumble, Sweep and Roll as Proportional.
+- Absolute Steps: Steps on every parent, Per Step Number children each. Per Step Spread scatters along the parent; Per Step Roll turns each step.
+- Bifurcation:
+  - Spots from Last down to First every Spacing (share of the parent). Each forks with chance Threshold; the one at Last always forks when Threshold > 0.
+  - Forks alternate sides.
+  - Balance 0..1 shrinks the forks to 100..40% length and radius.
+  - Align 1 turns them to the world's sides; 0 keeps the parent's frame.
+  - Bifurcation children count as their parent's extensions and are made before sibling generators.
+- Flood: one child on every spine point of the parent between First and Last, each turned the golden angle.
+- Parent: one child per parent at First, pointing along the parent.
+- Extend parent (list: None, Any, Split 1, Split 2, Skinny, Fat, Breaks only, Bottom).
+  - A parent's extensions are its Skin > Splits forks (now real spines; Split 1 / Split 2) and its Bifurcation children.
+  - Any: children also grow on every extension. Split 1 / Split 2: on that fork only. Skinny / Fat: on the thinnest / thickest extension.
+  - Breaks only: on a broken parent, children carry on past the break over the part that snapped off.
+  - Bottom: children on an extension move to the spine it extends.
+  - None: as before. Old files with a number there read as None.
+- Test: every_mode_places_children.
+
+## Height indicator button, renaming, names that stay readable (picture 87)
+- Viewport: a button with a small person under the light controls shows or hides the height indicator (its scale line, ticks and person). It's lit blue while shown. Tree files keep the choice ([view] show_height); files without it show it.
+- Node graph: F2 on the picked generator, or a double-click on one, opens a box over its name. Enter or a click elsewhere keeps the typed name, Escape keeps the old one. Keyboard shortcuts wait while typing.
+- Circle nodes: names are drawn after every node, on a dark tag. The tag goes right of the disc, or else left, below or above, whichever side no other node or name covers.
+- New, added-from-menu, template and duplicated generators get a name no other generator has: base, then base_2, base_3 ... A trailing _number is replaced. A name typed by hand is kept as typed, even if another generator has it.
+
+## Links on wires, soft shadows, faint grid (picture 88)
+- Every wire in the node graph has a small circle halfway along it, with the child generator's count beside it (Preferences > Node Editor > Show counts). The count is no longer written under node names.
+- Disconnecting: click a circle to pick the link (ringed in the selection colour), then press Delete or Backspace, or right-click it > Disconnect. The child generator loses its parent; it and the generators under it stop growing until linked again (drag from a socket onto a node).
+- Nodes have a very soft drop shadow: 7 widening layers, 3 px down, each 7% x strength. Preferences > Node Editor > Node shadow sets the strength, 0..1, default 0.6.
+- The node graph's grid defaults to Lines with a faint colour (white at 5%, Themes > Node Editor > Grid). The setting is now saved as node_grid2, so a Dots grid saved before isn't kept.
+
+## Graph: marquee picks links, parents carry children, drop to link (picture 89)
+- A selection box in the node graph also picks every wire circle (link) inside it. Shift or Ctrl adds to the links already picked. Delete, or right-click > Disconnect, takes all the picked links' children off their parents.
+- Dragging a node moves it and every generator under it (with a multi-selection: all of them and theirs). Dragging a child moves only the child.
+- Dropping a dragged node onto another node links it there, if that node can be its parent. It then sits 100 units above its new parent, shifted sideways like a new sibling (150 apart, alternating sides), with its own children coming along.
+
+## Render > Material views and variation swatches (picture 90)
+- Backgrounds are solid:
+  - Color, Opacity and Metallic: pure black.
+  - Normal: (128, 128, 255).
+  - Specular: grey (191, 191, 191).
+  - Subsurface: white.
+- Material > Color now shows the material's gradient (it rides in the vertex colours).
+- Material > Opacity is pure white wherever a generator draws (cut-out parts stay away). Ground, origin, grid, shadow and height indicator are hidden, so everything else is black.
+- Vertex Colors views show the tree's own vertex colours. A material's gradient no longer shows there: it's white for gradient materials, because generators write white vertex colours.
+- Material > Settings > Variations colours and the Season colour are swatches with no numbers; a click opens the colour wheel, like every other colour.
+
+## Hide and isolate, curve windows, curves on placement (picture 91)
+- Render > Material > Roughness stands on light grey (191). In every Render > Material view the world-origin disc is hidden.
+- A hidden generator (H) still grows, out of sight. Every generator on it or beside it stays exactly where it was, and only its own bark, leaves and picking are left out. Hidden leaf generators make their leaves out of sight, so leaf generators under them keep their anchors.
+- Isolate (I) shows only the picked generator. The generators it grows on are kept hidden, so it doesn't move.
+- Curve windows:
+  - They close only with the X at the top right; a click outside no longer closes them.
+  - The graph pans up and down (middle-drag or the wheel; Ctrl+wheel zooms).
+  - Points, including the two end points, can go from -10 to 10. The 0 and 1 lines are drawn brighter, with value labels at the side.
+  - Curve values outside 0..1 now pass through: the spline keeps within 0..1 or its two points, whichever reaches further.
+- Parent curves now change where children go:
+  - Frequency, Number and Proportional Number: more children where the curve is high.
+  - Phyllotaxy Internode length, Children per node, Spread and Spiral: read at each node as the walk goes down the parent. The nodes are then stretched so the last sits on First.
+  - Interval Frequency, Count, Spread and Spiral: read at each node.
+  - Bifurcation Threshold and Spacing: read at each spot.
+  - First, Last, Limit and the Steps counts: read where the parent sits on its own parent.
+  - The Parent level picks how many parents up the curve reads.
+- Test: internode_curve_takes_effect.
+
+## Hiding really changes nothing else (picture 92)
+- The leaves' shading (darker deeper in the crown) is measured over the whole tree, hidden generators included (TreeGeo full_min/full_max). Before, hiding or isolating a generator made the tree smaller, so the other generators' leaves turned lighter or darker.
+- Hidden generators build their bark, leaves and fronds out of sight:
+  - the size they reach still counts for the shading;
+  - their leaves still count for leaf collision.
+  Nothing of them is drawn.
+- Test: hiding_changes_nothing_else (leaf positions and shading identical with leaf collision on).
+
+## The real cause of "hiding changes another generator" (picture 93)
+- The tree is drawn in pieces of up to 30000 vertices per material. One draw took only 120000 triangle corners.
+- Thin needle tubes use about 4.8 corners a vertex. In the person's pine, the needle material has 41600 vertices and 198900 corners, so its first piece held about 143000 corners.
+- The drawing silently cut off everything past 120000: about 16% of the needles, always the branches at the end of the piece. Hiding or showing any generator moved where the piece ended, so different branches lost their tops.
+- Fixes:
+  - A piece now also starts fresh before it could hold more than 240000 corners (CHUNK_INDICES; 8 a vertex reserved).
+  - One draw takes 256000 corners.
+  - render::upload splits any piece that would still be larger over several draws.
+- Tests:
+  - hiding_in_the_pine_changes_nothing_else loads the person's tree (testdata/pine_hd_fruit.tcm). It checks every piece fits a draw and that hiding each generator in turn leaves every other generator's branches in place.
+  - Screenshots of the pine with and without Cone_01 show the rest unchanged.
+- Test hook: TM_OPEN=<tree file> and TM_HIDE=<generator name>.
+
+## Rounded toolbar, groups, re-directors (picture 94)
+- The editors' toolbar buttons (Add, Actions, Randomize) are rounded pills with small icons: a green plus, an amber three-dot disc and a die. Each button is sized to its word.
+- Groups (like Unreal Engine's comment boxes):
+  - Pick generators and press C to put a group box around them. It's named "Group", white at 50% opacity, with 24 units of margin.
+  - The heading band shows the name and the comment shows under it.
+  - Drag the heading to move the box and every node and re-director inside it. Drag the bottom-right corner to resize it.
+  - Double-click the heading (or right-click > Rename) to type a new name. The text starts picked, so the first key replaces it; Enter or a click elsewhere keeps it.
+  - With a group picked, the left panel shows Heading, Comment, Color, Transparency (0 = solid) and Delete group.
+  - Delete removes a picked group; its nodes stay.
+- Re-directors: right-click a wire > Re-Director puts a small square on it where you clicked, and the wire then runs parent -> square -> child. Drag the square to reshape the wire. Right-click it > Remove re-director (or pick it and press Delete) to remove it. The count circle sits between the square and the child.
+- Tree files keep [group] sections (name, comment, color, rect) and a [graph] section of reroute=child,x,y lines. New tree clears both.

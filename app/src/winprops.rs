@@ -352,6 +352,11 @@ impl App {
 thread_local! {
     /// Pictures for Window properties > Layout's extra views (picture 65).
     static PANES: std::cell::RefCell<Vec<RenderTarget>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// Each extra view's own camera (picture 82: they turn, pan and zoom like the main view), with
+    /// the view type it was framed for; a new choice in the list frames it afresh.
+    static PANE_CAMS: std::cell::RefCell<Vec<Option<(usize, crate::render::Cam)>>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// The extra view a mouse drag started in.
+    static PANE_ACTIVE: std::cell::Cell<Option<usize>> = const { std::cell::Cell::new(None) };
 }
 
 /// Window properties > Viewport > Layout (picture 65): the main (interactive) view and the extra
@@ -410,12 +415,32 @@ impl App {
             let mut cam = crate::render::Cam::new();
             cam.set_view(*view);
             cam.target = centre;
-            // fit the tree's height (front/side) or footprint (top) with a margin
-            let (sw, sh) = if *view == 5 { (ext.x.max(ext.z), ext.x.max(ext.z)) } else { (ext.x.max(ext.z), ext.y) };
             let aspect = r.w / r.h.max(1.0);
-            let need_h = (sh * 1.15).max(sw * 1.15 / aspect.max(0.1));
-            cam.dist = (ext.length() * 2.0).max(10.0);
-            cam.fov = (2.0 * (need_h * 0.5 / cam.dist).atan()).to_degrees().clamp(0.5, 120.0);
+            if *view == 0 {
+                // Perspective (picture 81): the default angle, the whole tree in view
+                cam.fov = 40.0;
+                cam.frame(lo, hi);
+            } else {
+                // fit the tree's height (front, back, sides) or footprint (top, bottom) with a margin
+                let (sw, sh) = if *view >= 5 { (ext.x.max(ext.z), ext.x.max(ext.z)) } else { (ext.x.max(ext.z), ext.y) };
+                let need_h = (sh * 1.15).max(sw * 1.15 / aspect.max(0.1));
+                cam.dist = (ext.length() * 2.0).max(10.0);
+                cam.fov = (2.0 * (need_h * 0.5 / cam.dist).atan()).to_degrees().clamp(0.5, 120.0);
+            }
+            // the view's own camera, once framed; moved by the mouse afterwards (picture 82)
+            let cam = PANE_CAMS.with(|p| {
+                let mut p = p.borrow_mut();
+                if p.len() <= k {
+                    p.resize(k + 1, None);
+                }
+                match p[k] {
+                    Some((v, c)) if v == *view => c,
+                    _ => {
+                        p[k] = Some((*view, cam));
+                        cam
+                    }
+                }
+            });
             let mut c3 = cam.camera3d(None, aspect, Some(rt.clone()));
             c3.viewport = None;
             set_camera(&c3);
@@ -455,10 +480,212 @@ impl App {
             }
             draw_texture_ex(&targets[k].texture, r.x, r.y, WHITE, DrawTextureParams { dest_size: Some(vec2(r.w, r.h)), flip_y: true, ..Default::default() });
             draw_rectangle_lines(r.x, r.y, r.w, r.h, 1.0, Color::new(0.0, 0.0, 0.0, 0.6));
-            let name = crate::render::VIEWS[(*view).min(6)];
-            let tw = ui.text_w(name, 12.5);
-            draw_rectangle(r.x + 6.0, r.y + 6.0, tw + 12.0, 20.0, Color::new(0.0, 0.0, 0.0, 0.45));
-            ui.text(name, r.x + 12.0, r.y + 9.0, 12.5, Color::new(0.9, 0.9, 0.9, 1.0));
+            // the view type, chosen from a list in the corner (picture 81): Perspective, Front, Back,
+            // Left, Right, Top or Bottom; kept with the window properties
+            let names: Vec<String> = crate::render::VIEWS.iter().map(|s| s.to_string()).collect();
+            let mut v = (*view).min(6);
+            let cr = Rect::new(r.x + 6.0, r.y + 6.0, 130.0, 22.0);
+            if ui.combo(&format!("vp.pane{}", k), cr, &names, &mut v) {
+                self.winp.insert(format!("Viewport:Pane{}", k), v as f64);
+            }
+            ui.record(&format!("vp.pane{}", k), cr);
+            if cr.contains(ui.mouse()) {
+                ui.tooltip = Some("Choose what this view shows".into());
+            }
+        }
+    }
+}
+impl App {
+    /// Mouse navigation in the extra views of Window properties > Layout (picture 82): a drag or
+    /// the wheel that starts over one turns, pans or zooms that view's own camera, the same way as
+    /// the main view (its controls run with that camera swapped in). Returns true when it took the
+    /// mouse this frame, so the main view leaves it alone.
+    pub fn pane_input(&mut self, ui: &mut crate::ui::Ui, panes: &[(Rect, usize)]) -> bool {
+        if panes.is_empty() {
+            PANE_ACTIVE.with(|a| a.set(None));
+            return false;
+        }
+        let m = ui.mouse();
+        let inp = ui.inp.clone();
+        let down = inp.l_down || inp.m_down || inp.r_down;
+        let pressed = inp.l_pressed || inp.m_pressed || inp.r_pressed;
+        let active = PANE_ACTIVE.with(|a| a.get()).filter(|k| *k < panes.len());
+        // (picture 84: the frame the button is let go in belongs to the view too, so a click there
+        // picks or deselects)
+        let target = match active {
+            Some(k) => Some(k),
+            _ => {
+                let free = !ui.blocked && ui.popup.is_none();
+                // (the view list in the corner keeps its clicks)
+                panes
+                    .iter()
+                    .position(|(r, _)| r.contains(m) && !Rect::new(r.x + 6.0, r.y + 6.0, 130.0, 22.0).contains(m))
+                    .filter(|_| free && (pressed || inp.wheel != 0.0))
+            }
+        };
+        let Some(k) = target else {
+            PANE_ACTIVE.with(|a| a.set(None));
+            return false;
+        };
+        let Some((view, pcam)) = PANE_CAMS.with(|p| p.borrow().get(k).copied().flatten()) else { return false };
+        let r = panes[k].0;
+        let (saved_cam, saved_vp) = (self.cam, self.viewport);
+        self.cam = pcam;
+        self.viewport = r;
+        // a click picks a generator there, a click on empty space lets go of it, a double-click
+        // centres that view on the spot, as in the main view (picture 84)
+        let looking = self.looking.take();
+        self.viewport_pick(ui, r);
+        self.viewport_input(ui, r);
+        self.looking = looking;
+        let moved = self.cam;
+        self.cam = saved_cam;
+        self.viewport = saved_vp;
+        PANE_CAMS.with(|p| {
+            if let Some(slot) = p.borrow_mut().get_mut(k) {
+                *slot = Some((view, moved));
+            }
+        });
+        PANE_ACTIVE.with(|a| a.set(if down || pressed { Some(k) } else { None }));
+        true
+    }
+}
+
+/// Whether a click or drag is in progress in one of the extra views (the main view then leaves
+/// the click alone, picture 84).
+pub fn pane_active() -> bool {
+    PANE_ACTIVE.with(|a| a.get().is_some())
+}
+
+thread_local! {
+    /// Which view a camera drag (moving or turning a custom camera) started in: None the main
+    /// view, Some(k) extra view k (picture 83).
+    static CAM_DRAG_OWNER: std::cell::Cell<Option<usize>> = const { std::cell::Cell::new(None) };
+}
+
+/// The custom-camera overlay for the view `owner` (None = the main view): a camera drag started in
+/// another view is set aside while this one draws, so each drag moves by its own view's projection.
+pub fn cameras_overlay_for(app: &mut App, ui: &mut crate::ui::Ui, r: Rect, owner: Option<usize>) {
+    let cur = CAM_DRAG_OWNER.with(|c| c.get());
+    let held = if app.cam_drag.is_some() && cur != owner { app.cam_drag.take() } else { None };
+    let before = app.cam_drag.is_some();
+    app.draw_cameras_overlay(ui, r);
+    if !before && app.cam_drag.is_some() {
+        CAM_DRAG_OWNER.with(|c| c.set(owner));
+    }
+    if let Some(h) = held {
+        app.cam_drag = Some(h);
+    } else if app.cam_drag.is_none() && cur == owner {
+        CAM_DRAG_OWNER.with(|c| c.set(None));
+    }
+}
+
+impl App {
+    /// Extra view k's camera: framed on the tree for `view` the first time (or when another type
+    /// is picked), then kept as the mouse moves it.
+    fn pane_cam(&self, k: usize, view: usize, r: Rect) -> crate::render::Cam {
+        // the tree and the custom cameras (picture 83: a camera can be seen and moved from here)
+        let (mut lo, mut hi) = self.bounds;
+        for c in self.cameras.iter().filter(|c| !c.hidden) {
+            let s = Vec3::splat(c.icon_size.max(0.5));
+            lo = lo.min(c.pos - s);
+            hi = hi.max(c.pos + s);
+        }
+        let centre = (lo + hi) * 0.5;
+        let ext = (hi - lo).max(Vec3::splat(1.0));
+        PANE_CAMS.with(|p| {
+            let mut p = p.borrow_mut();
+            if p.len() <= k {
+                p.resize(k + 1, None);
+            }
+            if let Some((v, c)) = p[k] {
+                if v == view {
+                    return c;
+                }
+            }
+            let mut cam = crate::render::Cam::new();
+            cam.set_view(view);
+            cam.target = centre;
+            let aspect = r.w / r.h.max(1.0);
+            if view == 0 {
+                cam.fov = 45.0;
+                cam.frame(lo, hi);
+                // a view taller than wide sees less across: step back so the sides fit too
+                cam.dist /= aspect.clamp(0.3, 1.0);
+            } else {
+                let (sw, sh) = if view >= 5 { (ext.x.max(ext.z), ext.x.max(ext.z)) } else { (ext.x.max(ext.z), ext.y) };
+                let need_h = (sh * 1.15).max(sw * 1.15 / aspect.max(0.1));
+                cam.dist = (ext.length() * 2.0).max(10.0);
+                cam.fov = (2.0 * (need_h * 0.5 / cam.dist).atan()).to_degrees().clamp(0.5, 120.0);
+            }
+            p[k] = Some((view, cam));
+            cam
+        })
+    }
+
+    /// Runs `f` with extra view k's camera and rectangle in place of the main view's (and nothing
+    /// looked through, so a custom camera the main view looks through shows as a model there),
+    /// then keeps what `f` did to the camera.
+    fn with_pane<R>(&mut self, k: usize, view: usize, r: Rect, f: impl FnOnce(&mut App) -> R) -> R {
+        let pcam = self.pane_cam(k, view, r);
+        let (saved_cam, saved_vp, saved_look) = (self.cam, self.viewport, self.looking);
+        self.cam = pcam;
+        self.viewport = r;
+        self.looking = None;
+        let out = f(self);
+        let moved = self.cam;
+        self.cam = saved_cam;
+        self.viewport = saved_vp;
+        self.looking = saved_look;
+        PANE_CAMS.with(|p| {
+            if let Some(slot) = p.borrow_mut().get_mut(k) {
+                *slot = Some((view, moved));
+            }
+        });
+        out
+    }
+
+    /// Picture 83: the extra views drawn exactly like the main view, straight to the screen: its
+    /// background (sky, gradient or picture), ground, grid, origin, the tree with its shadow,
+    /// the selection outline and the custom cameras as models. Called where the main view's 3D
+    /// pass is (outside the UI scale).
+    pub fn draw_panes_3d(&mut self, panes: &[(Rect, usize)], scale: f32, sh: f32, f: f32) {
+        for (k, (r, view)) in panes.iter().enumerate() {
+            let r = *r;
+            self.with_pane(k, *view, r, |app| {
+                let gl = unsafe { get_internal_gl() };
+                gl.quad_gl.push_model_matrix(Mat4::from_scale(vec3(f, f, 1.0)));
+                app.draw_viewport_bg(r);
+                let gl = unsafe { get_internal_gl() };
+                gl.quad_gl.pop_model_matrix();
+                app.draw_viewport_3d(r, scale, sh);
+                app.draw_selection_outline(r, f);
+            });
+        }
+    }
+
+    /// The extra views' overlays (UI units): the custom cameras' icons and handles (so a camera
+    /// can be picked and moved from any view), the view list in the corner and a thin border.
+    pub fn draw_panes_overlay(&mut self, ui: &mut crate::ui::Ui, panes: &[(Rect, usize)]) {
+        for (k, (r, view)) in panes.iter().enumerate() {
+            let r = *r;
+            self.with_pane(k, *view, r, |app| {
+                let vp_ui = std::mem::take(&mut app.vp_ui);
+                app.vp_ui = vec![Rect::new(r.x + 6.0, r.y + 6.0, 130.0, 22.0)];
+                cameras_overlay_for(app, ui, r, Some(k));
+                app.vp_ui = vp_ui;
+            });
+            draw_rectangle_lines(r.x, r.y, r.w, r.h, 1.0, Color::new(0.0, 0.0, 0.0, 0.6));
+            let names: Vec<String> = crate::render::VIEWS.iter().map(|s| s.to_string()).collect();
+            let mut v = (*view).min(6);
+            let cr = Rect::new(r.x + 6.0, r.y + 6.0, 130.0, 22.0);
+            if ui.combo(&format!("vp.pane{}", k), cr, &names, &mut v) {
+                self.winp.insert(format!("Viewport:Pane{}", k), v as f64);
+            }
+            ui.record(&format!("vp.pane{}", k), cr);
+            if cr.contains(ui.mouse()) {
+                ui.tooltip = Some("Choose what this view shows".into());
+            }
         }
     }
 }

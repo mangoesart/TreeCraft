@@ -7,6 +7,11 @@ use std::collections::HashMap;
 use std::f32::consts::PI;
 
 pub const CHUNK_VERTS: usize = 30000;
+/// The most triangle corners one piece may hold: the drawing buffer's index room (main.rs
+/// draw_call_index_capacity) less a margin. Picture 93: pieces of thin needle tubes held up to
+/// 180000 corners against a 120000 buffer, so the drawing cut the rest off silently, and which
+/// branches lost their ends moved whenever any generator was hidden or shown.
+pub const CHUNK_INDICES: usize = 240_000;
 
 pub struct Rng(u64);
 impl Rng {
@@ -38,6 +43,11 @@ pub struct Spine {
     /// The spine it grows on and where along it (for curves reading a higher parent level).
     pub parent_spine: Option<usize>,
     pub pos_on_parent: f32,
+    /// An extension of another spine (picture 86): a Skin > Splits fork or a Bifurcation child,
+    /// with its number among that spine's extensions (1 = Split 1, 2 = Split 2 ...).
+    pub ext_of: Option<(usize, u8)>,
+    /// Spine:Break: the share of its whole length left after the break (1 = not broken).
+    pub kept: f32,
 }
 
 impl Spine {
@@ -90,8 +100,10 @@ pub struct MatGeo {
 
 impl MatGeo {
     fn chunk_for(&mut self, need: usize) -> &mut Chunk {
+        // a tube makes at most 6 corners a vertex (two triangles per quad) and a cap 3; a leaf
+        // mesh rarely more, so 8 a vertex keeps every piece within the drawing buffer
         let full = match self.chunks.last() {
-            Some(c) => c.v.len() + need > CHUNK_VERTS,
+            Some(c) => c.v.len() + need > CHUNK_VERTS || c.i.len() + need * 8 > CHUNK_INDICES,
             None => true,
         };
         if full {
@@ -110,6 +122,10 @@ pub struct TreeGeo {
     pub leaves: usize,
     pub bmin: Vec3,
     pub bmax: Vec3,
+    /// The bounds with hidden generators too (picture 92): the leaves' shading reads these, so
+    /// hiding a generator changes nothing else.
+    pub full_min: Vec3,
+    pub full_max: Vec3,
     pub per_node: HashMap<u32, usize>,
     /// Collection meshes built from contributing generators (mesh index -> geometry).
     pub collections: HashMap<usize, MeshGeom>,
@@ -132,6 +148,66 @@ pub struct TreeGeo {
     pub hits: Vec<(u32, usize, Vec<Vec3>, Vec<f32>)>,
     /// Spines of Skin:Type "Spine only" generators, drawn as yellow lines (picture 39).
     pub spine_lines: Vec<(u32, Vec<Vec3>)>,
+    /// PivotPainter2 (TreeCraft's own tool): every branch and leaf as an element, in the order
+    /// made, keyed by (generator, node number) so the same element has the same key in every
+    /// generation of this tree.
+    pub pp_elems: Vec<PPElem>,
+    /// Which drawn vertices belong to which element: (material, chunk, first vertex, end, key).
+    pub pp_ranges: Vec<(usize, usize, usize, usize, (u32, usize))>,
+    /// The element each spine (by its index in the spine list) became.
+    pp_of_spine: HashMap<usize, (u32, usize)>,
+}
+
+/// One PivotPainter2 element: a branch (its spine) or a leaf. Its pivot is where it starts, its
+/// X axis points along it, its Y axis is across it, its length runs along X, and its parent is
+/// the element it grows on (None: a root).
+#[derive(Clone, Debug)]
+pub struct PPElem {
+    pub key: (u32, usize),
+    pub pivot: Vec3,
+    pub x: Vec3,
+    pub y: Vec3,
+    pub len: f32,
+    /// Its size across Y and Z (the branch's base diameter, or the leaf's width).
+    pub width: f32,
+    pub parent: Option<(u32, usize)>,
+    pub depth: u32,
+}
+
+impl TreeGeo {
+    /// Where every material's geometry ends now (to tell later which vertices an element added).
+    fn pp_mark(&self) -> Vec<(usize, usize, usize)> {
+        self.mats.iter().map(|(k, m)| (*k, m.chunks.len(), m.chunks.last().map_or(0, |c| c.v.len()))).collect()
+    }
+    /// Record that everything added since `mark` belongs to element `key`.
+    fn pp_since(&mut self, mark: &[(usize, usize, usize)], key: (u32, usize)) {
+        let mut out = vec![];
+        for (k, m) in &self.mats {
+            let (c0, s0) = match mark.iter().find(|x| x.0 == *k) {
+                Some(&(_, n, l)) if n > 0 => (n - 1, l),
+                _ => (0, 0),
+            };
+            for (ci, ch) in m.chunks.iter().enumerate().skip(c0) {
+                let start = if ci == c0 { s0 } else { 0 };
+                if ch.v.len() > start {
+                    out.push((*k, ci, start, ch.v.len(), key));
+                }
+            }
+        }
+        self.pp_ranges.extend(out);
+    }
+    /// Add element `key` growing on the spine `parent_spine` (or a root).
+    fn pp_add(&mut self, key: (u32, usize), pivot: Vec3, tip: Vec3, side: Vec3, width: f32, parent_spine: Option<usize>) {
+        let d = tip - pivot;
+        let x = d.normalize_or(Vec3::Y);
+        let mut y = side - x * side.dot(x);
+        if y.length_squared() < 1e-8 {
+            y = x.any_orthonormal_vector();
+        }
+        let parent = parent_spine.and_then(|i| self.pp_of_spine.get(&i).copied());
+        let depth = parent.and_then(|p| self.pp_elems.iter().rev().find(|e| e.key == p)).map_or(0, |e| e.depth + 1);
+        self.pp_elems.push(PPElem { key, pivot, x, y: y.normalize(), len: d.length(), width, parent, depth });
+    }
 }
 
 /// A curve's multiplier for one property and kind (1 when there's no curve).
@@ -253,6 +329,7 @@ fn broken(s: Spine, spot: f32, p: &Params) -> Spine {
     for (k, r) in b.rad.iter_mut().enumerate() {
         *r = s.radius((b.cum[k] / s.len).min(1.0));
     }
+    b.kept = (b.len / s.len.max(1e-6)).clamp(0.01, 1.0);
     b
 }
 
@@ -312,6 +389,31 @@ impl TreeGeo {
     fn grow(&mut self, p: Vec3) {
         self.bmin = self.bmin.min(p);
         self.bmax = self.bmax.max(p);
+        self.full_min = self.full_min.min(p);
+        self.full_max = self.full_max.max(p);
+    }
+
+    /// A place to build a hidden generator's parts out of sight (picture 92): it borrows the
+    /// leaves already placed, so leaf collision works as if the parts were drawn.
+    fn hidden_scratch(&mut self) -> TreeGeo {
+        TreeGeo {
+            bmin: Vec3::splat(f32::MAX),
+            bmax: Vec3::splat(f32::MIN),
+            full_min: Vec3::splat(f32::MAX),
+            full_max: Vec3::splat(f32::MIN),
+            leaf_grid: std::mem::take(&mut self.leaf_grid),
+            ..Default::default()
+        }
+    }
+
+    /// Take back what a hidden generator's parts leave behind: the leaves placed (for collision)
+    /// and how far they reach (for the leaves' shading); nothing is drawn.
+    fn hidden_merge(&mut self, s: TreeGeo) {
+        self.leaf_grid = s.leaf_grid;
+        if s.full_min.x <= s.full_max.x {
+            self.full_min = self.full_min.min(s.full_min);
+            self.full_max = self.full_max.max(s.full_max);
+        }
     }
 }
 
@@ -357,7 +459,7 @@ pub struct GenCtx<'a> {
 }
 
 pub fn generate(ctx: &GenCtx) -> TreeGeo {
-    let mut geo = TreeGeo { bmin: Vec3::splat(f32::MAX), bmax: Vec3::splat(f32::MIN), ..Default::default() };
+    let mut geo = TreeGeo { bmin: Vec3::splat(f32::MAX), bmax: Vec3::splat(f32::MIN), full_min: Vec3::splat(f32::MAX), full_max: Vec3::splat(f32::MIN), ..Default::default() };
     // gradient colours (picture 74): only while no picture is in the material's Color slot
     for (i, m) in ctx.materials.iter().enumerate() {
         if m.grad_on && (m.file.is_empty() || m.source != 4) {
@@ -389,8 +491,10 @@ pub fn generate(ctx: &GenCtx) -> TreeGeo {
         geo.bmax = vec3(5.0, 10.0, 5.0);
     }
     // ambient occlusion for leaves: deeper inside the crown is darker
-    let c = (geo.bmin + geo.bmax) * 0.5;
-    let half = ((geo.bmax - geo.bmin) * 0.5).max(Vec3::splat(0.5));
+    // (picture 92: over the whole tree, hidden generators included)
+    let (amin, amax) = if geo.full_min.x <= geo.full_max.x { (geo.full_min, geo.full_max) } else { (geo.bmin, geo.bmax) };
+    let c = (amin + amax) * 0.5;
+    let half = ((amax - amin) * 0.5).max(Vec3::splat(0.5));
     for (m, ci, start) in leaf_ranges {
         if let Some(mg) = geo.mats.get_mut(&m) {
             let ch = &mut mg.chunks[ci];
@@ -398,7 +502,7 @@ pub fn generate(ctx: &GenCtx) -> TreeGeo {
             for v in &mut ch.v[start..end] {
                 let d = (v.position - c) / half;
                 let r = (d.x * d.x + d.z * d.z).sqrt().min(1.0);
-                let h = ((v.position.y - geo.bmin.y) / (half.y * 2.0)).clamp(0.0, 1.0);
+                let h = ((v.position.y - amin.y) / (half.y * 2.0)).clamp(0.0, 1.0);
                 let ao = (0.35 + 0.45 * r.powf(0.8) + 0.25 * h).min(1.0);
                 v.normal.w = v.normal.w.min(ao);
             }
@@ -474,12 +578,19 @@ fn process(
     cache: &[Option<MeshGeom>],
     leaf_ranges: &mut Vec<(usize, usize, usize)>,
 ) {
-    let children: Vec<&Node> = ctx.nodes.iter().filter(|n| n.parent == Some(node_id)).collect();
+    let mut children: Vec<&Node> = ctx.nodes.iter().filter(|n| n.parent == Some(node_id)).collect();
+    // Bifurcation generators first, so their forks exist when siblings Extend parent onto them
+    children.sort_by_key(|n| (n.kind.makes_spines() && crate::stpanel::orig_mode(&n.p) == 7) as u8 == 0);
     let parent_gen = ctx.nodes.iter().find(|n| n.id == node_id);
     for child in children {
-        if child.hidden {
-            continue;
-        }
+        // a hidden generator (picture 91) still grows, so every generator on it or beside it stays
+        // exactly as it was; only its own bark, leaves and picking are left out
+        let shown = !child.hidden && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id));
+        // Extend parent (picture 86): this generator's parents with the extensions it may use
+        let ext_parents = if child.kind.makes_spines() || child.kind == Kind::Leaf { extend_parents(&child.p, parents, spines) } else { parents.to_vec() };
+        let parents: &[ParentRef] = &ext_parents;
+        // Proportional modes count against the longest parent
+        let max_plen = parents.iter().filter_map(|q| if let ParentRef::Spine(i) = q { Some(spines[*i].len) } else { None }).fold(0.0f32, f32::max);
         let sel = ctx.highlight && ctx.selected == Some(child.id);
         // the selected generator is marked by alpha only; its colour comes from Selection (picture 30)
         let col: [u8; 4] = if sel { [255, 255, 255, 128] } else { [255, 255, 255, 255] };
@@ -506,7 +617,7 @@ fn process(
                 }
             }
             let mut rng = Rng::new((p.seed as u64) * 7919 + pi as u64 * 104729 + child.id as u64 * 31);
-            let placements = shared_placement(p, *parent, spines, distribute(p, *parent, spines, tree, &mut rng));
+            let placements = shared_placement(p, *parent, spines, distribute(p, *parent, spines, tree, &mut rng, max_plen));
             let n_on_parent = placements.len();
             for (k_on_parent, (t, roll, base_pos, azim_dir)) in placements.into_iter().enumerate() {
                 let me = inst;
@@ -622,20 +733,33 @@ fn process(
                             s.mat = pick_material(&child.p, parent_mat, child.id, me);
                             if let ParentRef::Spine(i) = *parent {
                                 s.parent_spine = Some(i);
+                                // a Bifurcation fork extends its parent (Extend parent, picture 86)
+                                if crate::stpanel::orig_mode(p) == 7 {
+                                    let nth = spines.iter().filter(|q| matches!(q.ext_of, Some((o, _)) if o == i)).count();
+                                    s.ext_of = Some((i, (nth + 1).min(255) as u8));
+                                }
                             }
                             s.pos_on_parent = t;
-                            geo.bones.push(s.pts.clone());
-                            geo.nodes.push((child.id, me, s.pts[0], s.pts[s.pts.len() - 1]));
-                            geo.hits.push((child.id, me, s.pts.clone(), s.rad.clone()));
+                            if shown {
+                                geo.bones.push(s.pts.clone());
+                                geo.nodes.push((child.id, me, s.pts[0], s.pts[s.pts.len() - 1]));
+                                geo.hits.push((child.id, me, s.pts.clone(), s.rad.clone()));
+                            }
                             // Skin:Type "Spine only" (3) keeps the spine for its children but draws no
                             // bark; Skin:Visibility draws only that share of the branches (their
                             // children still grow)
                             let visible = hash01(child.id as u64, me as u64, 4049) * 0.5 + 0.5 < pex(p, "Skin:Visibility", 1.0);
                             // Spine only (picture 39): drawn as a yellow line with a mark at each segment
-                            if skin_type == 3 && ctx.show_branches && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id)) {
+                            if skin_type == 3 && ctx.show_branches && shown {
                                 geo.spine_lines.push((child.id, s.pts.clone()));
                             }
-                            if ctx.show_branches && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id)) && skin_type != 3 && visible {
+                            if ctx.show_branches && !shown && skin_type != 3 && visible {
+                                // hidden (picture 92): built out of sight, for the bounds only
+                                let mut scratch = geo.hidden_scratch();
+                                skin(&s, p, col, &mut scratch, child.kind == Kind::Trunk, None, child.id, me);
+                                geo.hidden_merge(scratch);
+                            }
+                            if ctx.show_branches && shown && skin_type != 3 && visible {
                                 // picture 72: the parent is drawn with flat facets, which lie inside its
                                 // round radius by r x (1 - cos(pi / sides)); the weld fits the base to
                                 // that inner surface, 3% further in, so no crease opens between them
@@ -646,14 +770,49 @@ fn process(
                                 } else {
                                     None
                                 };
+                                let mark = geo.pp_mark();
                                 skin(&s, p, col, geo, child.kind == Kind::Trunk, weld, child.id, me);
+                                geo.pp_since(&mark, (child.id, me));
                             }
+                            // PivotPainter2: this branch is an element growing on its parent's
+                            let ps = if let ParentRef::Spine(i) = *parent { Some(i) } else { None };
+                            geo.pp_add((child.id, me), s.pts[0], s.pts[s.pts.len() - 1], s.nrm[0], s.rad[0] * 2.0, ps);
+                            geo.pp_of_spine.insert(spines.len(), (child.id, me));
+                            // its Skin > Splits forks, as spines children can grow on with Extend
+                            // parent (they're drawn with the bark above)
+                            let forks = if skin_type != 3 { split_forks(&s, p, child.id, me) } else { vec![] };
                             spines.push(s);
-                            new_spines.push(ParentRef::Spine(spines.len() - 1));
+                            let me_spine = spines.len() - 1;
+                            new_spines.push(ParentRef::Spine(me_spine));
+                            for mut f in forks {
+                                f.ext_of = f.ext_of.map(|(_, k)| (me_spine, k));
+                                f.parent_spine = Some(me_spine);
+                                spines.push(f);
+                            }
                             count += 1;
                         }
                     }
-                    Kind::Leaf if ctx.only.as_ref().map_or(false, |o| !o.contains(&child.id)) => {}
+                    Kind::Leaf if !shown => {
+                        // hidden (picture 91): its leaves are made out of sight, so leaf generators
+                        // under it still find the same anchors
+                        let mut scratch = geo.hidden_scratch();
+                        if pex(p, "Leaves:Frond", 0.0) <= 0.5 {
+                            let mut scratch_ranges = vec![];
+                            let frames = make_leaf(ctx, p, *parent, t, roll, base_pos, spines, anchors, &mut rng, col, &mut scratch, cache, &mut scratch_ranges);
+                            for fr in frames {
+                                anchors.push(fr);
+                                new_spines.push(ParentRef::Anchor(anchors.len() - 1));
+                            }
+                        } else if k_on_parent == 0 {
+                            if let ParentRef::Spine(i) = *parent {
+                                let (a, b) = (p.first.min(p.last).clamp(0.0, 1.0), p.first.max(p.last).clamp(0.0, 1.0));
+                                let b = if b - a < 0.02 { 1.0 } else { b };
+                                make_frond(&spines[i], a, b, p, col, &mut scratch);
+                            }
+                        }
+                        geo.hidden_merge(scratch);
+                        count += 1;
+                    }
                     Kind::Leaf if pex(p, "Leaves:Frond", 0.0) > 0.5 => {
                         // a frond (picture 65): one flat card per parent, from First to Last along
                         // its spine, bending with it
@@ -662,7 +821,10 @@ fn process(
                                 let s = &spines[i];
                                 let (a, b) = (p.first.min(p.last).clamp(0.0, 1.0), p.first.max(p.last).clamp(0.0, 1.0));
                                 let b = if b - a < 0.02 { 1.0 } else { b };
+                                let mark = geo.pp_mark();
                                 make_frond(s, a, b, p, col, geo);
+                                geo.pp_since(&mark, (child.id, me));
+                                geo.pp_add((child.id, me), s.point(a), s.point(b), s.frame(a).1, (p.leaf_size * p.size_scalar).max(0.02), Some(i));
                                 let at = s.point(a);
                                 geo.nodes.push((child.id, me, at, s.point(b)));
                                 geo.hits.push((child.id, me, (0..=8).map(|k| s.point(a + (b - a) * k as f32 / 8.0)).collect(), vec![(p.leaf_size * p.size_scalar).max(0.1) * 0.5; 9]));
@@ -671,13 +833,22 @@ fn process(
                         }
                     }
                     Kind::Leaf => {
+                        let mark = geo.pp_mark();
                         let frames = make_leaf(ctx, p, *parent, t, roll, base_pos, spines, anchors, &mut rng, col, geo, cache, leaf_ranges);
+                        geo.pp_since(&mark, (child.id, me));
                         let at = match *parent {
                             ParentRef::Spine(i) => spines[i].point(t),
                             ParentRef::Anchor(ai) => anchors[ai].pos,
                             ParentRef::Ground => base_pos,
                         };
-                        geo.nodes.push((child.id, me, at, frames.first().map_or(at + Vec3::Y * p.leaf_size.max(0.1) * 0.5, |f| f.pos)));
+                        let tip = frames.first().map_or(at + Vec3::Y * p.leaf_size.max(0.1) * 0.5, |f| f.pos);
+                        geo.nodes.push((child.id, me, at, tip));
+                        // PivotPainter2: the leaf, from where it sits toward its tip
+                        {
+                            let ps = if let ParentRef::Spine(i) = *parent { Some(i) } else { None };
+                            let side = ps.map_or(Vec3::X, |i| spines[i].frame(t.min(1.0)).0);
+                            geo.pp_add((child.id, me), at, tip, side, (p.leaf_size * p.size_scalar).max(0.02), ps);
+                        }
                         let lr = (p.leaf_size * p.size_scalar).max(0.1) * 0.8;
                         geo.hits.push((child.id, me, vec![at], vec![lr]));
                         for fr in frames {
@@ -701,11 +872,26 @@ fn process(
                 let mut s = build_spine(child.id, pts.clone(), r0, &child.p);
                 let parent_mat = spines.iter().find(|q| Some(q.node) == child.parent).map_or(NO_MATERIAL, |q| q.mat);
                 s.mat = pick_material(&child.p, parent_mat, child.id, usize::MAX - k);
-                geo.bones.push(s.pts.clone());
-                geo.nodes.push((child.id, usize::MAX - k, s.pts[0], s.pts[s.pts.len() - 1]));
-                geo.hits.push((child.id, usize::MAX - k, s.pts.clone(), s.rad.clone()));
-                if ctx.show_branches && ctx.only.as_ref().map_or(true, |o| o.contains(&child.id)) {
+                if shown {
+                    geo.bones.push(s.pts.clone());
+                    geo.nodes.push((child.id, usize::MAX - k, s.pts[0], s.pts[s.pts.len() - 1]));
+                    geo.hits.push((child.id, usize::MAX - k, s.pts.clone(), s.rad.clone()));
+                }
+                if ctx.show_branches && !shown {
+                    let mut scratch = geo.hidden_scratch();
+                    skin(&s, &child.p, col, &mut scratch, child.kind == Kind::Trunk, None, child.id, usize::MAX - k);
+                    geo.hidden_merge(scratch);
+                }
+                if ctx.show_branches && shown {
+                    let mark = geo.pp_mark();
                     skin(&s, &child.p, col, geo, child.kind == Kind::Trunk, None, child.id, usize::MAX - k);
+                    geo.pp_since(&mark, (child.id, usize::MAX - k));
+                }
+                // PivotPainter2: a hand-drawn branch grows on the nearest spine of its parent
+                {
+                    let ps = spines.iter().position(|q| Some(q.node) == child.parent);
+                    geo.pp_add((child.id, usize::MAX - k), s.pts[0], s.pts[s.pts.len() - 1], s.nrm[0], s.rad[0] * 2.0, ps);
+                    geo.pp_of_spine.insert(spines.len(), (child.id, usize::MAX - k));
                 }
                 spines.push(s);
                 new_spines.push(ParentRef::Spine(spines.len() - 1));
@@ -748,7 +934,7 @@ fn process(
 /// - Interval (fn 0x14047b6f0): walk from Last down to First in steps of 10 / Frequency length
 ///   units, putting Count children around each node (1/Count apart, half a turn when fewer than 3),
 ///   adding Spiral x 0.1 turns per node; Spread jitters each child along the parent.
-fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rng: &mut Rng) -> Vec<(f32, f32, Vec3, Vec3)> {
+fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rng: &mut Rng, max_plen: f32) -> Vec<(f32, f32, Vec3, Vec3)> {
     const TURN: f32 = 2.0 * PI;
     let mut out = vec![];
     let plen = match parent {
@@ -757,12 +943,23 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
         // one child on each anchor, turned by Roll around the anchor's direction
         ParentRef::Anchor(_) => return vec![(0.0, p.roll * TURN, Vec3::ZERO, Vec3::X)],
     };
-    let (first, last) = (p.first.min(p.last), p.last.max(p.first));
+    // First and Last with their Parent curves (picture 91), read where this parent sits
+    let (f0, l0) = (p.first * place_curve(p, "Generation:First", 0.0, parent, spines, true), p.last * place_curve(p, "Generation:Last", 0.0, parent, spines, true));
+    let (first, last) = (f0.min(l0), l0.max(f0));
     let span = last - first;
+    let mode = crate::stpanel::orig_mode(p);
+    let ext = match parent {
+        ParentRef::Spine(i) => ext_amount(p, &spines[i]),
+        _ => 0.0,
+    };
     if let ParentRef::Ground = parent {
         // children of the Tree node: trunks spread over the Tree's Shape radius
-        let n = match p.gen_mode {
-            MODE_CLASSIC => p.frequency.max(0.0) as usize,
+        let n = match mode {
+            0 => p.frequency.max(0.0) as usize,
+            1 => pex(p, "Generation:Proportional:Number", 2.0).max(0.0) as usize,
+            2 => (pex(p, "Generation:Proportional Steps:Steps", 1.0) * pex(p, "Generation:Proportional Steps:Per Step:Number", 1.0)).max(0.0) as usize,
+            4 => (pex(p, "Generation:Absolute Steps:Steps", 1.0) * pex(p, "Generation:Absolute Steps:Per Step:Number", 1.0)).max(0.0) as usize,
+            7 | 8 | 9 => 1,
             _ => p.number.max(0) as usize,
         }
         .min(500);
@@ -776,8 +973,28 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
         }
         return out;
     }
-    match p.gen_mode {
-        MODE_ABSOLUTE => {
+    // the golden angle in turns (137.5 degrees): spiral phyllotaxy and Flood
+    const GOLD: f32 = 0.381_966;
+    // Steps (picture 86): `steps` evenly spaced spots from First to Last (one step sits in the
+    // middle), `per` children at each; Spread scatters them along the parent by that share of the
+    // gap between steps; each child's roll = (j / per + random(-Jumble, Jumble) / 2) x Sweep + Roll,
+    // and every step turns a further Step roll
+    let stepped = |out: &mut Vec<(f32, f32, Vec3, Vec3)>, steps: usize, per: usize, spread: f32, step_roll: f32, jumble: f32, sweep: f32, roll: f32, rng: &mut Rng| {
+        let steps = steps.clamp(1, 500);
+        let per = per.min(200);
+        let gap = span / steps as f32;
+        for k in 0..steps {
+            let tk = if steps == 1 { first + span * 0.5 } else { first + span * k as f32 / (steps - 1) as f32 };
+            for j in 0..per {
+                let tj = tk + rng.sym() * spread * gap * 0.5;
+                let turns = (j as f32 / per.max(1) as f32 + rng.sym() * jumble * 0.5) * sweep + roll + step_roll * k as f32;
+                out.push((onto_parent(p, tj, ext), turns * TURN, Vec3::ZERO, Vec3::X));
+            }
+        }
+    };
+    match mode {
+        // Absolute: exactly Number children
+        3 => {
             let n = (p.number.max(0) as usize).min(2000);
             let mut rolls: Vec<f32> = (0..n)
                 .map(|i| (rng.sym() * p.jumble * 0.5 + i as f32 / n.max(1) as f32) * p.sweep)
@@ -792,30 +1009,175 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
                 let t = along(p, "Generation:Absolute:Number", first, span, rng);
                 // First / Last below 0 or above 1 (picture 74): spots off the parent stay at its
                 // base or tip instead of disappearing
-                out.push((onto_parent(p, t), r * TURN, Vec3::ZERO, Vec3::X));
+                out.push((onto_parent(p, t, ext), r * TURN, Vec3::ZERO, Vec3::X));
             }
         }
-        MODE_INTERVAL | MODE_PHYLLOTAXY => {
-            // Interval: spacing 10/Frequency units. Phyllotaxy: Internode length in units.
-            let spacing_units = if p.gen_mode == MODE_INTERVAL { 10.0 / p.interval.max(0.01) } else { p.interval.max(0.05) };
-            let step = spacing_units / plen.max(0.001);
-            let per = p.per_node.max(1) as usize;
+        // Proportional (picture 86): Number children on the longest parent of this generator,
+        // fewer on shorter ones in proportion to their length (rounded); rolls as Absolute
+        1 => {
+            let num = pex(p, "Generation:Proportional:Number", 2.0).max(0.0);
+            let n = ((num * plen / max_plen.max(1e-4)).round().max(0.0) as usize).min(2000);
+            let (jumble, sweep, roll) = (pex(p, "Generation:Proportional:Jumble", 0.0), pex(p, "Generation:Proportional:Sweep", 1.0), pex(p, "Generation:Proportional:Roll", 0.0));
+            for i in 0..n {
+                let turns = (i as f32 / n.max(1) as f32 + rng.sym() * jumble * 0.5) * sweep + roll;
+                let t = along(p, "Generation:Proportional:Number", first, span, rng);
+                out.push((onto_parent(p, t, ext), turns * TURN, Vec3::ZERO, Vec3::X));
+            }
+        }
+        // Proportional Steps: Steps on the longest parent, fewer on shorter ones (at least one);
+        // Per Step Number children each, Offset scatters them along the parent
+        2 => {
+            let pre = "Generation:Proportional Steps";
+            let pp = |name: &str| place_curve(p, &format!("{}:{}", pre, name), 0.0, parent, spines, true);
+            let steps = (pex(p, &format!("{}:Steps", pre), 1.0).max(1.0) * pp("Steps") * plen / max_plen.max(1e-4)).round().max(1.0) as usize;
+            let per = (pex(p, &format!("{}:Per Step:Number", pre), 1.0).max(0.0) * pp("Per Step:Number")).round() as usize;
+            stepped(
+                &mut out,
+                steps,
+                per,
+                pex(p, &format!("{}:Per Step:Offset", pre), 0.0),
+                pex(p, &format!("{}:Per Step:Roll", pre), 0.0),
+                pex(p, &format!("{}:Jumble", pre), 0.0),
+                pex(p, &format!("{}:Sweep", pre), 1.0),
+                pex(p, &format!("{}:Roll", pre), 0.0),
+                rng,
+            );
+        }
+        // Absolute Steps: Steps on every parent, Per Step Number children each
+        4 => {
+            let pre = "Generation:Absolute Steps";
+            stepped(
+                &mut out,
+                (pex(p, &format!("{}:Steps", pre), 1.0).max(1.0) * place_curve(p, &format!("{}:Steps", pre), 0.0, parent, spines, true)).round().max(1.0) as usize,
+                (pex(p, &format!("{}:Per Step:Number", pre), 1.0).max(0.0) * place_curve(p, &format!("{}:Per Step:Number", pre), 0.0, parent, spines, true)).round() as usize,
+                pex(p, &format!("{}:Per Step:Spread", pre), 0.0),
+                pex(p, &format!("{}:Per Step:Roll", pre), 0.0),
+                pex(p, &format!("{}:Jumble", pre), 0.0),
+                pex(p, &format!("{}:Sweep", pre), 1.0),
+                pex(p, &format!("{}:Roll", pre), 0.0),
+                rng,
+            );
+        }
+        // Phyllotaxy (picture 86): nodes evenly from Last down to First, as many as Internode
+        // length (units) fits plus one, so the first and last nodes sit on First and Last with no
+        // gap; Limit caps them. Style: Opposite (distichous) 2 a node in one plane, Opposite
+        // (decussate) 2 a node turning a quarter each node, Opposite 2 a node turning the golden
+        // angle, Alternating (distichous) 1 a node turning half, Alternating 1 a node turning the
+        // golden angle, Whorled Children-per-node a node, each whorl turned half a gap. Spiral adds
+        // 0.1 turn a node; Spread scatters children along the parent by that share of the gap.
+        5 => {
+            let (a, b) = (first.clamp(0.0, 1.0), last.clamp(0.0, 1.0));
+            let style = pex(p, "Generation:Phyllotaxy:Arrangement:Style", 5.0) as i32;
+            let per = match style {
+                0..=2 => 2,
+                3 | 4 => 1,
+                _ => p.per_node.max(1) as usize,
+            };
+            // the nodes: a walk down from Last, each step Internode length (x its Parent curve
+            // where the walk is, picture 91), then stretched so the last node sits on First
+            let pc = |name: &str, t: f32| place_curve(p, name, t, parent, spines, false);
+            let limit = ((p.limit.max(1) as f32) * place_curve(p, "Generation:Phyllotaxy:Nodes:Limit", 0.0, parent, spines, true)).round().max(1.0) as usize;
+            let mut ts = vec![b];
+            let mut t = b;
+            while ts.len() < limit.min(2000) {
+                t -= (p.interval * pc("Generation:Phyllotaxy:Nodes:Internode length", t)).max(0.05) / plen.max(0.001);
+                if t < a - 1e-4 {
+                    break;
+                }
+                ts.push(t);
+            }
+            if ts.len() > 1 {
+                let low = *ts.last().unwrap();
+                let k = if b - low > 1e-6 { (b - a) / (b - low) } else { 1.0 };
+                for t in &mut ts {
+                    *t = b - (b - *t) * k;
+                }
+            }
+            let nodes = ts.len();
+            let gap = if nodes > 1 { (b - a) / (nodes - 1) as f32 } else { 0.0 };
+            let mut spiral = 0.0f32;
+            for (k, &t) in ts.iter().enumerate() {
+                let kf = k as f32;
+                let per = if style >= 5 { ((per as f32) * pc("Generation:Phyllotaxy:Arrangement:Children per node", t)).round().max(1.0) as usize } else { per };
+                let node_turn = match style {
+                    0 => 0.0,
+                    1 => 0.25 * kf,
+                    3 => 0.5 * kf,
+                    2 | 4 => GOLD * kf,
+                    _ => (k % 2) as f32 * 0.5 / per as f32,
+                } + spiral;
+                spiral += p.spiral * pc("Generation:Phyllotaxy:Nodes:Spiral", t) * 0.1;
+                let spread = p.jumble * pc("Generation:Phyllotaxy:Nodes:Spread", t);
+                for j in 0..per {
+                    let tj = (t + rng.sym() * spread * gap * 0.5).clamp(a, b);
+                    let turns = node_turn + j as f32 / per as f32;
+                    out.push((tj, turns * TURN, Vec3::ZERO, Vec3::X));
+                }
+            }
+        }
+        // Bifurcation (picture 86; estimated): spots from Last down to First every Spacing (a
+        // share of the parent); each forks with chance Threshold (the one at Last always does when
+        // Threshold is above 0); forks alternate sides. Balance makes the forks smaller and Align
+        // turns them to the world's sides (make_spine); they count as the parent's extensions.
+        7 => {
+            let thr = pex(p, "Generation:Bifurcation:Threshold", 0.5).clamp(0.0, 1.0);
+            let spacing = pex(p, "Generation:Bifurcation:Spacing", 0.1).max(0.01);
+            let (a, b) = (first.clamp(0.0, 1.0), last.clamp(0.0, 1.0));
+            let mut t = b;
+            let mut k = 0;
+            // (picture 91: Parent curves on Threshold and Spacing, read where the walk is)
+            let pc = |name: &str, t: f32| place_curve(p, name, t, parent, spines, false);
+            while t >= a - 1e-4 && thr > 0.0 && out.len() < 500 {
+                if k == 0 || rng.next() < thr * pc("Generation:Bifurcation:Threshold", t) {
+                    let turns = 0.5 * (out.len() % 2) as f32 + p.roll;
+                    out.push((t.clamp(0.0, 1.0), turns * TURN, Vec3::ZERO, Vec3::X));
+                }
+                t -= (spacing * pc("Generation:Bifurcation:Spacing", t)).max(0.01);
+                k += 1;
+            }
+        }
+        // Flood (picture 86; estimated): a child on every point of the parent's spine between
+        // First and Last, each turned the golden angle from the last
+        8 => {
+            if let ParentRef::Spine(i) = parent {
+                let s = &spines[i];
+                let (a, b) = (first.clamp(0.0, 1.0), last.clamp(0.0, 1.0));
+                for (k, c) in s.cum.iter().enumerate() {
+                    let t = c / s.len.max(1e-6);
+                    if t > 1e-4 && t >= a - 1e-4 && t <= b + 1e-4 {
+                        out.push((t.min(1.0), (GOLD * k as f32) * TURN, Vec3::ZERO, Vec3::X));
+                    }
+                }
+            }
+        }
+        // Parent (picture 86; estimated): one child where First sits on each parent, carrying
+        // on along it (make_spine points it the parent's way)
+        9 => out.push((first.clamp(0.0, 1.0), 0.0, Vec3::ZERO, Vec3::X)),
+        6 => {
+            // Interval: spacing 10/Frequency units
+            // (picture 91: Parent curves on Frequency, Count, Spread and Spiral vary them along
+            // the parent, read at each node; Limit's at the parent's own spot)
+            let pc = |name: &str, t: f32| place_curve(p, name, t, parent, spines, false);
+            let limit = ((p.limit.max(1) as f32) * place_curve(p, "Generation:Interval:Limit", 0.0, parent, spines, true)).round().max(1.0) as i32;
             // (picture 74: the walk keeps to the parent)
             let (first, last) = (first.clamp(0.0, 1.0), last.clamp(0.0, 1.0));
             let mut t = last;
             let mut node = 0i32;
             let mut spiral_turns = 0.0f32;
-            while t >= first && node < p.limit.max(1) && out.len() < 4000 {
+            while t >= first && node < limit && out.len() < 4000 {
+                let step = 10.0 / (p.interval * pc("Generation:Interval:Frequency", t)).max(0.01) / plen.max(0.001);
+                let per = ((p.per_node.max(1) as f32) * pc("Generation:Interval:Count", t)).round().max(1.0) as usize;
                 let within = if per >= 3 { 1.0 / per as f32 } else { 0.5 };
                 let stagger = if p.balanced && node % 2 == 1 { 0.5 / per as f32 } else { 0.0 };
+                let spread = p.jumble * pc("Generation:Interval:Spread", t);
                 for j in 0..per {
-                    let tj = (t + rng.sym() * p.jumble * step * 0.5).clamp(first, last);
+                    let tj = (t + rng.sym() * spread * step * 0.5).clamp(first, last);
                     let turns = (j as f32 * within + stagger + spiral_turns) * p.sweep + p.roll;
                     if (-1e-4..=1.0001).contains(&tj) {
                         out.push((tj.clamp(0.0, 1.0), turns * TURN, Vec3::ZERO, Vec3::X));
                     }
                 }
-                spiral_turns += p.spiral * 0.1;
+                spiral_turns += p.spiral * pc("Generation:Interval:Spiral", t) * 0.1;
                 t -= step;
                 node += 1;
             }
@@ -823,12 +1185,98 @@ fn distribute(p: &Params, parent: ParentRef, spines: &[Spine], tree: &Params, rn
         _ => {
             let f = if p.relative { plen * p.frequency * 0.025 } else { p.frequency };
             let n = (f.max(0.0) as usize).min(2000);
-            for i in 0..n {
-                let base = if p.balanced { i as f32 / n.max(1) as f32 } else { rng.next() };
-                let turns = (base + rng.sym() * p.offset * 0.5) * p.sweep + p.roll;
-                let t = along(p, "Generation:Frequency", first, span, rng);
-                out.push((onto_parent(p, t), turns * TURN, Vec3::ZERO, Vec3::X));
+            if pex(p, "Generation:Steps:Enabled", 0.0) > 0.5 {
+                // Classic > Steps (picture 86): Number evenly spaced steps from First to Last;
+                // Per step frequency on puts Frequency children at every step, off shares them
+                // out (child i at step i mod steps); Spread scatters them along the parent by that
+                // share of the gap between steps; every step turns a further Roll
+                let steps = ((pex(p, "Generation:Steps:Number", 5.0).max(1.0) * place_curve(p, "Generation:Steps:Number", 0.0, parent, spines, true)).round().max(1.0) as usize).min(500);
+                let per_step = pex(p, "Generation:Steps:Per step frequency", 0.0) > 0.5;
+                let spread = pex(p, "Generation:Steps:Spread", 0.0);
+                let step_roll = pex(p, "Generation:Steps:Roll", 0.0);
+                let gap = span / steps as f32;
+                let total = if per_step { n * steps } else { n };
+                for i in 0..total.min(4000) {
+                    let k = if per_step { i / n.max(1) } else { i % steps };
+                    let in_step = if per_step { n } else { (n + steps - 1 - k) / steps };
+                    let j = if per_step { i % n.max(1) } else { i / steps };
+                    let tk = if steps == 1 { first + span * 0.5 } else { first + span * k as f32 / (steps - 1) as f32 };
+                    let base = if p.balanced { j as f32 / in_step.max(1) as f32 } else { rng.next() };
+                    let turns = (base + rng.sym() * p.offset * 0.5) * p.sweep + p.roll + step_roll * k as f32;
+                    let t = tk + rng.sym() * spread * gap * 0.5;
+                    out.push((onto_parent(p, t, ext), turns * TURN, Vec3::ZERO, Vec3::X));
+                }
+            } else {
+                for i in 0..n {
+                    let base = if p.balanced { i as f32 / n.max(1) as f32 } else { rng.next() };
+                    let turns = (base + rng.sym() * p.offset * 0.5) * p.sweep + p.roll;
+                    let t = along(p, "Generation:Frequency", first, span, rng);
+                    out.push((onto_parent(p, t, ext), turns * TURN, Vec3::ZERO, Vec3::X));
+                }
             }
+        }
+    }
+    out
+}
+
+/// Extend parent (picture 86): the original's list (fn 0x140247820) None, Any, Split 1, Split 2,
+/// Skinny, Fat, Breaks only, Bottom, stored by number.
+pub fn extend_choice(p: &Params) -> usize {
+    (pex(p, "Generation:Shared:Extend parent", 0.0).round().max(0.0) as usize).min(7)
+}
+
+/// How far past the tip children may go on this parent, as a share of its length: with Extend
+/// parent Breaks only, a snapped branch's children carry on over the part that broke off (along
+/// the tip's direction); otherwise none.
+fn ext_amount(p: &Params, s: &Spine) -> f32 {
+    if extend_choice(p) == 6 && s.kept < 1.0 {
+        1.0 / s.kept - 1.0
+    } else {
+        0.0
+    }
+}
+
+/// The parents a generator's children grow on, with Extend parent (picture 86; estimated): Any
+/// adds every extension of each parent (its Skin > Splits forks and Bifurcation children), Split 1
+/// / Split 2 only that one, Skinny / Fat the thinnest / thickest; Bottom moves children from an
+/// extension onto the spine it extends (down to the first); None and Breaks only keep the parents.
+fn extend_parents(p: &Params, parents: &[ParentRef], spines: &[Spine]) -> Vec<ParentRef> {
+    let choice = extend_choice(p);
+    let mut out: Vec<ParentRef> = vec![];
+    for q in parents {
+        let ParentRef::Spine(i) = *q else {
+            out.push(*q);
+            continue;
+        };
+        if choice == 7 {
+            let mut root = i;
+            while let Some((up, _)) = spines[root].ext_of {
+                if up >= spines.len() || up == root {
+                    break;
+                }
+                root = up;
+            }
+            if !out.iter().any(|o| matches!(o, ParentRef::Spine(r) if *r == root)) {
+                out.push(ParentRef::Spine(root));
+            }
+            continue;
+        }
+        out.push(*q);
+        if !(1..=5).contains(&choice) {
+            continue;
+        }
+        let exts: Vec<usize> = (0..spines.len()).filter(|&j| matches!(spines[j].ext_of, Some((o, _)) if o == i)).collect();
+        let pick: Vec<usize> = match choice {
+            1 => exts,
+            2 | 3 => exts.into_iter().filter(|&j| spines[j].ext_of.map(|e| e.1 as usize) == Some(choice - 1)).collect(),
+            _ => {
+                let by = |j: &usize| spines[*j].rad.first().copied().unwrap_or(0.0);
+                let best = if choice == 4 { exts.iter().copied().min_by(|a, b| by(a).total_cmp(&by(b))) } else { exts.iter().copied().max_by(|a, b| by(a).total_cmp(&by(b))) };
+                best.into_iter().collect()
+            }
+        };
+        for j in pick {
+            out.push(ParentRef::Spine(j));
         }
     }
     out
@@ -845,11 +1293,11 @@ fn shared_placement(p: &Params, parent: ParentRef, spines: &[Spine], mut out: Ve
     let ParentRef::Spine(i) = parent else { return out };
     let pos = pex(p, "Generation:Shared:Position", 0.0);
     let rot = pex(p, "Generation:Shared:Rotation", 0.0) * 2.0 * PI;
-    let ext = pex(p, "Generation:Shared:Extend parent", 0.0).max(0.0);
+    let ext = ext_amount(p, &spines[i]);
     let clip = pex(p, "Generation:Shared:Boundaries:Clip", 0.025).clamp(0.0, 1.0);
-    let favor = match p.gen_mode {
-        MODE_ABSOLUTE => pex(p, "Generation:Absolute:Favor splits", 0.0),
-        MODE_CLASSIC => pex(p, "Generation:Proportional:Favor splits", 0.0),
+    let favor = match crate::stpanel::orig_mode(p) {
+        3 => pex(p, "Generation:Absolute:Favor splits", 0.0),
+        1 => pex(p, "Generation:Proportional:Favor splits", 0.0),
         _ => 0.0,
     }
     .clamp(0.0, 1.0);
@@ -874,12 +1322,11 @@ fn shared_placement(p: &Params, parent: ParentRef, spines: &[Spine], mut out: Ve
 /// A spot along the parent for a child (picture 74): First / Last beyond the parent's ends put
 /// it at the base (below 0) or as close to the tip as Boundaries > Clip lets children grow (above
 /// 1), so it stays on the parent instead of disappearing.
-fn onto_parent(p: &Params, t: f32) -> f32 {
+fn onto_parent(p: &Params, t: f32, ext: f32) -> f32 {
     if t < 0.0 {
         0.0
     } else if t > 1.0 {
         let clip = pex(p, "Generation:Shared:Boundaries:Clip", 0.025).clamp(0.0, 1.0);
-        let ext = pex(p, "Generation:Shared:Extend parent", 0.0).max(0.0);
         if ext > 0.0 { 1.0 } else { (1.0 - clip).max(0.0) }
     } else {
         t
@@ -889,15 +1336,44 @@ fn onto_parent(p: &Params, t: f32) -> f32 {
 /// A random spot between First and Last; a Profile curve on the count property makes children
 /// likelier where it's high (picture 24).
 fn along(p: &Params, count_prop: &str, first: f32, span: f32, rng: &mut Rng) -> f32 {
-    let Some(c) = p.curves.get(&format!("{}|2", count_prop)) else { return first + span * rng.next() };
-    let top = c.pts.iter().map(|q| q.y).fold(0.0f32, f32::max).max(1e-3);
-    for _ in 0..32 {
+    // the Profile curve, and (picture 91) the Parent curve on the count: more children where
+    // either is high, along First..Last
+    let c2 = p.curves.get(&format!("{}|2", count_prop));
+    let c0 = p.curves.get(&format!("{}|0", count_prop));
+    if c2.is_none() && c0.is_none() {
+        return first + span * rng.next();
+    }
+    let dens = |x: f32| c2.map_or(1.0, |c| c.eval(x)).max(0.0) * c0.map_or(1.0, |c| c.eval((first + span * x).clamp(0.0, 1.0))).max(0.0);
+    let top = (0..=32).map(|k| dens(k as f32 / 32.0)).fold(0.0f32, f32::max).max(1e-3) * 1.05;
+    for _ in 0..48 {
         let x = rng.next();
-        if rng.next() * top <= c.eval(x) {
+        if rng.next() * top <= dens(x) {
             return first + span * x;
         }
     }
     first + span * rng.next()
+}
+
+/// A Parent curve (picture 91) on a property that decides where children go, read where it
+/// applies: level 1 at the spot `t` on this parent (or, `per_parent`, where this parent sits on
+/// its own parent), each further level one parent up. 1 when no curve is drawn.
+fn place_curve(p: &Params, name: &str, t: f32, parent: ParentRef, spines: &[Spine], per_parent: bool) -> f32 {
+    let key = format!("{}|0", name);
+    let Some(c) = p.curves.get(&key) else { return 1.0 };
+    let level = p.curve_levels.get(&key).copied().unwrap_or(1).clamp(1, 4) as usize;
+    let mut x = t;
+    let mut cur = if let ParentRef::Spine(i) = parent { Some(i) } else { None };
+    let climbs = level - 1 + per_parent as usize;
+    for _ in 0..climbs {
+        match cur {
+            Some(i) => {
+                x = spines[i].pos_on_parent;
+                cur = spines[i].parent_spine;
+            }
+            None => break,
+        }
+    }
+    c.eval(x.clamp(0.0, 1.0))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -923,7 +1399,10 @@ fn make_spine(
     } else {
         rng
     };
+    let gen_mode = crate::stpanel::orig_mode(p);
     let angle = (p.start_angle + p.angle_var * rng.sym() + p.angle_profile * (t - 0.5)).clamp(0.0, 1.0) * PI;
+    // Parent mode (picture 86): the child carries on along its parent
+    let angle = if gen_mode == 9 && matches!(parent, ParentRef::Spine(_)) { 0.0 } else { angle };
     let mut anc_dir: Option<Vec3> = None;
     let (mut start, dir, plen, prad) = match parent {
         ParentRef::Ground => {
@@ -937,14 +1416,22 @@ fn make_spine(
             // Generation > Align (picture 56; estimated): on, the children's roll counts from a
             // fixed reference: Align style 1 the world's up (seen across the parent), 0 the
             // parent's own frame; off, each child turns by a random extra amount
-            let mode_pre = match p.gen_mode {
-                MODE_ABSOLUTE => "Generation:Absolute",
-                MODE_INTERVAL => "Generation:Interval",
-                MODE_PHYLLOTAXY => "Generation:Phyllotaxy:Arrangement",
+            let omode = crate::stpanel::orig_mode(p);
+            let mode_pre = match omode {
+                2 => "Generation:Proportional Steps",
+                3 => "Generation:Absolute",
+                4 => "Generation:Absolute Steps",
+                5 => "Generation:Phyllotaxy:Arrangement",
+                6 => "Generation:Interval",
                 _ => "Generation:Proportional",
             };
-            let align_on = pex(p, &format!("{}:Align", mode_pre), 1.0) > 0.5;
-            let style = pex(p, &format!("{}:Align style", mode_pre), 1.0) as i32;
+            let (align_on, style) = match omode {
+                // Bifurcation's Align (picture 86): 1 turns the forks to the world's sides, 0
+                // keeps the parent's own frame; Flood and Parent keep the parent's frame
+                7 => (true, (pex(p, "Generation:Bifurcation:Align", 0.0) > 0.5) as i32),
+                8 | 9 => (true, 0),
+                _ => (pex(p, &format!("{}:Align", mode_pre), 1.0) > 0.5, pex(p, &format!("{}:Align style", mode_pre), 1.0) as i32),
+            };
             let mut roll = roll;
             if !align_on {
                 roll += rng.next() * 2.0 * PI;
@@ -1004,6 +1491,13 @@ fn make_spine(
         r0 = r0.min(prad * 0.95);
     }
     r0 = r0.max(0.005);
+    // Bifurcation > Balance (picture 86; estimated): 0 = forks as big as the generator makes them,
+    // 1 = forks 40% the size
+    if gen_mode == 7 {
+        let k = 1.0 - 0.6 * pex(p, "Generation:Bifurcation:Balance", 0.0).clamp(0.0, 1.0);
+        len *= k;
+        r0 = (r0 * k).max(0.005);
+    }
     // Generation > Sink on a trunk (picture 57): with no parent branch, the base goes down into
     // the ground by Sink x the trunk's own radius
     if matches!(parent, ParentRef::Ground) {
@@ -1246,7 +1740,7 @@ fn build_spine(node: u32, pts: Vec<Vec3>, r0: f32, p: &Params) -> Spine {
             r
         })
         .collect();
-    Spine { node, pts, rad, tan, nrm, cum, len, mat: p.material, parent_spine: None, pos_on_parent: 0.0 }
+    Spine { node, pts, rad, tan, nrm, cum, len, mat: p.material, parent_spine: None, pos_on_parent: 0.0, ext_of: None, kept: 1.0 }
 }
 
 /// A UV Mapping property kept in Params::extra (or its default).
@@ -1419,17 +1913,26 @@ fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, wel
         }
     }
     skin_tube(s, p, col, geo, trunk, &look);
-    // Skin:Splits: by Chance (Seed), the branch forks at two thirds of its length: one fork at
-    // Spread 1 (x 90 degrees), another at Spread 2; Balance shares the radius between the main
-    // branch and its forks; Smooth Outer bends a fork out gradually, Smooth Inner lets it start
-    // inside the branch
+    let flat = SkinLook { weld: None, pull: 0.0, ..SkinLook::new(p, None) };
+    for fork in split_forks(s, p, gen, node) {
+        skin_tube(&fork, p, col, geo, trunk, &flat);
+    }
+}
+
+/// Skin:Splits: by Chance (Seed), the branch forks at two thirds of its length: one fork at
+/// Spread 1 (x 90 degrees), another at Spread 2; Balance shares the radius between the main
+/// branch and its forks; Smooth Outer bends a fork out gradually, Smooth Inner lets it start
+/// inside the branch. Each fork is marked as Split 1 or Split 2 of `s` (Extend parent, picture 86;
+/// the caller fills in which spine `s` is).
+fn split_forks(s: &Spine, p: &Params, gen: u32, node: usize) -> Vec<Spine> {
+    let mut out = vec![];
     let chance = pex(p, "Skin:Splits:Chance", 0.0);
     if chance <= 0.0 || s.pts.len() < 3 {
-        return;
+        return out;
     }
     let seed = pex(p, "Skin:Splits:Seed", 15000.0) as u64;
     if hash01(seed, gen as u64, node as u64) * 0.5 + 0.5 >= chance {
-        return;
+        return out;
     }
     let at = 0.66;
     let (tn, n, b) = s.frame(at);
@@ -1439,7 +1942,6 @@ fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, wel
     let bal = pex(p, "Skin:Splits:Balance", 0.5).clamp(0.05, 0.95);
     let outer = pex(p, "Skin:Splits:Smooth:Outer", 0.5).clamp(0.0, 1.0);
     let inner = pex(p, "Skin:Splits:Smooth:Inner", 0.25).clamp(0.0, 1.0);
-    let flat = SkinLook { weld: None, pull: 0.0, ..SkinLook::new(p, None) };
     for (k, key) in ["Skin:Splits:Spread 1", "Skin:Splits:Spread 2"].iter().enumerate() {
         let spread = pex(p, key, 0.0);
         if spread <= 0.0 {
@@ -1460,8 +1962,11 @@ fn skin(s: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: bool, wel
             .collect();
         let mut fork = build_spine(s.node, pts, r, p);
         fork.mat = s.mat;
-        skin_tube(&fork, p, col, geo, trunk, &flat);
+        fork.pos_on_parent = at;
+        fork.ext_of = Some((usize::MAX, k as u8 + 1));
+        out.push(fork);
     }
+    out
 }
 
 /// Welding's extra rings (pictures 58, 59): the weld zone gets Welding > Segments > Rings rings
@@ -1472,7 +1977,7 @@ fn densify_base(s: &Spine, zone: f32, offset: f32, rings: usize, bias: f32) -> S
     let mut ds: Vec<f32> = (0..=n).map(|i| zone * (i as f32 / n as f32).powf(bias.clamp(0.3, 5.0))).collect();
     ds.extend(s.cum.iter().copied().filter(|c| *c > zone * 1.0001));
     let len = s.len.max(1e-6);
-    let mut out = Spine { node: s.node, pts: vec![], rad: vec![], tan: vec![], nrm: vec![], cum: vec![], len: s.len, mat: s.mat, parent_spine: s.parent_spine, pos_on_parent: s.pos_on_parent };
+    let mut out = Spine { node: s.node, pts: vec![], rad: vec![], tan: vec![], nrm: vec![], cum: vec![], len: s.len, mat: s.mat, parent_spine: s.parent_spine, pos_on_parent: s.pos_on_parent, ext_of: s.ext_of, kept: s.kept };
     for d in ds {
         let t = (d / len).clamp(0.0, 1.0);
         let (tn, nn, _) = s.frame(t);
@@ -1793,10 +2298,11 @@ fn skin_tube(s0: &Spine, p: &Params, col: [u8; 4], geo: &mut TreeGeo, trunk: boo
             }
         }
         vc
-    };    // ends (picture 71): the tip is always closed, a low dome half its radius past the last ring,
-    // so no branch ends in a hole; Skin > Cap ends also closes the base (open by default, picture
-    // 34, since it sits in the parent)
-    if rad[m - 1] > 1e-4 || s.rad[m - 1] > 1e-4 {
+    };
+    // ends: Gen > General > Cap tip (or Skin > Cap ends) closes the tip with a low dome half its
+    // radius past the last ring (picture 71); open unless asked (picture 85). Cap ends also
+    // closes the base (open by default, picture 34, since it sits in the parent)
+    if (p.cap_tip || p.cap_ends) && (rad[m - 1] > 1e-4 || s.rad[m - 1] > 1e-4) {
         let tip = s.pts[m - 1] + s.tan[m - 1] * s.rad[m - 1] * 0.5;
         let ci = ch.v.len() as u16;
         ch.v.push(vtx(tip, uvm.uv(0.5, s.cum[m - 1]), grad_col(1.0), s.tan[m - 1], 1.0));
@@ -2186,6 +2692,71 @@ mod dup_tests {
         assert!(a > 0, "the original made no branches");
         assert!(b > 0, "the copy made no branches (original {})", a);
     }
+
+    /// The person's own pine (picture 93): hiding any one generator leaves every other
+    /// generator's branches exactly where they were.
+    #[test]
+    fn hiding_in_the_pine_changes_nothing_else() {
+        let text = include_str!("../testdata/pine_hd_fruit.tcm");
+        let nodes = crate::treefile::parse_nodes(text);
+        let spines_of = |nodes: &[Node]| -> Vec<(u32, usize, Vec<Vec3>)> {
+            let ctx = GenCtx { nodes, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+            let mut v: Vec<(u32, usize, Vec<Vec3>)> = generate(&ctx).hits.into_iter().map(|h| (h.0, h.1, h.2)).collect();
+            v.sort_by_key(|h| (h.0, h.1));
+            v
+        };
+        // every piece fits one draw, so nothing is cut off (the real cause in picture 93)
+        {
+            let ctx = GenCtx { nodes: &nodes, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 0, only: None };
+            let geo = generate(&ctx);
+            for mg in geo.mats.values() {
+                for c in &mg.chunks {
+                    assert!(c.v.len() <= CHUNK_VERTS && c.i.len() <= CHUNK_INDICES, "a piece holds {} vertices, {} corners", c.v.len(), c.i.len());
+                    assert!(c.i.iter().all(|&k| (k as usize) < c.v.len()), "a corner points past its piece");
+                }
+            }
+        }
+        let all = spines_of(&nodes);
+        for hide in nodes.iter().filter(|n| n.kind != Kind::Tree).map(|n| n.id).collect::<Vec<_>>() {
+            let mut n2 = nodes.clone();
+            n2.iter_mut().find(|n| n.id == hide).unwrap().hidden = true;
+            let got = spines_of(&n2);
+            let want: Vec<_> = all.iter().filter(|h| h.0 != hide).collect();
+            assert_eq!(want.len(), got.len(), "hiding {} changed how many branches the others have", hide);
+            for (a, b) in want.iter().zip(&got) {
+                assert_eq!((a.0, a.1), (b.0, b.1));
+                let d = a.2.iter().zip(&b.2).map(|(p, q)| p.distance(*q)).fold(0.0f32, f32::max);
+                assert!(a.2.len() == b.2.len() && d < 1e-4, "hiding {} moved generator {} branch {} by {}", hide, a.0, a.1, d);
+            }
+        }
+    }
+
+    /// Hiding a generator (picture 92) leaves every other generator's leaves exactly as they were:
+    /// same places and same shading, with leaf collision on.
+    #[test]
+    fn hiding_changes_nothing_else() {
+        let mut nodes = vec![node(1, Kind::Tree, None, "Tree"), node(2, Kind::Trunk, Some(1), "Trunk"), node(3, Kind::Branch, Some(2), "A"), node(4, Kind::Branch, Some(2), "B"), node(5, Kind::Leaf, Some(4), "Leaves")];
+        nodes[3].p.seed += 31;
+        for n in &mut nodes {
+            n.p.material = 0;
+        }
+        nodes[4].p.leaf_material = 7;
+        let leaves = |nodes: &[Node]| -> Vec<[f32; 4]> {
+            let ctx = GenCtx { nodes, materials: &[], meshes: &[], selected: None, highlight: false, show_branches: true, forces: &[], leaf_collision: 2, only: None };
+            let geo = generate(&ctx);
+            geo.mats.get(&7).map(|m| m.chunks.iter().flat_map(|c| c.v.iter().map(|v| [v.position.x, v.position.y, v.position.z, v.normal.w])).collect()).unwrap_or_default()
+        };
+        let before = leaves(&nodes);
+        assert!(!before.is_empty(), "the leaf generator made no leaves");
+        nodes[2].hidden = true;
+        let after = leaves(&nodes);
+        assert_eq!(before.len(), after.len(), "hiding A changed B's leaf count");
+        for (a, b) in before.iter().zip(&after) {
+            for k in 0..4 {
+                assert!((a[k] - b[k]).abs() < 1e-5, "hiding A changed B's leaves: {:?} vs {:?}", a, b);
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -2224,6 +2795,8 @@ mod tip_tests {
     fn tip_open_edges(weld: bool, cap: bool) -> (usize, usize) {
         let mut p = Params::new(Kind::Branch);
         p.cap_ends = cap;
+        // the tip is closed only when asked (picture 85); with cap false the test asks with Cap tip
+        p.cap_tip = !cap;
         if weld {
             p.extra.insert("Skin:Welding:Enabled".into(), 1.0);
         }
@@ -2274,6 +2847,117 @@ mod tip_tests {
             eprintln!("weld {} cap {}: open tip edges {}, tris {}", w, c, o, t);
             assert_eq!(o, 0, "the tip of a branch (weld {}, cap ends {}) is open", w, c);
         }
+    }
+
+    /// Every generation mode places children (picture 86).
+    #[test]
+    fn every_mode_places_children() {
+        let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, i as f32 * 0.5, 0.0)).collect();
+        let base = Params::new(Kind::Branch);
+        let s = build_spine(1, pts.clone(), 0.5, &base);
+        let short = build_spine(1, pts[..11].to_vec(), 0.5, &base);
+        let spines = vec![s, short];
+        let tree = Params::new(Kind::Tree);
+        let place = |p: &Params, i: usize| distribute(p, ParentRef::Spine(i), &spines, &tree, &mut Rng::new(5), 10.0);
+        let mode = |m: f64| {
+            let mut p = Params::new(Kind::Branch);
+            p.first = 0.1;
+            p.last = 0.9;
+            p.extra.insert("Generation:Mode".into(), m);
+            p
+        };
+        // Phyllotaxy: nodes reach both First and Last (no gap)
+        let mut p = mode(5.0);
+        p.interval = 2.0;
+        p.jumble = 0.0;
+        let ts: Vec<f32> = place(&p, 0).iter().map(|o| o.0).collect();
+        let (lo, hi) = (ts.iter().cloned().fold(1.0, f32::min), ts.iter().cloned().fold(0.0, f32::max));
+        assert!((lo - 0.1).abs() < 1e-3 && (hi - 0.9).abs() < 1e-3, "phyllotaxy spans First..Last: {} {}", lo, hi);
+        // Classic Steps: 4 steps of Frequency each with Per step frequency
+        let mut p = mode(0.0);
+        p.frequency = 3.0;
+        p.extra.insert("Generation:Steps:Enabled".into(), 1.0);
+        p.extra.insert("Generation:Steps:Number".into(), 4.0);
+        p.extra.insert("Generation:Steps:Per step frequency".into(), 1.0);
+        let o = place(&p, 0);
+        assert_eq!(o.len(), 12);
+        let mut spots: Vec<i32> = o.iter().map(|q| (q.0 * 1000.0).round() as i32).collect();
+        spots.dedup();
+        spots.sort();
+        spots.dedup();
+        assert_eq!(spots.len(), 4, "children sit on 4 steps");
+        // Proportional: Number on the longest parent, half on one half as long
+        let mut p = mode(1.0);
+        p.extra.insert("Generation:Proportional:Number".into(), 8.0);
+        assert_eq!(place(&p, 0).len(), 8);
+        assert_eq!(place(&p, 1).len(), 4);
+        // Proportional Steps and Absolute Steps
+        let mut p = mode(2.0);
+        p.extra.insert("Generation:Proportional Steps:Steps".into(), 4.0);
+        p.extra.insert("Generation:Proportional Steps:Per Step:Number".into(), 2.0);
+        assert_eq!(place(&p, 0).len(), 8);
+        assert_eq!(place(&p, 1).len(), 4);
+        let mut p = mode(4.0);
+        p.extra.insert("Generation:Absolute Steps:Steps".into(), 3.0);
+        p.extra.insert("Generation:Absolute Steps:Per Step:Number".into(), 2.0);
+        assert_eq!(place(&p, 1).len(), 6);
+        // Bifurcation, Flood, Parent
+        assert!(!place(&mode(7.0), 0).is_empty());
+        assert!(place(&mode(8.0), 0).len() > 5);
+        assert_eq!(place(&mode(9.0), 0).len(), 1);
+        // Extend parent: Any adds the parent's forks, None doesn't, Bottom goes back to the parent
+        let mut spines2 = spines;
+        let mut fork = build_spine(1, (0..=6).map(|i| vec3(i as f32 * 0.4, 7.0, 0.0)).collect(), 0.2, &base);
+        fork.ext_of = Some((0, 1));
+        spines2.push(fork);
+        let mut p = mode(0.0);
+        assert_eq!(extend_parents(&p, &[ParentRef::Spine(0)], &spines2).len(), 1);
+        p.extra.insert("Generation:Shared:Extend parent".into(), 1.0);
+        assert_eq!(extend_parents(&p, &[ParentRef::Spine(0)], &spines2).len(), 2);
+        p.extra.insert("Generation:Shared:Extend parent".into(), 3.0);
+        assert_eq!(extend_parents(&p, &[ParentRef::Spine(0)], &spines2).len(), 1, "no Split 2 here");
+        p.extra.insert("Generation:Shared:Extend parent".into(), 7.0);
+        assert!(matches!(extend_parents(&p, &[ParentRef::Spine(2)], &spines2)[..], [ParentRef::Spine(0)]));
+    }
+
+    /// A Parent curve on Phyllotaxy's Internode length changes the nodes (picture 91).
+    #[test]
+    fn internode_curve_takes_effect() {
+        let pts: Vec<Vec3> = (0..=20).map(|i| vec3(0.0, i as f32 * 0.5, 0.0)).collect();
+        let base = Params::new(Kind::Branch);
+        let spines = vec![build_spine(1, pts, 0.5, &base)];
+        let tree = Params::new(Kind::Tree);
+        let mut p = Params::new(Kind::Branch);
+        p.extra.insert("Generation:Mode".into(), 5.0);
+        p.extra.insert("Generation:Phyllotaxy:Arrangement:Style".into(), 4.0);
+        p.first = 0.0;
+        p.last = 1.0;
+        p.interval = 1.0;
+        p.jumble = 0.0;
+        let flat = distribute(&p, ParentRef::Spine(0), &spines, &tree, &mut Rng::new(1), 10.0).len();
+        let mut c = Curve::flat();
+        for q in &mut c.pts {
+            q.y = 0.5;
+        }
+        p.curves.insert("Generation:Phyllotaxy:Nodes:Internode length|0".into(), c);
+        let half = distribute(&p, ParentRef::Spine(0), &spines, &tree, &mut Rng::new(1), 10.0).len();
+        assert!(half > flat + 5, "halving the internode length doubles the nodes: {} -> {}", flat, half);
+    }
+
+    /// Without Cap tip or Cap ends the tube's tip stays open (picture 85).
+    #[test]
+    fn tip_open_by_default() {
+        let mut p = Params::new(Kind::Branch);
+        assert!(!p.cap_tip && !p.cap_ends);
+        p.cap_tip = false;
+        let pts: Vec<Vec3> = (0..=10).map(|i| vec3(0.0, i as f32 * 0.5, 0.0)).collect();
+        let s = build_spine(1, pts, 0.6, &p);
+        let mut open = TreeGeo::default();
+        skin(&s, &p, [255; 4], &mut open, false, None, 1, 0);
+        p.cap_tip = true;
+        let mut capped = TreeGeo::default();
+        skin(&s, &p, [255; 4], &mut capped, false, None, 1, 0);
+        assert!(capped.tris > open.tris, "Cap tip adds the dome");
     }
 }
 

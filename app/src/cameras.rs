@@ -634,7 +634,8 @@ impl App {
         let mut handles: Vec<(u8, Vec2, Vec2)> = vec![];
         let mut centre = None;
         if let Some(i) = sel.filter(|i| Some(*i) != self.looking && *i < self.cameras.len() && !self.cameras[*i].hidden) {
-            if perspective {
+            // (picture 84: in orthographic views too; the axis pointing at the viewer drops out)
+            {
                 let c = &self.cameras[i];
                 if let Some(o) = proj(c.pos) {
                     centre = Some(o);
@@ -698,7 +699,9 @@ impl App {
                         let right = Vec3::Y.cross(vd).normalize_or(Vec3::X);
                         let up = vd.cross(right).normalize_or(Vec3::Y);
                         let depth = viewer.distance(c.pos).max(0.1);
-                        let s = 2.0 * depth * (self.cam.fov.to_radians() * 0.5).tan() / r.h.max(1.0);
+                        // world units per pixel: an orthographic view's height over the view, or
+                        // the perspective spread at the camera's depth
+                        let s = if perspective { 2.0 * depth * (self.cam.fov.to_radians() * 0.5).tan() / r.h.max(1.0) } else { self.cam.view_height() / r.h.max(1.0) };
                         c.pos += (right * d.x - up * d.y) * s;
                     }
                 }

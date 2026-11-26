@@ -134,6 +134,8 @@ pub struct Params {
     pub ext_list: Vec<(usize, f32)>,
     /// Close the tip and base of each branch (off by default, picture 34).
     pub cap_ends: bool,
+    /// Close the tip of each tube with a low dome (off unless asked, picture 85).
+    pub cap_tip: bool,
     /// Which parent each curve reads its place on (1 = the direct parent, 2 = its parent ...),
     /// keyed like `curves` (the original's curve editor "Parent level").
     pub curve_levels: std::collections::BTreeMap<String, u8>,
@@ -210,7 +212,9 @@ impl Curve {
                             let (f2, f3) = (f * f, f * f * f);
                             (2.0 * f3 - 3.0 * f2 + 1.0) * a.y + (f3 - 2.0 * f2 + f) * m0 + (-2.0 * f3 + 3.0 * f2) * b.y + (f3 - f2) * m1
                         };
-                        return y.clamp(0.0, 1.0);
+                        // (picture 91: points may sit below 0 or above 1; the spline keeps
+                        // within 0..1 or its two points, whichever reaches further)
+                        return y.clamp(a.y.min(b.y).min(0.0), a.y.max(b.y).max(1.0));
                     }
                 }
                 pts[n - 1].y
@@ -362,6 +366,7 @@ impl Params {
             mat_list: vec![],
             ext_list: vec![],
             cap_ends: false,
+            cap_tip: false,
             curve_levels: std::collections::BTreeMap::new(),
             variances: std::collections::BTreeMap::new(),
         };

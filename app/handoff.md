@@ -169,3 +169,69 @@ render.rs preview_stand_mesh returns only the torus (big 1.46, small 0.26); app.
 
 ## Picture 80
 render.rs torus big 1.38 small 0.18; app.rs render_preview: camera 4.4, RING_TEX made once by drawing text into a render target then reading it back into a plain texture (binding the render target's own texture gave a blue ring); the read-back flips rows, so the text is drawn at 0.75 of the height to land at v 0.25. Hook TM_RING_PNG=<file> dumps that picture.
+
+## Picture 81
+winprops.rs draw_layout_panes: a ui.combo per pane writes winp "Viewport:Pane<k>"; render_layout_panes frames view 0 with Cam::frame. main.rs overrides layout_panes' default views from winp; hook TM_PANE0=<view>. Picking from the list by hand wasn't tried (only the stored choice was shown in a capture).
+
+## Picture 82
+winprops.rs PANE_CAMS (per pane (view, Cam), framed once in render_layout_panes) and PANE_ACTIVE; App::pane_input swaps the pane's cam and rect into self.cam / self.viewport and calls viewport_input. main.rs calls pane_input first and viewport_input only when it returns false. Mouse drags in panes weren't tested by script (no scripted mouse here); only drawing was captured.
+
+## Picture 83
+winprops.rs: pane_cam (framing includes visible cameras), with_pane (swaps cam, viewport, looking=None), draw_panes_3d (bg + draw_viewport_3d + outline per pane, outside the UI scale) and draw_panes_overlay (camera overlay via cameras_overlay_for with CAM_DRAG_OWNER, view list, border). app.rs draw_viewport_overlay uses cameras_overlay_for(.., None). main.rs calls the two new functions; render_layout_panes/draw_layout_panes are now unused. Hook TM_CAMLOOK=1|2 (a camera beside the tree; 1 also looks through it). All panes are the same size as the main view in every layout, so the shared shadow/selection render targets aren't reallocated. Camera dragging in a pane wasn't tried by hand.
+
+## PivotPainter2
+gen.rs: PPElem, TreeGeo.pp_elems / pp_ranges / pp_of_spine, pp_mark/pp_since/pp_add around skin, make_frond, make_leaf and freehand skins. pivotpainter.rs: PP2 settings, dims/uv, f32_to_f16, write_exr_half (own EXR writer), write_textures, pp2_rows panel (+test). export.rs: Group.uv2, export_groups fills it from a full generation's key -> index map, fbx_binary writes a second LayerElementUV + Layer 1, write_export writes the textures, App::pp2_elements / pp2_bake_only. app.rs App.pp2 / pp2_open (select() closes it). props.rs: PivotPainter2 button under Window properties (empty slot keeps the column), panel when pp2_open && Sel::None. Hooks: TM_PP2=1 opens the panel; TM_EXPORT_DIR also writes the PP2 textures. Not yet tried in Unreal Engine (axis mapping and parent-index decoding are the likely things to adjust).
+
+## Picture 84
+winprops.rs pane_input: active pane keeps the release frame; viewport_pick runs there with the pane's cam/viewport (looking cleared); pane_active() lets main.rs skip the main view's pick while a pane owns the click. cameras.rs: handles built for ortho views too; free-move scale uses view_height in ortho. Hook TM_CAMLOOK=3 (camera selected, not looked through). Not seen in a capture: the person's own windows were in front during capture, so those pictures were deleted; relies on build, tests and rebuild_check.
+
+## Picture 85 (done)
+- Params.cap_tip (model.rs, treefile) default false; gen.rs skin closes the tip only when cap_tip or cap_ends. Checkbox drawn in stpanel.rs after the Mode combo for Trunk/Branch when sub-tab is All or General.
+
+
+## Picture 86 (done)
+- gen.rs distribute() dispatches on crate::stpanel::orig_mode(p) (0..9). It covers every mode, plus Classic Steps. It takes max_plen, the longest parent, for the Proportional modes.
+- Spine has ext_of (parent spine, number) and kept (break share). split_forks() makes the Skin Splits forks as spines, pushed after their branch.
+- extend_parents() and ext_amount() implement the Extend parent list (stpanel choices). Bifurcation generators are sorted first in process().
+- Values are estimates, not read from the original's code: the Ghidra function addresses in MECHANICS for Classic/Absolute/Interval didn't match the built-in function list this time.
+
+## Picture 87 (done)
+- viewnav.rs draw_height_button is called under draw_light_controls in app.rs. treefile [view] show_height.
+- app.rs: RENAME thread_local and renaming_node(), which main.rs keyboard() checks. Labels for Circle style are drawn in a pass after the nodes in draw_generation; label_at is used to place the rename box. unique_node_name(base, me) is used in add_node, gen_add, build_template and duplicate_node.
+- native_window_capture gives a black picture for this GL window; use rebuild_check's checks/round-0/screenshot.png instead.
+
+## Picture 88 (done)
+- app.rs: thread_locals LINK_SEL and NODE_SHADOW, with set_node_shadow(). disconnect_node(id).
+- draw_generation collects links (child, midpoint) while drawing wires, then hover_link, draws the circles before the labels (link_tags are obstacles for the label placer), and handles the link click, right-click and Delete before the main interaction.
+- draw_node_shape draws the soft shadow for every style.
+- prefs: node_shadow and node_grid2.
+- Screen capture that works: a PowerShell window grab after calling SetProcessDPIAware (the window is 3862x2110 physical). Run with TM_DEMO=1 TM_NOWELCOME=1 TM_NODESTYLE=2.
+
+## Picture 89 (done)
+- LINK_SEL is now Vec<u32>. The marquee release adds links whose midpoints fall inside the box.
+- The GraphDrag::Node move set = descendants of the dragged node and of graph_multi. On release after a move, the node under the mouse (outside that set) becomes the parent via reparent(), and the moved group is placed above it.
+
+## Picture 90 (done)
+- render.rs: new GradOn uniform (set in apply_material when the gradient rides in vertex colours). Material Color = albedo x vertex colour, Opacity = white, the Vertex Colors views ignore the gradient.
+- app.rs: channel_bg() and opacity_view(). draw_viewport_bg fills the solid colour; draw_viewport_3d skips ground, origin, grid and shadow in Opacity.
+- matpanel color_field now uses colorwheel::swatch.
+- Capture tip: TM_RENDER=<mode> TM_DEMO=1 TM_NOWELCOME=1, plus a DPI-aware window grab.
+
+## Picture 91 (done)
+- gen.rs process(): `shown` = !hidden && only-set. Hidden generators build spines and leaves (into a scratch TreeGeo) but don't skin, add bones or hits. Isolation in app.rs keeps only the picked id.
+- editmodes.rs: CURVE_VIEW thread_local (key, y0, span) and YLIM=10. The curve window no longer closes on an outside click.
+- gen.rs place_curve(p, name, t, parent, spines, per_parent) is used in distribute; along() also reads the |0 curve as a density.
+- model.rs Curve::eval is no longer clamped to 0..1.
+
+## Picture 92 (done)
+- TreeGeo.full_min/full_max (grow() updates both), hidden_scratch() and hidden_merge(). Hidden branches, freehand branches, leaves and fronds are built into a scratch geo that borrows leaf_grid. The leaf AO in generate() uses the full bounds.
+
+## Picture 93 (done): the real cause
+- The macroquad draw_call_index_capacity (120000) was smaller than a 30000-vertex chunk of needle tubes (~143000 indices), so the overflow was silently clamped. CHUNK_INDICES=240000 is now checked in chunk_for; the capacity is 256000; upload splits oversize chunks.
+- treefile::node_line() and parse_nodes() are used by the tests. The person's tree is in testdata/.
+
+## Picture 94 (done)
+- app.rs: pill_button(); the NodeGroup struct; App.groups, group_sel and reroutes. GraphDrag::Group/GroupSize/Reroute. Thread_locals GROUP_DRAG, GROUP_RENAME, REROUTE_SEL, WIRE_CTX. wire_points() and dist_to_path().
+- props.rs: Rows::text() with TEXT_FOCUS. props::typing() is checked by main keyboard(). The group panel shows when group_sel is set and sel is None.
+- treefile: [group] and [graph] sections.
+- Test hook TM_GRAPHDEMO=1.

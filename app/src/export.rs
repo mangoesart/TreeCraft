@@ -50,6 +50,8 @@ pub struct Group {
     pub tris: Vec<[u32; 3]>,
     /// Polylines (branch spines), OBJ and XML only.
     pub lines: Vec<Vec<Vec3>>,
+    /// PivotPainter2's UV set (channel 2): each vertex at its element's pixel; empty when off.
+    pub uv2: Vec<Vec2>,
 }
 
 fn names(v: &[&str]) -> Vec<String> {
@@ -172,7 +174,53 @@ impl App {
             _ => xml_text(&groups, &mats).into_bytes(),
         };
         std::fs::write(path, bytes).map_err(|e| e.to_string())?;
+        // PivotPainter2: its textures beside the FBX, named after it
+        if self.pp2.with_fbx && o.file_type == 0 {
+            let stem = path.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "tree".into());
+            crate::pivotpainter::write_textures(&dir, &stem, &self.pp2_elements(o), &self.pp2)?;
+        }
         Ok(groups.len())
+    }
+
+    /// PivotPainter2's elements for the whole tree, moved into Unreal's space the way the export
+    /// moves the mesh: the export's own transform (unit, +Scale, swaps, flips), then the FBX's axis
+    /// setting (Y-up: X, Z, Y; Z-up: X, -Y, Z) and metres to centimetres.
+    pub fn pp2_elements(&self, o: &ExportOpts) -> Vec<crate::pivotpainter::PPOut> {
+        let full = self.generate_with(None);
+        let tf = Xform::new(o);
+        let to_ue = |v: Vec3| if o.axis == 1 { vec3(v.x, -v.y, v.z) } else { vec3(v.x, v.z, v.y) };
+        let idx: std::collections::HashMap<(u32, usize), usize> = full.pp_elems.iter().enumerate().map(|(i, e)| (e.key, i)).collect();
+        full.pp_elems
+            .iter()
+            .enumerate()
+            .map(|(i, e)| {
+                // a steady random value per element, from its key
+                let mut hsh = (e.key.0 as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ (e.key.1 as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
+                hsh ^= hsh >> 31;
+                crate::pivotpainter::PPOut {
+                    pivot: to_ue(tf.p(e.pivot)) * 100.0,
+                    x: to_ue(tf.n(e.x)),
+                    y: to_ue(tf.n(e.y)),
+                    z: to_ue(tf.n(e.x.cross(e.y))),
+                    ext: vec3(e.len, e.width, e.width) * tf.k * 100.0,
+                    parent: e.parent.and_then(|p| idx.get(&p).copied()).unwrap_or(i),
+                    depth: e.depth,
+                    random: (hsh % 10_000) as f32 / 9_999.0,
+                }
+            })
+            .collect()
+    }
+
+    /// PivotPainter2 > Bake textures only: the textures into a chosen folder, named after the tree.
+    pub fn pp2_bake_only(&mut self) {
+        let Some(dir) = crate::prefs::file_dialog().set_title("PivotPainter2: folder for the textures").pick_folder() else { return };
+        let stem = self.tree_path.as_ref().and_then(|p| p.file_stem().map(|s| s.to_string_lossy().to_string())).unwrap_or_else(|| "tree".into());
+        let o = ExportOpts { file_type: 0, ..self.export_opts.clone() };
+        let els = self.pp2_elements(&o);
+        match crate::pivotpainter::write_textures(&dir, &stem, &els, &self.pp2) {
+            Ok(files) => self.set_status(&format!("PivotPainter2: baked {} element(s) into {}", els.len(), files.join(", "))),
+            Err(e) => self.set_status(&format!("PivotPainter2: {}", e)),
+        }
     }
 
     /// The tree cut into groups by the chosen Grouping, transformed as asked.
@@ -208,6 +256,15 @@ impl App {
             }
         }
         let tf = Xform::new(o);
+        // PivotPainter2 (FBX only): every element's index in the whole tree, and the texture size
+        let pp = if self.pp2.with_fbx && o.file_type == 0 {
+            let full = self.generate_with(None);
+            let idx: std::collections::HashMap<(u32, usize), usize> = full.pp_elems.iter().enumerate().map(|(i, e)| (e.key, i)).collect();
+            let (w, h) = crate::pivotpainter::dims(full.pp_elems.len());
+            Some((idx, w, h))
+        } else {
+            None
+        };
         let mut out: Vec<Group> = vec![];
         let mut piece_of_gen: std::collections::HashMap<u32, Vec<usize>> = Default::default();
         for (name, set, gen_id) in pieces {
@@ -221,13 +278,19 @@ impl App {
             let first = out.len();
             if o.geometry {
                 for (mi, mg) in mats {
-                    let mut g = Group { name: if multi && o.group_by != 1 { format!("{}_{}", name, self.materials.get(*mi).map(|m| m.name.as_str()).unwrap_or("Default")) } else if o.group_by == 1 { self.materials.get(*mi).map(|m| m.name.clone()).unwrap_or_else(|| "Default".into()) } else { name.clone() }, material: *mi, parent: None, pos: vec![], nrm: vec![], uv: vec![], tris: vec![], lines: vec![] };
-                    for ch in &mg.chunks {
+                    let mut g = Group { name: if multi && o.group_by != 1 { format!("{}_{}", name, self.materials.get(*mi).map(|m| m.name.as_str()).unwrap_or("Default")) } else if o.group_by == 1 { self.materials.get(*mi).map(|m| m.name.clone()).unwrap_or_else(|| "Default".into()) } else { name.clone() }, material: *mi, parent: None, pos: vec![], nrm: vec![], uv: vec![], tris: vec![], lines: vec![], uv2: vec![] };
+                    for (ci, ch) in mg.chunks.iter().enumerate() {
                         let base = g.pos.len() as u32;
-                        for v in &ch.v {
+                        // PivotPainter2: this chunk's element ranges
+                        let ranges: Vec<(usize, usize, (u32, usize))> = if pp.is_some() { geo.pp_ranges.iter().filter(|r| r.0 == *mi && r.1 == ci).map(|r| (r.2, r.3, r.4)).collect() } else { vec![] };
+                        for (vi, v) in ch.v.iter().enumerate() {
                             g.pos.push(tf.p(v.position));
                             g.nrm.push(tf.n(vec3(v.normal.x, v.normal.y, v.normal.z)));
                             g.uv.push(if o.flip_v { vec2(v.uv.x, 1.0 - v.uv.y) } else { v.uv });
+                            if let Some((idx, w, h)) = &pp {
+                                let e = ranges.iter().find(|r| vi >= r.0 && vi < r.1).and_then(|r| idx.get(&r.2)).copied().unwrap_or(0);
+                                g.uv2.push(crate::pivotpainter::uv(e, *w, *h));
+                            }
                         }
                         for t in ch.i.chunks(3) {
                             if t.len() == 3 {
@@ -244,7 +307,7 @@ impl App {
             if o.spines && o.file_type != 0 {
                 let lines: Vec<Vec<Vec3>> = geo.hits.iter().filter(|h| set.contains(&h.0) && h.2.len() > 1).map(|h| h.2.iter().map(|p| tf.p(*p)).collect()).collect();
                 if !lines.is_empty() {
-                    out.push(Group { name: format!("{}_spines", name), material: usize::MAX, parent: None, pos: vec![], nrm: vec![], uv: vec![], tris: vec![], lines });
+                    out.push(Group { name: format!("{}_spines", name), material: usize::MAX, parent: None, pos: vec![], nrm: vec![], uv: vec![], tris: vec![], lines, uv2: vec![] });
                 }
             }
             if let Some(id) = gen_id {
@@ -615,40 +678,50 @@ pub fn fbx_binary(groups: &[Group], mats: &[(usize, String, [f32; 3], Option<Str
             }
         }
         let uv: Vec<f64> = g.uv.iter().flat_map(|t| [t.x as f64, 1.0 - t.y as f64]).collect();
-        objects.push(nk(
-            "Geometry",
-            vec![P::I64(gid), s(&format!("{}\u{0}\u{1}Geometry", clean(&g.name))), s("Mesh")],
+        let mut geo_kids = vec![
+            n("Vertices", vec![P::ArrF64(verts)]),
+            n("PolygonVertexIndex", vec![P::ArrI32(pvi)]),
+            n("GeometryVersion", vec![P::I32(124)]),
+            nk(
+                "LayerElementNormal",
+                vec![P::I32(0)],
+                vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("")]), n("MappingInformationType", vec![s("ByPolygonVertex")]), n("ReferenceInformationType", vec![s("Direct")]), n("Normals", vec![P::ArrF64(nrm)])],
+            ),
+            nk(
+                "LayerElementUV",
+                vec![P::I32(0)],
+                vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("UVMap")]), n("MappingInformationType", vec![s("ByPolygonVertex")]), n("ReferenceInformationType", vec![s("IndexToDirect")]), n("UV", vec![P::ArrF64(uv)]), n("UVIndex", vec![P::ArrI32(uvi.clone())])],
+            ),
+        ];
+        // PivotPainter2: the second UV set (channel 2), each vertex at its element's pixel
+        let has_uv2 = g.uv2.len() == g.pos.len() && !g.uv2.is_empty();
+        if has_uv2 {
+            let uv2: Vec<f64> = g.uv2.iter().flat_map(|t| [t.x as f64, 1.0 - t.y as f64]).collect();
+            geo_kids.push(nk(
+                "LayerElementUV",
+                vec![P::I32(1)],
+                vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("PivotPainter")]), n("MappingInformationType", vec![s("ByPolygonVertex")]), n("ReferenceInformationType", vec![s("IndexToDirect")]), n("UV", vec![P::ArrF64(uv2)]), n("UVIndex", vec![P::ArrI32(uvi)])],
+            ));
+        }
+        geo_kids.push(nk(
+            "LayerElementMaterial",
+            vec![P::I32(0)],
+            vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("")]), n("MappingInformationType", vec![s("AllSame")]), n("ReferenceInformationType", vec![s("IndexToDirect")]), n("Materials", vec![P::ArrI32(vec![0])])],
+        ));
+        geo_kids.push(nk(
+            "Layer",
+            vec![P::I32(0)],
             vec![
-                n("Vertices", vec![P::ArrF64(verts)]),
-                n("PolygonVertexIndex", vec![P::ArrI32(pvi)]),
-                n("GeometryVersion", vec![P::I32(124)]),
-                nk(
-                    "LayerElementNormal",
-                    vec![P::I32(0)],
-                    vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("")]), n("MappingInformationType", vec![s("ByPolygonVertex")]), n("ReferenceInformationType", vec![s("Direct")]), n("Normals", vec![P::ArrF64(nrm)])],
-                ),
-                nk(
-                    "LayerElementUV",
-                    vec![P::I32(0)],
-                    vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("UVMap")]), n("MappingInformationType", vec![s("ByPolygonVertex")]), n("ReferenceInformationType", vec![s("IndexToDirect")]), n("UV", vec![P::ArrF64(uv)]), n("UVIndex", vec![P::ArrI32(uvi)])],
-                ),
-                nk(
-                    "LayerElementMaterial",
-                    vec![P::I32(0)],
-                    vec![n("Version", vec![P::I32(101)]), n("Name", vec![s("")]), n("MappingInformationType", vec![s("AllSame")]), n("ReferenceInformationType", vec![s("IndexToDirect")]), n("Materials", vec![P::ArrI32(vec![0])])],
-                ),
-                nk(
-                    "Layer",
-                    vec![P::I32(0)],
-                    vec![
-                        n("Version", vec![P::I32(100)]),
-                        nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementNormal")]), n("TypedIndex", vec![P::I32(0)])]),
-                        nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementUV")]), n("TypedIndex", vec![P::I32(0)])]),
-                        nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementMaterial")]), n("TypedIndex", vec![P::I32(0)])]),
-                    ],
-                ),
+                n("Version", vec![P::I32(100)]),
+                nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementNormal")]), n("TypedIndex", vec![P::I32(0)])]),
+                nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementUV")]), n("TypedIndex", vec![P::I32(0)])]),
+                nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementMaterial")]), n("TypedIndex", vec![P::I32(0)])]),
             ],
         ));
+        if has_uv2 {
+            geo_kids.push(nk("Layer", vec![P::I32(1)], vec![n("Version", vec![P::I32(100)]), nk("LayerElement", vec![], vec![n("Type", vec![s("LayerElementUV")]), n("TypedIndex", vec![P::I32(1)])])]));
+        }
+        objects.push(nk("Geometry", vec![P::I64(gid), s(&format!("{}\u{0}\u{1}Geometry", clean(&g.name))), s("Mesh")], geo_kids));
         objects.push(nk(
             "Model",
             vec![P::I64(mid), s(&format!("{}\u{0}\u{1}Model", clean(&g.name))), s("Mesh")],
@@ -701,7 +774,7 @@ mod tests {
     use super::*;
 
     fn tri_group() -> Vec<Group> {
-        vec![Group { name: "Trunk".into(), material: 0, parent: None, pos: vec![Vec3::ZERO, Vec3::X, Vec3::Y], nrm: vec![Vec3::Z; 3], uv: vec![Vec2::ZERO, Vec2::X, Vec2::Y], tris: vec![[0, 1, 2]], lines: vec![] }]
+        vec![Group { name: "Trunk".into(), material: 0, parent: None, pos: vec![Vec3::ZERO, Vec3::X, Vec3::Y], nrm: vec![Vec3::Z; 3], uv: vec![Vec2::ZERO, Vec2::X, Vec2::Y], tris: vec![[0, 1, 2]], lines: vec![], uv2: vec![] }]
     }
 
     /// The binary FBX reads back as a well-formed node tree: every record's end offset lands on the
